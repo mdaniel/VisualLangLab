@@ -22,6 +22,7 @@ package net.java.dev.vll
 
 import java.io.File
 import java.io.PrintStream
+import scala.xml.Elem
 import scala.xml.Node
 import scala.xml.NodeSeq
 import scala.xml.XML
@@ -92,7 +93,7 @@ object FileIO {
         for (i <- 0 until c.getChildCount)
           printParserTree(c.getChildAt(i).asInstanceOf[ParserTreeNode], level + 1)
         out.printf("%s</Choice>%n", margin)
-      case x => printf("ERROR: Unknown type in parser-tree: %s%n", x)
+      case x => System.err.printf("ERROR: Unknown type in parser-tree: %s%n", x)
     }
   }
 
@@ -213,8 +214,25 @@ object FileIO {
     ParserTreePanel.setParser(ParserBank(lastParser))
   }
 
+  def load(s: String) {
+    val grammar = XML.loadString(s)
+    load(grammar)
+/*    Parsers.customWhitespace = (grammar \ "Whitespace").text.r
+    Parsers.comments = (grammar \ "Comments").text.r
+    getTokens(grammar \ "Tokens")
+    getParsers(grammar \ "Parsers")*/
+}
+
   def load(inFile: File) {
     val grammar = XML.loadFile(inFile)
+    load(grammar)
+/*    Parsers.customWhitespace = (grammar \ "Whitespace").text.r
+    Parsers.comments = (grammar \ "Comments").text.r
+    getTokens(grammar \ "Tokens")
+    getParsers(grammar \ "Parsers")*/
+  }
+
+  def load(grammar: Elem) {
     Parsers.customWhitespace = (grammar \ "Whitespace").text.r
     Parsers.comments = (grammar \ "Comments").text.r
     getTokens(grammar \ "Tokens")
