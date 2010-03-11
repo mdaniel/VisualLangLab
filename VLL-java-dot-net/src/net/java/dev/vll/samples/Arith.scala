@@ -33,6 +33,10 @@ object Arith {
 Arith is the arithmetic expression parser described at page 644 of
 "Programming in Scala" (http://www.artima.com/shop/programming_in_scala)
 
+Clicking the "OK" button below will cause the Arith parsers to be loaded into the IDE.
+You can review the parsers by using the tree pane on the left, and the drop-down
+combo-box above the tree.
+
 If you don't have the book, the text of the containing chapter can be found at this link:
 http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf
 
