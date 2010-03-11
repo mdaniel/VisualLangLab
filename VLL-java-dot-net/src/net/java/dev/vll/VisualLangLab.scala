@@ -30,6 +30,7 @@ import javax.swing.filechooser.FileFilter
 import javax.swing.{UIManager, JComboBox, SwingUtilities}
 import scala.swing.event.{ButtonClicked, WindowClosing}
 import scala.swing.Swing._
+import net.java.dev.vll.samples._
 
 object VisualLangLab extends SimpleSwingApplication with ActionListener {
 
@@ -403,22 +404,31 @@ object VisualLangLab extends SimpleSwingApplication with ActionListener {
   }
 
   val aboutMenuItem = new MenuItem("About VisualLangLab") {
-    val msg = """<html><body><table><tr><td align="center">VisualLanguageLab, Ver-2
-Copyright 2005, 2010. All rights reserved
-Sanjay Dasgupta, sanjay.dasgupta@gmail.com
-</td></tr></table></body></html>"""
+    val msg ="""
+                VisualLangLab, Ver-2.01
+      An IDE for LL(*) Parsers using Scala Combinators
+Copyright 2010, Sanjay Dasgupta (sanjay.dasgupta@gmail.com)
+              (https://vll.dev.java.net/)
+"""
     reactions += {case ButtonClicked(_) =>
         Dialog.showMessage(splitPane, msg, "VisualLangLab", Dialog.Message.Info, null)
     }
   }
-  val helpSampleItem1 = new MenuItem("Sample-1 Java")
-  val helpSampleItem2 = new MenuItem("Sample-2 Expression")
+  val helpSampleItem1 = new MenuItem("Expr") {
+    reactions += {
+      case ButtonClicked(_) => Arith.load()
+    }
+  }
+  val helpSampleItem2 = new MenuItem("Sample-2 ???")
   val helpSampleItem3 = new MenuItem("Sample-3 ???")
   val helpSamples = new Menu("Samples") {
     contents + helpSampleItem1 + helpSampleItem2 + helpSampleItem3
   }
   val helpMenuItem = new MenuItem("Help") {
-    reactions += {case ButtonClicked(_) => }
+    val msg = "Not yet implemented\nCheck for documentation at https://vll.dev.java.net"
+    reactions += {case ButtonClicked(_) =>
+        Dialog.showMessage(splitPane, msg, "VisualLangLab", Dialog.Message.Info, null)
+    }
   }
   val helpMenu = new Menu("Help") {
     contents + helpMenuItem + new Separator + helpSamples + new Separator + aboutMenuItem
