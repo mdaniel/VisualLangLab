@@ -1,13 +1,56 @@
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />                                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />                                
 <h1>Project home page </h1>
 
-<h3>Project Description:</h3>
+
+<h3>Project Description</h3>
+
+<table width="100%"><tr>
+
+<td>
+<p>VisualLangLab is an IDE for creating, testing, and running LL(*) parsers using 
+<a href="http://www.scala-lang.org/">Scala's</a> 
+<a href="http://www.scala-lang.org/docu/files/api/scala/util/parsing/combinator/Parsers.Parser.html">
+parser</a> 
+<a href="http://en.wikipedia.org/wiki/Parser_combinator">combinators</a> 
+in a purely visual environment without code or <i>grammar</i> scripts of any kind. It is a rapid application development environment that enables you to quickly produce backtracking, recursive-descent LL(*) parsers without writing any code - and even without knowing how to program in 
+Scala (well, almost). Parsers can be run and tested within the same environment.
+</a>
+
 <p>
-VisualLangLab is an IDE for developing, testing and running parsers that use 
-<a href="http://www.scala-lang.org/">Scala</a>'s 
-<a href="">parser combinators</a>.
+Development with VisualLangLab is extremely fast as parser code-generation 
+and compilation are not required. VisualLangLab uses Scala's parser 
+combinator capabilities to build complex parsers on the fly at run-time, 
+so an iterative, incremental design process works very well.
 </p>
+
+</td>
+
+<td>
+<img src="index01.png"/>
+</td>
+
+</tr></table>
+
+<h3>Downloading & running</h3>
+<p>
+You only need to download a single jar file: 
+<a href="https://vll.dev.java.net/files/documents/10973/148678/VisualLangLab.jar">VisualLangLab.jar</a>. You start the program by executing the 
+following command:
+</p>
+
+<code>scala -cp VisualLangLab.jar net.java.dev.vll.VisualLangLab</code>
+
+<p>
+You must have Scala 2.8 (currently a 
+<a href="http://www.scala-lang.org/node/212/distributions">Beta pre-release</a>) installed. In turn, Scala 2.8 requires Java 1.5 or higher to be installed.
+</p>
+
+<p>
+Alternatively, you can 
+</p>
+
+
 <h3>Participation:</h3>
+
 <p>This project may provide an opportunity for developers to participate in a 
   variety of ways. If you are interested in participating please send an inquiry 
   to the owner at owner@projectname.dev.java.net (replace "projectname" with the 
@@ -16,15 +59,20 @@ VisualLangLab is an IDE for developing, testing and running parsers that use
 <p>If you are not a member, you can request membership to this project <a href="servlets/ProjectMembershipRequest">here</a>.</p>
 <h3>Mailing Lists:</h3>
 <p>If you wish to subscribe to one of this project's mailing lists, click <a href="servlets/ProjectMailingListList">here</a></p>
-<h3>Downloads:</h3>
-<ul>
-  <li> To access the repository, click <a href="source/browse/">here</a> </li>
-  <li> Unversioned downloads, documentation, etc... is usually kept in the Docs 
-    & Files section. You can access the Docs & Files by clicking <a href="servlets/ProjectDocumentList">here</a> 
-  </li>
-</ul>
+
+
 <h3>Issues:</h3>
 <p>To submit a project issue, or query existing issues, click <a href="servlets/ProjectIssues">here</a></p>
+
+<p>
+The current version (2.01) produces parsers based purely on 
+<a href="http://www.scala-lang.org/archives/downloads/distrib/files/nightly/docs/library/index.html">RegexParsers</a>, 
+but there are plans to include the benefits of 
+<a href="http://www.scala-lang.org/archives/downloads/distrib/files/nightly/docs/library/index.html">PackratParsers</a> and other powerful features in future 
+versions. 
+</p>
+
+
 <a name="OWNER"></a> 
 <h3>For The Project Owner:</h3>
 <p>Congratulations on your new java.net project!</p>
@@ -66,6 +114,3 @@ VisualLangLab is an IDE for developing, testing and running parsers that use
   about your project for visitors to your project space. Good luck with your new 
   project! </p>
 <br>
- 
-               
-              
