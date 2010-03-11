@@ -26,27 +26,24 @@ import net.java.dev.vll.ParseTreeHandler
 import net.java.dev.vll.VisualLangLab
 import scala.swing.Dialog
 
-object Arith extends ParseTreeHandler {
+object Arith {
 
   def load() {
     val msg = """
 Arith is the arithmetic expression parser described at page 644 of
 "Programming in Scala" (http://www.artima.com/shop/programming_in_scala)
 
-If you don't have the book, the text of the containing chapter can be
-found at this link:
+If you don't have the book, the text of the containing chapter can be found at this link:
 http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf
 
-A parse-tree processor that evaluates the arithmetic expressions can be
-installed by choosing "Run -> Tree handler -> Custom" from the menu, and
-entering "net.java.dev.vll.samples.Arith" into the dialog presented.
+A parse-tree processor that evaluates the arithmetic expressions can be installed (optionally)
+by choosing "Run -> Tree handler -> Custom" from the menu,
+and entering "net.java.dev.vll.samples.Arith" into the dialog presented.
 
-Source code for the expression handler (in the class mentioned above)
-can be found here:
-    
-
+Code for the expression handler (in the class mentioned above) can be found here:
+https://vll.dev.java.net/source/browse/*checkout*/vll/trunk/VLL-java-dot-net/src/net/java/dev/vll/samples/Arith.scala
 """
-    Dialog.showMessage(VisualLangLab.splitPane, msg, "VisualLangLab", Dialog.Message.Info, null)
+    Dialog.showMessage(VisualLangLab.splitPane, msg, "VisualLangLab sample - Arith", Dialog.Message.Info, null)
     FileIO.load(grammar)
   }
 
@@ -105,7 +102,9 @@ can be found here:
       </Parser>
     </Parsers>
   </VLL-Grammar>
+}
 
+class Arith extends ParseTreeHandler {
   private def eval(t: Any): Float = {
     t match {
       case n: String => n.toFloat
