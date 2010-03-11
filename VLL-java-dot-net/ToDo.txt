@@ -1,0 +1,55 @@
+File->New should clear all text areas, and clear custom tree handlers
+Help and about menus
+consistent logging messages
+Error on left-recursive constructs
+Trace should exclude whitespace and comments from matching range
+
+Add NOT rule reference (multiplicity = 0?)
+Packrat parsing
+Description fields for each element in rule tree
+Inline tokens?
+Add go-to on context menu for rule-ref icon in rule-tree
+JSON as persistence structure
+add confirmation dialog when deleting token node from rule
+button to copy log contents to clipboard
+Tree display for output (sample custom tree handler)
+redirect out and err (differentiated by color) to log area
+Main parser selection
+Rename rule
+
+
+Done
+Implement tupleator (change nested ~ into Arrays)
+show all files in file-chooser
+exit cleanup when window is closed
+integrity check before deleting rule
+integrity check before deleting token
+right-click edit menu not working
+hierarchic naming of nodes
+Error message when user attempts to parse with incomplete parser (sequence, choice with <2 child nodes, etc)
+Log-pane should always have fixed-size font
+Type E should be n-ary
+Choose L&F
+Save/load whitespace, comment specification
+change input format for new tokens to make comma mandatory
+add handler class loading
+tooltip for tokens
+rule-name and token-name format check (no embedded blanks, etc)
+Adding to a sequence or choice should display the newly added member
+add a 'cancel' option for save-changes dialog
+Change application icon
+file name should be indicated in title bar after Save-As
+right-click should select the node below
+Token review and management
+indicate filename on title bar
+escaping of " in xml file needed
+separate tokens for literals and regex
+Detection of unsaved changes
+Comment handling
+Assign parser names
+Parsers for recursive rules
+Enable logging
+"Delete" on tree root node must be disabled.
+Edit popup menu for input text
+Rule-Node text does not always change when trace is toggled or mult is changed
+Parse button should parse only when text size != 0
