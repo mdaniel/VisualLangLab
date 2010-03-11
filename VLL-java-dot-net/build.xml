@@ -2,9 +2,17 @@
 <!-- You may freely edit this file. See commented blocks below for -->
 <!-- some examples of how to customize the build. -->
 <!-- (If you delete it and reopen the project it will be recreated.) -->
-<project name="VLL-java-dot-net" default="default" basedir=".">
-    <description>Builds, tests, and runs the project VLL-java-dot-net.</description>
+<project name="VisualLangLab" default="default" basedir=".">
+    <description>Builds, tests, and runs the project VisualLangLab.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <target name="-post-jar">
+        <tstamp/>
+        <zip zipfile="VisualLangLab-${DSTAMP}-${TSTAMP}.zip" compress="true">
+            <fileset dir="." includes="build.xml, *.txt, *.vll, *.g, *.mf"/>
+            <fileset dir="src" includes="**/*.*"/>
+        </zip>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -54,7 +62,7 @@
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="VLL-java-dot-net-impl.jar">
+        <target name="run" depends="VisualLangLab2-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>
