@@ -5,7 +5,7 @@
 
 <table width="100%"><tr>
 
-<td align="center">
+<td>
 <p>VisualLangLab is an IDE for creating, testing, and running LL(*) parsers using 
 <a href="http://www.scala-lang.org/">Scala's</a> 
 <a href="http://www.scala-lang.org/docu/files/api/scala/util/parsing/combinator/Parsers.Parser.html">
@@ -24,8 +24,8 @@ so an iterative, incremental design process works very well.
 
 </td>
 
-<td align="center">
-<a href="VisualLangLab.jar"><img src="index01.png"/></a>
+<td>
+<a href="VisualLangLab.jar"><img src="index02.png" width="250" height="190"/></a>
 </td>
 
 </tr></table>
@@ -33,15 +33,32 @@ so an iterative, incremental design process works very well.
 <h3>Downloading & running</h3>
 <p>
 You only need to download a single jar file: 
-<a href="VisualLangLab.jar">VisualLangLab.jar</a>. You start the program by executing the 
-following command:
+<a href="VisualLangLab.jar">VisualLangLab.jar</a>. The program has been tested 
+on Windows-XP and Ubuntu-9.10. You start the program by executing the 
+following command (Windows as well as Linux):
 </p>
 
 <code>scala -cp VisualLangLab.jar net.java.dev.vll.VisualLangLab</code>
 
 <p>
-You must have Scala 2.8 (currently a 
-<a href="http://www.scala-lang.org/node/212/distributions">Beta pre-release</a>) installed. In turn, Scala 2.8 requires Java 1.5 or higher to be installed.
+You must have Scala 2.8 (get the 
+<a href="http://www.scala-lang.org/node/212/distributions">Beta1 pre-release</a>) installed. 
+In turn, Scala 2.8 requires Java 1.5 or higher. If you do not wish to install Scala, 
+you can run it from a Java command like this:
+</p>
+
+<code>java -cp "scala-library.jar;scala-swing.jar;VisualLangLab.jar" net.java.dev.vll.VisualLangLab</code>
+
+<p>
+The JAR files <i>scala-library.jar</i> and <i>scala-swing.jar</i> can be found in the 
+Scala installation zip or jar files.
+</p>
+
+<h3>Documentation, Tutorials, and Samples:</h3>
+
+<p>
+The JAR files <i>scala-library.jar</i> and <i>scala-swing.jar</i> can be found in the 
+Scala installation zip or jar files.
 </p>
 
 <h3>Participation:</h3>
