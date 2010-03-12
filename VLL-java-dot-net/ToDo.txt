@@ -1,4 +1,4 @@
-File->New should clear all text areas, and clear custom tree handlers
+Error message customization
 Help and about menus
 consistent logging messages
 Error on left-recursive constructs
@@ -19,6 +19,7 @@ Rename rule
 
 
 Done
+File->New should clear all text areas, and clear custom tree handlers
 Implement tupleator (change nested ~ into Arrays)
 show all files in file-chooser
 exit cleanup when window is closed
