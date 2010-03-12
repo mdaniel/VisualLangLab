@@ -11,8 +11,11 @@
 <a href="http://www.scala-lang.org/docu/files/api/scala/util/parsing/combinator/Parsers.Parser.html">
 parser</a> 
 <a href="http://en.wikipedia.org/wiki/Parser_combinator">combinators</a> 
-in a purely visual environment without code or <i>grammar</i> scripts of any kind. It is a rapid application development environment that enables you to quickly produce backtracking, recursive-descent LL(*) parsers without writing any code - and even without knowing how to program in 
-Scala (well, almost). Parsers can be run and tested within the same environment.
+in a purely visual environment without code or <i>grammar</i> scripts of any kind. 
+It is a rapid application development environment that enables you to quickly 
+produce backtracking, recursive-descent LL(*) parsers without writing any code - and 
+even without knowing how to program in Scala (well, almost). Parsers can be run and 
+tested within the same environment.
 </a>
 
 <p>
@@ -20,6 +23,10 @@ Development with VisualLangLab is extremely fast as parser code-generation
 and compilation are not required. VisualLangLab uses Scala's parser 
 combinator capabilities to build complex parsers on the fly at run-time, 
 so an iterative, incremental design process works very well.
+</p>
+
+<p>
+Read this <a href="docs-tuts/hello-world/index.html">introductory tutorial</a> to understand how VisualLangLab works.
 </p>
 
 </td>
@@ -33,9 +40,8 @@ so an iterative, incremental design process works very well.
 <h3>Downloading & running</h3>
 <p>
 You only need to download a single jar file: 
-<a href="VisualLangLab.jar">VisualLangLab.jar</a>. The program has been tested 
-on Windows-XP and Ubuntu-9.10. You start the program by executing the 
-following command (Windows as well as Linux):
+<a href="VisualLangLab.jar">VisualLangLab.jar</a>. You start the program by 
+executing the following command:
 </p>
 
 <code>scala -cp VisualLangLab.jar net.java.dev.vll.VisualLangLab</code>
@@ -43,23 +49,37 @@ following command (Windows as well as Linux):
 <p>
 You must have Scala 2.8 (get the 
 <a href="http://www.scala-lang.org/node/212/distributions">Beta1 pre-release</a>) installed. 
-In turn, Scala 2.8 requires Java 1.5 or higher. If you do not wish to install Scala, 
-you can run it from a Java command like this:
+In turn, Scala 2.8 requires Java 1.5 or higher. The program has been tested 
+on Windows-XP and Ubuntu-9.10. 
 </p>
 
-<code>java -cp "scala-library.jar;scala-swing.jar;VisualLangLab.jar" net.java.dev.vll.VisualLangLab</code>
+<h3>Documentation, Tutorials, and FAQ:</h3>
+
+<ul>
+<li>A first <a href="docs-tuts/hello-world/index.html">Hello-World</a> tutorial</li>
+<li>More documents and tutorials can be found <a href="docs-tuts/index.html">here</a></li>
+<li>The VisualLangLab <a href="docs-tuts/faq/index.html">FAQ</a></li>
+</ul>
+
+<h3>Grammar repository:</h3>
+
+<ul>
+<li>A first <a href="grammars/Arith.vll">arithmetic expression</a> grammar</li>
+<li>A <a href="grammars/Java1_5.vll">Java</a> grammar</li>
+<li>More grammars can be found <a href="grammars/index.html">here</a></li>
+</ul>
+
+<h3>Roadmap:</h3>
 
 <p>
-The JAR files <i>scala-library.jar</i> and <i>scala-swing.jar</i> can be found in the 
-Scala installation zip or jar files.
+There are plans to add the following features:
 </p>
 
-<h3>Documentation, Tutorials, and Samples:</h3>
-
-<p>
-The JAR files <i>scala-library.jar</i> and <i>scala-swing.jar</i> can be found in the 
-Scala installation zip or jar files.
-</p>
+<ul>
+<li>Code generation and export(Scala)</li>
+<li>Semantic predicates</li>
+<li>PackRat parsing</li>
+</ul>
 
 <h3>Participation:</h3>
 
