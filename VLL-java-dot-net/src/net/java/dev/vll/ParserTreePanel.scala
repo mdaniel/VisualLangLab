@@ -160,6 +160,8 @@ object ParserTreePanel extends ScrollPane with ActionListener with TreeSelection
     //theTree.addTreeSelectionListener(this)
     theTree.addMouseListener(popupListener)
     theTree.addSelectionPath(new TreePath(rootNode))
+    for (i <- 1 until 20)
+      theTree.expandRow(i)
   }
 
   var clipboard: ParserTreeNode = _
