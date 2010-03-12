@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>Grammar without Tears - Parser Combinators made Simple</title>
+</head>
+
+<body>
+
+<p>
+Almost <i>every</i> introduction to parsers uses an example that does 
+arithmetic expressions. So, following the beaten track, here's one 
+that replicates the code on page 644 of 
+<a href="http://www.artima.com/shop/programming_in_scala">Programming in Scala</a>. 
+If you don't have the book, download the relevant part from 
+<a href="http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf">here</a>. Step-1, obviously, is firing up your new toy ...
+</p>
+
+<pre><code>&gt; scala -cp VisualLangLab.jar net.java.dev.vll.VisualLangLab
+</code></pre>
+
+<p>
+And you will be presented with VisualLangLab's deceptively frugal interface in due course ...
+</p>
+
+<img src="images/vll-startup-gui.png"></img>
+
+<p>
+Create the first parser by choosing "Parsers" -> "New parser" from the menu 
+bar. Enter "expr" into the dialog box presented, and press the "OK" button.
+</p>
+
+<img src="images/new-parser.png"></img>
+<img src="images/new-parser-dialog.png"></img>
+
+<p>
+Now (leaving the "expr" parser incomplete) create the next parser "factor". 
+Choose "Parsers" -> "New parser" from the menu bar, enter "factor" 
+into the dialog box, and press "OK". We now have to create the tokens that 
+parser "factor" needs. Choose "Tokens" -> "New literal", enter "LPAREN, (" 
+into the dialog box, and press "OK".
+</p>
+
+<img src="images/token-lparen-dialog.png"></img>
+
+<p>
+Then create another literal token called "RPAREN" for ")"...
+</p>
+
+<img src="images/token-rparen-dialog.png"></img>
+
+<p>
+Now create a token for "floatingPointNumber". Choose "Tokens" -> "New regex" 
+from the menu bar, and enter "floatingPointNumber, \d+" into the dialog box. 
+("\d+" does not really represent a floting point number, but the approximation 
+will suffice for this example)
+</p>
+
+<img src="images/floatingPointNumber-dialog.png"></img>
+
+<p>
+Having created the three required tokens, we now return to the parser we were 
+creating - "factor". Right-click factor's root node, and choose Choice" from 
+the context menu...
+</p> 
+
+<img src="images/factor-add-choice.png"></img>
+
+<p>
+The tree display for "factor" should now look like this...
+</p>
+
+<img src="images/factor-1.png"></img>
+
+<p>
+Right-click factor's root node, and choose "Add" -> "Token" 
+from the context menu...
+</p>
+
+<img src="images/factor-add-token-fpn.png"></img>
+
+<p>
+Then select "floatingPointNumber" from the combo-box in the dialog...
+</p>
+
+<img src="images/select-fpn.png"></img>
+
+</body>
+</html>
