@@ -43,7 +43,7 @@ installed (optionally) by choosing "Run -> Tree handler -> Custom",
 and entering "net.java.dev.vll.treehandler.Arith" into the dialog presented.
 
 Code for the expression handler (in the class mentioned above) can be found here:
-https://vll.dev.java.net/source/browse/*checkout*/vll/trunk/VLL-java-dot-net/src/net/java/dev/vll/samples/Arith.scala
+https://vll.dev.java.net/source/browse/*checkout*/vll/trunk/VLL-java-dot-net/src/net/java/dev/vll/treehandler/Arith.scala
 """
     FileIO.load(grammar)
     println(msg)
