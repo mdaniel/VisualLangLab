@@ -246,6 +246,9 @@ object VisualLangLab extends SimpleSwingApplication with ActionListener {
           grammarFile = None
           top.title = "VisualLangLab"
         }
+        customTreeHandlerClassName = None
+        customTreeHandler = None
+        basicPrinterMenuItem.selected = true
     }}
   val fileOpenMenuItem = new MenuItem("Open") { reactions += {
       case ButtonClicked(_) =>
@@ -461,7 +464,7 @@ Copyright 2010, Sanjay Dasgupta (sanjay.dasgupta@gmail.com)
     splitPane.dividerLocation = treeWidth
     contents = new BorderPanel {
       add(splitPane, BorderPanel.Position.Center)
-      add(new Label("Status"), BorderPanel.Position.South)
+      //add(new Label("Status"), BorderPanel.Position.South)
     }
     location = ((screenWidth - frameWidth) / 2, (screenHeight - frameHeight) / 2)
     preferredSize = (frameWidth, frameHeight)
@@ -471,9 +474,6 @@ Copyright 2010, Sanjay Dasgupta (sanjay.dasgupta@gmail.com)
     reactions += {
       case WindowClosing(w) => saveChanges()
     }
-//    override def closeOperation() {
-//      saveChanges()
-//    }
     System.setOut(new PrintStream(OutStream))
     System.setErr(new PrintStream(OutStream))
   }
