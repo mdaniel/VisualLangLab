@@ -29,7 +29,6 @@ object Multiplicity extends Enumeration {
   val ZeroOrMore = Value("*")
   val OneOrMore = Value("+")
   val Zero = Value("0")
-  //val strMap = Map("1" -> One, "?" -> ZeroOrOne, "*" -> ZeroOrMore, "+" -> OneOrMore)
 }
 
 abstract sealed class ParserTreeNode (
@@ -38,16 +37,27 @@ abstract sealed class ParserTreeNode (
   var trace: Boolean = false
 ) extends DefaultMutableTreeNode {
   lazy val image: Image = swing.Swing.Icon(getClass.getResource(imageName)).getImage
+  var errorMessage = ""
   def cloneTree: ParserTreeNode
   def isComplete: Boolean
   def nodeName: String = getParent.asInstanceOf[ParserTreeNode].nodeName + "." + getParent.getIndex(this)
   def getChild(i: Int) = getChildAt(i).asInstanceOf[ParserTreeNode]
+  def annotation = (trace, errorMessage) match {
+    case (false, "") => "   "
+    case (false, _) => "[M]"
+    case (true, "") => "[T]"
+    case (true, _) => "[#]"
+  }
 }
 
 class LiteralNode(val literalName: String, multi: Multiplicity.Value = Multiplicity.One) extends
 ParserTreeNode(multi, "Literal.gif") {
-  override def toString = "%s %s %s  ".format(multiplicity, literalName, if (trace) "#" else " ")
-  def cloneTree() = new LiteralNode(literalName, multiplicity)
+  override def toString = "%s %s %s  ".format(multiplicity, literalName, annotation)
+  def cloneTree() = {
+    val clone = new LiteralNode(literalName, multiplicity)
+    clone.errorMessage = errorMessage
+    clone
+  }
   def isComplete = true
 }
 
@@ -57,8 +67,12 @@ object LiteralNode {
 
 class RegexNode(val regexName: String, multi: Multiplicity.Value = Multiplicity.One) extends
 ParserTreeNode(multi, "Regex.gif") {
-  override def toString = "%s %s %s  ".format(multiplicity, regexName, if (trace) "#" else " ")
-  def cloneTree() = new RegexNode(regexName, multiplicity)
+  override def toString = "%s %s %s  ".format(multiplicity, regexName, annotation)
+  def cloneTree() = {
+    val clone = new RegexNode(regexName, multiplicity)
+    clone.errorMessage = errorMessage
+    clone
+  }
   def isComplete = true
 }
 
@@ -67,10 +81,11 @@ object RegexNode {
 }
 
 class RootNode(val name: String) extends ParserTreeNode(Multiplicity.One, "Root.gif") {
-  override def toString = "<html><font color=\"%s\">1 (root)   </font></html>".
-      format(if (isComplete) "black" else "red")
+  override def toString = "<html><font color=\"%s\">1 (root) %s  </font></html>".
+      format(if (isComplete) "black" else "red", annotation)
   def cloneTree() = {
     val clone = new RootNode(name)
+    clone.errorMessage = errorMessage
     val model = new DefaultTreeModel(clone)
     for (i <- 0 until getChildCount) {
       val child = getChild(i)
@@ -91,9 +106,10 @@ object RootNode {
 class RepSepNode (multi: Multiplicity.Value = Multiplicity.ZeroOrMore) extends
 ParserTreeNode(multi, "RepSep.gif") {
   override def toString = "<html><font color=\"%s\">%s (%s) %s  </font></html>".
-      format(if (isComplete) "black" else "red" ,multiplicity, nodeName, if (trace) "#" else " ")
+      format(if (isComplete) "black" else "red" ,multiplicity, nodeName, annotation)
   def cloneTree() = {
     val clone = new RepSepNode(multiplicity)
+    clone.errorMessage = errorMessage
     val model = new DefaultTreeModel(clone)
     for (i <- 0 until getChildCount) {
       val child = getChild(i)
@@ -114,9 +130,10 @@ object RepSepNode {
 class SequenceNode (multi: Multiplicity.Value = Multiplicity.One) extends
 ParserTreeNode(multi, "Sequence.gif") {
   override def toString = "<html><font color=\"%s\">%s (%s) %s  </font></html>".
-      format(if (isComplete) "black" else "red" ,multiplicity, nodeName, if (trace) "#" else " ")
+      format(if (isComplete) "black" else "red" ,multiplicity, nodeName, annotation)
   def cloneTree() = {
     val clone = new SequenceNode(multiplicity)
+    clone.errorMessage = errorMessage
     val model = new DefaultTreeModel(clone)
     for (i <- 0 until getChildCount) {
       val child = getChild(i)
@@ -137,9 +154,10 @@ object SequenceNode {
 class ChoiceNode (multi: Multiplicity.Value = Multiplicity.One) extends
 ParserTreeNode(multi, "Choice.gif") {
   override def toString = "<html><font color=\"%s\">%s (%s) %s  </font></html>".
-      format(if (isComplete) "black" else "red" ,multiplicity, nodeName, if (trace) "#" else " ")
+      format(if (isComplete) "black" else "red" ,multiplicity, nodeName, annotation)
   def cloneTree() = {
     val clone = new ChoiceNode(multiplicity)
+    clone.errorMessage = errorMessage
     val model = new DefaultTreeModel(clone)
     for (i <- 0 until getChildCount) {
       val child = getChild(i)
@@ -159,8 +177,12 @@ object ChoiceNode {
 
 class ReferenceNode(val parserName: String, multi: Multiplicity.Value = Multiplicity.One) extends
 ParserTreeNode(multi, "Reference.gif") {
-  override def toString = "%s %s %s  ".format(multiplicity, parserName, if (trace) "#" else " ")
-  def cloneTree() = new ReferenceNode(parserName, multiplicity)
+  override def toString = "%s %s %s  ".format(multiplicity, parserName, annotation)
+  def cloneTree() = {
+    val clone = new ReferenceNode(parserName, multiplicity)
+    clone.errorMessage = errorMessage
+    clone
+  }
   def isComplete = true
 }
 

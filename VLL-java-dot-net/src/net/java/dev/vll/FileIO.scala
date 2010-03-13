@@ -68,28 +68,29 @@ object FileIO {
   }
 
   def printParserTree(t: ParserTreeNode, level: Int) {
+    def details() = "Mult=\"%s\" ErrMsg=\"%s\"".format(t.multiplicity, encode(t.errorMessage))
     val margin = "  " * (2 + level)
     t match {
-      case t: LiteralNode => out.printf("%s<Token Ref=\"%s\" Mult=\"%s\"/>%n", margin, encode(t.literalName), t.multiplicity)
-      case t: RegexNode => out.printf("%s<Token Ref=\"%s\" Mult=\"%s\"/>%n", margin, encode(t.regexName), t.multiplicity)
-      case r: ReferenceNode => out.printf("%s<Reference Ref=\"%s\" Mult=\"%s\"/>%n", margin, encode(r.parserName), r.multiplicity)
+      case t: LiteralNode => out.printf("%s<Token Ref=\"%s\" %s/>%n", margin, encode(t.literalName), details)
+      case t: RegexNode => out.printf("%s<Token Ref=\"%s\" %s/>%n", margin, encode(t.regexName), details)
+      case r: ReferenceNode => out.printf("%s<Reference Ref=\"%s\" %s/>%n", margin, encode(r.parserName), details)
       case s: RootNode =>
         //out.printf("%s<Root>%n", margin)
         for (i <- 0 until s.getChildCount)
           printParserTree(s.getChildAt(i).asInstanceOf[ParserTreeNode], level + 1)
         //out.printf("%s</Root>%n", margin)
       case s: SequenceNode =>
-        out.printf("%s<Sequence Mult=\"%s\">%n", margin, s.multiplicity)
+        out.printf("%s<Sequence %s>%n", margin, details)
         for (i <- 0 until s.getChildCount)
           printParserTree(s.getChildAt(i).asInstanceOf[ParserTreeNode], level + 1)
         out.printf("%s</Sequence>%n", margin)
       case rs: RepSepNode =>
-        out.printf("%s<RepSep Mult=\"%s\">%n", margin, rs.multiplicity)
+        out.printf("%s<RepSep %s>%n", margin, details)
         for (i <- 0 until rs.getChildCount)
           printParserTree(rs.getChildAt(i).asInstanceOf[ParserTreeNode], level + 1)
         out.printf("%s</RepSep>%n", margin)
       case c: ChoiceNode =>
-        out.printf("%s<Choice Mult=\"%s\">%n", margin, c.multiplicity)
+        out.printf("%s<Choice %s>%n", margin, details)
         for (i <- 0 until c.getChildCount)
           printParserTree(c.getChildAt(i).asInstanceOf[ParserTreeNode], level + 1)
         out.printf("%s</Choice>%n", margin)
@@ -156,38 +157,48 @@ object FileIO {
       case <Reference></Reference> =>
         val ref = decode((node \ "@Ref").toString)
         val mult = (node \ "@Mult").toString
+        val errMsg = (node \ "@ErrMsg").toString
         //printf("  Reference: %s, %s%n", ref, mult)
         aNode = new ReferenceNode(ref, strMap(mult))
+        aNode.errorMessage = errMsg
         parent.add(aNode)
       case <Token></Token> => 
         val ref = decode((node \ "@Ref").toString)
         val mult = (node \ "@Mult").toString
+        val errMsg = (node \ "@ErrMsg").toString
         //printf("  Token: %s, %s%n", ref, mult)
         TokenBank.get(ref) match {
           case Some(Left(_)) => aNode = new LiteralNode(ref, strMap(mult))
           case Some(Right(_)) => aNode = new RegexNode(ref, strMap(mult))
           case None => println("Token not found")
         }
+        aNode.errorMessage = errMsg
         //aNode = new TokenTreeNode(ref, strMap(mult))
         parent.add(aNode)
       case <Sequence>{contents @ _*}</Sequence> => 
         val mult = (node \ "@Mult").toString
+        val errMsg = (node \ "@ErrMsg").toString
         //printf("  Sequence: %s%n", mult)
         aNode = new SequenceNode(strMap(mult))
+        aNode.errorMessage = errMsg
         if (parent != null)
           parent.add(aNode)
         for (c <- node.child) traverse(c, aNode)
       case <RepSep>{contents @ _*}</RepSep> =>
         val mult = (node \ "@Mult").toString
+        val errMsg = (node \ "@ErrMsg").toString
         //printf("  Sequence: %s%n", mult)
+        aNode.errorMessage = errMsg
         aNode = new RepSepNode(strMap(mult))
         if (parent != null)
           parent.add(aNode)
         for (c <- node.child) traverse(c, aNode)
       case <Choice>{contents @ _*}</Choice> => 
         val mult = (node \ "@Mult").toString
+        val errMsg = (node \ "@ErrMsg").toString
         //printf("  Choice: %s%n", mult)
         aNode = new ChoiceNode(strMap(mult))
+        aNode.errorMessage = errMsg
         if (parent != null)
           parent.add(aNode)
         for (c <- node.child) traverse(c, aNode)

@@ -36,6 +36,14 @@ object ParserTreePanel extends ScrollPane with ActionListener with TreeSelection
 //    println(t)
   }
 
+  def setErrorMessage() {
+    Dialog.showInput(VisualLangLab.splitPane, "Enter message", "Error message", Dialog.Message.Question,
+                     null, Array[String](), selectedNode.errorMessage) match {
+      case Some(msg) => selectedNode.errorMessage = msg
+      case None => 
+    }
+  }
+
   def chooseToken(): Option[ParserTreeNode] = {
     if (TokenBank.isEmpty) {
       Dialog.showMessage(VisualLangLab.splitPane, "No tokens defined yet", "Add token", Dialog.Message.Info, null)
@@ -117,6 +125,7 @@ object ParserTreePanel extends ScrollPane with ActionListener with TreeSelection
       case TreeNodePopupMenu.moveDown => parent.insert(selectedNode, parent.getIndex(selectedNode) + 1)
           theModel.nodeStructureChanged(parent)  
           VisualLangLab.isDirty = true
+      case TreeNodePopupMenu.errorMsg => setErrorMessage()
       case TreeNodePopupMenu.traceNode => selectedNode.trace = !selectedNode.trace
         theModel.nodeChanged(selectedNode)
       case TreeNodePopupMenu.cutNode =>

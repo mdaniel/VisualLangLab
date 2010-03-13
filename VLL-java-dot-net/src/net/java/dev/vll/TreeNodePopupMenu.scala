@@ -43,8 +43,12 @@ object TreeNodePopupMenu extends JPopupMenu {
         multMenu.setEnabled(false)
       case null =>
         multMenu.setEnabled(false)
+        errorMsg.setEnabled(false)
+        traceNode.setEnabled(false)
       case _ =>
         multMenu.setEnabled(true)
+        errorMsg.setEnabled(true)
+        traceNode.setEnabled(true)
     }
     selectedNode match {
       case cho: ChoiceNode => addMenu.setEnabled(true)
@@ -94,7 +98,7 @@ object TreeNodePopupMenu extends JPopupMenu {
   val multZeroOrOne = new JMenuItem("? (0 or 1)")
   val multZeroOrMore = new JMenuItem("* (0 or more)")
   val multOneOrMore = new JMenuItem("+ (1 or more)")
-  val multZero = new JMenuItem("0 (nonexistent)")
+  val multZero = new JMenuItem("0 (not there)")
   multMenu.add(multOne)
   multOne.addActionListener(ParserTreePanel)
   multZeroOrOne.addActionListener(ParserTreePanel)
@@ -131,6 +135,10 @@ object TreeNodePopupMenu extends JPopupMenu {
   val deleteNode = new JMenuItem("Delete")
   editMenu.add(deleteNode)
   deleteNode.addActionListener(ParserTreePanel)
+
+  val errorMsg = new JMenuItem("Error message")
+  add(errorMsg)
+  errorMsg.addActionListener(ParserTreePanel)
   addSeparator()
 
   val traceNode = new JCheckBoxMenuItem("Trace")

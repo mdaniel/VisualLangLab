@@ -23,7 +23,7 @@ package net.java.dev.vll
 import javax.swing.{JTree}
 import javax.swing.tree.{DefaultTreeCellRenderer}
 import java.awt.event.MouseEvent
-import java.awt.{Component}
+import java.awt.{Component, Font}
 
 object ElementRenderer extends DefaultTreeCellRenderer {
   override def getTreeCellRendererComponent(tree: JTree, value: Object, selected: Boolean, 
@@ -42,7 +42,14 @@ object ElementRenderer extends DefaultTreeCellRenderer {
         toolTipText = if(rs.getChildCount < 2) "Must have 2 child nodes" else ""
       case _ => toolTipText = "???"
     }
-    super.getTreeCellRendererComponent( tree, value, selected, expanded, leaf, row, hasFocus )
+    val r = super.getTreeCellRendererComponent( tree, value, selected, expanded, leaf, row, hasFocus )
+    if (theFont == None) {
+      val f = r.getFont
+      theFont = Some(f)
+      val newFont = new Font(Font.MONOSPACED, f.getStyle, f.getSize)
+      r.setFont(newFont)
+    }
+    r
   }
   override def getToolTipText(me: MouseEvent): String = toolTipText
   override def getLeafIcon = theIcon
@@ -50,4 +57,5 @@ object ElementRenderer extends DefaultTreeCellRenderer {
   override def getClosedIcon = theIcon
   var theIcon: ElementIcon = null
   var toolTipText = ""
+  var theFont: Option[Font] = None
 }

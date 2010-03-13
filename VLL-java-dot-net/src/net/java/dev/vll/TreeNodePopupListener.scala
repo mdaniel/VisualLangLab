@@ -37,10 +37,7 @@ class TreeNodePopupListener(val popup: JPopupMenu) extends MouseAdapter {
     if (e.isPopupTrigger()) {
       val path = ParserTreePanel.theTree.getPathForLocation(e.getX(), e.getY())
       if (path != null) {
-        //RuleTreePanel.theTree.addSelectionPath(path)
         ParserTreePanel.theTree.setSelectionPath(path)
-        //RuleTreePanel.theTree.scrollPathToVisible(path)
-        //val node = path.getLastPathComponent.asInstanceOf[RuleTreeNode]
         ParserTreePanel.selectedNode = path.getLastPathComponent.asInstanceOf[ParserTreeNode]
         TreeNodePopupMenu.adjustMenu()
         TreeNodePopupMenu.show(e.getComponent(), e.getX() + VisualLangLab.treeWidth / 10, e.getY());

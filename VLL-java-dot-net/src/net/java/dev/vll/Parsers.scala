@@ -42,6 +42,15 @@ object Parsers extends RegexParsers {
     else
       offset
 
+  private def setCustomMessage[T](p: Parser[T], newMsg: String): Parser[T] = {
+    return Parser(in => p(in) match {
+        case Error(_, nxt) => Error(newMsg, nxt)
+        case Failure(_, nxt) => Failure(newMsg, nxt)
+        case success => success
+      }
+    )
+  }
+
   private def applyMultiplicity(parser: Parser[_], multiplicity: Multiplicity.Value) = multiplicity match {
     case Multiplicity.One => parser
     case Multiplicity.ZeroOrOne => (parser)?
@@ -50,10 +59,10 @@ object Parsers extends RegexParsers {
     case Multiplicity.Zero => not(parser.asInstanceOf[Parser[Nothing]])
   }
 
-  private def withTrace(p: Parser[_]): Parser[_] = {
+  private def withTrace[T](p: Parser[T]): Parser[T] = {
       Parser(x => {
           traceStack.push(x.pos)
-          val res: ParseResult[_] = p(x);
+          val res: ParseResult[T] = p(x);
           val startPos = traceStack.pop
           res match {
             case Success(_, next) =>
@@ -76,7 +85,7 @@ object Parsers extends RegexParsers {
   }
 
   private def tilde2array(t: ~[_,_]): Array[Any] = {
-    def tilde2list(t: ~[_,_]): List[_] = {
+    def tilde2list(t: ~[_,_]): List[Any] = {
       val ~(a, b) = t
       a match {
         case at: ~[_,_] => b :: tilde2list(at)
@@ -157,6 +166,8 @@ object Parsers extends RegexParsers {
       case _ => System.err.printf("Unknown node-type: (%s, %s)%n", node.nodeName, node.getClass)
         parser = err("Unknown node type: " + node.toString)
     }
+    if (!node.errorMessage.isEmpty)
+      parser = setCustomMessage(parser, node.errorMessage)
     if (node.trace) {
       parser = withTrace(parser)
       parser.named(node.nodeName + ".TRACE")
