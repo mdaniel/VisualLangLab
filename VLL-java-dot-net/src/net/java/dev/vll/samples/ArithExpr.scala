@@ -22,34 +22,42 @@ package net.java.dev.vll.samples
 
 import net.java.dev.vll.Parsers._
 import net.java.dev.vll.FileIO
+import net.java.dev.vll.TextPane
 import net.java.dev.vll.VisualLangLab
 import scala.swing.Dialog
 
-object Arith {
+object ArithExpr {
 
   def load() {
-    val msg = """
-Arith is the arithmetic expression parser described at page 644 of
+    val msg = """ArithExpr implements the parser described at page 644 of
 "Programming in Scala" (http://www.artima.com/shop/programming_in_scala)
-
-A description of the parser can also be found at the following link:
+A description of the same parser can also be found here:
 http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf
 
-The Arith parsers have been loaded into the IDE, and you can review them
-by using the tree pane (on the left), and the drop-down combo-box above it.
+The ArithExpr parsers have been loaded -- into the tree pane on the left.
+use the combo-box above the tree pane to choose different sub-parsers.
+
+IMPORTANT: Remember to have the top-level parser (expr) selected when running
+the parser.
 
 A parse-tree processor that evaluates the arithmetic expressions can be 
 installed (optionally) by choosing "Run -> Tree handler -> Custom",
-and entering "net.java.dev.vll.treehandler.Arith" into the dialog presented.
+and entering "net.java.dev.vll.treehandler.ArithExpr" into the dialog presented.
 
 Code for the expression handler (in the class mentioned above) can be found here:
-https://vll.dev.java.net/source/browse/*checkout*/vll/trunk/VLL-java-dot-net/src/net/java/dev/vll/treehandler/Arith.scala
+https://vll.dev.java.net/source/browse/*checkout*/vll/trunk/VLL-java-dot-net/src/net/java/dev/vll/treehandler/ArithExpr.scala
+
+Sample input (remove quotes): "(2 + 3) * (7 - 3)"
+Output (without tree handler): (((((~((2~List())~List((+~(3~List())))))~))~List((*~(((~((7~List())~List((-~(3~List())))))~)))))~List())
+
+Output (with tree handler): 20.0
 """
     FileIO.load(grammar)
+    TextPane.clearLogText()
     println(msg)
     Dialog.showMessage(VisualLangLab.splitPane, 
-        "Arith - an arithmetic expression parser\nPlease read notes in log window",
-        "VisualLangLab sample - Arith", Dialog.Message.Info, null)
+        "ArithExpr - an arithmetic expression parser\nPlease read notes in log window",
+        "VisualLangLab sample - ArithExpr", Dialog.Message.Info, null)
   }
 
   val grammar = <VLL-Grammar>
