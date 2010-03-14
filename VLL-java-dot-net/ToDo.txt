@@ -1,10 +1,9 @@
-Error message customization
+consume spaces and comments after any match (to improve error messages and traces)
 Help and about menus
 consistent logging messages
 Error on left-recursive constructs
 Trace should exclude whitespace and comments from matching range
 
-Add NOT rule reference (multiplicity = 0?)
 Packrat parsing
 Description fields for each element in rule tree
 Inline tokens?
@@ -19,6 +18,8 @@ Rename rule
 
 
 Done
+Add NOT rule reference (multiplicity = 0?)
+Error message customization
 File->New should clear all text areas, and clear custom tree handlers
 Implement tupleator (change nested ~ into Arrays)
 show all files in file-chooser
