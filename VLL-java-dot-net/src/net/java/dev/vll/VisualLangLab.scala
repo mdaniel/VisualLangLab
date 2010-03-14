@@ -431,7 +431,11 @@ Copyright 2010, Sanjay Dasgupta (sanjay.dasgupta@gmail.com)
       case ButtonClicked(_) => SimpleJSON.load()
     }
   }
-  val helpSampleItem3 = new MenuItem("Sample-3 ???")
+  val helpSampleItem3 = new MenuItem("Java (Incomplete)") {
+    reactions += {
+      case ButtonClicked(_) => Java.load()
+    }
+  }
   val helpSamples = new Menu("Samples") {
     contents + helpSampleItem1 + helpSampleItem2 + helpSampleItem3
   }
