@@ -30,6 +30,7 @@ object ElementRenderer extends DefaultTreeCellRenderer {
       expanded: Boolean, leaf: Boolean, row: Int, hasFocus: Boolean): Component = {
     theIcon = new ElementIcon( value.asInstanceOf[ParserTreeNode], selected )
     value match {
+      case l: ReferenceNode => toolTipText = ""
       case l: LiteralNode => toolTipText = TokenBank(l.literalName).left.get
       case r: RegexNode => toolTipText = TokenBank(r.regexName).right.get
       case s: SequenceNode =>
@@ -47,7 +48,7 @@ object ElementRenderer extends DefaultTreeCellRenderer {
       val f = r.getFont
       theFont = Some(f)
       val newFont = new Font(Font.MONOSPACED, f.getStyle, f.getSize)
-      r.setFont(newFont)
+      //r.setFont(newFont)
     }
     r
   }

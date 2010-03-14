@@ -170,7 +170,8 @@ object FileIO {
         TokenBank.get(ref) match {
           case Some(Left(_)) => aNode = new LiteralNode(ref, strMap(mult))
           case Some(Right(_)) => aNode = new RegexNode(ref, strMap(mult))
-          case None => println("Token not found")
+          case None => printf("FATAL: Token '%s' not found. VLL file is corrupted%n", ref)
+            exit()
         }
         aNode.errorMessage = errMsg
         //aNode = new TokenTreeNode(ref, strMap(mult))
@@ -188,8 +189,8 @@ object FileIO {
         val mult = (node \ "@Mult").toString
         val errMsg = (node \ "@ErrMsg").toString
         //printf("  Sequence: %s%n", mult)
-        aNode.errorMessage = errMsg
         aNode = new RepSepNode(strMap(mult))
+        aNode.errorMessage = errMsg
         if (parent != null)
           parent.add(aNode)
         for (c <- node.child) traverse(c, aNode)

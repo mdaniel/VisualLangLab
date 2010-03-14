@@ -36,7 +36,7 @@ abstract sealed class ParserTreeNode (
   val imageName: String,
   var trace: Boolean = false
 ) extends DefaultMutableTreeNode {
-  lazy val image: Image = swing.Swing.Icon(getClass.getResource(imageName)).getImage
+  lazy val image: Image = swing.Swing.Icon(getClass.getResource("images/" + imageName)).getImage
   var errorMessage = ""
   def cloneTree: ParserTreeNode
   def isComplete: Boolean

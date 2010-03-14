@@ -126,6 +126,7 @@ object ParserTreePanel extends ScrollPane with ActionListener with TreeSelection
           theModel.nodeStructureChanged(parent)  
           VisualLangLab.isDirty = true
       case TreeNodePopupMenu.errorMsg => setErrorMessage()
+        theModel.nodeChanged(selectedNode)
       case TreeNodePopupMenu.traceNode => selectedNode.trace = !selectedNode.trace
         theModel.nodeChanged(selectedNode)
       case TreeNodePopupMenu.cutNode =>

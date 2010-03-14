@@ -20,7 +20,7 @@
 
 package net.java.dev.vll
 
-import scala.swing.{Orientation, Separator, SplitPane, Dialog, FileChooser, BorderPanel, Label, RadioMenuItem, ButtonGroup, CheckMenuItem}
+import scala.swing.{Orientation, Separator, SplitPane, Dialog, FileChooser, BorderPanel, RadioMenuItem, ButtonGroup, CheckMenuItem}
 import swing.{MainFrame, Menu, MenuBar, SimpleSwingApplication, MenuItem}
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
@@ -176,6 +176,10 @@ object VisualLangLab extends SimpleSwingApplication with ActionListener {
     }
   }
 
+  def renameParser() {
+      Dialog.showMessage(VisualLangLab.splitPane, "Not yet implemented", "Rename parser", Dialog.Message.Info, null)
+  }
+
   def deleteParser() {
     val parser = parserChooser.getSelectedItem.asInstanceOf[String]
     val ok = Dialog.showConfirmation(splitPane, "Delete '" + parser + "' ?",
@@ -303,7 +307,7 @@ object VisualLangLab extends SimpleSwingApplication with ActionListener {
     reactions += {case ButtonClicked(_) => createNewParser()}
   }
   val renameParserMenuItem = new MenuItem("Rename parser") {
-    reactions += {case ButtonClicked(_) => /* Not yet implemented */}
+    reactions += {case ButtonClicked(_) => renameParser()}
   }
   val deleteParserMenuItem = new MenuItem("Delete parser") {
     reactions += {case ButtonClicked(_) => deleteParser()}
@@ -417,12 +421,16 @@ Copyright 2010, Sanjay Dasgupta (sanjay.dasgupta@gmail.com)
         Dialog.showMessage(splitPane, msg, "VisualLangLab", Dialog.Message.Info, null)
     }
   }
-  val helpSampleItem1 = new MenuItem("Expr") {
+  val helpSampleItem1 = new MenuItem("ArithExpr") {
     reactions += {
-      case ButtonClicked(_) => Arith.load()
+      case ButtonClicked(_) => ArithExpr.load()
     }
   }
-  val helpSampleItem2 = new MenuItem("Sample-2 ???")
+  val helpSampleItem2 = new MenuItem("SimpleJSON") {
+    reactions += {
+      case ButtonClicked(_) => SimpleJSON.load()
+    }
+  }
   val helpSampleItem3 = new MenuItem("Sample-3 ???")
   val helpSamples = new Menu("Samples") {
     contents + helpSampleItem1 + helpSampleItem2 + helpSampleItem3
@@ -441,7 +449,7 @@ Copyright 2010, Sanjay Dasgupta (sanjay.dasgupta@gmail.com)
   val prettyTreePrinter: ParseTreeHandler = PrettyTreePrinter
   var customTreeHandlerClassName: Option[String] = None
   var customTreeHandler: Option[ParseTreeHandler] = None
-  val vllIconImage = swing.Swing.Icon(getClass.getResource("Icon.gif"))
+  val vllIconImage = swing.Swing.Icon(getClass.getResource("images/Icon.gif"))
   var isDirty = false
   val parserChooser = new JComboBox()
   parserChooser.addActionListener(this)
