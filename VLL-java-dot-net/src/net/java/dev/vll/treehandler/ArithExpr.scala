@@ -23,7 +23,7 @@ package net.java.dev.vll.treehandler
 import net.java.dev.vll.ParseTreeHandler
 import net.java.dev.vll.Parsers._
 
-class Arith extends ParseTreeHandler {
+class ArithExpr extends ParseTreeHandler {
   private def eval(t: Any): Float = {
     t match {
       case n: String => n.toFloat
