@@ -1,0 +1,55 @@
+<VLL-Grammar>
+  <Whitespace>\s+</Whitespace>
+  <Comments></Comments>
+  <Tokens>
+    <Literal Name="DIV" Pattern="/"/>
+    <Literal Name="LPAREN" Pattern="("/>
+    <Literal Name="MINUS" Pattern="-"/>
+    <Literal Name="MULT" Pattern="*"/>
+    <Literal Name="PLUS" Pattern="+"/>
+    <Literal Name="RPAREN" Pattern=")"/>
+    <Regex Name="floatingPointNumber" Pattern="-?(\d+(\.\d*)?|\d*\.\d+)([eE][+-]?\d+)?[fFdD]?"/>
+  </Tokens>
+  <Parsers>
+    <Parser Name="expr">
+        <Sequence Mult="1" ErrMsg="">
+          <Reference Ref="term" Mult="1" ErrMsg=""/>
+          <Choice Mult="*" ErrMsg="">
+            <Sequence Mult="1" ErrMsg="">
+              <Token Ref="PLUS" Mult="1" ErrMsg=""/>
+              <Reference Ref="term" Mult="1" ErrMsg=""/>
+            </Sequence>
+            <Sequence Mult="1" ErrMsg="">
+              <Token Ref="MINUS" Mult="1" ErrMsg=""/>
+              <Reference Ref="term" Mult="1" ErrMsg=""/>
+            </Sequence>
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="factor">
+        <Choice Mult="1" ErrMsg="">
+          <Token Ref="floatingPointNumber" Mult="1" ErrMsg=""/>
+          <Sequence Mult="1" ErrMsg="">
+            <Token Ref="LPAREN" Mult="1" ErrMsg=""/>
+            <Reference Ref="expr" Mult="1" ErrMsg=""/>
+            <Token Ref="RPAREN" Mult="1" ErrMsg=""/>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="term">
+        <Sequence Mult="1" ErrMsg="">
+          <Reference Ref="factor" Mult="1" ErrMsg=""/>
+          <Choice Mult="*" ErrMsg="">
+            <Sequence Mult="1" ErrMsg="">
+              <Token Ref="MULT" Mult="1" ErrMsg=""/>
+              <Reference Ref="factor" Mult="1" ErrMsg=""/>
+            </Sequence>
+            <Sequence Mult="1" ErrMsg="">
+              <Token Ref="DIV" Mult="1" ErrMsg=""/>
+              <Reference Ref="factor" Mult="1" ErrMsg=""/>
+            </Sequence>
+          </Choice>
+        </Sequence>
+    </Parser>
+  </Parsers>
+</VLL-Grammar>
