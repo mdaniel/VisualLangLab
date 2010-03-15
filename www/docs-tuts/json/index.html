@@ -79,21 +79,15 @@ involve code-generation or compilation of any kind.
 
 <p>
 Since this may be unfamiliar terrain, here's a sneak preview of where we're going. 
-The trees in Figure-2 below show the four (sub-)parsers in the json parser. 
-Comparing each tree with the corresponding Scala code (last row 
-of table) should give you a good idea of the purpose of each node / icon. 
+The trees in Figure-2 below show the four parsers in the json parser. 
+Comparing each tree with the corresponding Scala code (from the book or chapter 
+extract referred above) should give you a good idea of the purpose of each node / icon. 
 </p>
 
 <table border="1">
 <tr><td align="center" colspan="4">Parsers</td></tr>
 <tr align="center"><td><img src="images/tree-arr.png"/></td><td><img src="images/tree-member.png"/></td>
 <td><img src="images/tree-obj.png"/></td><td><img src="images/tree-value.png"/></td></tr>
-<tr>
-<td align="center">def arr: Parser[Any] = "[" ~ repsep(value, ",") ~ "]"</td>
-<td align="center">def member: Parser[Any] = stringLiteral ~ ":" ~ value</td>
-<td align="center">def obj: Parser[Any] = "{" ~ repsep(member, ",") ~ "}"</td>
-<td>def value: Parser[Any] = obj | arr | stringLiteral | floatingPointNumber |
- "null" | "true" | "false"</td></tr>
 </table>
 <i>Figure-2. The four parsers in the json parser</i>
 
