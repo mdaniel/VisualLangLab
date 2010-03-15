@@ -87,7 +87,7 @@ object TreeNodePopupMenu extends JPopupMenu {
   val newChoice = new JMenuItem("Choice")
   addMenu.add(newChoice)
   newChoice.addActionListener(ParserTreePanel)
-  val newReference = new JMenuItem("Parser")
+  val newReference = new JMenuItem("Reference")
   addMenu.add(newReference)
   newReference.addActionListener(ParserTreePanel)
   add(addMenu)

@@ -98,20 +98,20 @@ object VisualLangLab extends SimpleSwingApplication with ActionListener {
 
   def createNewToken(isRegex: Boolean) {
     val pattern = """\s*([a-zA-Z_]\w*)\s*,\s*(.+?)\s*""".r
-    val title = "Create " + (if (isRegex) "regex token" else "literal token")
-    val msg = "Enter token-name, " + (if (isRegex) "regex-pattern" else "literal-string")
+    val title = "New " + (if (isRegex) "regex" else "literal")
+    val msg = "Enter name, comma, " + (if (isRegex) "regex" else "literal")
     Dialog.showInput(VisualLangLab.splitPane, msg, title, Dialog.Message.Question, null, Array[String](), null) match {
       case Some(tokenInfo) =>
         tokenInfo match {
           case pattern(name, value) =>
             if (TokenBank contains name) {
-              Dialog.showMessage(splitPane, "A token named '" + name + "' already exists", "Create token", Dialog.Message.Error, null)
+              Dialog.showMessage(splitPane, "A token named '" + name + "' already exists", title, Dialog.Message.Error, null)
             } else {
               TokenBank(name) = if (isRegex) Right(value) else Left(value)
               isDirty = true
             }
           case _ =>
-            Dialog.showMessage(splitPane, "Bad input. Enter <name> , <pattern>", "Create token", Dialog.Message.Error, null)
+            Dialog.showMessage(splitPane, "Bad input. Expected name, comma, regex/literal", title, Dialog.Message.Error, null)
         }
       case None =>
     }

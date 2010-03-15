@@ -66,7 +66,7 @@ object ParserTreePanel extends ScrollPane with ActionListener with TreeSelection
       None
     else {
       val parserNames = ParserBank.getParserNames
-      val selection = Dialog.showInput(VisualLangLab.splitPane, "Select parser", "Add parser",
+      val selection = Dialog.showInput(VisualLangLab.splitPane, "Select parser", "Add reference",
           Dialog.Message.Question, null, parserNames, parserNames(0))
       selection map (s => new ReferenceNode(s))
     } 
