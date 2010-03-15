@@ -1,0 +1,448 @@
+<html>
+<head>
+<title>VisualLangLab JSON Parser</title>
+</head>
+
+<body>
+<h1>Use VisualLangLab to Create a Simple JSON Parser</h1>
+
+<p>
+This tutorial is a quick introduction to <a href="https://vll.dev.java.net/">VisualLangLab</a>. 
+It illustrates the tool's features by explaining how to create a simple JSON parser (based on 
+the one on page-648 of 
+<a href="http://www.artima.com/shop/programming_in_scala">Programming in Scala</a>). 
+If you don't have the book, an extract of the relevant chapter can be found 
+<a href="http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf">here</a> (and the JSON parser code is at the bottom of the 8<sup>th</sup> page). 
+</p>
+
+<p>
+Information on downloading and running VisualLangLab can be found 
+<a href="https://vll.dev.java.net/">here</a> and at the end of 
+this article.
+</p>
+
+<h2>The User Interface</h2>
+
+<p>
+Before getting into the details take a look at VisualLangLab's user interface to 
+understand the main functions.
+</p>
+
+<img src="images/user-interface.png"/><br/>
+<i>Figure-1. The VisualLangLab user interface</i>
+
+<p>
+The user interface has five distinct parts, described below:
+</p>
+
+<ul>
+<li><u>The menu bar</u> is in the usual position across the top of the frame. 
+The <i>File</i> menu contains the usual items, but the other menus have items 
+specific to parser generation.
+</li>
+<li>
+<u>The parser tree</u> occupies most of the left side of the interface. Nodes in the 
+tree are manipulated using a context menu (visible in the figure) that is displayed 
+when any node is right-clicked. 
+</li>
+<li>
+<u>The parser chooser</u> is the combo-box between the menu bar and the parser tree. 
+This combo box is used to select the parser to display in the tree area. 
+</li>
+<li>
+<u>The log text area</u> occupies the lower part of the right side of the interface. 
+This is where all of the parser's output appears (when you run the parser to test it). 
+</li>
+<li>
+<u>The parser input area</u> occupies the upper part of the right side of the interface. 
+This is where you provide input for testing the parser. 
+</li>
+</ul>
+
+<h3>Relationship with Scala's <i>Combinator</i> Classes</h3>
+
+<p>
+This section can be safely skipped -- read it only if you must.
+</p>
+
+<p>
+While not the whole truth, it's harmless to believe that the tool you see in Figure-1 
+above is descended from <i>scala.util.parsing.combinator.RegexParsers</i>. It's also 
+comforting to believe that the tree on the left (and other such trees that can be selected 
+from the combo-box) are somehow related to <i>RegexParsers.Parser</i>. 
+Beyond this, anything that you surmise about the inner 
+workings of the tool is probably correct -- execept if those imagined machinations 
+involve code-generation or compilation of any kind.
+</p>
+
+<h2>The Parser-Tree Display</h2>
+
+<p>
+Since this may be unfamiliar terrain, here's a sneak preview of where we're going. 
+The trees in Figure-2 below show the four (sub-)parsers in the json parser. 
+Comparing each tree with the corresponding Scala code (last row 
+of table) should give you a good idea of the purpose of each node / icon. 
+</p>
+
+<table border="1">
+<tr><td align="center" colspan="4">Parsers</td></tr>
+<tr align="center"><td><img src="images/tree-arr.png"/></td><td><img src="images/tree-member.png"/></td>
+<td><img src="images/tree-obj.png"/></td><td><img src="images/tree-value.png"/></td></tr>
+<tr>
+<td align="center">def arr: Parser[Any] = "[" ~ repsep(value, ",") ~ "]"</td>
+<td align="center">def member: Parser[Any] = stringLiteral ~ ":" ~ value</td>
+<td align="center">def obj: Parser[Any] = "{" ~ repsep(member, ",") ~ "}"</td>
+<td>def value: Parser[Any] = obj | arr | stringLiteral | floatingPointNumber |
+ "null" | "true" | "false"</td></tr>
+</table>
+<i>Figure-2. The four parsers in the json parser</i>
+
+<p>
+The list below documents the different kinds of parser-tree nodes:
+</p>
+
+<ul>
+<li><img src="images/Root.gif"/> <u>Root</u> represents the root element of a parser. 
+The root has no particular function -- merely anchoring the rest of the parser 
+tree in place. A newly created parser has a name and just a root node.
+</li>
+<li><img src="images/Sequence.gif"/> <u>Sequence</u> represents an ordered set of a 
+fixed number of child elements (typically all of different types). A child can 
+be a leaf node or a tree. Internally, VisualLangLab chains the child nodes of a 
+Sequence together with the ~ combinator.
+</li>
+<li><img src="images/Choice.gif"/> <u>Choice</u> represents a set of a fixed number 
+of alternative elements (of different types). Each alternative may be a leaf node 
+or a tree. Internally, VisualLangLab separates the child nodes of a Choice using 
+the | combinator. 
+</li>
+<li><img src="images/RepSep.gif"/> <u>RepSep</u> represents a series of instances of 
+one type (the first child element) separated by instances of another type (the second 
+child element). 
+</li>
+<li><img src="images/Reference.gif"/> <u>Reference</u> represents a reference to another  
+parser (which is named beside the icon). 
+</li>
+<li><img src="images/Regex.gif"/> <u>Regex</u> represents a <i>token</i> defined 
+with a regular expression. Each Regex's name is depicted beside its icon. 
+The regular expression itself is displayed as the tool-tip text when the mouse 
+hovers over the Regex's icon. 
+</li>
+<li><img src="images/Literal.gif"/> <u>Literal</u> represents a <i>token</i> defined 
+with a literal string. Each Literal's name is depicted beside its icon. 
+The literal string itself is displayed as the tool-tip text when the mouse hovers 
+over the Literal's icon. 
+</li>
+</ul>
+
+<p>
+Each node in the parser tree has a name that is shown to its right. 
+The Regex (<img src="images/Regex.gif"/>), Literal (<img src="images/Literal.gif"/>), 
+and Reference (<img src="images/Reference.gif"/>) nodes have <i>real</i> names 
+based on information assigned when these nodes are created. The remaining icons 
+have a machine-made name (in parenthesis) based on the parser's name and the icon's 
+position in the parser tree. All nodes must have a name to enable tracing, error 
+reporting, etc.
+</p>
+
+<p>
+Every node name is preceded by a separate 1-character decoration that depicts its multiplicity. 
+Table-1 below lists the characters used and their meaning. Each node is created with a 
+default multiplicity of 1, but this value can be changed via the element's context menu. 
+A RepSep element's multiplicity may only be * (default) or +. VisualLangLab does not have 
+a separate node type for Scala's <i>rep1sep</i>, but this distinction is made by 
+setting multiplicity to +.
+</p>
+
+<table border="1">
+<tr><td colspan="2" align="center">Table-1 Multiplicity indicator</td></tr>
+<tr><td align="center">Decoration</td><td align="center">Multiplicity</td></tr>
+<tr><td align="center">1</td><td align="center">Exactly one</td></tr>
+<tr><td align="center">?</td><td align="center">Zero or one</td></tr>
+<tr><td align="center">*</td><td align="center">Zero or more</td></tr>
+<tr><td align="center">+</td><td align="center">One or more</td></tr>
+<tr><td align="center">0</td><td align="center">Must not exist</td></tr>
+</table>
+
+<p>
+Each node name may also be followed by a separate 3-character decoration as described 
+in Table-2 below. We do not use these features in this example. 
+</p>
+
+<table border="1">
+<tr><td colspan="2" align="center">Table-2 Trace & error-message indicator</td></tr>
+<tr><td align="center">Decoration</td><td align="center">Meaning</td></tr>
+<tr><td align="center">None</td><td align="center">No trace, and no custom error message</td></tr>
+<tr><td align="center">[M]</td><td align="center">Element has custom error-message</td></tr>
+<tr><td align="center">[T]</td><td align="center">Element has tracing on</td></tr>
+<tr><td align="center">[#]</td><td align="center">Tracing enabled, and custom error-message set</td></tr>
+</table>
+
+<p>
+Remember that these trees are not <i>parse tree</i>s 
+(parser output), but a representation of the structure of a parser's code. 
+When you create a parser with VisualLangLab, you don't see any Scala code -- just use 
+the tools provided to create a few trees like the ones in Figure-2, and you're done!
+These trees are therefore called <i>parse<b><u>r</u></b> tree</i>s. 
+</p>
+
+<h2>Creating a Parser</h2>
+
+<p>
+When VisualLangLab is started, it creates and displays a parser called <i>NoName</i> with 
+just a root node (see Figure-3 below). NoName is just a place-holder (so the 
+tree display area has something to show), and the user will typically ignore it and 
+proceed to create the parsers he/she needs. 
+</p>
+
+<img src="images/startup-view.png"/><br/>
+<i>Figure-3. VisualLangLab at startup</i>
+
+
+<p>
+So let's start!
+</p>
+
+<h3>Create the parsers</h3>
+
+<p>
+First create the four parsers (<i>arr</i>, <i>member</i>, <i>obj</i>, and <i>value</i>) 
+by following these steps: 
+</p>
+
+<ul>
+<li>Choose <i>Parsers -> New parser</i> from the menu (left of Figure-4 below)</li>
+<li>Enter the parser name into the <i>New parser</i> dialog presented, click OK 
+(right of Figure-4 below)</li>
+</ul>
+
+<table>
+<tr>
+<td><img src="images/menu-new-parser.png"/></td>
+<td><img src="images/new-parser.png"/></td>
+</tr>
+</table>
+<i>Figure-4. Creating a new parser</i>
+
+<p>
+Perform this process for each of the four parsers (<i>arr</i>, <i>member</i>, <i>obj</i>, and <i>value</i>). When finished, the combo-box (just above the tree area) should have entries 
+for all these newly created parsers.
+</p>
+
+<h3>Create some Literals</h3>
+
+<p>
+Let's now create the 3 Literal tokens needed to complete the <i>arr</i> parser:  
+</p>
+
+<ul>
+<li>Choose <i>Tokens -> New literal</i> from the menu (left of Figure-5 below)</li>
+<li>Enter the literal's name and value (separated by a comma) into the <i>New literal</i> dialog presented (right of Figure-5 below), click OK</li>
+</ul>
+
+<table>
+<tr>
+<td><img src="images/menu-new-literal.png"/></td>
+<td><img src="images/new-literal.png"/></td>
+</tr>
+</table>
+<i>Figure-5. Creating a new Literal token</i>
+
+<p>
+Perform this process for each of the three literals (<i>[</i>, <i>]</i>, and <i>,</i>). To 
+make it easy to refer to these literals, we give them mnemonic names (<i>LBKT</i>, <i>RBKT</i>, and <i>COMMA</i>). The table below contains the text that must be entered into the <i>New literal</i> 
+dialog to create these Literals.
+</p>
+
+<table border="1">
+<tr align="center"><td>Token</td><td>Text for <i>New literal</i></td></tr>
+<tr><td>Left bracket</td><td align="center"><font style="background-color:yellow">LBKT, [</font></td></tr>
+<tr><td>Right bracket</td><td align="center"><font style="background-color:yellow">RBKT, ]</font></td></tr>
+<tr><td>Comma</td><td align="center"><font style="background-color:yellow">COMMA, ,</font></td></tr>
+</table>
+
+<h3>Complete the <i>arr</i> parser</h3>
+
+<p>
+We now have everything needed to finish off <i>arr</i>. Proceed as follows:
+</p>
+
+<ul>
+<li>Select <i>arr</i> using the combo-box above the tree</li>
+<li>Add a Sequence to the root node by right-clicking it an choosing <i>Add -> Sequence</i> 
+at the context menu (see Figure-6 below)</li>
+</ul>
+
+<table>
+<tr>
+<td><img src="images/add-sequence.png"/></td>
+<td><img src="images/new-sequence.png"/></td>
+</tr>
+</table>
+<i>Figure-6. Creating a new Sequence</i>
+
+<p>
+As in the diagram above, you should now have a Sequence node attached to the root node. 
+The node's name is rendered in red to indicate that it is incomplete (a Sequence should 
+have 2 or more child nodes). Now let's add the required child nodes. 
+</p>
+
+<p>
+Right-click the Sequence node and choose <i>Add -> Token</i> from the context menu 
+(left of Figure-7 below). This presents the <i>Add token</i> dialog (right of Figure-7 
+below). Select <i>LBKT</i> from the drop-down list, and click <i>OK</i>. 
+This should add the Literal <i>LBKT</i> to the Sequence node.
+</p>
+
+<table>
+<tr>
+<td><img src="images/add-token.png"/></td>
+<td><img src="images/add-token-lbkt.png"/></td>
+</tr>
+</table>
+<i>Figure-7. Adding a token to a node</i>
+
+<p>
+Next, add a RepSep to the Sequence Node by right-clicking it and choosing 
+<i>Add -> RepSep</i> from the context menu. A RepSep node should get added 
+to the Sequence node just below the <i>LBKT</i> Literal. Now let's add the 
+RepSep's child nodes.
+</p>
+
+<p>
+The RepSep houses an indefinite number of <u>rep</u>etitions of a reference to 
+the parser <i>value</i> <u>sep</u>arated by a comma. We add the first child by 
+right clicking the RepSep and choosing <i>Add -> Reference</i> from the context 
+menu. This presents the <i>Add reference</i> dialog (right of figure 
+below). Select <i>value</i> from the drop-down list, and click <i>OK</i> 
+(left of Figure-8 below). This should add the Reference <i>value</i> 
+to the RepSep node. Right-click the RepSep node again, and choose <i>Add -> Token</i>. 
+This time choose <i>COMMA</i> from the drop-down list and press <i>OK</i>. The RepSep's 
+name, which was earlier rendered in red, should now turn black (as addition of the second 
+child node completes the RepSep node)
+</p>
+
+<table>
+<tr>
+<td><img src="images/add-parser.png"/></td>
+<td><img src="images/add-token-comma.png"/></td>
+</tr>
+</table>
+<i>Figure-8. Populating the RepSep</i>
+
+<p>
+Finally, right-click the Sequence node and choose <i>Add -> Token</i> again. This time 
+choose <i>RBKT</i> from the drop-down list and press <i>OK</i>. This completes the 
+parser <i>arr</i>. Verify that it looks like the one in Figure-2 above. You should 
+also be able to see the literal pattern (as a tool-tip text) when the mouse hovers over 
+the Literal node icons. 
+</p>
+
+<h3>Complete the <i>member</i> Parser</h3>
+
+<p>
+Let's now turn our attention to <i>member</i>. 
+However, before we can make any progress, we need to define a couple of new tokens.  
+From the main menu, choose <i>Tokens -> New regex</i>, copy-paste the following text into 
+the <i>New regex</i> dialog box, and click <i>OK</i>:
+</p>
+
+<pre><font style="background-color:yellow">stringLiteral, "([^"\p{Cntrl}\\]|\\[\\/bfnrt]|\\u[a-fA-F0-9]{4})*"</font></pre>
+
+<p>
+Then create a Literal for <i>:</i>. From the main menu, choose <i>Tokens -> New literal</i>, 
+copy-paste the following text into the <i>New literal</i> dialog box, and click <i>OK</i>:
+</p>
+
+<pre><font style="background-color:yellow">COLON, :</font></pre>
+
+<p>
+Now select <i>member</i> in the parser-chooser combo-box. Add a Sequence node to 
+<i>member</i>'s root node. Then add the following three child elements to the Sequence 
+node.
+</p>
+
+<ul>
+<li>Right-click the Sequence node and choose <i>Add -> Token</i>. Select <i>stringLiteral</i> 
+from the drop-down list and click <i>OK</i></li>
+<li>Right-click the Sequence node and choose <i>Add -> Token</i>. Select <i>COLON</i> 
+from the drop-down list and click <i>OK</i></li>
+<li>Right-click the Sequence node and choose <i>Add -> Reference</i>. Select <i>value</i> 
+from the drop-down list and click <i>OK</i></li>
+</ul>
+
+<p>
+This completes the 
+parser <i>member</i>. Verify that it looks like the one in Figure-2 above. You should 
+also be able to see the literal and regex patterns (as tool-tip text) when the mouse hovers over 
+the Literal or Regex node icons. 
+</p>
+
+<h3>Complete the Remaining Parsers: <i>obj</i> and <i>value</i></h3>
+
+<p>
+If you've understood how we created the two previous parsers, you won't need any help 
+with the remaining two. But just to speed your way through those parsers, here some help 
+with a few mundane details. The table below lists information for some tokens that need to 
+be created first. <u>CAREFUL:</u> The last one is a <i>Regex</i>, the others are <i>Literal</i>s
+</p>
+
+<table border="1">
+<tr align="center"><td>Token</td><td>Text for <i>New literal</i></td></tr>
+<tr><td>Literal left curly bracket</td><td align="center"><font style="background-color:yellow">LCURLY, {</font></td></tr>
+<tr><td>Literal right curly bracket</td><td align="center"><font style="background-color:yellow">RCURLY, }</font></td></tr>
+<tr><td>Literal null</td><td align="center"><font style="background-color:yellow">NULL, null</font></td></tr>
+<tr><td>Literal true</td><td align="center"><font style="background-color:yellow">TRUE, true</font></td></tr>
+<tr><td>Literal false</td><td align="center"><font style="background-color:yellow">FALSE, false</font></td></tr>
+<tr><td>Regex floatingPointNumber</td><td align="center"><font style="background-color:yellow">floatingPointNumber, -?(\d+(\.\d*)?|\d*\.\d+)([eE][+-]?\d+)?[fFdD]?</font></td></tr>
+</table>
+
+<h2>Running the Parser</h2>
+
+<p>
+To test your parser proceed as follows.
+</p>
+
+<ul>
+<li>Paste some json into the <i>Parser input</i> area. You can find some json text 
+in the book (or chapter extract) referred at the beginning of this article</li>
+<li>Select the top-level parser <i>value</i> in the combo-box</li>
+<li>From the main menu choose <i>Run -> Run parser</i>. If all is well with your parser 
+the parse-tree appears instantly in the <i>Log</i> area</li>
+</ul>
+
+<h3>Last Resort</h3>
+
+<p>
+If you just can't get the parser to behave, choose <i>Help -> Samples -> Simple JSON</i> 
+from the main menu. A canned version of this parser is loaded into the tool. Remember to 
+always have the top-level parser <i>value</i> selected when trying to run the parser. 
+</p>
+
+<h3>Advanced features</h3>
+
+<p>
+If your parser works as expected, and you'd like to understand the structure of the parse-tree 
+better, select <i>Run -> Tree handler -> Pretty</i> and run again. You can also write a 
+Scala class to handle the parse tree. To see an example parse-tree handler see the sample called 
+<i>ArithExpr</i>
+</p>
+
+<p>
+If the parser appears to have errors you can use the <i>Trace</i> and <i>Error message</i> 
+features (on the context menu) to track down the bug. 
+</p>
+
+<h2>How to Run VisualLangLab</h2>
+
+<table border="1" width="100%">
+<tr><td>
+Download <a href="https://vll.dev.java.net/VisualLangLab.jar">VisualLangLab.jar</a>,
+then execute: <pre>scala -cp VisualLangLab.jar net.java.dev.vll.VisualLangLab</pre>
+You must have <a href="http://www.scala-lang.org/node/212/distributions">Scala 2.8.0</a> 
+installed, which in turn requires Java 1.5 or higher.
+</td></tr>
+</table>
+
+</body>
+</html>
