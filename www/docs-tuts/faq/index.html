@@ -11,7 +11,7 @@
 <a href="#code-generated">Code, where is the generated code?</a><br/>
 <a href="#combinator-related">Combinators, what is the relationship to?</a><br/>
 <a href="#downloading">Downloading VisualLangLab</a><br/>
-<a href="#editing-parser-tree">Edit parser tree, how to</a><br/>
+<a href="#editing-grammar-tree">Edit grammar tree, how to</a><br/>
 <a href="#flattening">Flattening, what is?</a><br/>
 <a href="#error-message">Error message, setting</a><br/>
 <a href="#literal-creating">Literal, creating a</a><br/>
@@ -32,68 +32,68 @@
 
 
 
-<p id="choice">
+<h3 id="choice">How is "Choice" related to Scala types?</h3>
 The "Choice" node type is transformed into multiple invocations of the "|" combinator. 
 In effect, all the child nodes of a Sequence are combined together with applications 
 of "|". Thus, a Choice node that has x, y, and z as child nodes effectively represents 
 the parser "(x | y | z)". The name "Choice" has no relationship to any 
 classes in the Scala API. 
-</p>
 
-<p id="code-generated">
+
+<h3 id="code-generated">Where is the generated code?</h3>
 While you can use VisualLangLab to visually model a parser and also test-run it, 
 the generated code option has not yet been completed. 
 VisualLangLab does not need to generate or compile any code for its own purposes -- 
 which is how it is able to run the created parser. 
 "Creating a parser" in the VisualLangLab context really means just visually modeling it!
-</p>
 
-<p id="combinator-related">
+
+<h3 id="combinator-related">How are these concepts related to Scala combinators?</h3>
 Though not the whole truth, it is useful to believe that the GUI is derived from 
 "scala.util.parsing.combinator.Parsers", and that the trees are related to "Parsers.Parser"
-</p>
 
-<p id="downloading">
+
+<h3 id="downloading">Where can I download VisualLangLab from?</h3>
 You can download the VisualLangLab JAR <a href="https://vll.dev.java.net/VisualLangLab.jar">here</a>
-</p>
 
-<p id="editing-parser-tree">
-You can edit the parser-node by right-clicking the node and choosing "Edit" from the context 
+
+<h3 id="editing-grammar-tree">How do I edit a grammar-node?</h3>
+You can edit a grammar-node by right-clicking the node and choosing "Edit" from the context 
 menu. The sub-menu under "Edit" allows you to move the node up or down (relative to its 
 siblings), and also to cut, copy, paste, and delete the selected node.
-</p>
 
-<p id="error-message">
-You assign a (custom) error-message to a parse-tree node by right-clicking it and choosing 
+
+<h3 id="error-message">How do I assign a custom error message to a grammar-node?</h3>
+You assign a (custom) error-message to a grammar-tree node by right-clicking it and choosing 
 "Error message" from the context menu. Then enter the message text into the dialog box presented. 
-</p>
 
-<p id="flattening">
+
+<h3 id="flattening">What is "flattening"?</h3>
 You instruct VisualLangLab to flatten all nested "~" objects by choosing "Run -> Flatten nested ~" 
 from the main menu. When flattening has been enabled in this way, VisualLangLab translates each 
 nested "~" object (in the parse-tree) into a Scala Array. This makes life easier for the 
 parse-tree processor. 
-</p>
 
-<p id="literal-creating">
+
+<h3 id="literal-creating">How do I create a Literal token?</h3>
 You create a Literal token by choosing <i>Tokens -> New literal</i> from the main menu. 
 Then enter literal-name, a comma, and the literal-value into the dialog box presented. 
 For example, to create a Literal called "DASH" for the character "-", enter "DASH,-" 
 (without the quotes) into the dialog. You can add blanks around the comma if you wish. 
-</p>
 
-<p id="multiplicity-setting">
-You set the multiplicity of a node in the parser tree by right-clicking the node and 
+
+<h3 id="multiplicity-setting">How do I set the multiplicity of a grammar node?</h3>
+You set the multiplicity of a node in the grammar-tree by right-clicking the node and 
 choosing <i>Multiplicity -> ?</i> from the context menu. The "?" in the preceding 
 sentence represents any of the options availabile (1, *, +, ?, and 0). 
-</p>
 
-<p id="multiplicity-value-0">
+
+<h3 id="multiplicity-value-0">Why/when would I set multiplicty to 0 (zero)?</h3>
 Setting Multiplicity to 0 means that matching data must not exist in the input. 
-VisualLangLab implements this feature with the "not" combinator. 
-</p>
+Check documentation about the "not" combinator. 
 
-<p id="parser-create">
+
+<h3 id="parser-create">How do I create a parser?</h3>
 You create a new parser by choosing "Parsers -> New parser" from the main menu, and 
 entering the parser name into the dialog box presented. This creates (and displays) 
 a newly created parser with just a root node. You can then proceed to build the complete 
@@ -101,65 +101,67 @@ parser by right-clicking the root-node, and choosing "Add" from the context menu
 For the simplest possible parser you would add a token (a previously created 
 Literal or a Regex) directly to the root-node. But more typically you would add one 
 of the aggregate types (Sequence, Choice, or RepSep) to the root-node. You would then 
-recursively add further elements to that parser-tree till the parser is fully defined. 
-</p>
+recursively add further elements to that grammar-tree till the parser is fully defined. 
 
-<p id="regex-creating">
+
+<h3 id="regex-creating">How do I create a Regex token</h3>
 You create a Regex token by choosing <i>Tokens -> New regex</i> from the main menu. 
 Then enter regex-name, a comma, and the regex-pattern into the dialog box presented. 
 For example, to create a Regex called "INT" for the pattern "\d+", enter "INT,\d+" 
 (without the quotes) into the dialog. You can add blanks around the comma if you wish. 
-</p>
 
-<p id="rep1sep">
+
+<h3 id="rep1sep">Why is there no Rep1Sep?</h3>
 The "RepSep" node can perform the function of both combinators "repsep" and "rep1sep". 
 Which one it emulates depends on the multiplicity setting. A multiplicity setting of "*" 
 gives the "repsep" behavior, while a setting of "+" gives the "rep1sep" behavior.
-</p>
 
-<p id="running">
+
+<h3 id="running">How do I run VisualLangLab?</h3>
 You run VisualLangLab by executing the following command line: 
-</p>
+
 <pre>scala -cp VisualLangLab.jar net.java.dev.vll.VisualLangLab</pre>
-<p>
+
 You must have Scala 2.8 installed. VisualLangLab has been tested on Windows-XP 
 and Linux (Ubuntu 9.10) 
-</p>
 
-<p id="running-parser">
+
+<h3 id="running-parser">How do I run the parser?</h3>
 You run the created parser by pasting the input text into the "Parser input" area, and 
 then choosing "Run -> Run parser" from the main menu. Remember to have the top-level 
-parser selected in the tree-display when you invoke "Run -> Run parser"
-</p>
+parser selected in the tree-display when you invoke "Run -> Run parser". Running the 
+parser without any text in the "Parser input" area passes an empty string ("") to 
+the parser.
 
-<p id="sample-parser">
+
+<h3 id="sample-parser">Where can I find sample parsers?</h3>
 A few sample parsers are bundled with VisualLangLab. Choose "Help -> Samples" from the 
 main menu. Other samples can be found 
 <a href="https://vll.dev.java.net/grammars/index.html">here</a>.
-</p>
 
-<p id="sequence">
+
+<h3 id="sequence">How is "Sequence" related to other Scala types?</h3>
 The "Sequence" node type is transformed into multiple invocations of the "~" combinator. 
 In effect, all the child nodes of a Sequence are threaded together with applications 
 of "~". Thus, a Sequence that has a, b, and c as child nodes effectively represents 
 the parser "(a ~ b ~ c)". The name "Sequence" has no relationship to similarly named 
 classes in the Scala API. 
-</p>
 
-<p id="tracing">
-You can enable (or disable) tracing of a parser-node by right-clicking the node and choosing "Trace" 
+
+<h3 id="tracing">How can I get a run-time trace of a grammar-node?</h3>
+You can enable (or disable) tracing of a grammar-node by right-clicking the node and choosing "Trace" 
 from the context menu. When tracing is enabled on a node, VisualLangLab prints a trace message 
 whenever the trace-enabled node is used (successfully or otherwise) in the course of a parser run. 
-</p>
 
-<p id="troubleshooting">
+
+<h3 id="troubleshooting">How do I troubleshoot a parser?</h3>
 There are two features that help in troubleshooting a parser -- <a href="#tracing">tracing</a> 
 and custom <a href="#error-message">error messages</a>.
-</p>
 
-<p id="website">
+
+<h3 id="website">Where is the VisualLangLab website?</h3>
 The VisualLangLab web-site is here: https://vll.dev.java.net/
-</p>
+
 
 </body>
 </html>
