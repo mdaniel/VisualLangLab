@@ -24,7 +24,11 @@
 
 
 <p id="choice">
-You can download the VisualLangLab JAR <a href="https://vll.dev.java.net/VisualLangLab.jar">here</a>
+The "Choice" node type is transformed into multiple invocations of the "|" combinator. 
+In effect, all the child nodes of a Sequence are combined together with applications 
+of "|". Thus, a Choice node that has x, y, and z as child nodes effectively represents 
+the parser "(x | y | z)". The name "Choice" has no relationship to any 
+classes in the Scala API. 
 </p>
 
 <p id="downloading">
@@ -77,9 +81,9 @@ and Linux (Ubuntu 9.10)
 </p>
 
 <p id="sequence">
-The "Sequence" node type is transformed into multiple invocations of "~" combinator. 
+The "Sequence" node type is transformed into multiple invocations of the "~" combinator. 
 In effect, all the child nodes of a Sequence are threaded together with applications 
-of "~". Thus, if a Sequence has a, b, and c as child nodes, it effectively becomes 
+of "~". Thus, a Sequence that has a, b, and c as child nodes effectively represents 
 the parser "(a ~ b ~ c)". The name "Sequence" has no relationship to similarly named 
 classes in the Scala API. 
 </p>
