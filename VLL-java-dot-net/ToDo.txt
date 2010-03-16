@@ -1,4 +1,4 @@
-consume spaces and comments after any match (to improve error messages and traces)
+Parsing error message should contain line & col number
 Help and about menus
 consistent logging messages
 Error on left-recursive constructs
@@ -18,6 +18,7 @@ Rename rule
 
 
 Done
+consume spaces and comments after any match (to improve error messages and traces)
 Add NOT rule reference (multiplicity = 0?)
 Error message customization
 File->New should clear all text areas, and clear custom tree handlers
