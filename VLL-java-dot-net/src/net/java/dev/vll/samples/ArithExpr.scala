@@ -20,7 +20,7 @@
 
 package net.java.dev.vll.samples
 
-import net.java.dev.vll.Parsers._
+import net.java.dev.vll.VllParsers._
 import net.java.dev.vll.FileIO
 import net.java.dev.vll.TextPane
 import net.java.dev.vll.VisualLangLab
