@@ -10,6 +10,7 @@
 <a href="#choice">Choice, relationship to Scala classes</a><br/>
 <a href="#downloading">Downloading VisualLangLab</a><br/>
 <a href="#editing-parser-tree">Edit parser tree, how to</a><br/>
+<a href="#flattening">Flattening, what is?</a><br/>
 <a href="#error-message">Error message, setting</a><br/>
 <a href="#literal-creating">Literal, creating a</a><br/>
 <a href="#multiplicity-setting">Multiplicity, setting the</a><br/>
@@ -18,6 +19,7 @@
 <a href="#rep1sep">rep1sep, why isn't there one?</a><br/>
 <a href="#regex-creating">Regex, creating a</a><br/>
 <a href="#running">Running VisualLangLab</a><br/>
+<a href="#running-parser">Run parser, how to</a><br/>
 <a href="#sequence">Sequence, relationship to Scala classes</a><br/>
 <a href="#tracing">Tracing, how to?</a><br/>
 <a href="#troubleshooting">Troubleshooting, what facilities exist?</a><br/>
@@ -48,6 +50,13 @@ siblings), and also to cut, copy, paste, and delete the selected node.
 <p id="error-message">
 You assign a (custom) error-message to a parse-tree node by right-clicking it and choosing 
 "Error message" from the context menu. Then enter the message text into the dialog box presented. 
+</p>
+
+<p id="flattening">
+You instruct VisualLangLab to flatten all nested "~" objects by choosing "Run -> Flatten nested ~" 
+from the main menu. When flattening has been enabled in this way, VisualLangLab translates each 
+nested "~" object (in the parse-tree) into a Scala Array. This makes life easier for the 
+parse-tree processor. 
 </p>
 
 <p id="literal-creating">
@@ -99,6 +108,12 @@ You run VisualLangLab by executing the following command line:
 <p>
 You must have Scala 2.8 installed. VisualLangLab has been tested on Windows-XP 
 and Linux (Ubuntu 9.10) 
+</p>
+
+<p id="running-parser">
+You run the created parser by pasting the input text into the "Parser input" area, and 
+then choosing "Run -> Run parser" from the main menu. Remember to have the top-level 
+parser selected in the tree-display when you invoke "Run -> Run parser"
 </p>
 
 <p id="sequence">
