@@ -21,7 +21,7 @@
 package net.java.dev.vll.treehandler
 
 import net.java.dev.vll.ParseTreeHandler
-import net.java.dev.vll.Parsers._
+import net.java.dev.vll.VllParsers._
 
 class ArithExpr extends ParseTreeHandler {
   private def eval(t: Any): Float = {
