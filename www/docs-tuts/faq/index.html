@@ -8,6 +8,7 @@
 <h2>15<sup>th</sup> March 2010</h2>
 
 <a href="#choice">Choice, relationship to Scala classes</a><br/>
+<a href="#code-generated">Code, where is the generated code?</a><br/>
 <a href="#downloading">Downloading VisualLangLab</a><br/>
 <a href="#editing-parser-tree">Edit parser tree, how to</a><br/>
 <a href="#flattening">Flattening, what is?</a><br/>
@@ -35,6 +36,14 @@ In effect, all the child nodes of a Sequence are combined together with applicat
 of "|". Thus, a Choice node that has x, y, and z as child nodes effectively represents 
 the parser "(x | y | z)". The name "Choice" has no relationship to any 
 classes in the Scala API. 
+</p>
+
+<p id="code-generated">
+While you can use VisualLangLab to visually model a parser and also test-run it, 
+the generated code option has not yet been completed. 
+VisualLangLab does not need to generate or compile any code for its own purposes -- 
+which is how it is able to run the created parser. 
+"Creating a parser" in the VisualLangLab context really means just visually modeling it!
 </p>
 
 <p id="downloading">
