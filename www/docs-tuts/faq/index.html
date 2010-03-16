@@ -5,6 +5,88 @@
 
 <body>
 <h1>The VisualLangLab FAQ</h1>
+<h2>15<sup>th</sup> March 2010</h2>
+
+<a href="#choice">Choice, relationship to Scala classes</a><br/>
+<a href="#downloading">Downloading VisualLangLab</a><br/>
+<a href="#error-message">Error message, setting</a><br/>
+<a href="#literal-creating">Literal, creating a</a><br/>
+<a href="#multiplicity-setting">Multiplicity, setting the</a><br/>
+<a href="#multiplicity-value-0">Multiplicity, what does "0" mean?</a><br/>
+<a href="#rep1sep">rep1sep, why isn't there one?</a><br/>
+<a href="#regex-creating">Regex, creating a</a><br/>
+<a href="#running">Running VisualLangLab</a><br/>
+<a href="#sequence">Sequence, relationship to Scala classes</a><br/>
+<a href="#website">Website of VisualLangLab</a><br/>
+
+
+
+
+
+<p id="choice">
+You can download the VisualLangLab JAR <a href="https://vll.dev.java.net/VisualLangLab.jar">here</a>
+</p>
+
+<p id="downloading">
+You can download the VisualLangLab JAR <a href="https://vll.dev.java.net/VisualLangLab.jar">here</a>
+</p>
+
+<p id="error-message">
+You assign a (custom) error-message to a parse-tree node by right-clicking it and choosing 
+"Error message" from the context menu. Then enter the message text into the dialog box presented. 
+</p>
+
+<p id="literal-creating">
+You create a Literal token by choosing <i>Tokens -> New literal</i> from the main menu. 
+Then enter literal-name, a comma, and the literal-value into the dialog box presented. 
+For example, to create a Literal called "DASH" for the character "-", enter "DASH,-" 
+(without the quotes) into the dialog. You can add blanks around the comma if you wish. 
+</p>
+
+<p id="multiplicity-setting">
+You set the multiplicity of a node in the parser tree by right-clicking the node and 
+choosing <i>Multiplicity -> ?</i> from the context menu. The "?" in the preceding 
+sentence represents any of the options availabile (1, *, +, ?, 0). 
+</p>
+
+<p id="multiplicity-value-0">
+Setting Multiplicity to 0 means that matching data must not exist in the input. 
+VisualLangLab implements this feature with the "not" combinator. 
+</p>
+
+<p id="regex-creating">
+You create a Regex token by choosing <i>Tokens -> New regex</i> from the main menu. 
+Then enter regex-name, a comma, and the regex-pattern into the dialog box presented. 
+For example, to create a Regex called "INT" for the pattern "\d+", enter "INT,\d+" 
+(without the quotes) into the dialog. You can add blanks around the comma if you wish. 
+</p>
+
+<p id="rep1sep">
+The "RepSep" node can perform the function of both combinators "repsep" and "rep1sep". 
+Which one it emulates depends on the multiplicity setting. A multiplicity setting of "*" 
+gives the "repsep" behavior, while a setting of "+" gives the "rep1sep" behavior.
+</p>
+
+<p id="running">
+You run VisualLangLab by executing the following command line: 
+</p>
+<pre>scala -cp VisualLangLab.jar net.java.dev.vll.VisualLangLab</pre>
+<p>
+You must have Scala 2.8 installed. VisualLangLab has been tested on Windows-XP 
+and Linux (Ubuntu 9.10) 
+</p>
+
+<p id="sequence">
+The "Sequence" node type is transformed into multiple invocations of "~" combinator. 
+In effect, all the child nodes of a Sequence are threaded together with applications 
+of "~". Thus, if a Sequence has a, b, and c as child nodes, it effectively becomes 
+the parser "(a ~ b ~ c)". The name "Sequence" has no relationship to similarly named 
+classes in the Scala API. 
+</p>
+
+<p id="website">
+The VisualLangLab web-site is here: https://vll.dev.java.net/
+</p>
 
 </body>
 </html>
