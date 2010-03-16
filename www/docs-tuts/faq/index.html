@@ -9,6 +9,7 @@
 
 <a href="#choice">Choice, relationship to Scala classes</a><br/>
 <a href="#downloading">Downloading VisualLangLab</a><br/>
+<a href="#editing-parser-tree">Edit parser tree, how to</a><br/>
 <a href="#error-message">Error message, setting</a><br/>
 <a href="#literal-creating">Literal, creating a</a><br/>
 <a href="#multiplicity-setting">Multiplicity, setting the</a><br/>
@@ -17,6 +18,8 @@
 <a href="#regex-creating">Regex, creating a</a><br/>
 <a href="#running">Running VisualLangLab</a><br/>
 <a href="#sequence">Sequence, relationship to Scala classes</a><br/>
+<a href="#tracing">Tracing, how to?</a><br/>
+<a href="#troubleshooting">Troubleshooting, what facilities exist?</a><br/>
 <a href="#website">Website of VisualLangLab</a><br/>
 
 
@@ -33,6 +36,12 @@ classes in the Scala API.
 
 <p id="downloading">
 You can download the VisualLangLab JAR <a href="https://vll.dev.java.net/VisualLangLab.jar">here</a>
+</p>
+
+<p id="editing-parser-tree">
+You can edit the parser-node by right-clicking the node and choosing "Edit" from the context 
+menu. The sub-menu under "Edit" allows you to move the node up or down (relative to its 
+siblings), and also to cut, copy, paste, and delete the selected node.
 </p>
 
 <p id="error-message">
@@ -86,6 +95,17 @@ In effect, all the child nodes of a Sequence are threaded together with applicat
 of "~". Thus, a Sequence that has a, b, and c as child nodes effectively represents 
 the parser "(a ~ b ~ c)". The name "Sequence" has no relationship to similarly named 
 classes in the Scala API. 
+</p>
+
+<p id="tracing">
+You can enable (or disable) tracing of a parser-node by right-clicking the node and choosing "Trace" 
+from the context menu. When tracing is enabled on a node, VisualLangLab prints a trace message 
+whenever the trace-enabled node is used (successfully or otherwise) in the course of a parser run. 
+</p>
+
+<p id="troubleshooting">
+There are two features that help in troubleshooting a parser -- <a href="#tracing">tracing</a> 
+and custom <a href="#error-message">error messages</a>.
 </p>
 
 <p id="website">
