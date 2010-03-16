@@ -14,6 +14,7 @@
 <a href="#literal-creating">Literal, creating a</a><br/>
 <a href="#multiplicity-setting">Multiplicity, setting the</a><br/>
 <a href="#multiplicity-value-0">Multiplicity, what does "0" mean?</a><br/>
+<a href="#parser-create">Parser, how to create one?</a><br/>
 <a href="#rep1sep">rep1sep, why isn't there one?</a><br/>
 <a href="#regex-creating">Regex, creating a</a><br/>
 <a href="#running">Running VisualLangLab</a><br/>
@@ -59,12 +60,23 @@ For example, to create a Literal called "DASH" for the character "-", enter "DAS
 <p id="multiplicity-setting">
 You set the multiplicity of a node in the parser tree by right-clicking the node and 
 choosing <i>Multiplicity -> ?</i> from the context menu. The "?" in the preceding 
-sentence represents any of the options availabile (1, *, +, ?, 0). 
+sentence represents any of the options availabile (1, *, +, ?, and 0). 
 </p>
 
 <p id="multiplicity-value-0">
 Setting Multiplicity to 0 means that matching data must not exist in the input. 
 VisualLangLab implements this feature with the "not" combinator. 
+</p>
+
+<p id="parser-create">
+You create a new parser by choosing "Parsers -> New parser" from the main menu, and 
+entering the parser name into the dialog box presented. This creates (and displays) 
+a newly created parser with just a root node. You can then proceed to build the complete 
+parser by right-clicking the root-node, and choosing "Add" from the context menu. 
+For the simplest possible parser you would add a token (a previously created 
+Literal or a Regex) directly to the root-node. But more typically you would add one 
+of the aggregate types (Sequence, Choice, or RepSep) to the root-node. You would then 
+recursively add further elements to that parser-tree till the parser is fully defined. 
 </p>
 
 <p id="regex-creating">
