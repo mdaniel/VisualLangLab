@@ -103,11 +103,11 @@ object FileIO {
     out.println("<VLL-Grammar>")
 
     out.print("  <Whitespace>")
-    out.print(encode(Parsers.customWhitespace.toString))
+    out.print(encode(VllParsers.wspace))
     out.println("</Whitespace>")
 
     out.print("  <Comments>")
-    out.print(encode(Parsers.comments.toString))
+    out.print(encode(VllParsers.comment))
     out.println("</Comments>")
 
     out.println("  <Tokens>")
@@ -245,8 +245,8 @@ object FileIO {
   }
 
   def load(grammar: Elem) {
-    Parsers.customWhitespace = (grammar \ "Whitespace").text.r
-    Parsers.comments = (grammar \ "Comments").text.r
+    VllParsers.wspace = (grammar \ "Whitespace").text
+    VllParsers.comment = (grammar \ "Comments").text
     getTokens(grammar \ "Tokens")
     getParsers(grammar \ "Parsers")
   }

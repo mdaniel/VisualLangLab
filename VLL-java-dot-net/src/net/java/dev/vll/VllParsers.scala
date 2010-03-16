@@ -25,18 +25,43 @@ import scala.util.parsing.combinator.RegexParsers
 import scala.collection.mutable.Map
 import scala.util.parsing.input.Position
 
-object Parsers extends RegexParsers {
+object VllParsers extends RegexParsers {
+
+  private var commentRe = ""
+  private var whitespaceRe = "\\s+"
+
+  def comment = commentRe
+  def comment_=(c: String) {
+    commentRe = c
+    updateSkipExpression()
+  }
+
+  def wspace = whitespaceRe
+  def wspace_=(w: String) {
+    whitespaceRe = w
+    updateSkipExpression()
+  }
+
+  private var skipExpression = whitespaceRe.r
+
+  private def updateSkipExpression() {
+    if (commentRe.isEmpty) {
+      if (whitespaceRe.isEmpty)
+        skipExpression = null
+      else
+        skipExpression = whitespaceRe.r
+    } else {
+      if (whitespaceRe.isEmpty)
+        skipExpression = commentRe.r
+      else
+        skipExpression = ("((" + whitespaceRe + ")|(" + commentRe + "))*").r
+    }
+  }
   
-  var comments = "".r
-
-  var customWhitespace = """\s+""".r
-
-  override def skipWhitespace = customWhitespace.toString.length > 0
-
   override def handleWhiteSpace(source: java.lang.CharSequence, offset: Int): Int =
-    if (skipWhitespace)
-      (customWhitespace findPrefixMatchOf (source.subSequence(offset, source.length))) match {
-        case Some(matched) => offset + matched.end
+    if (skipExpression != null)
+      (skipExpression findPrefixMatchOf (source.subSequence(offset, source.length))) match {
+        case Some(ms) => offset + ms.end
         case None => offset
       }
     else

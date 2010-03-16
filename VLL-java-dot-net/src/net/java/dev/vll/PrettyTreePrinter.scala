@@ -20,7 +20,7 @@
 
 package net.java.dev.vll
 
-import net.java.dev.vll.Parsers._
+import net.java.dev.vll.VllParsers._
 import scala.collection.immutable.WrappedString
 
 object PrettyTreePrinter extends ParseTreeHandler {

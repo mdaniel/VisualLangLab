@@ -197,18 +197,18 @@ object VisualLangLab extends SimpleSwingApplication with ActionListener {
   }
 
   def defineWhitespace() {
-    Dialog.showInput(VisualLangLab.splitPane, "Whitespace regex", "Define whitespace", Dialog.Message.Question, null, Array[String](), Parsers.customWhitespace) match {
+    Dialog.showInput(VisualLangLab.splitPane, "Whitespace regex", "Define whitespace", Dialog.Message.Question, null, Array[String](), VllParsers.wspace) match {
       case Some(whiteSpace) =>
-        Parsers.customWhitespace = whiteSpace.asInstanceOf[String].r
+        VllParsers.wspace = whiteSpace.asInstanceOf[String]
         isDirty = true
       case None =>
     }
   }
 
   def defineComments() {
-    Dialog.showInput(VisualLangLab.splitPane, "Comment regex", "Define comment", Dialog.Message.Question, null, Array[String](), Parsers.comments) match {
+    Dialog.showInput(VisualLangLab.splitPane, "Comment regex", "Define comment", Dialog.Message.Question, null, Array[String](), VllParsers.comment) match {
       case Some(comments) =>
-        Parsers.comments = comments.asInstanceOf[String].r
+        VllParsers.comment = comments.asInstanceOf[String]
         isDirty = true
       case None =>
     }
@@ -355,10 +355,10 @@ object VisualLangLab extends SimpleSwingApplication with ActionListener {
         val inputText = TextPane.getText
         val parserName = VisualLangLab.parserChooser.getSelectedItem.asInstanceOf[String]
         printf("%s Run start: %s %s%n", ("--" * 10), parserName, ("--" * 10))
-        val parser = Parsers.createParserFor(parserName)
-        val res = Parsers.parseAll(parser, inputText)
+        val parser = VllParsers.createParserFor(parserName)
+        val res = VllParsers.parseAll(parser, inputText)
         res match {
-          case Parsers.Success(tree, _) =>
+          case VllParsers.Success(tree, _) =>
             if (customHandlerMenuItem.selected) {
               customTreeHandler.get.onParse(tree)
             } else if (prettyPrinterMenuItem.selected) {
@@ -366,7 +366,9 @@ object VisualLangLab extends SimpleSwingApplication with ActionListener {
             } else {
               basicTreePrinter.onParse(tree)
             }
-          case _ => println(res)
+          case VllParsers.NoSuccess(msg, rest) =>
+            printf("%s, but [%s] found%n", msg.substring(0, msg.length - 14),
+                rest.source.subSequence(rest.offset, Math.min(rest.source.length, rest.offset + 10)))
         }
         printf("%s Run end: %s %s%n", ("--" * 10), parserName, ("--" * 10))
     }
