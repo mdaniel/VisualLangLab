@@ -1,0 +1,24 @@
+3.01 14-JUL-2011
+    New version uploaded to vll.java.net.
+2.06 13-JUL-2011
+    Modified definition of object passed to Javascript action
+    to enable correct operation of "println"
+2.05 11-JUL-2011
+    Using dedicated holder class for global VLL variable for 
+    Scala actions. Values are assigned and retrived by using the form 
+    "VLL.value". Same class also used for "$$" variable
+2.04 08-JUL-2011
+    Used "scala.util.DynamicVariable[AnyRef]" as the type of the global 
+    VLL variable for Scala actions. Values are assigned and 
+    retrived by using the form "VLL.value" 
+2.03 06-JUL-2011
+    Primed ScalaEngine to circumvent lazy loading
+2.02 06-JUL-2011
+    Reorganized action/predicate handling for Scala/Javascript
+2.01 04-JUL-2011
+    Added support for Scala action text
+1.03 27-JUN-2011
+    Corrected regression due to 1.02 changes
+1.02 26-JUN-2011
+    Corrected implementation of commit point
+1.01 First version

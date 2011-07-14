@@ -1,0 +1,1522 @@
+<VLL-Grammar>
+  <Whitespace>\s+</Whitespace>
+  <Comments>(?://[^\n]*\n)|(?:/\\*(?:[^*]|\\*(?!/))*+\\*/)</Comments>
+  <Tokens>
+    <Literal Name="RIGHT2_EQUALS" Pattern="&gt;&gt;="/>
+    <Literal Name="NATIVE" Pattern="native"/>
+    <Literal Name="SHORT" Pattern="short"/>
+    <Literal Name="GE" Pattern="&gt;="/>
+    <Literal Name="PRIVATE" Pattern="private"/>
+    <Literal Name="PACKAGE" Pattern="package"/>
+    <Literal Name="THROW" Pattern="throw"/>
+    <Literal Name="PERCENT" Pattern="%"/>
+    <Literal Name="RPAREN" Pattern=")"/>
+    <Literal Name="RBKT" Pattern="]"/>
+    <Literal Name="PIPE_EQUALS" Pattern="|="/>
+    <Literal Name="PLUS2" Pattern="++"/>
+    <Regex Name="IDENTIFIER" Pattern="[$a-zA-Z_][$a-zA-Z_0-9]*"/>
+    <Literal Name="ELSE" Pattern="else"/>
+    <Literal Name="INSTANCEOF" Pattern="instanceof"/>
+    <Literal Name="COLON" Pattern=":"/>
+    <Literal Name="RIGHT3" Pattern="&gt;&gt;&gt;"/>
+    <Literal Name="BREAK" Pattern="break"/>
+    <Literal Name="NULL" Pattern="null"/>
+    <Literal Name="ENUM" Pattern="enum"/>
+    <Regex Name="STRING_LITERAL" Pattern="\&quot;(\\\\[btnfr\&quot;\&apos;\\\\]|\\\\[0-7]{1,3}|\\\\u[0-9a-fA-F]{4,4}|[^&quot;\\\\])*\&quot;"/>
+    <Literal Name="LONG" Pattern="long"/>
+    <Literal Name="FOR" Pattern="for"/>
+    <Literal Name="INT" Pattern="int"/>
+    <Literal Name="SUPER" Pattern="super"/>
+    <Literal Name="IF" Pattern="if"/>
+    <Literal Name="BOOLEAN" Pattern="boolean"/>
+    <Literal Name="ASSERT" Pattern="assert"/>
+    <Literal Name="VOLATILE" Pattern="volatile"/>
+    <Literal Name="STAR" Pattern="*"/>
+    <Literal Name="CHAR" Pattern="char"/>
+    <Literal Name="CARET" Pattern="^"/>
+    <Regex Name="DECIMAL_LITERAL" Pattern="0[lL]?|[1-9]\d*[lL]?"/>
+    <Literal Name="CASE" Pattern="case"/>
+    <Literal Name="TRANSIENT" Pattern="transient"/>
+    <Literal Name="AMPERSAND2" Pattern="&amp;&amp;"/>
+    <Literal Name="AT" Pattern="@"/>
+    <Literal Name="LT" Pattern="&lt;"/>
+    <Regex Name="CHARACTER_LITERAL" Pattern="\&apos;(\\\\[btnfr\&quot;\&apos;\\\\]|\\\\[0-3][0-7]{1,2}|\\\\[0-7]{1,2}|\\\\u[0-9a-fA-F]{4,4}|[^&apos;])\&apos;"/>
+    <Literal Name="CONTINUE" Pattern="continue"/>
+    <Literal Name="RIGHT3_EQUALS" Pattern="&gt;&gt;&gt;="/>
+    <Literal Name="SEMICOLON" Pattern=";"/>
+    <Literal Name="LPAREN" Pattern="("/>
+    <Literal Name="FALSE" Pattern="false"/>
+    <Literal Name="FINALLY" Pattern="finally"/>
+    <Literal Name="EQ" Pattern="=="/>
+    <Literal Name="GT_" Pattern="&gt;"/>
+    <Literal Name="CATCH" Pattern="catch"/>
+    <Literal Name="NEW" Pattern="new"/>
+    <Literal Name="THIS" Pattern="this"/>
+    <Literal Name="CLASS" Pattern="class"/>
+    <Literal Name="BYTE" Pattern="byte"/>
+    <Literal Name="THROWS" Pattern="throws"/>
+    <Literal Name="RETURN" Pattern="return"/>
+    <Literal Name="STOP" Pattern="."/>
+    <Literal Name="PERCENT_EQUALS" Pattern="%="/>
+    <Literal Name="INTERFACE" Pattern="interface"/>
+    <Literal Name="SYNCHRONIZED" Pattern="synchronized"/>
+    <Literal Name="FINAL" Pattern="final"/>
+    <Literal Name="LE" Pattern="&lt;="/>
+    <Regex Name="FLOATING_LITERAL" Pattern="\d+\\.\d*([eE][+-]?\d+)?[fFdD]?|\\.\d+([eE][+-]?\d+)?[fFdD]?|\d+([eE][+-]?\d+)[fFdD]?|\d+[fFdD]|0[xX][0-9a-fA-F]+\\.[0-9a-fA-F]*([pP][+-]?\d+)?[fFdD]?|0[xX]\\.[0-9a-fA-F]+([pP][+-]?\d+)?[fFdD]?|0[xX][0-9a-fA-F]+([pP][+-]?\d+)[fFdD]?|0[xX][0-9a-fA-F]+[fFdD]"/>
+    <Literal Name="CARET_EQUALS" Pattern="^="/>
+    <Literal Name="LBKT" Pattern="["/>
+    <Literal Name="SWITCH" Pattern="switch"/>
+    <Literal Name="PIPE2" Pattern="||"/>
+    <Literal Name="IMPLEMENTS" Pattern="implements"/>
+    <Literal Name="ABSTRACT" Pattern="abstract"/>
+    <Literal Name="COMMA" Pattern=","/>
+    <Literal Name="TRUE" Pattern="true"/>
+    <Literal Name="ELLIPSIS" Pattern="..."/>
+    <Literal Name="TILDE" Pattern="~"/>
+    <Literal Name="IMPORT" Pattern="import"/>
+    <Literal Name="MINUS2" Pattern="--"/>
+    <Literal Name="DEFAULT" Pattern="default"/>
+    <Literal Name="DO" Pattern="do"/>
+    <Literal Name="DIV_EQUALS" Pattern="/="/>
+    <Literal Name="TRY" Pattern="try"/>
+    <Literal Name="VOID" Pattern="void"/>
+    <Literal Name="MINUS" Pattern="-"/>
+    <Literal Name="AMPERSAND" Pattern="&amp;"/>
+    <Literal Name="DOUBLE" Pattern="double"/>
+    <Literal Name="EQUALS" Pattern="="/>
+    <Literal Name="MINUS_EQUALS" Pattern="-="/>
+    <Literal Name="STRICTFP" Pattern="strictfp"/>
+    <Literal Name="LCURLY" Pattern="{"/>
+    <Literal Name="FLOAT" Pattern="float"/>
+    <Literal Name="RCURLY" Pattern="}"/>
+    <Literal Name="STATIC" Pattern="static"/>
+    <Literal Name="AMPERSAND_EQUALS" Pattern="&amp;="/>
+    <Regex Name="HEX_LITERAL" Pattern="0[xX][0-9a-fA-F]+[lL]?"/>
+    <Literal Name="EXTENDS" Pattern="extends"/>
+    <Literal Name="DIV" Pattern="/"/>
+    <Literal Name="STAR_EQUALS" Pattern="*="/>
+    <Literal Name="PUBLIC" Pattern="public"/>
+    <Literal Name="BANG" Pattern="!"/>
+    <Literal Name="LEFT2" Pattern="&lt;&lt;"/>
+    <Regex Name="DIGIT" Pattern="\d"/>
+    <Literal Name="PIPE" Pattern="|"/>
+    <Literal Name="WHILE" Pattern="while"/>
+    <Literal Name="NE" Pattern="!="/>
+    <Literal Name="PROTECTED" Pattern="protected"/>
+    <Literal Name="RIGHT2" Pattern="&gt;&gt;"/>
+    <Literal Name="PLUS_EQUALS" Pattern="+="/>
+    <Literal Name="LEFT2_EQUALS" Pattern="&lt;&lt;="/>
+    <Literal Name="PLUS" Pattern="+"/>
+    <Regex Name="OCTAL_LITERAL" Pattern="0[0-7]+[lL]?"/>
+    <Literal Name="QMARK" Pattern="?"/>
+  </Tokens>
+  <Parsers>
+    <Parser Name="annotationMethodOrConstantRest">
+        <Choice >
+          <Reference Ref="annotationMethodRest" />
+          <Reference Ref="annotationConstantRest" />
+        </Choice>
+    </Parser>
+    <Parser Name="block">
+        <Sequence >
+          <Token Ref="LCURLY" Drop="true"/>
+          <Reference Ref="blockStatement" Mult="*"/>
+          <Token Ref="RCURLY" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="constructorDeclaratorRest">
+        <Sequence >
+          <Reference Ref="formalParameters" />
+          <Sequence Mult="?">
+            <Token Ref="THROWS" />
+            <Reference Ref="qualifiedNameList" />
+          </Sequence>
+          <Reference Ref="constructorBody" />
+        </Sequence>
+    </Parser>
+    <Parser Name="variableDeclarators">
+        <RepSep Mult="+">
+          <Reference Ref="variableDeclarator" />
+          <Token Ref="COMMA" />
+        </RepSep>
+    </Parser>
+    <Parser Name="methodDeclaration">
+        <Sequence >
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="methodDeclaratorRest" />
+        </Sequence>
+    </Parser>
+    <Parser Name="typeArguments">
+        <Sequence >
+          <Token Ref="LT" Drop="true"/>
+          <RepSep Mult="+">
+            <Reference Ref="typeArgument" />
+            <Token Ref="COMMA" />
+          </RepSep>
+          <Token Ref="GT_" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="conditionalAndExpression">
+        <RepSep Mult="+">
+          <Reference Ref="inclusiveOrExpression" />
+          <Token Ref="AMPERSAND2" />
+        </RepSep>
+    </Parser>
+    <Parser Name="forUpdate">
+        <Reference Ref="expressionList" />
+    </Parser>
+    <Parser Name="normalInterfaceDeclaration">
+        <Sequence >
+          <Token Ref="INTERFACE" />
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="typeParameters" Mult="?"/>
+          <Sequence Mult="?">
+            <Token Ref="EXTENDS" />
+            <Reference Ref="typeList" />
+          </Sequence>
+          <Reference Ref="interfaceBody" />
+        </Sequence>
+    </Parser>
+    <Parser Name="switchBlockStatementGroup">
+        <Sequence >
+          <Reference Ref="switchLabel" Mult="+"/>
+          <Reference Ref="blockStatement" Mult="*"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="enumBodyDeclarations">
+        <Sequence >
+          <Token Ref="SEMICOLON" />
+          <Reference Ref="classBodyDeclaration" Mult="*"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="interfaceBody">
+        <Sequence >
+          <Token Ref="LCURLY" Drop="true"/>
+          <Reference Ref="interfaceBodyDeclaration" Mult="*"/>
+          <Token Ref="RCURLY" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="inclusiveOrExpression">
+        <RepSep Mult="+">
+          <Reference Ref="exclusiveOrExpression" />
+          <Token Ref="PIPE" />
+        </RepSep>
+    </Parser>
+    <Parser Name="shiftOp">
+        <Choice >
+          <Token Ref="RIGHT3" />
+          <Token Ref="LEFT2" />
+          <Token Ref="RIGHT2" />
+        </Choice>
+    </Parser>
+    <Parser Name="additiveExpression">
+        <Sequence >
+          <Reference Ref="multiplicativeExpression" />
+          <Sequence Mult="*">
+            <Choice >
+              <Token Ref="PLUS" />
+              <Token Ref="MINUS" />
+            </Choice>
+            <Reference Ref="multiplicativeExpression" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="classDeclaration">
+        <Choice >
+          <Reference Ref="normalClassDeclaration" />
+          <Reference Ref="enumDeclaration" />
+        </Choice>
+    </Parser>
+    <Parser Name="variableInitializer">
+        <Choice >
+          <Reference Ref="arrayInitializer" />
+          <Reference Ref="expression" />
+        </Choice>
+    </Parser>
+    <Parser Name="interfaceDeclaration">
+        <Choice >
+          <Reference Ref="normalInterfaceDeclaration" />
+          <Reference Ref="annotationTypeDeclaration" />
+        </Choice>
+    </Parser>
+    <Parser Name="variableModifier">
+        <Choice >
+          <Token Ref="FINAL" />
+          <Reference Ref="annotation" />
+        </Choice>
+    </Parser>
+    <Parser Name="equalityExpression">
+        <Sequence >
+          <Reference Ref="instanceofExpression" />
+          <Sequence Mult="*">
+            <Choice >
+              <Token Ref="EQ" />
+              <Token Ref="NE" />
+            </Choice>
+            <Reference Ref="instanceofExpression" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="enhancedForControl">
+        <Sequence >
+          <Reference Ref="variableModifier" Mult="*"/>
+          <Reference Ref="type" />
+          <Token Ref="IDENTIFIER" />
+          <Token Ref="COLON" Drop="true"/>
+          <Reference Ref="expression" />
+        </Sequence>
+    </Parser>
+    <Parser Name="unaryExpression">
+        <Choice >
+          <Sequence >
+            <Token Ref="PLUS" />
+            <Reference Ref="unaryExpression" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="MINUS" />
+            <Reference Ref="unaryExpression" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="PLUS2" />
+            <Reference Ref="unaryExpression" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="MINUS2" />
+            <Reference Ref="unaryExpression" />
+          </Sequence>
+          <Reference Ref="unaryExpressionNotPlusMinus" />
+        </Choice>
+    </Parser>
+    <Parser Name="constantDeclaratorRest">
+        <Sequence >
+          <Sequence Mult="*">
+            <Token Ref="LBKT" />
+            <Token Ref="RBKT" />
+          </Sequence>
+          <Token Ref="EQUALS" />
+          <Reference Ref="variableInitializer" />
+        </Sequence>
+    </Parser>
+    <Parser Name="type">
+        <Choice >
+          <Sequence >
+            <Reference Ref="classOrInterfaceType" />
+            <Sequence Mult="*">
+              <Token Ref="LBKT" />
+              <Token Ref="RBKT" />
+            </Sequence>
+          </Sequence>
+          <Sequence >
+            <Reference Ref="primitiveType" />
+            <Sequence Mult="*">
+              <Token Ref="LBKT" />
+              <Token Ref="RBKT" />
+            </Sequence>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="arrayInitializer">
+        <Sequence >
+          <Token Ref="LCURLY" Drop="true"/>
+          <Sequence Mult="?">
+            <RepSep Mult="+">
+              <Reference Ref="variableInitializer" />
+              <Token Ref="COMMA" />
+            </RepSep>
+            <Token Ref="COMMA" Mult="?"/>
+          </Sequence>
+          <Token Ref="RCURLY" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="explicitConstructorInvocation">
+        <Choice >
+          <Sequence >
+            <Reference Ref="nonWildcardTypeArguments" Mult="?"/>
+            <Choice >
+              <Token Ref="THIS" />
+              <Token Ref="SUPER" />
+            </Choice>
+            <Reference Ref="arguments" />
+            <Token Ref="SEMICOLON" Drop="true"/>
+          </Sequence>
+          <Sequence >
+            <Reference Ref="primary" />
+            <Token Ref="STOP" Drop="true"/>
+            <Reference Ref="nonWildcardTypeArguments" Mult="?"/>
+            <Token Ref="SUPER" Drop="true"/>
+            <Reference Ref="arguments" />
+            <Token Ref="SEMICOLON" Drop="true"/>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="literal">
+        <Choice >
+          <Token Ref="CHARACTER_LITERAL" />
+          <Token Ref="STRING_LITERAL" />
+          <Reference Ref="booleanLiteral" />
+          <Token Ref="NULL" />
+          <Token Ref="FLOATING_LITERAL" />
+          <Reference Ref="integerLiteral" />
+        </Choice>
+    </Parser>
+    <Parser Name="typeBound">
+        <RepSep Mult="+">
+          <Reference Ref="type" />
+          <Token Ref="AMPERSAND" />
+        </RepSep>
+    </Parser>
+    <Parser Name="qualifiedNameList">
+        <RepSep Mult="+">
+          <Reference Ref="qualifiedName" />
+          <Token Ref="COMMA" />
+        </RepSep>
+    </Parser>
+    <Parser Name="innerCreator">
+        <Sequence >
+          <Reference Ref="nonWildcardTypeArguments" Mult="?"/>
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="classCreatorRest" />
+        </Sequence>
+    </Parser>
+    <Parser Name="annotationTypeElementRest">
+        <Choice >
+          <Sequence >
+            <Reference Ref="type" />
+            <Reference Ref="annotationMethodOrConstantRest" />
+            <Token Ref="SEMICOLON" />
+          </Sequence>
+          <Sequence >
+            <Reference Ref="normalClassDeclaration" />
+            <Token Ref="SEMICOLON" Mult="?"/>
+          </Sequence>
+          <Sequence >
+            <Reference Ref="normalInterfaceDeclaration" />
+            <Token Ref="SEMICOLON" Mult="?"/>
+          </Sequence>
+          <Sequence >
+            <Reference Ref="enumDeclaration" />
+            <Token Ref="SEMICOLON" Mult="?"/>
+          </Sequence>
+          <Sequence >
+            <Reference Ref="annotationTypeDeclaration" />
+            <Token Ref="SEMICOLON" Mult="?"/>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="variableDeclaratorId">
+        <Sequence >
+          <Token Ref="IDENTIFIER" />
+          <Sequence Mult="*">
+            <Token Ref="LBKT" />
+            <Token Ref="RBKT" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="catchClause">
+        <Sequence >
+          <Token Ref="CATCH" />
+          <Token Ref="LPAREN" Drop="true"/>
+          <Reference Ref="formalParameter" />
+          <Token Ref="RPAREN" Drop="true"/>
+          <Reference Ref="block" />
+        </Sequence>
+    </Parser>
+    <Parser Name="interfaceBodyDeclaration">
+        <Choice >
+          <Sequence >
+            <Reference Ref="modifier" Mult="*"/>
+            <Reference Ref="interfaceMemberDecl" />
+          </Sequence>
+          <Token Ref="SEMICOLON" />
+        </Choice>
+    </Parser>
+    <Parser Name="booleanLiteral">
+        <Choice >
+          <Token Ref="TRUE" />
+          <Token Ref="FALSE" />
+        </Choice>
+    </Parser>
+    <Parser Name="conditionalOrExpression">
+        <RepSep Mult="+">
+          <Reference Ref="conditionalAndExpression" />
+          <Token Ref="PIPE2" />
+        </RepSep>
+    </Parser>
+    <Parser Name="creator">
+        <Choice >
+          <Sequence >
+            <Reference Ref="nonWildcardTypeArguments" />
+            <Reference Ref="createdName" />
+            <Reference Ref="classCreatorRest" />
+          </Sequence>
+          <Sequence >
+            <Reference Ref="createdName" />
+            <Choice >
+              <Reference Ref="arrayCreatorRest" />
+              <Reference Ref="classCreatorRest" />
+            </Choice>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="typeList">
+        <RepSep Mult="+">
+          <Reference Ref="type" />
+          <Token Ref="COMMA" />
+        </RepSep>
+    </Parser>
+    <Parser Name="identifierSuffix">
+        <Choice >
+          <Sequence >
+            <Sequence Mult="+">
+              <Token Ref="LBKT" />
+              <Token Ref="RBKT" />
+            </Sequence>
+            <Token Ref="STOP" />
+            <Token Ref="CLASS" />
+          </Sequence>
+          <Sequence Mult="+">
+            <Token Ref="LBKT" />
+            <Reference Ref="expression" />
+            <Token Ref="RBKT" />
+          </Sequence>
+          <Reference Ref="arguments" />
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="CLASS" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="STOP" />
+            <Reference Ref="explicitGenericInvocation" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="THIS" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="SUPER" />
+            <Reference Ref="arguments" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="NEW" />
+            <Reference Ref="innerCreator" />
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="voidInterfaceMethodDeclaratorRest">
+        <Sequence >
+          <Reference Ref="formalParameters" />
+          <Sequence Mult="?">
+            <Token Ref="THROWS" />
+            <Reference Ref="qualifiedNameList" />
+          </Sequence>
+          <Token Ref="SEMICOLON" />
+        </Sequence>
+    </Parser>
+    <Parser Name="andExpression">
+        <RepSep Mult="+">
+          <Reference Ref="equalityExpression" />
+          <Token Ref="AMPERSAND" />
+        </RepSep>
+    </Parser>
+    <Parser Name="primary">
+        <Choice >
+          <Reference Ref="parExpression" />
+          <Sequence >
+            <Token Ref="THIS" />
+            <Sequence Mult="*">
+              <Token Ref="STOP" />
+              <Token Ref="IDENTIFIER" />
+            </Sequence>
+            <Reference Ref="identifierSuffix" Mult="?"/>
+          </Sequence>
+          <Sequence >
+            <Token Ref="SUPER" />
+            <Reference Ref="superSuffix" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="NEW" />
+            <Reference Ref="creator" />
+          </Sequence>
+          <Sequence >
+            <RepSep Mult="+">
+              <Token Ref="IDENTIFIER" />
+              <Token Ref="STOP" />
+            </RepSep>
+            <Reference Ref="identifierSuffix" Mult="?"/>
+          </Sequence>
+          <Sequence >
+            <Reference Ref="primitiveType" />
+            <Sequence Mult="*">
+              <Token Ref="LBKT" />
+              <Token Ref="RBKT" />
+            </Sequence>
+            <Token Ref="STOP" />
+            <Token Ref="CLASS" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="VOID" />
+            <Token Ref="STOP" />
+            <Token Ref="CLASS" />
+          </Sequence>
+          <Reference Ref="literal" />
+        </Choice>
+    </Parser>
+    <Parser Name="classOrInterfaceDeclaration">
+        <Sequence >
+          <Reference Ref="classOrInterfaceModifier" Mult="*"/>
+          <Choice >
+            <Reference Ref="classDeclaration" />
+            <Reference Ref="interfaceDeclaration" />
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="enumDeclaration">
+        <Sequence >
+          <Token Ref="ENUM" />
+          <Token Ref="IDENTIFIER" />
+          <Sequence Mult="?">
+            <Token Ref="IMPLEMENTS" />
+            <Reference Ref="typeList" />
+          </Sequence>
+          <Reference Ref="enumBody" />
+        </Sequence>
+    </Parser>
+    <Parser Name="annotationName">
+        <RepSep Mult="+">
+          <Token Ref="IDENTIFIER" />
+          <Token Ref="STOP" />
+        </RepSep>
+    </Parser>
+    <Parser Name="explicitGenericInvocation">
+        <Sequence >
+          <Reference Ref="nonWildcardTypeArguments" />
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="arguments" />
+        </Sequence>
+    </Parser>
+    <Parser Name="elementValuePairs">
+        <RepSep Mult="+">
+          <Reference Ref="elementValuePair" />
+          <Token Ref="COMMA" />
+        </RepSep>
+    </Parser>
+    <Parser Name="expression">
+        <Sequence >
+          <Reference Ref="conditionalExpression" />
+          <Sequence Mult="?">
+            <Reference Ref="assignmentOperator" />
+            <Reference Ref="expression" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="typeParameter">
+        <Sequence >
+          <Token Ref="IDENTIFIER" />
+          <Sequence Mult="?">
+            <Token Ref="EXTENDS" />
+            <Reference Ref="typeBound" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="memberDeclaration">
+        <Sequence >
+          <Reference Ref="type" />
+          <Choice >
+            <Reference Ref="methodDeclaration" />
+            <Reference Ref="fieldDeclaration" />
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="catches">
+        <Reference Ref="catchClause" Mult="+"/>
+    </Parser>
+    <Parser Name="classOrInterfaceModifier">
+        <Choice >
+          <Reference Ref="annotation" />
+          <Token Ref="PUBLIC" />
+          <Token Ref="PROTECTED" />
+          <Token Ref="PRIVATE" />
+          <Token Ref="ABSTRACT" />
+          <Token Ref="STATIC" />
+          <Token Ref="FINAL" />
+          <Token Ref="STRICTFP" />
+        </Choice>
+    </Parser>
+    <Parser Name="arrayCreatorRest">
+        <Sequence >
+          <Token Ref="LBKT" />
+          <Choice >
+            <Sequence >
+              <Token Ref="RBKT" />
+              <Sequence Mult="*">
+                <Token Ref="LBKT" />
+                <Token Ref="RBKT" />
+              </Sequence>
+              <Reference Ref="arrayInitializer" />
+            </Sequence>
+            <Sequence >
+              <Reference Ref="expression" />
+              <Token Ref="RBKT" />
+              <Sequence Mult="*">
+                <Token Ref="LBKT" />
+                <Reference Ref="expression" />
+                <Token Ref="RBKT" />
+              </Sequence>
+              <Sequence Mult="*">
+                <Token Ref="LBKT" />
+                <Token Ref="RBKT" />
+              </Sequence>
+            </Sequence>
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="statement">
+        <Choice >
+          <Reference Ref="block" />
+          <Sequence >
+            <Token Ref="ASSERT" />
+            <Reference Ref="expression" />
+            <Sequence Mult="?">
+              <Token Ref="COLON" />
+              <Reference Ref="expression" />
+            </Sequence>
+            <Token Ref="SEMICOLON" Drop="true"/>
+          </Sequence>
+          <Sequence >
+            <Token Ref="IF" />
+            <Reference Ref="parExpression" />
+            <Reference Ref="statement" />
+            <Sequence Mult="?">
+              <Token Ref="ELSE" />
+              <Reference Ref="statement" />
+            </Sequence>
+          </Sequence>
+          <Sequence >
+            <Token Ref="FOR" />
+            <Token Ref="LPAREN" Drop="true"/>
+            <Reference Ref="forControl" />
+            <Token Ref="RPAREN" Drop="true"/>
+            <Reference Ref="statement" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="WHILE" />
+            <Reference Ref="parExpression" />
+            <Reference Ref="statement" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="DO" />
+            <Reference Ref="statement" />
+            <Token Ref="WHILE" />
+            <Reference Ref="parExpression" />
+            <Token Ref="SEMICOLON" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="TRY" />
+            <Reference Ref="block" />
+            <Choice >
+              <Sequence >
+                <Reference Ref="catches" />
+                <Token Ref="FINALLY" />
+                <Reference Ref="block" />
+              </Sequence>
+              <Reference Ref="catches" />
+              <Sequence >
+                <Token Ref="FINALLY" />
+                <Reference Ref="block" />
+              </Sequence>
+            </Choice>
+          </Sequence>
+          <Sequence >
+            <Token Ref="SWITCH" />
+            <Reference Ref="parExpression" />
+            <Token Ref="LCURLY" Drop="true"/>
+            <Reference Ref="switchBlockStatementGroup" Mult="*"/>
+            <Token Ref="RCURLY" Drop="true"/>
+          </Sequence>
+          <Sequence >
+            <Token Ref="SYNCHRONIZED" />
+            <Reference Ref="parExpression" />
+            <Reference Ref="block" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="RETURN" />
+            <Reference Ref="expression" Mult="?"/>
+            <Token Ref="SEMICOLON" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="THROW" />
+            <Reference Ref="expression" />
+            <Token Ref="SEMICOLON" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="BREAK" />
+            <Token Ref="IDENTIFIER" Mult="?"/>
+            <Token Ref="SEMICOLON" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="CONTINUE" />
+            <Token Ref="IDENTIFIER" Mult="?"/>
+            <Token Ref="SEMICOLON" />
+          </Sequence>
+          <Token Ref="SEMICOLON" />
+          <Sequence >
+            <Reference Ref="statementExpression" />
+            <Token Ref="SEMICOLON" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="IDENTIFIER" />
+            <Token Ref="COLON" />
+            <Reference Ref="statement" />
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="annotationTypeElementDeclaration">
+        <Sequence >
+          <Reference Ref="modifier" Mult="*"/>
+          <Reference Ref="annotationTypeElementRest" />
+        </Sequence>
+    </Parser>
+    <Parser Name="constructorBody">
+        <Sequence >
+          <Token Ref="LCURLY" Drop="true"/>
+          <Reference Ref="explicitConstructorInvocation" Mult="?"/>
+          <Reference Ref="blockStatement" Mult="*"/>
+          <Token Ref="RCURLY" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="castExpression">
+        <Choice >
+          <Sequence >
+            <Token Ref="LPAREN" Drop="true"/>
+            <Reference Ref="primitiveType" />
+            <Token Ref="RPAREN" Drop="true"/>
+            <Reference Ref="unaryExpression" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="LPAREN" Drop="true"/>
+            <Choice >
+              <Reference Ref="type" />
+              <Reference Ref="expression" />
+            </Choice>
+            <Token Ref="RPAREN" Drop="true"/>
+            <Reference Ref="unaryExpressionNotPlusMinus" />
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="formalParameterDecls">
+        <Sequence >
+          <Reference Ref="variableModifier" Mult="*"/>
+          <Reference Ref="type" />
+          <Reference Ref="formalParameterDeclsRest" />
+        </Sequence>
+    </Parser>
+    <Parser Name="unaryExpressionNotPlusMinus">
+        <Choice >
+          <Sequence >
+            <Token Ref="TILDE" />
+            <Reference Ref="unaryExpression" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="BANG" />
+            <Reference Ref="unaryExpression" />
+          </Sequence>
+          <Reference Ref="castExpression" />
+          <Sequence >
+            <Reference Ref="primary" />
+            <Reference Ref="selector" Mult="*"/>
+            <Choice Mult="?">
+              <Token Ref="PLUS2" />
+              <Token Ref="MINUS2" />
+            </Choice>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="statementExpression">
+        <Reference Ref="expression" />
+    </Parser>
+    <Parser Name="elementValuePair">
+        <Sequence >
+          <Token Ref="IDENTIFIER" />
+          <Token Ref="EQUALS" />
+          <Reference Ref="elementValue" />
+        </Sequence>
+    </Parser>
+    <Parser Name="variableDeclarator">
+        <Sequence >
+          <Reference Ref="variableDeclaratorId" />
+          <Sequence Mult="?">
+            <Token Ref="EQUALS" />
+            <Reference Ref="variableInitializer" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="forInit">
+        <Choice >
+          <Reference Ref="localVariableDeclaration" />
+          <Reference Ref="expressionList" />
+        </Choice>
+    </Parser>
+    <Parser Name="enumConstants">
+        <RepSep Mult="+">
+          <Reference Ref="enumConstant" />
+          <Token Ref="COMMA" />
+        </RepSep>
+    </Parser>
+    <Parser Name="formalParameter">
+        <Sequence >
+          <Reference Ref="variableModifier" Mult="*"/>
+          <Reference Ref="type" />
+          <Reference Ref="variableDeclaratorId" />
+        </Sequence>
+    </Parser>
+    <Parser Name="annotationTypeDeclaration">
+        <Sequence >
+          <Token Ref="AT" />
+          <Token Ref="INTERFACE" />
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="annotationTypeBody" />
+        </Sequence>
+    </Parser>
+    <Parser Name="fieldDeclaration">
+        <Sequence >
+          <Reference Ref="variableDeclarators" />
+          <Token Ref="SEMICOLON" />
+        </Sequence>
+    </Parser>
+    <Parser Name="classCreatorRest">
+        <Sequence >
+          <Reference Ref="arguments" />
+          <Reference Ref="classBody" Mult="?"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="genericMethodOrConstructorRest">
+        <Choice >
+          <Sequence >
+            <Choice >
+              <Reference Ref="type" />
+              <Token Ref="VOID" />
+            </Choice>
+            <Token Ref="IDENTIFIER" />
+            <Reference Ref="methodDeclaratorRest" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="IDENTIFIER" />
+            <Reference Ref="constructorDeclaratorRest" />
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="assignmentOperator">
+        <Choice >
+          <Token Ref="EQUALS" />
+          <Token Ref="PLUS_EQUALS" />
+          <Token Ref="MINUS_EQUALS" />
+          <Token Ref="STAR_EQUALS" />
+          <Token Ref="DIV_EQUALS" />
+          <Token Ref="CARET_EQUALS" />
+          <Token Ref="PERCENT_EQUALS" />
+          <Token Ref="LEFT2_EQUALS" />
+          <Token Ref="RIGHT3_EQUALS" />
+          <Token Ref="RIGHT2_EQUALS" />
+          <Token Ref="AMPERSAND_EQUALS" />
+          <Token Ref="PIPE_EQUALS" />
+        </Choice>
+    </Parser>
+    <Parser Name="packageDeclaration">
+        <Sequence >
+          <Token Ref="PACKAGE" />
+          <Reference Ref="qualifiedName" />
+          <Token Ref="SEMICOLON" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="genericMethodOrConstructorDecl">
+        <Sequence >
+          <Reference Ref="typeParameters" />
+          <Reference Ref="genericMethodOrConstructorRest" />
+        </Sequence>
+    </Parser>
+    <Parser Name="annotationConstantRest">
+        <Reference Ref="variableDeclarators" />
+    </Parser>
+    <Parser Name="interfaceMemberDecl">
+        <Choice >
+          <Reference Ref="interfaceMethodOrFieldDecl" />
+          <Reference Ref="interfaceGenericMethodDecl" />
+          <Sequence >
+            <Token Ref="VOID" />
+            <Token Ref="IDENTIFIER" />
+            <Reference Ref="voidInterfaceMethodDeclaratorRest" />
+          </Sequence>
+          <Reference Ref="interfaceDeclaration" />
+          <Reference Ref="classDeclaration" />
+        </Choice>
+    </Parser>
+    <Parser Name="typeName">
+        <Reference Ref="qualifiedName" />
+    </Parser>
+    <Parser Name="annotationMethodRest">
+        <Sequence >
+          <Token Ref="IDENTIFIER" />
+          <Token Ref="LPAREN" Drop="true"/>
+          <Token Ref="RPAREN" Drop="true"/>
+          <Reference Ref="defaultValue" Mult="?"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="methodDeclaratorRest">
+        <Sequence >
+          <Reference Ref="formalParameters" />
+          <Sequence Mult="*">
+            <Token Ref="LBKT" />
+            <Token Ref="RBKT" />
+          </Sequence>
+          <Sequence Mult="?">
+            <Token Ref="THROWS" />
+            <Reference Ref="qualifiedNameList" />
+          </Sequence>
+          <Choice >
+            <Reference Ref="methodBody" />
+            <Token Ref="SEMICOLON" />
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="classBodyDeclaration">
+        <Choice >
+          <Token Ref="SEMICOLON" />
+          <Sequence >
+            <Token Ref="STATIC" Mult="?"/>
+            <Reference Ref="block" />
+          </Sequence>
+          <Sequence >
+            <Reference Ref="modifier" Mult="*"/>
+            <Reference Ref="memberDecl" />
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="instanceofExpression">
+        <Sequence >
+          <Reference Ref="relationalExpression" />
+          <Sequence Mult="?">
+            <Token Ref="INSTANCEOF" />
+            <Reference Ref="type" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="blockStatement">
+        <Choice >
+          <Reference Ref="localVariableDeclarationStatement" />
+          <Reference Ref="classOrInterfaceDeclaration" />
+          <Reference Ref="statement" />
+        </Choice>
+    </Parser>
+    <Parser Name="shiftExpression">
+        <Sequence >
+          <Reference Ref="additiveExpression" />
+          <Sequence Mult="*">
+            <Reference Ref="shiftOp" />
+            <Reference Ref="additiveExpression" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="memberDecl">
+        <Choice >
+          <Reference Ref="genericMethodOrConstructorDecl" />
+          <Reference Ref="memberDeclaration" />
+          <Sequence >
+            <Token Ref="VOID" />
+            <Token Ref="IDENTIFIER" />
+            <Reference Ref="voidMethodDeclaratorRest" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="IDENTIFIER" />
+            <Reference Ref="constructorDeclaratorRest" />
+          </Sequence>
+          <Reference Ref="interfaceDeclaration" />
+          <Reference Ref="classDeclaration" />
+        </Choice>
+    </Parser>
+    <Parser Name="qualifiedName">
+        <RepSep Mult="+">
+          <Token Ref="IDENTIFIER" />
+          <Token Ref="STOP" />
+        </RepSep>
+    </Parser>
+    <Parser Name="methodBody">
+        <Reference Ref="block" />
+    </Parser>
+    <Parser Name="interfaceMethodOrFieldRest">
+        <Choice >
+          <Sequence >
+            <Reference Ref="constantDeclaratorsRest" />
+            <Token Ref="SEMICOLON" />
+          </Sequence>
+          <Reference Ref="interfaceMethodDeclaratorRest" />
+        </Choice>
+    </Parser>
+    <Parser Name="integerLiteral">
+        <Choice >
+          <Token Ref="OCTAL_LITERAL" />
+          <Token Ref="HEX_LITERAL" />
+          <Token Ref="DECIMAL_LITERAL" />
+        </Choice>
+    </Parser>
+    <Parser Name="enumConstantName">
+        <Token Ref="IDENTIFIER" />
+    </Parser>
+    <Parser Name="classOrInterfaceType">
+        <Sequence >
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="typeArguments" Mult="?"/>
+          <Sequence Mult="*">
+            <Token Ref="STOP" />
+            <Token Ref="IDENTIFIER" />
+            <Reference Ref="typeArguments" Mult="?"/>
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="formalParameterDeclsRest">
+        <Choice >
+          <Sequence >
+            <Reference Ref="variableDeclaratorId" />
+            <Sequence Mult="?">
+              <Token Ref="COMMA" />
+              <Reference Ref="formalParameterDecls" />
+            </Sequence>
+          </Sequence>
+          <Sequence >
+            <Token Ref="ELLIPSIS" />
+            <Reference Ref="variableDeclaratorId" />
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="relationalExpression">
+        <Sequence >
+          <Reference Ref="shiftExpression" />
+          <Sequence Mult="*">
+            <Reference Ref="relationalOp" />
+            <Reference Ref="shiftExpression" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="formalParameters">
+        <Sequence >
+          <Token Ref="LPAREN" Drop="true"/>
+          <Reference Ref="formalParameterDecls" Mult="?"/>
+          <Token Ref="RPAREN" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="elementValue">
+        <Choice >
+          <Reference Ref="conditionalExpression" />
+          <Reference Ref="annotation" />
+          <Reference Ref="elementValueArrayInitializer" />
+        </Choice>
+    </Parser>
+    <Parser Name="modifier">
+        <Choice >
+          <Reference Ref="annotation" />
+          <Token Ref="PUBLIC" />
+          <Token Ref="PROTECTED" />
+          <Token Ref="PRIVATE" />
+          <Token Ref="STATIC" />
+          <Token Ref="ABSTRACT" />
+          <Token Ref="FINAL" />
+          <Token Ref="NATIVE" />
+          <Token Ref="SYNCHRONIZED" />
+          <Token Ref="TRANSIENT" />
+          <Token Ref="VOLATILE" />
+          <Token Ref="STRICTFP" />
+        </Choice>
+    </Parser>
+    <Parser Name="typeParameters">
+        <Sequence >
+          <Token Ref="LT" Drop="true"/>
+          <RepSep Mult="+">
+            <Reference Ref="typeParameter" />
+            <Token Ref="COMMA" />
+          </RepSep>
+          <Token Ref="GT_" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="voidMethodDeclaratorRest">
+        <Sequence >
+          <Reference Ref="formalParameters" />
+          <Sequence Mult="?">
+            <Token Ref="THROWS" />
+            <Reference Ref="qualifiedNameList" />
+          </Sequence>
+          <Choice >
+            <Reference Ref="methodBody" />
+            <Token Ref="SEMICOLON" />
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="annotationTypeBody">
+        <Sequence >
+          <Token Ref="LCURLY" Drop="true"/>
+          <Reference Ref="annotationTypeElementDeclaration" Mult="*"/>
+          <Token Ref="RCURLY" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="nonWildcardTypeArguments">
+        <Sequence >
+          <Token Ref="LT" Drop="true"/>
+          <Reference Ref="typeList" />
+          <Token Ref="GT_" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="qualifiedImportName">
+        <RepSep Mult="+">
+          <Token Ref="IDENTIFIER" />
+          <Token Ref="STOP" />
+        </RepSep>
+    </Parser>
+    <Parser Name="interfaceMethodDeclaratorRest">
+        <Sequence >
+          <Reference Ref="formalParameters" />
+          <Sequence Mult="*">
+            <Token Ref="LBKT" />
+            <Token Ref="RBKT" />
+          </Sequence>
+          <Sequence Mult="?">
+            <Token Ref="THROWS" />
+            <Reference Ref="qualifiedNameList" />
+          </Sequence>
+          <Token Ref="SEMICOLON" />
+        </Sequence>
+    </Parser>
+    <Parser Name="interfaceGenericMethodDecl">
+        <Sequence >
+          <Reference Ref="typeParameters" />
+          <Choice >
+            <Reference Ref="type" />
+            <Token Ref="VOID" />
+          </Choice>
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="interfaceMethodDeclaratorRest" />
+        </Sequence>
+    </Parser>
+    <Parser Name="selector">
+        <Choice >
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="IDENTIFIER" />
+            <Reference Ref="arguments" Mult="?"/>
+          </Sequence>
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="THIS" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="SUPER" />
+            <Reference Ref="superSuffix" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="NEW" />
+            <Reference Ref="innerCreator" />
+          </Sequence>
+          <Sequence >
+            <Token Ref="LBKT" />
+            <Reference Ref="expression" />
+            <Token Ref="RBKT" />
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="switchLabel">
+        <Choice >
+          <Sequence >
+            <Token Ref="CASE" Drop="true"/>
+            <Reference Ref="constantExpression" />
+            <Token Ref="COLON" Drop="true"/>
+          </Sequence>
+          <Sequence >
+            <Token Ref="CASE" Drop="true"/>
+            <Reference Ref="enumConstantName" />
+            <Token Ref="COLON" Drop="true"/>
+          </Sequence>
+          <Sequence >
+            <Token Ref="DEFAULT" />
+            <Token Ref="COLON" Drop="true"/>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="relationalOp">
+        <Choice >
+          <Token Ref="LE" />
+          <Token Ref="GE" />
+          <Token Ref="LT" />
+          <Token Ref="GT_" />
+        </Choice>
+    </Parser>
+    <Parser Name="conditionalExpression">
+        <Sequence >
+          <Reference Ref="conditionalOrExpression" />
+          <Sequence Mult="?">
+            <Token Ref="QMARK" Drop="true"/>
+            <Reference Ref="expression" />
+            <Token Ref="COLON" Drop="true"/>
+            <Reference Ref="expression" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="normalClassDeclaration">
+        <Sequence >
+          <Token Ref="CLASS" />
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="typeParameters" Mult="?"/>
+          <Sequence Mult="?">
+            <Token Ref="EXTENDS" />
+            <Reference Ref="type" />
+          </Sequence>
+          <Sequence Mult="?">
+            <Token Ref="IMPLEMENTS" />
+            <Reference Ref="typeList" />
+          </Sequence>
+          <Reference Ref="classBody" />
+        </Sequence>
+    </Parser>
+    <Parser Name="constantExpression">
+        <Reference Ref="expression" />
+    </Parser>
+    <Parser Name="exclusiveOrExpression">
+        <RepSep Mult="+">
+          <Reference Ref="andExpression" />
+          <Token Ref="CARET" />
+        </RepSep>
+    </Parser>
+    <Parser Name="constantDeclarator">
+        <Sequence >
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="constantDeclaratorRest" />
+        </Sequence>
+    </Parser>
+    <Parser Name="classBody">
+        <Sequence >
+          <Token Ref="LCURLY" Drop="true"/>
+          <Reference Ref="classBodyDeclaration" Mult="*"/>
+          <Token Ref="RCURLY" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="elementValueArrayInitializer">
+        <Sequence >
+          <Token Ref="LCURLY" Drop="true"/>
+          <Sequence Mult="?">
+            <RepSep Mult="+">
+              <Reference Ref="elementValue" />
+              <Token Ref="COMMA" />
+            </RepSep>
+            <Token Ref="COMMA" Mult="?"/>
+          </Sequence>
+          <Token Ref="RCURLY" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="expressionList">
+        <RepSep Mult="+">
+          <Reference Ref="expression" />
+          <Token Ref="COMMA" />
+        </RepSep>
+    </Parser>
+    <Parser Name="enumBody">
+        <Sequence >
+          <Token Ref="LCURLY" Drop="true"/>
+          <Reference Ref="enumConstants" Mult="?"/>
+          <Token Ref="COMMA" Mult="?" Drop="true"/>
+          <Reference Ref="enumBodyDeclarations" Mult="?"/>
+          <Token Ref="RCURLY" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="multiplicativeExpression">
+        <Sequence >
+          <Reference Ref="unaryExpression" />
+          <Sequence Mult="*">
+            <Choice >
+              <Token Ref="STAR" />
+              <Token Ref="DIV" />
+              <Token Ref="PERCENT" />
+            </Choice>
+            <Reference Ref="unaryExpression" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="primitiveType">
+        <Choice >
+          <Token Ref="BOOLEAN" />
+          <Token Ref="CHAR" />
+          <Token Ref="BYTE" />
+          <Token Ref="SHORT" />
+          <Token Ref="INT" />
+          <Token Ref="LONG" />
+          <Token Ref="FLOAT" />
+          <Token Ref="DOUBLE" />
+        </Choice>
+    </Parser>
+    <Parser Name="localVariableDeclaration">
+        <Sequence >
+          <Reference Ref="variableModifier" Mult="*"/>
+          <Reference Ref="type" />
+          <Reference Ref="variableDeclarators" />
+        </Sequence>
+    </Parser>
+    <Parser Name="constantDeclaratorsRest">
+        <Sequence >
+          <Reference Ref="constantDeclaratorRest" />
+          <Sequence Mult="*">
+            <Token Ref="COMMA" />
+            <Reference Ref="constantDeclarator" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="annotation">
+        <Sequence >
+          <Token Ref="AT" />
+          <Reference Ref="annotationName" />
+          <Sequence Mult="?">
+            <Token Ref="LPAREN" Drop="true"/>
+            <Choice Mult="?">
+              <Reference Ref="elementValuePairs" />
+              <Reference Ref="elementValue" />
+            </Choice>
+            <Token Ref="RPAREN" Drop="true"/>
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="annotations">
+        <Reference Ref="annotation" Mult="+"/>
+    </Parser>
+    <Parser Name="parExpression">
+        <Sequence >
+          <Token Ref="LPAREN" Drop="true"/>
+          <Reference Ref="expression" />
+          <Token Ref="RPAREN" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="arguments">
+        <Sequence >
+          <Token Ref="LPAREN" Drop="true"/>
+          <Reference Ref="expressionList" Mult="?"/>
+          <Token Ref="RPAREN" Drop="true"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="typeDeclaration">
+        <Choice >
+          <Reference Ref="classOrInterfaceDeclaration" />
+          <Token Ref="SEMICOLON" />
+        </Choice>
+    </Parser>
+    <Parser Name="superSuffix">
+        <Choice >
+          <Reference Ref="arguments" />
+          <Sequence >
+            <Token Ref="STOP" />
+            <Token Ref="IDENTIFIER" />
+            <Reference Ref="arguments" Mult="?"/>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="packageOrTypeName">
+        <Reference Ref="qualifiedName" />
+    </Parser>
+    <Parser Name="typeArgument">
+        <Choice >
+          <Reference Ref="type" />
+          <Sequence >
+            <Token Ref="QMARK" />
+            <Sequence Mult="?">
+              <Choice >
+                <Token Ref="EXTENDS" />
+                <Token Ref="SUPER" />
+              </Choice>
+              <Reference Ref="type" />
+            </Sequence>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="interfaceMethodOrFieldDecl">
+        <Sequence >
+          <Reference Ref="type" />
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="interfaceMethodOrFieldRest" />
+        </Sequence>
+    </Parser>
+    <Parser Name="forControl">
+        <Choice >
+          <Sequence >
+            <Reference Ref="forInit" Mult="?"/>
+            <Token Ref="SEMICOLON" />
+            <Reference Ref="expression" Mult="?"/>
+            <Token Ref="SEMICOLON" />
+            <Reference Ref="forUpdate" Mult="?"/>
+          </Sequence>
+          <Reference Ref="enhancedForControl" />
+        </Choice>
+    </Parser>
+    <Parser Name="CompilationUnit">
+        <Choice >
+          <Sequence >
+            <Reference Ref="annotations" />
+            <Choice >
+              <Sequence >
+                <Reference Ref="packageDeclaration" />
+                <Reference Ref="importDeclaration" Mult="*"/>
+                <Reference Ref="typeDeclaration" Mult="*"/>
+              </Sequence>
+              <Sequence >
+                <Reference Ref="classOrInterfaceDeclaration" />
+                <Reference Ref="typeDeclaration" Mult="*"/>
+              </Sequence>
+            </Choice>
+          </Sequence>
+          <Sequence >
+            <Reference Ref="packageDeclaration" />
+            <Reference Ref="importDeclaration" Mult="*"/>
+            <Reference Ref="typeDeclaration" Mult="*"/>
+          </Sequence>
+          <Sequence >
+            <Reference Ref="importDeclaration" Mult="+"/>
+            <Reference Ref="typeDeclaration" Mult="*"/>
+          </Sequence>
+          <Reference Ref="typeDeclaration" Mult="+"/>
+        </Choice>
+    </Parser>
+    <Parser Name="defaultValue">
+        <Sequence >
+          <Token Ref="DEFAULT" />
+          <Reference Ref="elementValue" />
+        </Sequence>
+    </Parser>
+    <Parser Name="createdName">
+        <Choice >
+          <Reference Ref="classOrInterfaceType" />
+          <Reference Ref="primitiveType" />
+        </Choice>
+    </Parser>
+    <Parser Name="enumConstant">
+        <Sequence >
+          <Reference Ref="annotations" Mult="?"/>
+          <Token Ref="IDENTIFIER" />
+          <Reference Ref="arguments" Mult="?"/>
+          <Reference Ref="classBody" Mult="?"/>
+        </Sequence>
+    </Parser>
+    <Parser Name="localVariableDeclarationStatement">
+        <Sequence >
+          <Reference Ref="localVariableDeclaration" />
+          <Token Ref="SEMICOLON" />
+        </Sequence>
+    </Parser>
+    <Parser Name="importDeclaration">
+        <Sequence >
+          <Token Ref="IMPORT" />
+          <Token Ref="STATIC" Mult="?"/>
+          <Reference Ref="qualifiedName" />
+          <Sequence Mult="?">
+            <Token Ref="STOP" Drop="true"/>
+            <Token Ref="STAR" />
+          </Sequence>
+          <Token Ref="SEMICOLON" Drop="true"/>
+        </Sequence>
+    </Parser>
+  </Parsers>
+</VLL-Grammar>
