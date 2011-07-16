@@ -1,3 +1,7 @@
+3.02 16-JUL-2011
+    Build creates a ZIP binary release file containing JAR and docs files.
+    Addedd readme.txt and copying.txt files.
+    Minor cosmetic source changes.
 3.01 14-JUL-2011
     New version uploaded to vll.java.net.
 2.06 13-JUL-2011
