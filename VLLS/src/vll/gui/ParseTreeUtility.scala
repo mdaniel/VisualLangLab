@@ -165,7 +165,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
               "  if (ok) // check the predicate (ok) value\n    return true; // Parsing success\n  else\n" +
               "    return \"(error message)\"; // Parsing failure\n}\n"
     }
-    private val titleLabel = new Label("Action Text")
+    private val titleLabel = new Label("Action Code")
     add(titleLabel, BorderPanel.Position.North)
     add(new ScrollPane(actionTextArea), BorderPanel.Position.Center)
     add(btnPanel, BorderPanel.Position.South)
