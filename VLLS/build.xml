@@ -12,11 +12,12 @@
         <tstamp/>
         <jar destfile="VLLS.jar" compress="false" manifest="manifest.mf">
             <fileset dir="build/classes" includes="**/*.*" />
-            <fileset dir="." includes="changes.txt"/>
         </jar>
-        <zip zipfile="VLLS-3.01.zip" compress="true">
-            <fileset dir="." includes="src/**/*.*"/>
-            <fileset dir="." includes="manifest.mf, build.xml, changes.txt"/>
+        <zip zipfile="VLLS-3.02.zip" compress="true">
+            <fileset dir="." includes="docs/**/*.*"/>
+            <fileset dir="." includes="copying.txt, readme.txt, changes.txt, index.html"/>
+            <fileset dir="." includes="vlls.bat, vlls"/>
+            <fileset dir="." includes="VLLS.jar"/>
         </zip>
     </target>
     <!--
