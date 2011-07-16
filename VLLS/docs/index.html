@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>VisuaLangLab</title>
+  </head>
+
+  <body>
+    <h1>VisualLangLab - An IDE for Parser Development</h1>
+    <p>
+      <a href="http://vll.java.net/">VisualLangLab</a> 
+      is a completely visual IDE for development of parsers without 
+      code or script of any kind. It is simple in use, and very easy to learn. 
+      A grammar is represented as a tree with distinct icons for the grammar elements. 
+      The following figures show how it represents the three parts of the arithmetic 
+      expression parser in <a href="http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf">section 31.1</a> 
+      of <a href="http://www.artima.com/shop/programming_in_scala">Programming in Scala (first edition)</a>. 
+      The icons and annotations are explained fully in <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
+    </p>
+    <table border="1">
+      <tr><td>expr</td><td>factor</td><td>term</td></tr>
+      <tr><td><img src="images/GrammarTreeExpr1.png"/></td><td><img src="images/GrammarTreeFactor1.png"/></td><td><img src="images/GrammarTreeTerm1.png"/></td></tr>
+    </table>
+    <p>
+      The grammar tree is executable, and can be run at any time at the click of a button 
+      -- without delay or further manual intervention. 
+      Test input for the parser can be entered directly into the IDE or obtained 
+      from user-specified files. Running the parser does not require any other tools or skills. 
+      This capability simplifies testing, and encourages the use of an incremental, iterative 
+      development process.
+    </p>
+    <p>
+      Parser development is reduced to editing the tree's structure using the mouse 
+      for menu-bar and context-menu operations. 
+      Textual input from the keyboard is required only for naming parsers and tokens, 
+      and for specifying regular expression patterns for tokens. 
+      The user-interface is explained fully in <a href="TheGUI.html">The Gui</a> and 
+      <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
+    </p>
+    <p>
+      The grammar is saved as an intuitive XML file that can be loaded again later 
+      for further editing and testing. 
+      An API is also available for client programs (in Scala or Java) to load the 
+      saved XML file and regenerate the parser. 
+      Parser regeneration happens on the fly, (when the XML file-name is passed to the API) 
+      and does not require any intermediate steps or other manual intervention. 
+      Further details and examples can be found in <a href="UsingTheAPI.html">Using the API</a>.
+    </p>
+    <h2>Prerequisites</h2>
+    <p>
+      Beginning version 3.01 (July 2011), Scala 2.9.0+ is required
+    </p>
+    <h2>History</h2>
+      <p>
+        <a href="http://vll.java.net/">VisualLangLab</a> 
+        was born on 5<sup>th</sup> March 2004 as <i>A Visual LL(K) Parser Generator</i>.
+        This first version was written in Java, and can still be found <a href="http://java.net/projects/a-visual-llk-parser-generator">here</a>. 
+        The software was usable by mid-2004, 
+        and an interesting application is described in <a href="http://today.java.net/pub/a/today/2004/10/06/compiler.html">this java.net article</a> 
+        published in early October 2004.
+      </p>
+      <p>
+        The availability of Scala and its built-in parser-combinators prompted a re-write, 
+        and a Scala version was published under this java.net project on 10th March 2010. 
+        Although all of the code was re-written (in Scala), 
+        the essential character of the GUI remained the same.
+      <p>
+    <h2>Downloads</h2>
+      <p>
+        <b>Latest (3.01) binary: <a href="http://java.net/projects/vll/downloads/download/VLLS%203.01/VLLS.jar">VLLS.jar</a></b>
+      </p>
+  </body>
+</html>

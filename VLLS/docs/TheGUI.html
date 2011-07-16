@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <title>The GUI</title>
+  </head>
+
+  <body>
+    <h1>The VisualLangLab GUI</h1>
+
+    <p>
+      Figure-1 below depicts the complete <a href="http://vll.java.net/">VisualLangLab</a> GUI. 
+      The following description details all its features.
+    </p>
+
+    <img src="images/GuiFull1.png"/><br/>
+    <i>Figure-1. The VisualLangLab GUI</i>
+
+    <h2>The Menu Bar</h2>
+
+    <p>
+      The <i>Menu Bar</i> (across the top of the GUI) supports the following functions:
+    </p>
+
+    <ul>
+      <li>File - <i>New</i>, <i>Open</i>, <i>Save</i>, <i>SaveAs</i>, and 
+          <i>Exit</i> operations</li>
+      <li>View - enable/disable display of additional grammar-tree details, 
+          and choose Java look and feel</li>
+      <li>Tokens - <i>New literal</i>, <i>New regex</i>, <i>Edit</i>, <i>Find</i>, 
+          <i>Delete</i>, <i>Import</i>, and <i>Export</i> operations</li>
+      <li>Parsers - <i>New</i>, <i>Rename</i>, <i>Find</i>, and <i>Delete</i> operations</li>
+      <li>Globals - define the regular-expression for <i>whitespace</i> and <i>comments</i></li>
+      <li>Test - runs parser with input from <i>Parser Test Input</i> area or from 
+          user-specified file. Also enables choice of pretty-printers for AST, and 
+          enabling <i>Trace all</i> (parsers)</li>
+      <li>Log - <i>copy</i> or <i>clear</i> Parser Log area</li>
+      <li>Help - documentation, sample grammars, and the <i>About</i> page</li>
+    </ul>
+
+    <h2>The Tool Bar</h2>
+
+    <p>
+      The <i>Tool Bar</i> just below the Menu Bar enables quick invocation of commonly 
+      used operations:
+    </p>
+
+    <ul>
+      <li>File - <i>New</i>, <i>Open</i>, <i>Save</i>, and <i>SaveAs</i> operations</li></li>
+      <li>Back button to display last viewed grammar-tree</li>
+      <li>Combo box to select grammar-tree by name</li>
+      <li>Parsers - <i>New</i>, <i>Rename</i>, and <i>Find</i>  operations</li>
+      <li>Tokens - <i>New literal</i>, <i>New regex</i>, <i>Edit</i>, <i>Find</i>, 
+          <i>Import</i>, and <i>Export</i> operations</li>
+      <li>Test - run and stop parser operations</li>
+      <li>Log - <i>Copy</i>, and <i>Clear</i>  operations</li>
+    </ul>
+
+    <h2>The Grammar Tree</h2>
+
+    <p>
+      <i>The Grammar Tree</i> is the JTree at the top left of the GUI (below the toolbar).
+      A context menu displayed when any node of the grammar-tree is right-clicked 
+      (as in Figure-1 above) supports all the grammar editing functions as described 
+      <a href="EditingTheGrammarTree.html">here</a>.
+    </p>
+
+    <h2>The Parse Tree (AST) Area</h2>
+
+    <p>
+      The <i>Parse Tree (AST) Area</i> is the TextArea in the middle (below the toolbar).
+      <a href="http://vll.java.net/">VisualLangLab</a> 
+      displayes the structure of the AST produced by the selected grammar-tree 
+      node here. 
+    </p>
+    <p>
+      The format of the displayed information is described 
+      <a href="ASTAndActionCode.html">here</a>.
+    </p>
+
+    <h2>The Action-Code Area</h2>
+
+    <p>
+      The Action-Code area is the TextArea on the right (below the toolbar).
+      This editable area can be used to optionally provide any action-code for 
+      the selected grammar-tree node. 
+    </p>
+    <p>
+      The action-code must either be a Javascript function that takes one argument, 
+      or a Scala function taking one argument of type <i>Any</i>.
+      More details and examples can be found <a href="ASTAndActionCode.html">here</a>.
+    </p>
+
+    <h2>The Testing Area</h2>
+
+    <p>
+      The two TextAreas along the bottom of the GUI (<i>Parser Test Input</i> 
+      and <i>Parser Log</i>) constitute the testing area. 
+    </p>
+    <p>
+      The editable <i>Parser Test Input</i> area on the left is used 
+      for providing test input to the parser under development. 
+      Any text typed into this area is read by the parser under development 
+      when the <i>Parse input</i> toolbar button is clicked (or the 
+      <i>Test -> Parse input</i> menu item is selected.
+    </p>
+    <p>
+      The <i>Parser Log</i> area is where any output from the parser run appears.
+      Error messages are printed in red, while normal output is printed in black. 
+      When a parser runs to completion successfully, the AST produced is printed 
+      out along with some run-time and memory utilization statistics.
+    </p>
+    <p>
+      Testing withing <a href="http://vll.java.net">VisualLangLab</a> is described in detail 
+      <a href="TestingParsers.html">here</a>. 
+    </p>
+
+  </body>
+</html>

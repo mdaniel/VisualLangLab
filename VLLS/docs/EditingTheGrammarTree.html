@@ -1,0 +1,152 @@
+<html>
+  <head>
+    <title>Editing the Grammar Tree</title>
+  </head>
+  <body>
+    <h1>Editing the Grammar Tree</h1>
+
+    <p>
+      <a href="http://vll.java.net/">VisualLangLab</a> 
+      represents each grammar <i>clause</i> as a named tree with 
+      distinct icons for different grammar elements. As an example, consider the 
+      following arithmetic expression parser grammar from 
+      <a href="http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf">section 31.1</a> 
+      of <a href="http://www.artima.com/shop/programming_in_scala">Programming in Scala (first edition)</a>. 
+    </p>
+
+<code>
+<pre>    expr ::= term {"*" term | "-" term}
+    factor ::= floatingPointNumber | "(" expr ")"
+    term ::= factor {"*" factor | "/" factor}</pre>
+</code>
+
+    <p>
+      The figures below show how these parser clauses are represented within 
+      <a href="http://vll.java.net/">VisualLangLab</a>.
+      Although there are numerous details (such as the definition of <i>floatingPointNumber</i>)
+      not explained here, the correspondence between the textual <i>clauses</i> and the graphical 
+      <i>grammar trees</i> should be quite obvious.
+    </p>
+
+    <table border="1">
+      <tr><td>expr</td><td>factor</td><td>term</td></tr>
+      <tr><td><img src="images/GrammarTreeExpr1.png"/></td><td><img src="images/GrammarTreeFactor1.png"/></td><td><img src="images/GrammarTreeTerm1.png"/></td></tr>
+    </table>
+    <i>Figure-1. Grammar trees of arithmetic-expression parser.</i>
+
+    <p>
+      The following sections explain the grammar tree icons and their annotations,
+      and show how <a href="http://vll.java.net/">VisualLangLab</a>'s 
+      menus and and the grammar tree's context-menus 
+      are used to create or edit the grammar tree.
+    </p>
+
+    <h2>Grammar Tree Icons and Annotations</h2>
+
+    <p>
+      Before reading about how a grammar tree is created or edited, make sure that you 
+      understand what the different grammar-tree icons (and their annotations) mean.
+      <i>Annotations</i> -- the text following each icon -- are also explained below.
+    </p>
+
+    <h3>Icons</h3>
+
+    <table border="1">
+      <tr><td colspan="2" align="center"><b>Non-terminals</b></td></tr>
+      <tr><td><img src="images/GrammarIconRoot.gif"/></td><td>Root - this icon is used for the root 
+          node of every grammar tree (as in Figure-1 above)</td></tr>
+      <tr><td><img src="images/GrammarIconChoice.gif"/></td><td>Choice - used as the parent of a group 
+          of alternative items (any one of which should occur in the input)</td></tr>
+      <tr><td><img src="images/GrammarIconSequence.gif"/></td><td>Sequence - used as the parent of a 
+          sequence of items all of which should occur in the order specified</td></tr>
+      <tr><td><img src="images/GrammarIconRepSep.gif"/></td><td>RepSep - placeholder for a sequence 
+          of items (first child node) separated by the designated separator (second child node)</td></tr>
+      <tr><td><img src="images/GrammarIconReference.gif"/></td><td>Reference - invokes another 
+          named parser</td></tr>
+      <tr><td><img src="images/GrammarIconSemPred.gif"/></td><td>Semantic predicate</td></tr>
+      <tr><td colspan="2" align="center"><b>Terminals</b></td></tr>
+      <tr><td><img src="images/GrammarIconLiteral.gif"/></td><td>Literal - a token that matches a 
+          specified pattern literally</td></tr>
+      <tr><td><img src="images/GrammarIconRegex.gif"/></td><td>Regexp - a token that matches a 
+          specified regular-expression</td></tr>
+      <tr><td colspan="2" align="center"><b>Icon overlays</b></td></tr>
+      <tr><td><img src="images/GrammarIconCommitMark.gif"/></td><td>Commit - applied to an element 
+          in a Sequence ??? </td></tr>
+      <tr><td><img src="images/GrammarIconErrorMark.gif"/></td><td>Error: indicates that an error 
+          is present in the associated parser</td></tr>
+    </table>
+
+    <h3>Annotations</h3>
+
+    <p>
+      The first annotation is a 1-character flag that indicates the node's <i>multiplicity</i> 
+      -- the number of times the corresponding entity may occur in the parser's input. 
+      Multiplicity has one of the following values:
+    </p>
+
+    <ul>
+      <li>1 - exactly one occurrence</li>
+      <li>? - 0 or 1 occurrence (also called <i>optional</i>)</li>
+      <li>* - 0 or more occurrences</li>
+      <li>+ - 1 or more occurrences</li>
+      <li>0 - the associated entity must <i>not</i> occur in the input</li>
+      <li>= - the associated entity <i>must</i> occur in the input</li>
+    </ul>
+
+    <p>
+      Observe that the last two values ("0" and "=") are actually commonly required 
+      <a href="http://en.wikipedia.org/wiki/Syntactic_predicate">syntactic predictes</a> 
+      and have no influence on the information gathered by the parser (into to 
+      <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a> or parse-tree).
+    </p>
+
+    <p>
+      The second annotation is the <i>name</i> of the entity. The value displayed depends on the 
+      type of the node as described below.
+    </p>
+
+    <ul>
+      <li>Root - the name of the parser clause</li>
+      <li>Literal - the name of the literal token</li>
+      <li>Regexp - the name of the regular-expression token</li>
+      <li>Reference - the name of referred-to parser clause</li>
+      <li>Choice - the fixed text <i>(Choice)</i></li>
+      <li>Sequence - the fixed text <i>(Sequence)</i></li>
+      <li>RepSep - the fixed text <i>(RepSep)</i></li>
+      <li>Semantic predicate - the fixed text <i>(Predicate)</i></li>
+    </ul>
+
+    <p>
+      All icons have at least the two annotations described above. All other annotations, 
+      described below, are optional. If any of the optional annotations are present, they are 
+      enclosed within square brackets ([...]).
+    </p>
+
+    <ul>
+      <li>commit - backtracking to subsequent optional parser clauses will be prevented if this 
+          node is successfully parsed</li>
+      <li>drop - the node will not be entered into the AST</li>
+      <li>message - the node has an associated error-message</li>
+      <li>packrat - the parser clause is a packrat parser (applicable only to a root-node)</li>
+      <li>trace - the node will be logged at run-time</li>
+    </ul>
+
+    <h2>Creating a new Grammar-Tree (and Parser Clause)</h2>
+
+    <p>
+      When <a href="http://vll.java.net/">VisualLangLab</a> is started, 
+      or a new rule is created by choosing <i>Parsers->New</i> 
+      from the main menu, the grammar-tree (displayed at the top left of the GUI) contains just 
+      a root node as shown in Figure-2 below. The figure also shows the tree-node context menu 
+      that is displayed when you right-click any node of the grammar-node.
+    </p>
+
+    <p>
+      <img src="images/GrammarTreeEmpty.png"/><br/>
+      <i>Figure-2. Grammar-tree of newly created parser clause</i>
+    </p>
+
+    <h2>Creating Tokens for the Grammar Tree</h2>
+
+  </body>
+</html>
