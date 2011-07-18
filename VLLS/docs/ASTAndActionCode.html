@@ -7,9 +7,53 @@
     <h1>VisualLangLab - AST Structure and Action Code</h1>
 
     <p>
-      AST and Action Code ... .
+      The discussion in this section explains two related issues:
+      how <a href="http://vll.java.net/">VisualLangLab</a> determines the structure 
+      of the parse-tree (or AST) for any grammar-tree, 
+      and how to design action-code to process an AST.
     </p>
 
+    <h2>Parse-Tree (or AST) Structure</h2>
+
+    <p>
+      The structure of an AST for any particular grammar-tree is determined 
+      by the arrangement, type, and multiplicity of the nodes comprising the 
+      grammar-tree. Starting from the top-most node (the node just below the 
+      root-node), the following rules are applied recursively:
+    </p>
+
+    <ul>
+      <li>A <i>Literal</i> token contributes a <code>String</code> (identical to the Literal itself)</li>
+      <li>A <i>Regexp</i> token contributes a <code>String</code> (the <i>lexeme</i> or the matched input)</li>
+      <li>A <i>Sequence</i> contributes an <code>Array[Any]</code> (containing the items contributed 
+          the elements in the sequence)</li>
+      <li>A <i>Choice</i> contributes a <code>Pair[Int,Any]</code> where the first member 
+          is a value (0 onwards) indicating which alternative matched, and the second member 
+          is the item contributed by matched alternative</li>
+      <li>A <i>RepSep</i> contributes a <code>List[_]</code> containing all the matched items</li>
+    </ul>
+
+    <p>
+      Certain annotations cause the basic value to be wrapped in another structure as follows:
+    </p>
+
+    <ul>
+      <li>A multiplicity of <i>1</i> does not cause any change</li>
+      <li>A multiplicity of <i>?</i> (0 or 1) wraps the basic value into an 
+          <code>Option[_]</code>. A <code>None</code> is returned if the expected item was 
+          not found in the input, and a <code>Some[_]</code> is returned if the item was present</li>
+      <li>A multiplicity of <i>*</i> or <i>+</i> (0-or-more or 1-or-more) wraps the basic 
+          value into an <code>List[_]</code>. A <code>Nil</code> is returned if the multiplicity 
+          is <i>*</i>, and no matching elements were found in the input</li>
+      <li>A multiplicity of <i>0</i> or <i>=</i> (<i>not</i> or <i>guard</i>) contributes 
+          nothing to the AST</li>
+    </ul>
+
+    <h2>Action-Code Design</h2>
+
+    <p>
+      and how to design action-code to process an AST.
+    </p>
 
   </body>
 </html>
