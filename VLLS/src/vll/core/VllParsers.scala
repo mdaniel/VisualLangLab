@@ -354,8 +354,8 @@ class VllParsers extends Parsers with PackratParsers {
           val rep = node2parser(node(0))
           val sep = node2parser(node(1))
           node.multiplicity match {
-            case Multiplicity.ZeroOrMore => repsep(rep, sep) ^^ {_.toArray}
-            case Multiplicity.OneOrMore => rep1sep(rep, sep) ^^ {_.toArray}
+            case Multiplicity.ZeroOrMore => repsep(rep, sep)
+            case Multiplicity.OneOrMore => rep1sep(rep, sep)
           }
         case pn: PredicateNode => if (node.actionText.isEmpty) 
             failure("Predicate has no code")
