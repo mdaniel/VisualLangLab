@@ -13,7 +13,7 @@
         <jar destfile="VLLS.jar" compress="false" manifest="manifest.mf">
             <fileset dir="build/classes" includes="**/*.*" />
         </jar>
-        <zip zipfile="VLLS-3.02.zip" compress="true">
+        <zip zipfile="VLLS-3.03.zip" compress="true">
             <fileset dir="." includes="docs/**/*.*"/>
             <fileset dir="." includes="copying.txt, readme.txt, changes.txt, index.html"/>
             <fileset dir="." includes="vlls.bat, vlls"/>

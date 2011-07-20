@@ -1,3 +1,5 @@
+3.03 20-JUL-2011
+    Corrected issue VLL-3 (RepSep returning Array instead of List)
 3.02 16-JUL-2011
     Build creates a ZIP binary release file containing JAR and docs files.
     Addedd readme.txt and copying.txt files.
