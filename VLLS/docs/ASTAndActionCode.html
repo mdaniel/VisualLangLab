@@ -11,7 +11,7 @@
       are used interchangably thoroughout the documentation to mean the same thing -- 
       the structure of information gathered by 
       a grammar-tree (or part of a grammar-tree) during the parsing process. 
-      This is how <a href="???">Wikipedia defines AST</a>. 
+      This is how <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">Wikipedia defines AST</a>. 
     </p>
 
     <p>
@@ -27,8 +27,8 @@
       This version of <a href="http://vll.java.net/">VisualLangLab</a> is written in 
       <a href="http://www.scala-lang.org/">Scala</a>, so the AST is expressed in terms 
       of standard Scala data-structures. While knowledge of Scala programming is not 
-      needed to develop a parser, a rudimentary understanding of data-structures helps 
-      in understanding the AST. 
+      needed to develop a parser, a rudimentary understanding of data-structures is 
+      required for understanding the AST. 
       For a formal introduction to Scala use any of the books featured on the 
       <a href="http://www.scala-lang.org">official Scala web-site</a>.
     </p>
@@ -37,7 +37,7 @@
 
     <p>
       The following list contains all the Scala elements used in constructing ASTs. 
-      All items in the list are hyperlinked to documents that explain their purpose and use.
+      All items in the list are hyperlinked to detailed descriptions. 
     </p>
 
     <ul>
@@ -56,9 +56,9 @@
     </ul>
 
     <p>
-      The AST of a complete grammar-tree is built up by nesting these structures in one 
-      another as required by the grammar (the content-type parameter in the 
-      types above is <code>Any</code> to permit unconstrained nesting). 
+      The AST of a complete grammar-tree is built up by recursively nesting these structures 
+      as required by the grammar. That is why the content-type parameter 
+      is always <code>Any</code> (to permit unconstrained nesting). 
       The examples in the following discussion illustrate this concept.
     </p>
 
@@ -80,15 +80,15 @@
 
     <ul>
       <li>The <i>Root</i> node does not influence the AST structure -- its AST is the same as 
-          that of the node contained by the root node</li>
+          that of the contained tree</li>
       <li>A <i>Literal</i> token contributes a <code>String</code> (identical to the Literal itself)</li>
       <li>A <i>Regexp</i> token contributes a <code>String</code> (the <i>lexeme</i> or the matched input)</li>
-      <li>A <i>Sequence</i> contributes an <code>Array[Any]</code> (containing the items contributed 
-          by the elements in the sequence)</li>
+      <li>A <i>Sequence</i> contributes an <code>Array[Any]</code> containing the items contributed 
+          by its child nodes</li>
       <li>A <i>Choice</i> contributes a <code>Pair[Int,Any]</code> where the first member 
           is the (0-based) index of the matching alternative, and the second member 
-          is the item contributed by the matched alternative</li>
-      <li>A <i>RepSep</i> contributes a <code>List[_]</code> containing all the matched items</li>
+          is the value contributed by the matched alternative</li>
+      <li>A <i>RepSep</i> contributes a <code>List[Any]</code> containing all the matched items</li>
     </ul>
 
     <p>
@@ -97,13 +97,15 @@
     </p>
 
     <ul>
-      <li>A multiplicity of <i>?</i> (0 or 1) wraps the basic value in an 
-          <code>Option[Any]</code>. A <code>None</code> is returned if the expected item was 
-          not found in the input, and a <code>Some[Any]</code> is returned if the item was present</li>
-      <li>A multiplicity of <i>*</i> or <i>+</i> (0-or-more or 1-or-more) wraps the basic 
-          value into an <code>List[Any]</code>. A <code>Nil</code> is returned if the multiplicity 
+      <li>A node with multiplicity <i>?</i> (0 or 1) contributes an <code>Option[Any]</code>. 
+          A <code>None</code> is returned if the expected item was not found in the input, 
+          and a <code>Some[Any]</code> is returned if the item was present</li>
+      <li>A node with a multiplicity <i>*</i> (0-or-more) or <i>+</i> (1-or-more) wraps the underlying 
+          values into a <code>List[Any]</code>. A <code>Nil</code> is returned if the multiplicity 
           is <i>*</i>, and no matching elements were found in the input</li>
-      <li>A multiplicity of <i>0</i> or <i>=</i> (<i>not</i> or <i>guard</i>) contributes 
+      <li>A node with multiplicity <i>0</i> (<i>not</i>) or <i>=</i> (<i>guard</i>) contributes 
+          nothing to the AST</li>
+      <li>A child node of a <i>Sequence</i> with the <i>drop</i> annotation contributes 
           nothing to the AST</li>
       <li>A <i>Sequence</i> with only one child that contributes to the AST (because all 
           other child nodes have a <i>drop</i> annotation, 
@@ -116,14 +118,14 @@
       The examples below illustrate these principles using grammar trees from the 
       built-in parser for <i>SimpleJSON</i>. Remember that the AST shown 
       in the figures is the AST of the <i>selected</i> node. Also, remember that
-      the root-node of a grammar-tree merely reflects the AST of its one child node. 
+      the root-node of a grammar-tree merely reflects the AST of the contained tree. 
     </p>
 
     <h3>Sequence Node Example</h3>
 
     <p>
-      Figure-1 below illustrates the textual description of the AST of a Sequence node 
-      as well as the result of testing the grammar-tree with some test input. 
+      Figure-1 below illustrates the AST of a Sequence node. 
+      It also shows the result of testing the grammar-tree with some user-provided input. 
     </p>
 
     <img src="images/ASTSequence.png"/><br/>
@@ -141,9 +143,17 @@
       <li>[stringLiteral] - this form (name of a Regex node within square brackets) depicts 
           the lexeme matching the regular-expression</li>
       <li>":" - a string within double-quotes represents the string itself</li>
-      <li>@Value - an <i>@</i> prefixed parser-clause (or grammar-tree) name </li>
-      <li></li>
+      <li>@Value - an <i>@</i> prefixed parser-clause (or grammar-tree) name represent the 
+          AST returned by the named grammar-tree</li>
     </ul>
+
+    <p>
+      The two TextAreas at the bottom of the GUI show the result of actually testing 
+      the parser. Some test input (<i>"count" : 55</i>) has been typed into the 
+      <i>Parser Test Input</i> area, and the result of running the parser (by choosing 
+      <i>Test -> Parser input</i> from the main menu) appears under <i>Parser Log</i>. 
+      The AST actually generated is on the last line of the output.
+    </p>
 
     <h3>Choice Node Example</h3>
 
@@ -167,7 +177,7 @@
       output <code>Pair(3, 3.14)</code> (last line under <i>Parser Log</i>).
     </p>
 
-    <h3>RepSep Example</h3>
+    <h3>RepSep Node Example</h3>
 
     <p>
       The grammar-tree in Figure-3 below illustrates the AST of a <i>RepSep</i> node. 
@@ -180,7 +190,7 @@
       Blah blah ...
     </p>
 
-    <h3>Sequence Example with One Contributing Node</h3>
+    <h3>Sequence Node Example with One Contributing Node</h3>
 
     <p>
       The grammar-tree in Figure-4 below illustrates the AST of a <i>Sequence</i> node 
