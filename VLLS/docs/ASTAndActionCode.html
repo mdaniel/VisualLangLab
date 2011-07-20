@@ -140,7 +140,7 @@
     </p>
 
     <ul>
-      <li>[stringLiteral] - this form (name of a Regex node within square brackets) depicts 
+      <li>[stringLiteral] - this form (name of a Regex node within square brackets) represents 
           the lexeme matching the regular-expression</li>
       <li>":" - a string within double-quotes represents the string itself</li>
       <li>@Value - an <i>@</i> prefixed parser-clause (or grammar-tree) name represent the 
@@ -150,9 +150,17 @@
     <p>
       The two TextAreas at the bottom of the GUI show the result of actually testing 
       the parser. Some test input (<i>"count" : 55</i>) has been typed into the 
-      <i>Parser Test Input</i> area, and the result of running the parser (by choosing 
-      <i>Test -> Parser input</i> from the main menu) appears under <i>Parser Log</i>. 
-      The AST actually generated is on the last line of the output.
+      <i>Parser Test Input</i> area, and the result of running the parser 
+      appears under <i>Parser Log</i>. 
+      The AST actually generated is on the last line of the output 
+      (<i>Array("count", :, Pair(3, 55))</i>).
+    </p>
+
+    <p>
+      As described in <a href="TestingParsers.html">Testing Parsers</a> the displayed 
+      grammar-tree is run by choosing <i>Test -> Parse input</i> from the main menu or 
+      by clicking on the corresponding toolbar button 
+     (<img src="images/ToolBarButtonParseInput.gif" align="center"/>).
     </p>
 
     <h3>Choice Node Example</h3>
@@ -167,14 +175,17 @@
     <p>
       The displayed AST illustrates the format used to describe the AST of a Choice 
       node. The value actually returned by the parser is any one of the alternative 
-      <code>Pair[Int,Any]</code>s shown. Observe that the first member of the <code>Pair</code> 
-      is the index of the matching alternative.
+      <code>Pair[Int,Any]</code>s shown. The first member of the <code>Pair</code> 
+      is the index of the matching alternative, while the second member is the 
+      value obtained by parsing the actual alternative.
     </p>
 
     <p>
       The text in testing area show the result of a parser run. The text <i>3.14</i> was 
       typed into the <i>Parser Test Input</i> area, and the result of the run is the 
-      output <code>Pair(3, 3.14)</code> (last line under <i>Parser Log</i>).
+      output <code>Pair(3, 3.14)</code> (last line under <i>Parser Log</i>). The first 
+      member of the <code>Pair</code> in this example (the value <i>3</i>) is the 0-based 
+      index of the matching alternative (the Regex node <i>floatingPointNumber</i>). 
     </p>
 
     <h3>RepSep Node Example</h3>
@@ -187,21 +198,42 @@
     <i>Figure-3. RepSep node AST</i>
 
     <p>
-      Blah blah ...
+      Observe the the AST in this case is a 2-level structure -- a 
+      <code>List</code> nested within an <code>Array</code>. The <code>List</code> 
+      represents the <i>RepSep</i>, while the <code>Array</code> represents the 
+      containing <i>Sequence</i>.
+    </p>
+
+    <p>
+      The parser when tested with the following input: <i>[false, 3.14, "hello"]</i> 
+      produces this AST as output: 
+      <i>Array([, List(Pair(6, false), Pair(3, 3.14), Pair(2, "hello")), ])</i>.
     </p>
 
     <h3>Sequence Node Example with One Contributing Node</h3>
 
     <p>
-      The grammar-tree in Figure-4 below illustrates the AST of a <i>Sequence</i> node 
-      with just 1 contributing node. 
+      Our last example Figure-4 below illustrates the AST of a <i>Sequence</i> node 
+      with just 1 contributing node. It also shows the effect of applying the <i>drop</i> 
+      annotation to the child node of a <i>Sequence</i>.
     </p>
 
     <img src="images/ASTSeqWithDrop.png"/><br/>
     <i>Figure-4. Sequence node AST with 1 contributing node</i>
 
     <p>
-      Blah blah ...
+      This example uses the same grammar-tree as the previous example, but applies the 
+      <i>drop</i> annotation to the Literal nodes <i>LBKT</i> and <i>RBKT</i> 
+      (see <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>). The presence 
+      of the attribute is clearly evident in the grammar tree from the textual annotation 
+      as well as the overlay applied to the basic Literal icon.
+    </p>
+
+    <p>
+      The AST changes drastically beacuse of these modifications. The two <i>drop</i>ped 
+      nodes do not appear in the AST. And, since the Sequence has just one 
+      child node left that contributes to the AST (the RepSep), the Sequence merely 
+      passes on the AST of the RepSep. It does not need to produce an <code>Array</code>.
     </p>
 
     <h2>Action-Code Design</h2>
