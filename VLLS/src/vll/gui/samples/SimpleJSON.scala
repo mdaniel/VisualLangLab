@@ -28,23 +28,13 @@ class SimpleJSON(gui: VllGui) {
 
   def load() {
     val msg = """<html><body><pre>
-SimpleJSON implements the parser described at page 648 of
-"Programming in Scala" (http://www.artima.com/shop/programming_in_scala)
+SimpleJSON is based on the parser described at page 764 of
+"Programming in Scala" (http://www.artima.com/shop/programming_in_scala_2ed)
 A description of the same parser can also be found here:
 http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf
 
-The SimpleJSON parsers have been loaded -- into the tree pane on the left.
-use the combo-box above the tree pane to choose different sub-parsers.
-
 IMPORTANT: Remember to have the top-level parser (Value) selected when running
 the parser.
-
-This parser also uses a custom error message. To see an example
-select the parser called "Value", right-click the choice element
-at the top of the parser, and choose "Error message" from the context menu.
-Custom error messages are discussed at page 666 of "Programming in Scala",
-but VisualLangLab uses a completely different (and more flexible) technique.
-VisualLangLab's custom error messages can be applied to any grammar tree element.
 
 You can find sample input in the book or PDF document referred above.
 </pre></body></html>"""
