@@ -58,8 +58,7 @@ import vll.core.RootNode
 import vll.core.Automata
 import vll.core.ScalaEngine
 import vll.core.Utils
-import vll.gui.samples.ArithExpr
-import vll.gui.samples.SimpleJSON
+import vll.gui.samples.{ArithExpr, ArithExprWithActionCode, SimpleJSON}
 
 class VllGui extends MainFrame with ActionListener {
 
@@ -691,8 +690,13 @@ class VllGui extends MainFrame with ActionListener {
       case ButtonClicked(_) => new SimpleJSON(mainFrame).load()
     }
   }
-  val helpSamples = new Menu("Samples") {
-    contents.append(helpSampleItem1, helpSampleItem2)
+  val helpSampleItem3 = new MenuItem("ArithExpr with action-code") {
+    reactions += {
+      case ButtonClicked(_) => new ArithExprWithActionCode(mainFrame).load()
+    }
+  }
+  val helpSamples = new Menu("Sample grammars") {
+    contents.append(helpSampleItem1, helpSampleItem2, helpSampleItem3)
   }
   val helpMenuItem = new MenuItem("Help") {
     val msg = "Not yet implemented\nCheck for documentation at https://vll.dev.java.net"
