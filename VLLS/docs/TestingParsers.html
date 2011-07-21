@@ -7,9 +7,103 @@
     <h1>VisualLangLab - Testing Parsers</h1>
 
     <p>
-      Still under construction!
+      The greatest advantage of VisualLangLab over other tools is ease of testing. 
+      Every other parser development tool requires 
+      a quite complex code-generation step that must be completed without 
+      errors before the parser can be run for testing. 
+      But the grammar-tree in VisualLangLab is <i>executable</i> -- 
+      meaning it can be run <i>directly</i> without any code-generation or 
+      other manual activity. 
     </p>
 
+
+    <h2>Validation is as Easy as A-B-C</h2>
+
+    <p>
+      Since the grammar-tree is <i>executable</i>, validation is just 
+      three simple steps:
+    </p>
+
+    <ul>
+      <li>Enter test input in the <i>Parser Test Input</i> area (as at "A" 
+          in Figure-1 below)</li>
+      <li>Click the <i>Parse input</i> button (at "B" in Figure-1), 
+          or select <i>Test -> Parse input</i> from the main menu</li>
+      <li>Verify that the parser's output (at "C") is correct</li>
+    </ul>
+
+    <img src="images/TestingArithExpr1.png"/><br/>
+    <i>Figure-1. Three simple steps to validation</i>
+
+    <p>
+      The approach shown above is tedious as it requires manual verification 
+      of potentially complex data-structures. So while several approaches to 
+      test automation will be described below, note that manual testing is 
+      very useful during active development -- particularly to support an 
+      iterative, incremental process.
+    </p>
+
+    <h3>Testing Grammar-Trees Separately</h3>
+
+    <p>
+      To be defined ...
+    </p>
+
+    <h3>Providing Test Input from Files</h3>
+
+    <p>
+      Input for testing can also be obtained from a file instead of the 
+      <i>Parser Test Input</i> area. To provide input from a file, 
+      you should click the <i>Parse file</i> button 
+      <img src="images/ToolBarButtonParseFile.gif" align="center" /> 
+      (next to the <i>Parse input</i> button). 
+      When the <i>Parse file</i> button is clicked a file-chooser dialog 
+      is presented. Selecting a file and clicking the file-chooser's 
+      <i>Open</i> button causes the parser to the run using text from 
+      the file.
+    </p>
+
+    <p>
+      If a directory is selected in the file-chooser dialog, 
+      the grammar-tree is run on each of the files found in 
+      the directory tree rooted at the selected directory. 
+    </p>
+
+    <h3>Terminating a Long Running Test</h3>
+
+    <p>
+      While a parser is being run the <i>Stop parsing</i> button 
+      <img src="images/ToolBarButtonStopRun.gif" align="center" /> 
+      is enabled. This is not noticed during a typical test as the 
+      run ends very quickly, and the button returns to its usual 
+      disabled state. However, a test run that appears to be running 
+      for too long can be terminated by clicking this button.
+    </p>
+
+    <h2>Automated Testing</h2>
+
+    <p>
+     To be defined ...
+    </p>
+
+    <h3>Standard Tools</h3>
+
+    <p>
+      To be defined ...
+    </p>
+
+
+    <h3>JUnit <i>et al</i> and VisualLangLab API</h3>
+
+    <p>
+      To be defined ...
+    </p>
+
+    <h3>Action Code</h3>
+
+    <p>
+      To be defined ...
+    </p>
 
   </body>
 </html>

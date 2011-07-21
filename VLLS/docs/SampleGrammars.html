@@ -81,33 +81,21 @@
     <h3>Test-Running a Parser</h3>
 
     <p>
+      Figure-3 below shows the grammar-tree <i>expr</i> of the builtin <i>ArithExpr</i> 
+      parser being tested with the input text <i>12 / 3 + 5 * 4</i>. 
       To <i>test-run</i> the displayed grammar-tree just enter the test input 
-      (text for the parser's consumption) into the TextArea under 
-      <i>Parser Test Input</i> ("A" in Figure-2 below), and click the <i>Parse input</i> 
-      toolbar button ("B" in the figure). The results of the run (or any error messages) 
+      into the <i>Parser Test Input</i> area (as at "A" in Figure-3), 
+      and click the <i>Parse input</i> toolbar button ("B" in the figure). 
+      The results of the run (or any error messages) 
       appear in the <i>Parser Log</i> area ("C" in the figure).
     </p>
 
     <img src="images/TestingArithExpr1.png"/><br/>
-    <i>Figure-3. Testing the ArithExpr parser</i>
+    <i>Figure-3. Testing a parser (or grammar-tree)</i>
 
     <p>
-      Figure-2 above shows the grammar-tree <i>expr</i> of the <i>ArithExpr</i> parser 
-      (see below) being tested with the 
-      input "2 * (3 + 7)", and producing the output "20".
-      The result of parsing ("20") is a number (not a full-fledged AST) 
-      because the action-code actually evaluates the AST. Removing the action-code 
-      from all three grammar-trees (left as an exercise for the reader), 
-      will result in the same input being parsed to the following AST
-    </p>
-
-    <code>Array(Array(Pair(0, 2), List(Pair(0, Pair(1, Array(Array(Pair(0, 3), List()), List(Pair(0, Array(Pair(0, 7), List())))))))), List())</code>
-
-    <p>
-      If you happen to have <a href="http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf">section 31.1</a> 
-      of <a href="http://www.artima.com/shop/programming_in_scala">Programming in Scala (first edition)</a> 
-      open in front of you, you'll notice that this result is different from the one in the book. 
-      A careful reading of <a href="ASTAndActionCode.html">AST and Action Code</a> should explain everything.
+      More information about testing can be found in 
+      <a href="TestingParsers.html">Testing Parsers</a>
     </p>
 
     <h2>The ArithExpr Parser</h2>
