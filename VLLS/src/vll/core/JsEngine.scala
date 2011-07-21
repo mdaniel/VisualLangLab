@@ -25,6 +25,7 @@ import javax.script.Invocable
 import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
 import sun.org.mozilla.javascript.internal.NativeObject
+import vll.gui.VllGui
 
 object JsEngine {
   val sem = new ScriptEngineManager
@@ -33,6 +34,8 @@ object JsEngine {
   val compilable = engine.asInstanceOf[Compilable]
   val context = engine.getContext
   context.setAttribute("VLL", new NativeObject(), ScriptContext.ENGINE_SCOPE)
+  context.setAttribute("InputArea", VllGui.top.logTextPane.inputArea, ScriptContext.ENGINE_SCOPE)
+  context.setAttribute("LogArea", VllGui.top.logTextPane.logArea, ScriptContext.ENGINE_SCOPE)
 //  context.setAttribute("VLLARGS", null, ScriptContext.ENGINE_SCOPE)
 //  context.setAttribute("VLLINPUT", null, ScriptContext.ENGINE_SCOPE)
   def eval(s: String) = engine.eval(s)

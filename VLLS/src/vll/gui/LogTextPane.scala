@@ -62,19 +62,23 @@ class LogTextPane(val gui: VllGui) extends SplitPane(Orientation.Vertical) {
   }
   def clearLogText() {logArea.setText("")}
   def copyLog() {logArea.selectAll(); logArea.copy();}
-  def getText() = inputTextArea.text
-  def cut() {inputTextArea.cut()}
-  def copy() {inputTextArea.copy()}
-  def paste() {inputTextArea.peer.paste()}
-  def clear() {inputTextArea.text = ""}
-  def selectAll() {inputTextArea.selectAll()}
-  private val inputTextArea = new TextArea() {
+  def getText() = inputArea.text
+  def cut() {inputArea.cut()}
+  def copy() {inputArea.copy()}
+  def paste() {inputArea.peer.paste()}
+  def clear() {inputArea.text = ""}
+  def selectAll() {inputArea.selectAll()}
+  val inputArea = new TextArea() {
     font = new Font(Font.MONOSPACED, font.getStyle, font.getSize)
     peer.addMouseListener(new InputPopupListener(new InputPopupMenu(peer)))
+    def getText = text
+    def setText(t: String) {text = t}
   }
-  private val logArea = new JTextPane {
+  val logArea = new JTextPane {
     setFont(new Font(Font.MONOSPACED, getFont.getStyle, getFont.getSize))
     setEditable(false)
+    //def getText already defined in parent
+    //def setText(t: String) already defined in parent
   }
   leftComponent = new BorderPanel {
     val pnl = new BorderPanel() {
@@ -85,7 +89,7 @@ class LogTextPane(val gui: VllGui) extends SplitPane(Orientation.Vertical) {
     }
     add(new Label("Parser Test Input"), BorderPanel.Position.North)
 //    add(pnl, BorderPanel.Position.South)
-    add(new ScrollPane(inputTextArea), BorderPanel.Position.Center)
+    add(new ScrollPane(inputArea), BorderPanel.Position.Center)
   }
   rightComponent = new BorderPanel {
     val pnl = new BorderPanel() {

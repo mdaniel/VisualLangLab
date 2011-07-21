@@ -148,7 +148,7 @@ class ParsingActor(gui: VllGui) extends VllParsers with DaemonActor {
       val inputText = gui.logTextPane.getText
       var message: Option[String] = None
       try {
-        val res = gui.parsers.phrase(parser/*  <~ gui.parsers.eofParser */)(new CharSequenceReader(inputText))
+        val res = gui.parsers.phrase(parser)(new CharSequenceReader(new TextComponentCharSequence(gui.logTextPane.inputArea.peer)))
         parseEndTime = System.currentTimeMillis;
         val duration = parseEndTime - combinatorEndTime
         res match {
