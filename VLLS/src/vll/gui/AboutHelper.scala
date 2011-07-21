@@ -26,7 +26,7 @@ import scala.swing.Label
 
 class AboutHelper(gui: VllGui) {
     private val vllCopyright = """<html><body><pre>
-      |<b>VisualLangLab, Ver-2.02</b>
+      |<b>VisualLangLab</b>
       |An IDE for LL(*) Parsers using Scala Combinators
       |(<i>http://vll.java.net/</i> and <i>https://vll.dev.java.net/</i>)
 
@@ -43,15 +43,13 @@ class AboutHelper(gui: VllGui) {
       |GNU General Public License for more details.
 
       |You should have received a copy of the GNU General Public License
-      |along with VisualLangLab. If not, see &lt;http://www.gnu.org/licenses/&gt;
+      |along with VisualLangLab. If not, see http://www.gnu.org/licenses/
 
       |<u>Other copyright notices:</u>
       |VisualLangLab depends on certain other software listed below:
       |  1) The Scala Programming Language from http://www.scala-lang.org/
       |  2) Java look and feel Graphics Repository from
       |       http://java.sun.com/developer/techDocs/hi/repository/
-      |  3) dk.brics.automaton -- Finite-State Automata and Regular
-      |       Expressions for Java from http://www.brics.dk/automaton/
       |Copyright notices for these products are included in
       |the VisualLangLab distribution zip file, and should be
       |reviewed by the user.
