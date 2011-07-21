@@ -17,7 +17,7 @@
     </p>
 
 
-    <h2>Validation is as Easy as A-B-C</h2>
+    <h2>Validation is Easy as A-B-C</h2>
 
     <p>
       Since the grammar-tree is <i>executable</i>, validation is just 
@@ -32,6 +32,11 @@
       <li>Verify that the parser's output (at "C") is correct</li>
     </ul>
 
+    <p>
+      If you need help in understanding how to interpret the output go to 
+      <a href="ASTAndActionCode.html">AST and Action Code</a>
+    </p>
+
     <img src="images/TestingArithExpr1.png"/><br/>
     <i>Figure-1. Three simple steps to validation</i>
 
@@ -43,13 +48,43 @@
       iterative, incremental process.
     </p>
 
-    <h3>Testing Grammar-Trees Separately</h3>
+    <h3>Divide and Conquer</h3>
 
     <p>
-      To be defined ...
+      Clicking the <i>Parse input</i> button runs just the displayed grammar-tree. 
+      This behavior lets you validate independent parts of a large parser 
+      separately, simplifying and speeding up development of large and complex parsers.
     </p>
 
-    <h3>Providing Test Input from Files</h3>
+    <p>
+      However, if a grammar-tree contains any <i>Reference</i> nodes, 
+      execution will spill over to the other referred nodes. 
+      This is essential behavior, being the mechanism by which large parsers 
+      are built up from smaller ones. There are a few important points to be 
+      remembered from this insight:
+    </p>
+
+    <ul>
+      <li>Parsers should be divided into logically separate parts, with each 
+          part being a grammar-tree (or a tree of grammar-trees)</li>
+      <li>While recursion and mutual recursion can lead to elegant solutions, 
+          they are often difficult to test, and should be avoided if possible</li>
+      <li>When testing a complete parser, make sure that the top-level grammar-tree
+          (the <i>entry point</i>) is displayed</li>
+    </ul>
+
+    <p>
+      Forgetting the last point above is a souce of much confusion during development and testing 
+      of parsers. The ComboBox for selection of grammar-trees lists their names 
+      alphabetically, so the grammar-tree displayed immediately after a new file 
+      is loaded is not necessarily the entry-point. To alleviate this problem, 
+      the top-level grammar-tree should be given a name with an intial capital letter. 
+      If all the other grammar-trees are given names beginning with lower-case 
+      letters, the top-level grammar-tree will always be at the top of the list 
+      in the ComboBox, and be the first to display when the containing file is opened.
+    </p>
+
+    <h3>Test Input from Files</h3>
 
     <p>
       Input for testing can also be obtained from a file instead of the 

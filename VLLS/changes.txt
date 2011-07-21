@@ -1,3 +1,9 @@
+3.05 21-JUL-2011
+    Updated reference to "Programming in Scala" to second edition.
+    Removed reference to dk.brics.automaton in the about-dialog
+    Added copyright files for Scala and Java L&F icons
+3.04 21-JUL-2011
+    Separated built-in demo parsers for ArithExpr with and without action-code.
 3.03 20-JUL-2011
     Corrected issue VLL-3 (RepSep returning Array instead of List)
 3.02 16-JUL-2011
