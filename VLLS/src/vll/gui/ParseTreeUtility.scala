@@ -100,7 +100,6 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
     def setNode(n: ParserTreeNode) {
       actionTextArea.enabled = !n.isInstanceOf[RootNode]
       btnPanel.saveBtn.enabled = actionTextArea.enabled
-      btnPanel.codeBtn.enabled = actionTextArea.enabled
       if ((node != null) && node.actionText != actionTextArea.text) {
         //Dialog.showMessage(VllGui.top.contents(0), "Inside if", "Inside if", Dialog.Message.Plain, null)
         if (Dialog.showConfirmation(VllGui.top.contents(0), "Save changes?", "Unsaved changes exist", 
@@ -144,26 +143,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
               Dialog.showMessage(VllGui.top.contents(0), "Click \"Code\" button for outline code", "Action format error", Dialog.Message.Error, null)
         }
       }
-      val codeBtn = new Button("Code") {
-        reactions += {
-          case ButtonClicked(_) => 
-            val theCode = if (node.isInstanceOf[PredicateNode]) predicateCode else actionCode
-            if (actionTextArea.text.trim.isEmpty)
-              actionTextArea.text = theCode
-            else 
-              actionTextArea.text = theCode + "\n\n" + actionTextArea.text
-        }
-      }
-      add(codeBtn, BorderPanel.Position.West)
       add(saveBtn, BorderPanel.Position.East)
-      val actionCode = "function (ast) {\n" + "  if (ast) {\n" +
-              "    //\n    // var ast2 = ... (AST processing code)\n    //\n" + 
-              "    return ast2; // processed AST\n" + "  } else {\n" +
-              "    //\n    // pre-parse (initialization) code\n    //\n" + "  }\n}\n"
-      val predicateCode = "function () {\n" + 
-              "  //\n  // var ok = ... (predicate computation code)\n  //\n" + 
-              "  if (ok) // check the predicate (ok) value\n    return true; // Parsing success\n  else\n" +
-              "    return \"(error message)\"; // Parsing failure\n}\n"
     }
     private val titleLabel = new Label("Action Code")
     add(titleLabel, BorderPanel.Position.North)
