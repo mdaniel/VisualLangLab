@@ -145,15 +145,15 @@ class ParsingActor(gui: VllGui) extends VllParsers with DaemonActor {
     if (parser != null) {
       combinatorEndTime = System.currentTimeMillis
       printf("(%d ms)%nParsing ... ", combinatorEndTime - startTime)
-      val inputText = gui.logTextPane.getText
+      val theReader = new CharSequenceReader(new TextComponentCharSequence(gui.logTextPane.inputArea.peer))
       var message: Option[String] = None
       try {
-        val res = gui.parsers.phrase(parser)(new CharSequenceReader(new TextComponentCharSequence(gui.logTextPane.inputArea.peer)))
+        val res = gui.parsers.phrase(parser)(theReader)
         parseEndTime = System.currentTimeMillis;
         val duration = parseEndTime - combinatorEndTime
         res match {
            case gui.parsers.Success(tree, rest) =>
-             printf("(%d chars in %d ms), result follows:%n", inputText.length, duration)
+            printf("(%d chars in %d ms), result follows:%n", theReader.source.length, duration)
              handleTree(tree)
            case gui.parsers.NoSuccess(msg, rest) =>
 /*                 val res2 = gui.parsers.globalTokenParser(rest) match {
