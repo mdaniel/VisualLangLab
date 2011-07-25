@@ -28,18 +28,18 @@ import sun.org.mozilla.javascript.internal.NativeObject
 import vll.gui.VllGui
 
 object JsEngine {
-  val sem = new ScriptEngineManager
-  val engine = sem.getEngineByName("javascript")
-  val invocable = engine.asInstanceOf[Invocable]
-  val compilable = engine.asInstanceOf[Compilable]
-  val context = engine.getContext
+  private val sem = new ScriptEngineManager
+  private val engine = sem.getEngineByName("javascript")
+  private val invocable = engine.asInstanceOf[Invocable]
+  private val compilable = engine.asInstanceOf[Compilable]
+  private val context = engine.getContext
   context.setAttribute("VLL", new NativeObject(), ScriptContext.ENGINE_SCOPE)
   context.setAttribute("InputArea", VllGui.top.logTextPane.inputArea, ScriptContext.ENGINE_SCOPE)
   context.setAttribute("LogArea", VllGui.top.logTextPane.logArea, ScriptContext.ENGINE_SCOPE)
 //  context.setAttribute("VLLARGS", null, ScriptContext.ENGINE_SCOPE)
 //  context.setAttribute("VLLINPUT", null, ScriptContext.ENGINE_SCOPE)
-  def eval(s: String) = engine.eval(s)
-  def invoke(fName: String, args: Any*) = invocable.invokeFunction(fName, args.map(_.asInstanceOf[Object]):_*)
+//  def eval(s: String) = engine.eval(s)
+//  def invoke(fName: String, args: Any*) = invocable.invokeFunction(fName, args.map(_.asInstanceOf[Object]):_*)
   def compile(sName: String): Function3[Int,Int,Any,Any] = {
     val cs = compilable.compile("(%s)(VLLARGS)".format(sName))
     new Function3[Int,Int,Any,Any] {
@@ -51,5 +51,5 @@ object JsEngine {
       }
     }
   }
-  def put(key: String, value: Any) = engine.put(key, value.asInstanceOf[Object])
+//  def put(key: String, value: Any) = engine.put(key, value.asInstanceOf[Object])
 }
