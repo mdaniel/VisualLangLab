@@ -28,7 +28,7 @@ import scala.collection.mutable.HashMap
 import vll.core.ChoiceNode
 import vll.core.LiteralNode
 import vll.core.Multiplicity
-import vll.core.ParserTreeNode
+import vll.core.RuleTreeNode
 import vll.core.ReferenceNode
 import vll.core.RegexNode
 import vll.core.RepSepNode
@@ -37,7 +37,7 @@ import vll.core.SequenceNode
 import vll.core.PredicateNode
 import scala.collection.JavaConversions._
 
-class GuiNode private (val pNode: ParserTreeNode) extends MutableTreeNode
+class GuiNode private (val pNode: RuleTreeNode) extends MutableTreeNode
     with Traversable[GuiNode] {
   def foreach[Unit](f: GuiNode => Unit) {
     pNode.foreach(n => f(GuiNode(n)))
@@ -75,7 +75,7 @@ class GuiNode private (val pNode: ParserTreeNode) extends MutableTreeNode
   def isValidMessage = pNode.isValidMessage
   def epsilonOk = pNode.epsilonOk
   def displayName(full: Boolean) = {pNode match {
-        case ref: ReferenceNode => if (full) (ref.parserName + "@" + ref.nodeName) else ref.parserName
+        case ref: ReferenceNode => if (full) (ref.ruleName + "@" + ref.nodeName) else ref.ruleName
         case lit: LiteralNode => if (full) (lit.literalName + "@" + lit.nodeName) else lit.literalName
         case reg: RegexNode => if (full) (reg.regexName + "@" + reg.nodeName) else reg.regexName
         case seq: SequenceNode => if (full) seq.nodeName else "(Sequence)"
@@ -146,7 +146,7 @@ class GuiNode private (val pNode: ParserTreeNode) extends MutableTreeNode
 }
 
 object GuiNode {
-  def apply(pn: ParserTreeNode): GuiNode = {
+  def apply(pn: RuleTreeNode): GuiNode = {
     if (cache.contains(pn.seqNbr))
       cache(pn.seqNbr)
     else {

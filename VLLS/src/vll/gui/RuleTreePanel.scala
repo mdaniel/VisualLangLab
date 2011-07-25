@@ -45,7 +45,7 @@ import vll.core.SequenceNode
 import vll.core.PredicateNode
 import vll.core.VllParsers
 
-class ParserTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel with ActionListener with TreeSelectionListener {
+class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel with ActionListener with TreeSelectionListener {
 
   implicit def VllGui2Component(gui: VllGui): Component = Component.wrap(gui.peer.getRootPane)
 
@@ -83,13 +83,13 @@ class ParserTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPan
     }
   }
 
-  def chooseParser(): Option[GuiNode] = {
-    if (hub.parserBank.isEmpty)
+  def chooseRule(): Option[GuiNode] = {
+    if (hub.ruleBank.isEmpty)
       None
     else {
-      val parserNames = hub.parserBank.parserNames
-      val selection = Dialog.showInput(guiTop.splitPane, "Select parser", "Add reference",
-          Dialog.Message.Question, null, parserNames, parserNames(0))
+      val ruleNames = hub.ruleBank.ruleNames
+      val selection = Dialog.showInput(guiTop.splitPane, "Select rule", "Add reference",
+          Dialog.Message.Question, null, ruleNames, ruleNames(0))
       selection map (s => /* new  */GuiNode(ReferenceNode(Multiplicity.One, s)))
     } 
   }
@@ -109,7 +109,7 @@ class ParserTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPan
 /*       case treeNodePopupMenu.distinguishCheck => selectedNode.distinguish = !selectedNode.distinguish
         theModel.nodeChanged(selectedNode)
  */      case treeNodePopupMenu.gotoMenuItem => selectedNode.pNode match {
-          case ReferenceNode(_, parserName) => guiTop.parserChooser.setSelectedItem(parserName)
+          case ReferenceNode(_, ruleName) => guiTop.ruleChooser.setSelectedItem(ruleName)
           case RegexNode(_, regexName: String) =>
             Dialog.showInput(guiTop.splitPane, "Edit regex '%s'".format(regexName), "Edit token", Dialog.Message.Question, null, Array[String](), guiTop.parsers.tokenBank(regexName).right.get) match {
             case Some(newVal) =>
@@ -151,7 +151,7 @@ class ParserTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPan
         theTree.expandPath(new TreePath(selectedNode.getPath.asInstanceOf[Array[Object]]))
         theTree.scrollPathToVisible(new TreePath(newNode))
         guiTop.isDirty = true
-      case treeNodePopupMenu.newReference => chooseParser() match {
+      case treeNodePopupMenu.newReference => chooseRule() match {
           case Some(newNode) => theModel.insertNodeInto(newNode, selectedNode, selectedNode.getChildCount)
             theModel.nodeChanged(selectedNode)
             theTree.expandPath(new TreePath(selectedNode.getPath.asInstanceOf[Array[Object]]))
@@ -253,12 +253,12 @@ class ParserTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPan
     guiTop.typeDisplayPane.displayAstStruct(/* selectedNode.pNode */)
   }
 
-  def setParser(newParser: String) {
+  def setRule(newRule: String) {
     GuiNode.clearCache()
-    rootNode = GuiNode(hub.parserBank(newParser))
+    rootNode = GuiNode(hub.ruleBank(newRule))
     theTree.removeTreeSelectionListener(this)
-    if (newParser != guiTop.lastPoppedName) {
-      displayStack.push(newParser/* rootNode.nodeName */)
+    if (newRule != guiTop.lastPoppedName) {
+      displayStack.push(newRule/* rootNode.nodeName */)
       guiTop.backButton.enabled = true
     }
     theTree.removeMouseListener(treeNodePopupListener)
@@ -281,11 +281,11 @@ class ParserTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPan
     }
   }
 
-  private val typeDeducer: ParseTreeUtility = null
+  private val typeDeducer: RuleTreeUtility = null
   val treeNodePopupMenu = new TreeNodePopupMenu(this)
   private val treeNodePopupListener = new TreeNodePopupListener(this)
   var clipboard: GuiNode = _
-  var rootNode: GuiNode = GuiNode(hub.parserBank("Main"))
+  var rootNode: GuiNode = GuiNode(hub.ruleBank("Main"))
   val theModel = new DefaultTreeModel(rootNode)
   var selectedNode: GuiNode = rootNode
   private var parent: GuiNode = selectedNode.getParent

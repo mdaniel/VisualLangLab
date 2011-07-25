@@ -22,7 +22,7 @@ package vll.gui
 
 import vll.core.Multiplicity
 import vll.core.RegexNode
-import vll.core.ParserTreeNode
+import vll.core.RuleTreeNode
 import vll.core.JsEngine
 import vll.core.LiteralNode
 import vll.core.RootNode
@@ -50,7 +50,7 @@ import scala.swing.Swing._
 import vll.core.ChoiceNode
 import vll.core.Utils
 
-class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
+class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
   private val astStructurePanel = new BorderPanel {
     val astStructTextArea = new TextArea()
     astStructTextArea.editable = false
@@ -97,7 +97,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
     def isGlobal = false //rbn.selected
   }
   private val actionTextPanel = new BorderPanel {
-    def setNode(n: ParserTreeNode) {
+    def setNode(n: RuleTreeNode) {
       actionTextArea.enabled = !n.isInstanceOf[RootNode]
       btnPanel.saveBtn.enabled = actionTextArea.enabled
       if ((node != null) && node.actionText != actionTextArea.text) {
@@ -108,13 +108,13 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
             node.actionText = ""
           else
             node.actionText = actionTextArea.text
-          VllGui.top.parserTreePanel.nodeChanged()
+          VllGui.top.ruleTreePanel.nodeChanged()
         }
       }
       node = n
       actionTextArea.text = node.actionText
     }
-    private var node: ParserTreeNode = null
+    private var node: RuleTreeNode = null
     private val actionTextArea = new TextArea
     private val btnPanel = new BorderPanel() {
       val saveBtn = new Button("Save") {
@@ -127,7 +127,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
               try {
                 if (isJS) JsEngine.compile(actionText) else ScalaEngine.compile(actionText)
                 node.actionText = actionText
-                VllGui.top.parserTreePanel.nodeChanged()
+                VllGui.top.ruleTreePanel.nodeChanged()
                 Dialog.showMessage(VllGui.top.contents(0), "Syntax OK - text saved", "OK, saved", Dialog.Message.Info, null)
                 gui.isDirty = true
               } catch {
@@ -138,7 +138,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
               }
             } else if (actionText.trim.isEmpty) {
               node.actionText = ""
-              VllGui.top.parserTreePanel.nodeChanged()
+              VllGui.top.ruleTreePanel.nodeChanged()
             } else
               Dialog.showMessage(VllGui.top.contents(0), "Click \"Code\" button for outline code", "Action format error", Dialog.Message.Error, null)
         }
@@ -151,13 +151,13 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
     add(btnPanel, BorderPanel.Position.South)
   }
 //  private var displayedNode: ParserTreeNode = null
-  private var displayedNode = gui.parserTreePanel.selectedNode.pNode
+  private var displayedNode = gui.ruleTreePanel.selectedNode.pNode
   private val spacer = "\u00a6  "
   add(new SplitPane(Orientation.Vertical, astStructurePanel, actionTextPanel), 
       BorderPanel.Position.Center)
 
   def displayAstStruct(/* reset: Boolean = true */) {
-    displayedNode = gui.parserTreePanel.selectedNode.pNode
+    displayedNode = gui.ruleTreePanel.selectedNode.pNode
     actionTextPanel.setNode(displayedNode)
     if (displayedNode ne null) {
       astStructurePanel.astStructTextArea.text = getType(displayedNode, astStructurePanel.displayDepth)
@@ -171,7 +171,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
     sb.toString
   }
 
-  private val stack = new Stack[ParserTreeNode]
+  private val stack = new Stack[RuleTreeNode]
 
   private def removeMargin(s: String) = {
     if (s.startsWith(spacer))
@@ -180,7 +180,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
       s
   }
 
-  private def applyMultiplicity(t: String, node: ParserTreeNode, margin: String): String = node.multiplicity match {
+  private def applyMultiplicity(t: String, node: RuleTreeNode, margin: String): String = node.multiplicity match {
     case Multiplicity.One | Multiplicity.Guard | Multiplicity.Not => t
     case Multiplicity.OneOrMore =>
       if (t.contains("\n"))
@@ -199,13 +199,13 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
         "%sOption(%s)".format(margin, removeMargin(t))
   }
 
-  private def getType(node: ParserTreeNode, depthLimit: Int) = {
+  private def getType(node: RuleTreeNode, depthLimit: Int) = {
     //stack = new Stack()
     stack.clear()
     astType(node, 0, depthLimit)
   }
 
-  private def retType(node: ParserTreeNode, depth: Int, limit: Int): String = {
+  private def retType(node: RuleTreeNode, depth: Int, limit: Int): String = {
     if (!node.actionText.isEmpty) {
       val margin = spacer * depth
       margin + "js@%s".format(node.nodeName)
@@ -213,7 +213,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
       astType(node, depth, limit)
   }
   
-  private def astType(node: ParserTreeNode, depth: Int, limit: Int): String = {
+  private def astType(node: RuleTreeNode, depth: Int, limit: Int): String = {
     val margin = spacer * depth
     if (depth > limit)
       margin + "_"
@@ -227,7 +227,7 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
         case RegexNode(_, name) => margin + "[%s]".format(name)
         case root: RootNode => retType(root.head, depth, limit) 
         case seq: SequenceNode => 
-          def dropped(n: ParserTreeNode) = n.drop || n.multiplicity == Multiplicity.Not || n.multiplicity == Multiplicity.Guard || n.isInstanceOf[PredicateNode]
+          def dropped(n: RuleTreeNode) = n.drop || n.multiplicity == Multiplicity.Not || n.multiplicity == Multiplicity.Guard || n.isInstanceOf[PredicateNode]
           val effectiveLength = seq.filter(!dropped(_)).size
           if (effectiveLength == 1) {
             retType(seq.filter(!dropped(_)).head, depth, limit)
@@ -247,12 +247,12 @@ class ParseTreeUtility(private val gui: VllGui) extends BorderPanel {
           rt.zipWithIndex.map(t => mkPair(t)).
           mkString((margin + "Choice(\n"), ",\n", ("\n" + margin + ")"))
         case rs: RepSepNode => retType(rs.head, depth, limit)
-        case ReferenceNode(_, parserName) => 
+        case ReferenceNode(_, ruleName) => 
           if (astStructurePanel.isGlobal) {
-            val that = gui.parsers.parserBank(parserName)
-            if (stack.contains(that)) (margin + "@" + parserName) else retType(that, depth, limit)
+            val that = gui.parsers.ruleBank(ruleName)
+            if (stack.contains(that)) (margin + "@" + ruleName) else retType(that, depth, limit)
           } else
-            margin + "@" + parserName
+            margin + "@" + ruleName
         case rs: PredicateNode => "" 
       }
       if (astStructurePanel.isGlobal)

@@ -65,7 +65,7 @@ class VllParsers extends Parsers with PackratParsers {
   
   def reset() {
     tokenBank.clear()
-    parserBank.clear()
+    ruleBank.clear()
     commentRe = ""
     whiteSpaceRe = "\\s+"
     updateSkipExpression()
@@ -133,7 +133,7 @@ class VllParsers extends Parsers with PackratParsers {
       }
     )
     
-  val parserBank = new ParserBank(/* this */)
+  val ruleBank = new RuleBank(/* this */)
   val tokenBank = new mutable.HashMap[String, Either[String, String]] {
     def getTokenNames = keys.toArray.sorted
   }
@@ -163,7 +163,7 @@ class VllParsers extends Parsers with PackratParsers {
     whitespaceMatcher = Automata.matcher(Utils.unEscape(skipRe))
   }
   
-  private def withMessage[T](p: Parser[T], node: ParserTreeNode): Parser[T] = {
+  private def withMessage[T](p: Parser[T], node: RuleTreeNode): Parser[T] = {
     Parser(in => p(in) match {
         case Error(_, nxt) => Error("%s %s at (%d,%d)".format(
                                            node.nodeName, node.errorMessage, in.pos.line, in.pos.column), nxt)
@@ -174,7 +174,7 @@ class VllParsers extends Parsers with PackratParsers {
     )
   }
 
-  private def withMultiplicity(parser: Parser[_], node: ParserTreeNode): Parser[_] = node.multiplicity match {
+  private def withMultiplicity(parser: Parser[_], node: RuleTreeNode): Parser[_] = node.multiplicity match {
     case Multiplicity.One => parser
 //    case Multiplicity.ZeroOrOne => ((parser)?) ^^ {r => if (r.isEmpty) Array() else Array(r.get)}
     case Multiplicity.ZeroOrOne => (parser)? 
@@ -197,7 +197,7 @@ class VllParsers extends Parsers with PackratParsers {
 
   }
 
-  private def withTrace[T](p: Parser[T], node: ParserTreeNode): Parser[T] = {
+  private def withTrace[T](p: Parser[T], node: RuleTreeNode): Parser[T] = {
     Parser(in => {
         val margin = augmentString(". ") * traceDepth
         printf("%sENTRY %s (%s,%s)%n", margin, node.nodeName, in.pos.line, in.pos.column)
@@ -227,7 +227,7 @@ class VllParsers extends Parsers with PackratParsers {
     }
   }
 
-  private def tokenParser(tokenName: String, rex: String, isRegex: Boolean, isLocal: Boolean, node: ParserTreeNode): Parser[String] = {
+  private def tokenParser(tokenName: String, rex: String, isRegex: Boolean, isLocal: Boolean, node: RuleTreeNode): Parser[String] = {
     def failureMsg1(nodeName: String, expected: String) = "%s needs %s".format(nodeName, expected)
     def failureMsg2(nodeName: String, expected: String, found: String) = "%s needs %s (got %s)".format(nodeName, expected, found)
     if (isLocal) {
@@ -279,7 +279,7 @@ class VllParsers extends Parsers with PackratParsers {
   }
 
   private def combineSequence(node: SequenceNode): Parser[_] = {
-    def toDrop(n: ParserTreeNode) = n.drop || n.multiplicity == Multiplicity.Not || n.multiplicity == Multiplicity.Guard || n.isInstanceOf[PredicateNode]
+    def toDrop(n: RuleTreeNode) = n.drop || n.multiplicity == Multiplicity.Not || n.multiplicity == Multiplicity.Guard || n.isInstanceOf[PredicateNode]
     val t3 = node.zipWithIndex.map(nz => Tuple3(node2parser(nz._1), toDrop(nz._1), (node.commitPoint != -1 && nz._2 > node.commitPoint)))
     t3.reduceLeft((p1, p2) => (p1._2, p2._2, p2._3) match {
         case (false, false, false) => Tuple3(p1._1 ~ p2._1, (p1._2 && p2._2), false)
@@ -320,7 +320,7 @@ class VllParsers extends Parsers with PackratParsers {
     rv
   }
 
-  private def node2parser(node: ParserTreeNode): Parser[_] = {
+  private def node2parser(node: RuleTreeNode): Parser[_] = {
     val parser1: Parser[_] =
     if (!node.isValid) {
       System.err.printf("Invalid node: %s: %s%n", node.nodeName, node.isValidMessage)
@@ -411,7 +411,7 @@ class VllParsers extends Parsers with PackratParsers {
     if (parserCache.contains(parserName))
       parserCache(parserName)
     else {
-      val p = node2parser(parserBank(parserName))
+      val p = node2parser(ruleBank(parserName))
       parserCache(parserName) = p
       p
     }
@@ -470,17 +470,17 @@ object VllParsers {
     val vllParsers = fromFile(vllFile)
     var parser: vllParsers.Parser[_] = null;
     if (args.length == 3) {
-      if (vllParsers.parserBank.contains(args(2))) {
+      if (vllParsers.ruleBank.contains(args(2))) {
           parser = vllParsers.getParserFor(args(2))
       } else {
         err.printf("unable to find parser '%s'%n", args(2))
         sys.exit(1)
       }
-    } else if (vllParsers.parserBank.contains("Main")) {
+    } else if (vllParsers.ruleBank.contains("Main")) {
         parser = vllParsers.getParserFor("Main")
     } else {
       val pName = args(0).substring(0, args(0).length - 4)
-      if (vllParsers.parserBank.contains(pName)) {
+      if (vllParsers.ruleBank.contains(pName)) {
         parser = vllParsers.getParserFor(pName)
       } else {
         err.printf("unable to find top-level parser ('Main' or '%s')%n", pName)

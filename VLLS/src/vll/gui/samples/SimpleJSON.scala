@@ -40,10 +40,10 @@ You can find sample input in the book or PDF document referred above.
 </pre></body></html>"""
 
     gui.parsers.load(grammar)
-    val firstParser = gui.parsers.parserBank.parserNames(0)
-    gui.updateParserChooser(firstParser)
+    val firstRule = gui.parsers.ruleBank.ruleNames(0)
+    gui.updateRuleChooser(firstRule)
     gui.title = "VisualLangLab/S - SimpleJSON"
-    gui.parserTreePanel.setParser(firstParser)
+    gui.ruleTreePanel.setRule(firstRule)
     gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
         "VisualLangLab sample - SimpleJSON", Dialog.Message.Info, null)

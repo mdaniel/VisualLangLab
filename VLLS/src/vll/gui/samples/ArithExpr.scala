@@ -47,10 +47,10 @@ Output: Array(Array(Pair(1, Array(Array(Pair(0, 2), List()),
 
 </pre></body></html>"""
     gui.parsers.load(grammar)
-    val firstParser = gui.parsers.parserBank.parserNames(0)
-    gui.updateParserChooser(firstParser)
+    val firstRule = gui.parsers.ruleBank.ruleNames(0)
+    gui.updateRuleChooser(firstRule)
     gui.title = "VisualLangLab/S - ArithExpr"
-    gui.parserTreePanel.setParser(firstParser)
+    gui.ruleTreePanel.setRule(firstRule)
     gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
         "VisualLangLab sample - ArithExpr", Dialog.Message.Info, null)

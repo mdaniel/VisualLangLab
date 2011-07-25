@@ -22,10 +22,10 @@ package vll.gui
 
 import java.awt.{Component, Graphics}
 import javax.swing.{Icon}
-import vll.core.ParserTreeNode
+import vll.core.RuleTreeNode
 import scala.swing.Swing
 
-class ElementIcon(val node: ParserTreeNode, val selected: Boolean) extends javax.swing.Icon {
+class ElementIcon(val node: RuleTreeNode, val selected: Boolean) extends javax.swing.Icon {
 
   def image = /* swing. */Swing.Icon(getClass.getResource("images/" +
       ElementIcon.iconImageName(node.getClass.getSimpleName))).getImage

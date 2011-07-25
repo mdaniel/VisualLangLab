@@ -74,7 +74,7 @@ class FileIO(hub: VllParsers) {
     sb.toString
   }
 
-  private def printParserTree(out: PrintStream, t: ParserTreeNode, level: Int) {
+  private def printRuleTree(out: PrintStream, t: RuleTreeNode, level: Int) {
     def details = {
       val sb = new StringBuilder
       if (t.multiplicity != Multiplicity.One)
@@ -93,28 +93,28 @@ class FileIO(hub: VllParsers) {
     t match {
       case lit: LiteralNode => out.printf("%s<Token Ref=\"%s\" %s/>%n", margin, encode(lit.literalName), details)
       case reg: RegexNode => out.printf("%s<Token Ref=\"%s\" %s/>%n", margin, encode(reg.regexName), details)
-      case ref: ReferenceNode => out.printf("%s<Reference Ref=\"%s\" %s/>%n", margin, encode(ref.parserName), details)
+      case ref: ReferenceNode => out.printf("%s<Reference Ref=\"%s\" %s/>%n", margin, encode(ref.ruleName), details)
       case rn: RootNode/*(/* _,  */name, isPackrat)*/ =>
         out.printf("    <Parser Name=\"%s\"%s>%n", encode(rn.name), if (rn.isPackrat) " Packrat=\"true\"" else "")
         //out.printf("%s<Root>%n", margin)
         for (i <- 0 until t.size)
-          printParserTree(out, t(i).asInstanceOf[ParserTreeNode], level + 1)
+          printRuleTree(out, t(i).asInstanceOf[RuleTreeNode], level + 1)
         out.printf("    </Parser>%n")
         //out.printf("%s</Root>%n", margin)
       case seq: SequenceNode =>
         out.printf("%s<Sequence %s>%n", margin, details)
         for (i <- 0 until seq.size)
-          printParserTree(out, seq(i).asInstanceOf[ParserTreeNode], level + 1)
+          printRuleTree(out, seq(i).asInstanceOf[RuleTreeNode], level + 1)
         out.printf("%s</Sequence>%n", margin)
       case rsn: RepSepNode =>
         out.printf("%s<RepSep %s>%n", margin, details)
         for (i <- 0 until rsn.size)
-          printParserTree(out, rsn(i).asInstanceOf[ParserTreeNode], level + 1)
+          printRuleTree(out, rsn(i).asInstanceOf[RuleTreeNode], level + 1)
         out.printf("%s</RepSep>%n", margin)
       case ch: ChoiceNode =>
         out.printf("%s<Choice %s>%n", margin, details)
         for (i <- 0 until ch.size)
-          printParserTree(out, ch(i).asInstanceOf[ParserTreeNode], level + 1)
+          printRuleTree(out, ch(i).asInstanceOf[RuleTreeNode], level + 1)
         out.printf("%s</Choice>%n", margin)
       case pn: PredicateNode => out.printf("%s<Predicate %s/>%n", margin, details)
       case _ => System.err.printf("ERROR: Unknown type in parser-tree: %s%n", t)
@@ -144,15 +144,7 @@ class FileIO(hub: VllParsers) {
     }
     out.println("  </Tokens>")
 
-/*     out.println("  <Parsers>")
-    for ((name, node) <- hub.parserBank) {
-      //out.printf("    <Parser Name=\"%s\">%n", encode(name))
-      printParserTree(out, node, 1)
-      //out.printf("    </Parser>%n")
-    }
-    out.println("  </Parsers>")
-
- */    out.println("</VLL-Grammar>")
+    out.println("</VLL-Grammar>")
   }
 
   def exportTokens(file: File) {
@@ -185,9 +177,9 @@ class FileIO(hub: VllParsers) {
     out.println("  </Tokens>")
 
     out.println("  <Parsers>")
-    for ((name, node) <- hub.parserBank) {
+    for ((name, node) <- hub.ruleBank) {
       //out.printf("    <Parser Name=\"%s\">%n", encode(name))
-      printParserTree(out, node, 1)
+      printRuleTree(out, node, 1)
       //out.printf("    </Parser>%n")
     }
     out.println("  </Parsers>")
@@ -230,8 +222,8 @@ class FileIO(hub: VllParsers) {
     }
   }
 
-  private def traverse(node: Node, parent: ParserTreeNode): ParserTreeNode = {
-    var aNode: ParserTreeNode = null
+  private def traverse(node: Node, parent: RuleTreeNode): RuleTreeNode = {
+    var aNode: RuleTreeNode = null
         val multNode = (node \ "@Mult")
         val mult = if (multNode.isEmpty) "1" else (node \ "@Mult").toString
         val errMsgNode = (node \ "@ErrMsg")
@@ -332,7 +324,7 @@ class FileIO(hub: VllParsers) {
   }
 
   private def getParsers(parserRoot: NodeSeq) {
-    hub.parserBank.clear()
+    hub.ruleBank.clear()
     val parsers = parserRoot \ "Parser"
     var lastParser: String = null
     for (parser <- parsers) {
@@ -342,51 +334,29 @@ class FileIO(hub: VllParsers) {
       lastParser = name
       //printf("Parser: %s%n", name)
       val root = /* new  */RootNode(name, isPackrat)
-      hub.parserBank(name) = root
+      hub.ruleBank(name) = root
       for (h <- parser.child) {
         traverse(h, root)
       }
     }
-    //VisualLangLab.updateParserChooser(lastParser)
-    //ParserTreePanel.setParser(lastParser)
   }
 
   def importTokens(grammar: Elem) {
-//    hub.wspace = (grammar \ "Whitespace").text
-//    hub.comment = (grammar \ "Comments").text
-//    val flatten = (grammar \ "FlattenNestedTildes")
-//    hub.flattenNestedTilde = !flatten.isEmpty && flatten.text.toString == "true"
-    //printf("flattenNestedTilde: %b%n", hub.flattenNestedTilde)
-//    hub.tokenBank.clear
     getTokens(grammar \ "Tokens")
-/*     getParsers(grammar \ "Parsers")
-    if (hub.parserBank.size > 1 && hub.parserBank("Main").isEmpty)
-      hub.parserBank.remove("Main")
-    missingTokens.clear()
-    missingParsers.clear()
-    refdTokens.filter(!hub.tokenBank.contains(_)).foreach(missingTokens + _)
-    refdParsers.filter(!hub.parserBank.contains(_)).foreach(missingParsers + _)
-    refdTokens.clear()
-    refdParsers.clear()
-    if (!missingTokens.isEmpty || !missingParsers.isEmpty)
-      throw new IOException("Reference integrity errors exist")
- */  }
+  }
 
   def load(grammar: Elem) {
     hub.wspace = (grammar \ "Whitespace").text
     hub.comment = (grammar \ "Comments").text
-//    val flatten = (grammar \ "FlattenNestedTildes")
-//    hub.flattenNestedTilde = !flatten.isEmpty && flatten.text.toString == "true"
-    //printf("flattenNestedTilde: %b%n", hub.flattenNestedTilde)
     hub.tokenBank.clear
     getTokens(grammar \ "Tokens")
     getParsers(grammar \ "Parsers")
-    if (hub.parserBank.size > 1 && hub.parserBank("Main").isEmpty)
-      hub.parserBank.remove("Main")
+    if (hub.ruleBank.size > 1 && hub.ruleBank("Main").isEmpty)
+      hub.ruleBank.remove("Main")
     missingTokens.clear()
     missingParsers.clear()
     refdTokens.filter(!hub.tokenBank.contains(_)).foreach(missingTokens + _)
-    refdParsers.filter(!hub.parserBank.contains(_)).foreach(missingParsers + _)
+    refdParsers.filter(!hub.ruleBank.contains(_)).foreach(missingParsers + _)
     refdTokens.clear()
     refdParsers.clear()
     if (!missingTokens.isEmpty || !missingParsers.isEmpty)

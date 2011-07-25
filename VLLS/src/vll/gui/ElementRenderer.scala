@@ -34,7 +34,7 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
     try {
       guiNode = value.asInstanceOf[GuiNode]
       isRoot = guiNode.pNode.isInstanceOf[RootNode]
-      parserValid = guiNode.isValid
+      ruleValid = guiNode.isValid
       toolTipText = guiNode.pNode match {
         case lit: LiteralNode => hub.tokenBank(lit.literalName).left.get
         case reg: RegexNode => hub.tokenBank(reg.regexName).right.get
@@ -69,7 +69,7 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
       g.drawLine(h + 1, 2, h + 1, h - 2)
     }
     super.paintComponent(g)
-    if (!parserValid) {
+    if (!ruleValid) {
       g.drawImage(errorImage, 0, 0, null)
     }
     if (dropped) {
@@ -108,7 +108,7 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
     }
     msg
   }
-  override def getForeground() = color //if (parserValid) Color.black else Color.red
+  override def getForeground() = color //if (ruleValid) Color.black else Color.red
   var guiNode: GuiNode = null
   var dropped = false
   var theIcon: ElementIcon = null
@@ -117,7 +117,7 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
   var displayName = ""
   var theAnnotations = ""
   var multiplicity = Multiplicity.One
-  var parserValid = true
+  var ruleValid = true
   var isCommitPoint = false
   var color = Color.black
   var isRoot = false

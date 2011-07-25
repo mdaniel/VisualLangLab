@@ -72,8 +72,8 @@ class ParsingActor(gui: VllGui) extends VllParsers with DaemonActor {
     val defaultCursor = gui.cursor
     gui.cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)
     var i, errors = 0
-    val parserName = gui.parserChooser.getSelectedItem.asInstanceOf[String]
-    val parser = gui.parsers.getParserFor(parserName)
+    val ruleName = gui.ruleChooser.getSelectedItem.asInstanceOf[String]
+    val parser = gui.parsers.getParserFor(ruleName)
     if (parser != null) {
       if (file.exists) {
         val startTime = System.currentTimeMillis
@@ -138,10 +138,10 @@ class ParsingActor(gui: VllGui) extends VllParsers with DaemonActor {
     gui.parsers.userRequestedStop = false
     val defaultCursor = gui.cursor
     gui.cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)
-    val parserName = gui.parserChooser.getSelectedItem.asInstanceOf[String]
+    val ruleName = gui.ruleChooser.getSelectedItem.asInstanceOf[String]
     printf("Generating parsers ... ")
     startTime = System.currentTimeMillis
-    val parser = gui.parsers.getParserFor(parserName)
+    val parser = gui.parsers.getParserFor(ruleName)
     if (parser != null) {
       combinatorEndTime = System.currentTimeMillis
       printf("(%d ms)%nParsing ... ", combinatorEndTime - startTime)

@@ -22,7 +22,7 @@ package vll.gui
 
 import java.awt.event.{MouseAdapter, MouseEvent}
 
-class TreeNodePopupListener(val parserTreePanel: ParserTreePanel) extends MouseAdapter {
+class TreeNodePopupListener(val ruleTreePanel: RuleTreePanel) extends MouseAdapter {
 
   override def mousePressed(e: MouseEvent) {
 try {
@@ -44,15 +44,13 @@ try {
 
   private def maybeShowPopup(e: MouseEvent) {
     if (e.isPopupTrigger()) {
-      val path = parserTreePanel.theTree.getPathForLocation(e.getX(), e.getY())
+      val path = ruleTreePanel.theTree.getPathForLocation(e.getX(), e.getY())
       if (path != null) {
-        parserTreePanel.theTree.setSelectionPath(path)
-        parserTreePanel.selectedNode = path.getLastPathComponent.asInstanceOf[GuiNode]
-        parserTreePanel.treeNodePopupMenu.adjustMenu()
-        parserTreePanel.treeNodePopupMenu.show(e.getComponent(), e.getX() + /* VllGui.top.treeWidth */
-            parserTreePanel.theTree.getWidth / 10, e.getY());
-//        val loc = parserTreePanel.theTree.getPopupLocation(e)
-//        parserTreePanel.treeNodePopupMenu.show(e.getComponent, loc.x, loc.y);
+        ruleTreePanel.theTree.setSelectionPath(path)
+        ruleTreePanel.selectedNode = path.getLastPathComponent.asInstanceOf[GuiNode]
+        ruleTreePanel.treeNodePopupMenu.adjustMenu()
+        ruleTreePanel.treeNodePopupMenu.show(e.getComponent(), e.getX() + /* VllGui.top.treeWidth */
+            ruleTreePanel.theTree.getWidth / 10, e.getY());
       }
     }
   }

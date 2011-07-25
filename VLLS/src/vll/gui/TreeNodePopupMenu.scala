@@ -31,13 +31,13 @@ import vll.core.RootNode
 import vll.core.SequenceNode
 import vll.core.PredicateNode
 
-class TreeNodePopupMenu(val parserTreePanel: ParserTreePanel) extends JPopupMenu {
+class TreeNodePopupMenu(val ruleTreePanel: RuleTreePanel) extends JPopupMenu {
 
   def adjustMenu() {
-    val selectedNode = parserTreePanel.selectedNode
+    val selectedNode = ruleTreePanel.selectedNode
     val parentNode = selectedNode.getParent
     val isRootNode = parentNode eq null
-    val clipboard = parserTreePanel.clipboard
+    val clipboard = ruleTreePanel.clipboard
     val parentIndex = if (isRootNode) -1 else parentNode.getIndex(selectedNode)
     val parentChildCount = if (isRootNode) -1 else parentNode.getChildCount
     val childCount = selectedNode.getChildCount
@@ -94,28 +94,28 @@ class TreeNodePopupMenu(val parserTreePanel: ParserTreePanel) extends JPopupMenu
 
   val gotoMenuItem = new JMenuItem("Go to")
   add(gotoMenuItem)
-  gotoMenuItem.addActionListener(parserTreePanel)
+  gotoMenuItem.addActionListener(ruleTreePanel)
   addSeparator()
 
   val addMenu = new JMenu("Add")
   val newToken = new JMenuItem("Token")
   addMenu.add(newToken)
-  newToken.addActionListener(parserTreePanel)
+  newToken.addActionListener(ruleTreePanel)
   val newSequence = new JMenuItem("Sequence")
   addMenu.add(newSequence)
-  newSequence.addActionListener(parserTreePanel)
+  newSequence.addActionListener(ruleTreePanel)
   val newRepSep = new JMenuItem("RepSep")
   addMenu.add(newRepSep)
-  newRepSep.addActionListener(parserTreePanel)
+  newRepSep.addActionListener(ruleTreePanel)
   val newChoice = new JMenuItem("Choice")
   addMenu.add(newChoice)
-  newChoice.addActionListener(parserTreePanel)
+  newChoice.addActionListener(ruleTreePanel)
   val newReference = new JMenuItem("Reference")
   addMenu.add(newReference)
-  newReference.addActionListener(parserTreePanel)
+  newReference.addActionListener(ruleTreePanel)
   val newPredicate = new JMenuItem("Predicate")
   addMenu.add(newPredicate)
-  newPredicate.addActionListener(parserTreePanel)
+  newPredicate.addActionListener(ruleTreePanel)
   add(addMenu)
   //addSeparator()
 
@@ -134,12 +134,12 @@ class TreeNodePopupMenu(val parserTreePanel: ParserTreePanel) extends JPopupMenu
   bg.add(multNot)
   bg.add(multGuard)
   multMenu.add(multOne)
-  multOne.addActionListener(parserTreePanel)
-  multZeroOrOne.addActionListener(parserTreePanel)
-  multZeroOrMore.addActionListener(parserTreePanel)
-  multOneOrMore.addActionListener(parserTreePanel)
-  multNot.addActionListener(parserTreePanel)
-  multGuard.addActionListener(parserTreePanel)
+  multOne.addActionListener(ruleTreePanel)
+  multZeroOrOne.addActionListener(ruleTreePanel)
+  multZeroOrMore.addActionListener(ruleTreePanel)
+  multOneOrMore.addActionListener(ruleTreePanel)
+  multNot.addActionListener(ruleTreePanel)
+  multGuard.addActionListener(ruleTreePanel)
   multMenu.add(multZeroOrOne)
   multMenu.add(multZeroOrMore)
   multMenu.add(multOneOrMore)
@@ -153,38 +153,38 @@ class TreeNodePopupMenu(val parserTreePanel: ParserTreePanel) extends JPopupMenu
   add(editMenu)
   val cutNode = new JMenuItem("Cut")
   editMenu.add(cutNode)
-  cutNode.addActionListener(parserTreePanel)
+  cutNode.addActionListener(ruleTreePanel)
   val copyNode = new JMenuItem("Copy")
   editMenu.add(copyNode)
-  copyNode.addActionListener(parserTreePanel)
+  copyNode.addActionListener(ruleTreePanel)
   val pasteNode = new JMenuItem("Paste")
   editMenu.add(pasteNode)
-  pasteNode.addActionListener(parserTreePanel)
+  pasteNode.addActionListener(ruleTreePanel)
   val deleteNode = new JMenuItem("Delete")
   editMenu.add(deleteNode)
-  deleteNode.addActionListener(parserTreePanel)
+  deleteNode.addActionListener(ruleTreePanel)
   addSeparator()
 
   val dropCheck = new JCheckBoxMenuItem("Drop")
   add(dropCheck)
-  dropCheck.addActionListener(parserTreePanel)
+  dropCheck.addActionListener(ruleTreePanel)
 
   val commitPoint = new JCheckBoxMenuItem("Commit")
   add(commitPoint)
-  commitPoint.addActionListener(parserTreePanel)
+  commitPoint.addActionListener(ruleTreePanel)
 
   val packratCheck = new JCheckBoxMenuItem("Packrat")
   add(packratCheck)
-  packratCheck.addActionListener(parserTreePanel)
+  packratCheck.addActionListener(ruleTreePanel)
 
   val errorMsg = new JMenuItem("Error message")
   add(errorMsg)
-  errorMsg.addActionListener(parserTreePanel)
+  errorMsg.addActionListener(ruleTreePanel)
   addSeparator()
 
   val traceNode = new JCheckBoxMenuItem("Trace")
   add(traceNode)
-  traceNode.addActionListener(parserTreePanel)
+  traceNode.addActionListener(ruleTreePanel)
 
 /*   val colorMenu = new JMenu("Color")
   add(colorMenu)

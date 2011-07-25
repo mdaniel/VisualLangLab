@@ -22,16 +22,16 @@ package vll.core
 
 import scala.collection._
 
-abstract sealed class ParserTreeNode (
+abstract sealed class RuleTreeNode (
   var multiplicity: Multiplicity.Value
-) extends mutable.ArrayBuffer[ParserTreeNode] {
-  val seqNbr = ParserTreeNode.getSeqNbr
+) extends mutable.ArrayBuffer[RuleTreeNode] {
+  val seqNbr = RuleTreeNode.getSeqNbr
   var errorMessage = ""
   var drop = false
   var trace = false
-  var parent: ParserTreeNode = null
+  var parent: RuleTreeNode = null
   var actionText: String = ""
-  def cloneTree: ParserTreeNode
+  def cloneTree: RuleTreeNode
   def epsilonOk: Boolean
   protected var isValidChecks = List[Pair[Function0[Boolean], String]](
     Pair(()=>{if (actionText.isEmpty) {true} else {
@@ -49,7 +49,7 @@ abstract sealed class ParserTreeNode (
   }
   var isValidMessage: String = null
   def nodeName: String = if (parent eq null) "*" else parent.nodeName + "_" + parent.indexOf(this)
-  def allNodes: mutable.ArrayBuffer[ParserTreeNode] = flatMap(n => (n: @unchecked) match {
+  def allNodes: mutable.ArrayBuffer[RuleTreeNode] = flatMap(n => (n: @unchecked) match {
       case LiteralNode(_, _) => mutable.ArrayBuffer(n)
       case RegexNode(_, _) => mutable.ArrayBuffer(n)
       case ReferenceNode(_, _) => mutable.ArrayBuffer(n)
@@ -58,20 +58,20 @@ abstract sealed class ParserTreeNode (
       case SequenceNode(_) => n.allNodes += n
       case PredicateNode() => mutable.ArrayBuffer(n)
     })
-  protected def copyFieldsFrom(n: ParserTreeNode) {
+  protected def copyFieldsFrom(n: RuleTreeNode) {
     drop = n.drop
     errorMessage = n.errorMessage
     actionText = n.actionText
   }
 }
 
-object ParserTreeNode {
+object RuleTreeNode {
   private var seqNbr = 0
   private def getSeqNbr = {seqNbr += 1; seqNbr}
   val refStack = new mutable.Stack[String]
 }
 
-case class PredicateNode extends ParserTreeNode(Multiplicity.One) {
+case class PredicateNode extends RuleTreeNode(Multiplicity.One) {
   override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
   def epsilonOk = multiplicity == Multiplicity.ZeroOrMore || multiplicity == Multiplicity.ZeroOrOne
   def cloneTree() = {
@@ -82,7 +82,7 @@ case class PredicateNode extends ParserTreeNode(Multiplicity.One) {
   isValidChecks ::= Pair(()=>{!actionText.isEmpty}, "Predicate code is empty")
 }
 
-case class LiteralNode(multi: Multiplicity.Value, literalName: String) extends ParserTreeNode(multi) {
+case class LiteralNode(multi: Multiplicity.Value, literalName: String) extends RuleTreeNode(multi) {
   override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
   def epsilonOk = multiplicity == Multiplicity.ZeroOrMore || multiplicity == Multiplicity.ZeroOrOne
   def cloneTree() = {
@@ -92,7 +92,7 @@ case class LiteralNode(multi: Multiplicity.Value, literalName: String) extends P
   }
 }
 
-case class RegexNode(multi: Multiplicity.Value, regexName: String) extends ParserTreeNode(multi) {
+case class RegexNode(multi: Multiplicity.Value, regexName: String) extends RuleTreeNode(multi) {
   override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
   def epsilonOk = multiplicity == Multiplicity.ZeroOrMore || multiplicity == Multiplicity.ZeroOrOne
   def cloneTree() = {
@@ -102,12 +102,12 @@ case class RegexNode(multi: Multiplicity.Value, regexName: String) extends Parse
   }
 }
 
-case class RootNode(var name: String, var isPackrat: Boolean = false) extends ParserTreeNode(Multiplicity.One) {
+case class RootNode(var name: String, var isPackrat: Boolean = false) extends RuleTreeNode(Multiplicity.One) {
   override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
   def epsilonOk = {
     if (isEmpty) false 
-    else if (ParserTreeNode.refStack.contains(name)) false
-    else {ParserTreeNode.refStack.push(name); val res = head.epsilonOk; ParserTreeNode.refStack.pop(); res}
+    else if (RuleTreeNode.refStack.contains(name)) false
+    else {RuleTreeNode.refStack.push(name); val res = head.epsilonOk; RuleTreeNode.refStack.pop(); res}
   }
   def cloneTree() = {
     val clone = RootNode(name)
@@ -119,10 +119,10 @@ case class RootNode(var name: String, var isPackrat: Boolean = false) extends Pa
   isValidChecks ::= Pair(()=>{!isEmpty}, "RootNode needs 1 child node")
   isValidChecks ::= Pair(()=>{!epsilonOk}, "Matches the empty string")
   override def nodeName = name
-  override def allNodes: mutable.ArrayBuffer[ParserTreeNode] = super.allNodes += this
+  override def allNodes: mutable.ArrayBuffer[RuleTreeNode] = super.allNodes += this
 }
 
-case class RepSepNode (multi: Multiplicity.Value = Multiplicity.ZeroOrMore) extends ParserTreeNode(multi) {
+case class RepSepNode (multi: Multiplicity.Value = Multiplicity.ZeroOrMore) extends RuleTreeNode(multi) {
   override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
   def epsilonOk = if (isEmpty) false else multiplicity == Multiplicity.ZeroOrMore 
   def cloneTree() = {
@@ -135,7 +135,7 @@ case class RepSepNode (multi: Multiplicity.Value = Multiplicity.ZeroOrMore) exte
   isValidChecks ::= Pair(()=>{size >= 2}, "RepSep needs 2 child nodes")
 }
 
-case class SequenceNode (multi: Multiplicity.Value = Multiplicity.One) extends ParserTreeNode(multi) {
+case class SequenceNode (multi: Multiplicity.Value = Multiplicity.One) extends RuleTreeNode(multi) {
   var commitPoint = -1
   override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
   def epsilonOk = if (isEmpty) false else multiplicity == Multiplicity.ZeroOrMore || multiplicity == Multiplicity.ZeroOrOne ||
@@ -151,7 +151,7 @@ case class SequenceNode (multi: Multiplicity.Value = Multiplicity.One) extends P
   isValidChecks ::= Pair(()=>{isEmpty || exists(n => !n.drop)}, "Can't drop all child nodes")
 }
 
-case class ChoiceNode (multi: Multiplicity.Value = Multiplicity.One) extends ParserTreeNode(multi) {
+case class ChoiceNode (multi: Multiplicity.Value = Multiplicity.One) extends RuleTreeNode(multi) {
   override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
   def epsilonOk = if (isEmpty) false else multiplicity == Multiplicity.ZeroOrMore || multiplicity == Multiplicity.ZeroOrOne ||
       exists(_.epsilonOk)
@@ -165,11 +165,11 @@ case class ChoiceNode (multi: Multiplicity.Value = Multiplicity.One) extends Par
   isValidChecks ::= Pair(()=>{size >= 2}, "Choice needs >= 2 child nodes")
 }
 
-case class ReferenceNode(multi: Multiplicity.Value, var parserName: String) extends ParserTreeNode(multi) {
+case class ReferenceNode(multi: Multiplicity.Value, var ruleName: String) extends RuleTreeNode(multi) {
   override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
   def epsilonOk = multiplicity == Multiplicity.ZeroOrMore || multiplicity == Multiplicity.ZeroOrOne 
   def cloneTree() = {
-    val clone = ReferenceNode(multiplicity, parserName)
+    val clone = ReferenceNode(multiplicity, ruleName)
     clone.copyFieldsFrom(this)
     clone
   }

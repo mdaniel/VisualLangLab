@@ -42,10 +42,10 @@ Output: 20
 
 </pre></body></html>"""
     gui.parsers.load(grammar)
-    val firstParser = gui.parsers.parserBank.parserNames(0)
-    gui.updateParserChooser(firstParser)
+    val firstRule = gui.parsers.ruleBank.ruleNames(0)
+    gui.updateRuleChooser(firstRule)
     gui.title = "VisualLangLab/S - ArithExprWithActionCode"
-    gui.parserTreePanel.setParser(firstParser)
+    gui.ruleTreePanel.setRule(firstRule)
     gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
         "VisualLangLab sample - ArithExprWithActionCode", Dialog.Message.Info, null)

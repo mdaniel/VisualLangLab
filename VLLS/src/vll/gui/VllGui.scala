@@ -100,8 +100,8 @@ class VllGui extends MainFrame with ActionListener {
       if (!isDirty) {
         GuiNode.clearCache()
         parsers.reset()
-        parserTreePanel.setParser("Main")
-        updateParserChooser("Main")
+        ruleTreePanel.setRule("Main")
+        updateRuleChooser("Main")
         grammarFile = None
         mainFrame.title = "VisualLangLab/S"
       }
@@ -121,20 +121,15 @@ class VllGui extends MainFrame with ActionListener {
         grammarFileChooser.showOpenDialog(splitPane) match {
           case FileChooser.Result.Approve =>
             grammarFile = Some(grammarFileChooser.selectedFile)
-              //FileIO.load(grammarFile.get)
             try {
               parsers.load(grammarFile.get)
             } catch {
               case e: IOException => val sb = new StringBuilder(); sb.append("Missing ")
-/*                   if (!FileIO.missingParsers.isEmpty) sb.append(FileIO.missingParsers.mkString("Parsers(", ", ", ") "))
-                  if (!FileIO.missingTokens.isEmpty) sb.append(FileIO.missingTokens.mkString("Tokens(", ", ", ") "))
- */                  Dialog.showMessage(splitPane, sb.toString, "File open", Dialog.Message.Error, null)
+                  Dialog.showMessage(splitPane, sb.toString, "File open", Dialog.Message.Error, null)
             }
-//            globalFlattenTilde.selected = parsers.flattenNestedTilde
-            //println("flattens: %b, %d %n", globalFlattenTilde.selected, parsers.flattenNestedTilde)
-            val firstParser = parsers.parserBank.parserNames(0)
-            updateParserChooser(firstParser)
-            parserTreePanel.setParser(firstParser)
+            val firstRule = parsers.ruleBank.ruleNames(0)
+            updateRuleChooser(firstRule)
+            ruleTreePanel.setRule(firstRule)
             mainFrame.title = "VisualLangLab/S - " + grammarFile.get.getName
           case _ =>
         }
@@ -197,25 +192,19 @@ class VllGui extends MainFrame with ActionListener {
 
   val viewFullNamesMenuItem: CheckMenuItem = new CheckMenuItem("Full names") {
     reactions += {case ButtonClicked(_) =>
-//        parserTreePanel.rootNode.fullName = viewFullNamesMenuItem.selected
-        parserTreePanel.peer.repaint()
-        //ParserTreePanel.theTree.treeDidChange()
-        parserTreePanel.theModel.nodeStructureChanged(parserTreePanel.rootNode)
+        ruleTreePanel.peer.repaint()
+        ruleTreePanel.theModel.nodeStructureChanged(ruleTreePanel.rootNode)
         for (i <- 0 until 20)
-          parserTreePanel.theTree.expandRow(i)
-        //ParserTreePanel.theModel.nodeStructureChanged(ParserTreePanel.rootNode)
-    }
+          ruleTreePanel.theTree.expandRow(i)
+   }
   }
 
   val viewShowEpsOkMenuItem: CheckMenuItem = new CheckMenuItem("Show \u03b5-ok items") {
     reactions += {case ButtonClicked(_) => 
-//        parserTreePanel.rootNode.fullName = viewFullNamesMenuItem.selected
-        parserTreePanel.peer.repaint()
-        //ParserTreePanel.theTree.treeDidChange()
-        parserTreePanel.theModel.nodeStructureChanged(parserTreePanel.rootNode)
+        ruleTreePanel.peer.repaint()
+        ruleTreePanel.theModel.nodeStructureChanged(ruleTreePanel.rootNode)
         for (i <- 0 until 20)
-          parserTreePanel.theTree.expandRow(i)
-        //ParserTreePanel.theModel.nodeStructureChanged(ParserTreePanel.rootNode)
+          ruleTreePanel.theTree.expandRow(i)
     }
   }
   
@@ -240,127 +229,123 @@ class VllGui extends MainFrame with ActionListener {
     contents.append(viewFullNamesMenuItem, viewShowEpsOkMenuItem, new MenuItem(viewLookNFeelAction))
   }
   
-  val parserNewAction = new Action("New parser") {
+  val ruleNewAction = new Action("New rule") {
     icon = swing.Swing.Icon(getClass.getResource("images/NewReference.gif"))
     toolTip = title
     def apply {
     val pattern = """\s*([a-zA-Z_]\w*)\s*""".r
-    Dialog.showInput(splitPane, "Enter parser-name", "New parser", Dialog.Message.Question, null, Array[String](), null) match {
+    Dialog.showInput(splitPane, "Enter rule-name", "New rule", Dialog.Message.Question, null, Array[String](), null) match {
       case Some(name) =>
         name match {
-          case pattern(newParserName) =>
-            if (parsers.parserBank contains newParserName) {
-              Dialog.showMessage(splitPane, "A parser named '" + newParserName + "' already exists", "New parser", Dialog.Message.Error, null)
+          case pattern(newRuleName) =>
+            if (parsers.ruleBank contains newRuleName) {
+              Dialog.showMessage(splitPane, "A rule named '" + newRuleName + "' already exists", "New rule", Dialog.Message.Error, null)
             } else {
-              val newRoot = /* new  */RootNode(newParserName)
-//              ParserTreePanel.displayStack.push(ParserTreePanel.rootNode.nodeName)
-              parsers.parserBank(newParserName) = newRoot
-              parserTreePanel.setParser(newParserName)
-              updateParserChooser(newParserName)
-              //VisualLangLab.parserChooser.setSelectedItem(newParserName)
+              val newRoot = /* new  */RootNode(newRuleName)
+              parsers.ruleBank(newRuleName) = newRoot
+              ruleTreePanel.setRule(newRuleName)
+              updateRuleChooser(newRuleName)
               isDirty = true
-              currentParserName = newParserName
+              currentRuleName = newRuleName
             }
           case _ =>
-            Dialog.showMessage(splitPane, "Bad parser name - identifier expected", "New parser", Dialog.Message.Error, null)
+            Dialog.showMessage(splitPane, "Bad rule name - identifier expected", "New rule", Dialog.Message.Error, null)
         }
       case None =>
     }
     }
   }
   
-  val parserRenameAction = new Action("Rename parser") {
+  val ruleRenameAction = new Action("Rename rule") {
     icon = swing.Swing.Icon(getClass.getResource("images/Refresh16.gif"))
     toolTip = title
     def apply {
-    val currentName = parserChooser.getSelectedItem.asInstanceOf[String]
+    val currentName = ruleChooser.getSelectedItem.asInstanceOf[String]
     val pattern = """\s*([a-zA-Z_]\w*)\s*""".r
-    Dialog.showInput(splitPane, "Enter new name", "Rename parser", Dialog.Message.Question, null, Array[String](), currentName) match {
+    Dialog.showInput(splitPane, "Enter new name", "Rename rule", Dialog.Message.Question, null, Array[String](), currentName) match {
       case Some(name) =>
         name match {
-          case pattern(newParserName) =>
-            if (parsers.parserBank contains newParserName) {
-              Dialog.showMessage(splitPane, "A parser named '" + newParserName + "' already exists", "Rename parser", Dialog.Message.Error, null)
+          case pattern(newRuleName) =>
+            if (parsers.ruleBank contains newRuleName) {
+              Dialog.showMessage(splitPane, "A rule named '" + newRuleName + "' already exists", "Rename rule", Dialog.Message.Error, null)
             } else {
-              //printf("Renaming %s to %s%n", parserChooser.getSelectedItem.asInstanceOf[String], newParserName)
-              parsers.parserBank.rename(currentName, newParserName)
-              parserTreePanel.setParser(newParserName)
-              updateParserChooser(newParserName)
+              parsers.ruleBank.rename(currentName, newRuleName)
+              ruleTreePanel.setRule(newRuleName)
+              updateRuleChooser(newRuleName)
               isDirty = true
-              currentParserName = newParserName
+              currentRuleName = newRuleName
             }
           case _ =>
-            Dialog.showMessage(splitPane, "Bad parser name - identifier expected", "New parser", Dialog.Message.Error, null)
+            Dialog.showMessage(splitPane, "Bad rule name - identifier expected", "Rename rule", Dialog.Message.Error, null)
         }
       case None =>
     }
     }
   }
   
-  val parserDeleteAction = new Action("Delete parser") {
+  val ruleDeleteAction = new Action("Delete rule") {
     toolTip = title
     icon = swing.Swing.Icon(getClass.getResource("images/Delete16.gif"))
     def apply {
     def purgeStack(p: String) {
       var lst = List[String]()
-      while(!parserTreePanel.displayStack.isEmpty)
-        lst ::= parserTreePanel.displayStack.pop
-      lst.filter(_ != p).foreach(parserTreePanel.displayStack.push)
+      while(!ruleTreePanel.displayStack.isEmpty)
+        lst ::= ruleTreePanel.displayStack.pop
+      lst.filter(_ != p).foreach(ruleTreePanel.displayStack.push)
     }
-    val parserToDelete = parserChooser.getSelectedItem.asInstanceOf[String]
-    val ok = Dialog.showConfirmation(splitPane, "Delete '" + parserToDelete + "' ?",
-        "Delete parser", Dialog.Options.YesNo, Dialog.Message.Question, null)
+    val ruleToDelete = ruleChooser.getSelectedItem.asInstanceOf[String]
+    val ok = Dialog.showConfirmation(splitPane, "Delete '" + ruleToDelete + "' ?",
+        "Delete rule", Dialog.Options.YesNo, Dialog.Message.Question, null)
     if (ok == Dialog.Result.Yes) {
-      val parserNames = parsers.parserBank.parserNames //parsers.keysIterator.toSeq
-      if (parserNames.size == 1) {
-        Dialog.showMessage(splitPane, "Can't delete last parser (use rename instead)",
-            "Delete parser", Dialog.Message.Error, null)
+      val ruleNames = parsers.ruleBank.ruleNames 
+      if (ruleNames.size == 1) {
+        Dialog.showMessage(splitPane, "Can't delete last rule (use rename instead)",
+            "Delete rule", Dialog.Message.Error, null)
       } else {
-        parsers.parserBank.parserInUse(parserToDelete, true) match {
+        parsers.ruleBank.ruleInUse(ruleToDelete, true) match {
           case Nil =>
-            val idx = parserNames.indexOf(parserToDelete)
-              parsers.parserBank -= parserToDelete
-              val newDisplay = if (idx == parserNames.size - 1)
-                parserNames(idx - 1) else parserNames(idx + 1)
-              updateParserChooser(newDisplay)
-              parserTreePanel.setParser(newDisplay)
-              purgeStack(parserToDelete)
+            val idx = ruleNames.indexOf(ruleToDelete)
+              parsers.ruleBank -= ruleToDelete
+              val newDisplay = if (idx == ruleNames.size - 1)
+                ruleNames(idx - 1) else ruleNames(idx + 1)
+              updateRuleChooser(newDisplay)
+              ruleTreePanel.setRule(newDisplay)
+              purgeStack(ruleToDelete)
               isDirty = true
           case users: Seq[String] =>
-                val msg = "Can't delete '%s' - used by: \n%s".format(parserToDelete, users.mkString(",\n"))
-                Dialog.showMessage(splitPane, msg, "Delete parser", Dialog.Message.Error, null)
+                val msg = "Can't delete '%s' - used by: \n%s".format(ruleToDelete, users.mkString(",\n"))
+                Dialog.showMessage(splitPane, msg, "Delete rule", Dialog.Message.Error, null)
         }
       }
     }
     }
   }
   
-  val parserReferencesAction = new Action("Find parser") {
+  val ruleReferencesAction = new Action("Find rule") {
     toolTip = title
     icon = swing.Swing.Icon(getClass.getResource("images/Search16.gif"))
     def apply {
     val defaultCursor = /* VllGui.top. */cursor
-    /* VllGui.top. */cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)
-    val parserName = parserChooser.getSelectedItem.asInstanceOf[String]
-    parsers.parserBank.parserInUse(parserName) match {
+    cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)
+    val ruleName = ruleChooser.getSelectedItem.asInstanceOf[String]
+    parsers.ruleBank.ruleInUse(ruleName) match {
       case Nil =>
-        Dialog.showMessage(splitPane, "Parser '%s' is not used%n".format(parserName),
-            "Parser references", Dialog.Message.Info, null)
+        Dialog.showMessage(splitPane, "Rule '%s' is not used%n".format(ruleName),
+            "Rule references", Dialog.Message.Info, null)
       case lst => 
-        Dialog.showInput(splitPane, "Select parser", "Parser references",
+        Dialog.showInput(splitPane, "Select rule", "Rule references",
             Dialog.Message.Question, null, lst, lst(0)) match {
-              //case Some(p) => parserChooser.setSelectedItem(p.substring(0, p.indexOf('.')))
-              case Some(p) => parserChooser.setSelectedItem(p)
+              case Some(p) => ruleChooser.setSelectedItem(p)
               case None =>
             }
     }
-    /* VllGui.top. */cursor = defaultCursor
+    cursor = defaultCursor
     }
   }
 
-  val parserMenu = new Menu("Parsers") {
-    contents.append(new MenuItem(parserNewAction), new MenuItem(parserRenameAction), 
-    new MenuItem(parserReferencesAction), new Separator, new MenuItem(parserDeleteAction))
+  val ruleMenu = new Menu("Rules") {
+    contents.append(new MenuItem(ruleNewAction), new MenuItem(ruleRenameAction), 
+    new MenuItem(ruleReferencesAction), new Separator, new MenuItem(ruleDeleteAction))
   }
   
   def selectToken(title: String): Option[String] = {
@@ -401,8 +386,6 @@ class VllGui extends MainFrame with ActionListener {
             } else {
               if (isRegex) {
                 try {
-                  //val rex = new RegExp(Utils.unEscape(value), RegExp.NONE).toAutomaton
-                  //if (rex.getShortestExample(true).isEmpty) {
                   if (Automata.canMatchEmptyString(Utils.unEscape(value))) {
                     Dialog.showMessage(splitPane, "'%s' matches empty string, not allowed".format(value), title, Dialog.Message.Error, null)
                   } else {
@@ -471,25 +454,24 @@ class VllGui extends MainFrame with ActionListener {
     icon = swing.Swing.Icon(getClass.getResource("images/Replace16.gif"))
     toolTip = title
     def apply {
-    val defaultCursor = /* VllGui.top. */cursor
-    /* VllGui.top. */cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)
+    val defaultCursor = cursor
+    cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)
     selectToken("Token references") match {
         case Some(tokenName) =>
-          parsers.parserBank.tokenInUse(tokenName) match {
+          parsers.ruleBank.tokenInUse(tokenName) match {
             case Nil => 
               Dialog.showMessage(splitPane, "Token '%s' is not used%n".format(tokenName),
                   "Token references", Dialog.Message.Info, null)
             case lst =>
-              Dialog.showInput(splitPane, "Select parser", "Token references",
+              Dialog.showInput(splitPane, "Select rule", "Token references",
                   Dialog.Message.Question, null, lst, lst(0)) match {
-              //case Some(p) => parserChooser.setSelectedItem(p.substring(0, p.indexOf('.')))
-              case Some(p) => parserChooser.setSelectedItem(p)
+              case Some(p) => ruleChooser.setSelectedItem(p)
               case None =>
             }
           }
         case None =>
     }
-    /* VllGui.top. */cursor = defaultCursor
+    cursor = defaultCursor
     }
   }
   
@@ -499,7 +481,7 @@ class VllGui extends MainFrame with ActionListener {
     def apply {
     selectToken("Delete token") match {
         case Some(tokenName) =>
-          parsers.parserBank.tokenInUse(tokenName) match {
+          parsers.ruleBank.tokenInUse(tokenName) match {
             case Nil => parsers.tokenBank.remove(tokenName)
               isDirty = true
             case lst: Seq[String] =>
@@ -581,14 +563,13 @@ class VllGui extends MainFrame with ActionListener {
   }
   
   val globalsMenu = new Menu("Globals") {
-    contents.append(new MenuItem(globalWhitespaceAction), new MenuItem(globalCommentAction))/*  +
-    globalFlattenTilde + globalJavaizeLists */
+    contents.append(new MenuItem(globalWhitespaceAction), new MenuItem(globalCommentAction))
   }
   
   val runParseInputAction = new Action("Parse input") {
     toolTip = title
     icon = swing.Swing.Icon(getClass.getResource("images/AlignLeft16.gif"))
-    def apply { parsers ! null; /* println("parsers ! null") */ }
+    def apply { parsers ! null; }
   }
   
   val runParseFileAction = new Action("Parse file") {
@@ -658,7 +639,6 @@ class VllGui extends MainFrame with ActionListener {
     icon = swing.Swing.Icon(getClass.getResource("images/Clear16.gif"))
     def apply {
       logTextPane.clearLogText()
-      //parsers.textPane.clearLogText()
     }
   }
 
@@ -667,7 +647,6 @@ class VllGui extends MainFrame with ActionListener {
     icon = swing.Swing.Icon(getClass.getResource("images/Copy16.gif"))
     def apply {
       logTextPane.copyLog()
-      //textPane.copyLogText()
     }
   }
 
@@ -709,7 +688,7 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   menuBar = new MenuBar {
-    contents.append(fileMenu, viewMenu, tokensMenu, parserMenu, globalsMenu, testMenu, logMenu, helpMenu)
+    contents.append(fileMenu, viewMenu, tokensMenu, ruleMenu, globalsMenu, testMenu, logMenu, helpMenu)
   }
   
   val backButton: Button = new Button() {
@@ -717,12 +696,11 @@ class VllGui extends MainFrame with ActionListener {
     tooltip = "Back"
     enabled = false
     reactions += {case bc: ButtonClicked =>
-         if (!parserTreePanel.displayStack.isEmpty) {
-          val parserName = parserTreePanel.displayStack.pop
-          //println("popped: " + parserName)
-          lastPoppedName = parserName
-          parserChooser.setSelectedItem(parserName)
-          if (parserTreePanel.displayStack.isEmpty)
+         if (!ruleTreePanel.displayStack.isEmpty) {
+          val ruleName = ruleTreePanel.displayStack.pop
+          lastPoppedName = ruleName
+          ruleChooser.setSelectedItem(ruleName)
+          if (ruleTreePanel.displayStack.isEmpty)
             enabled = false
         }
      }
@@ -730,24 +708,20 @@ class VllGui extends MainFrame with ActionListener {
   
   def actionPerformed(ae: ActionEvent) {
     ae.getSource match {
-      case `parserChooser` =>
-        val pName = parserChooser.getSelectedItem.asInstanceOf[String]
-//        if (pName != lastPoppedName) {
-//          ParserTreePanel.displayStack.push(ParserTreePanel.rootNode.nodeName)
-//          LeftContainerPanel.backButton.enabled = true
-//        }
-        parserTreePanel.setParser(pName)
+      case `ruleChooser` =>
+        val pName = ruleChooser.getSelectedItem.asInstanceOf[String]
+        ruleTreePanel.setRule(pName)
     }
   }
   
-  def updateParserChooser(selectedName: String) {
-    parserChooser.removeActionListener(this)
-    parserChooser.removeAllItems
-    val parserNames = parsers.parserBank.parserNames
-    parserNames.foreach(r => parserChooser.addItem(r))
-    parserChooser.setMaximumSize(parserChooser.getPreferredSize)
-    parserChooser.setSelectedItem(selectedName)
-    parserChooser.addActionListener(this)
+  def updateRuleChooser(selectedName: String) {
+    ruleChooser.removeActionListener(this)
+    ruleChooser.removeAllItems
+    val ruleNames = parsers.ruleBank.ruleNames
+    ruleNames.foreach(r => ruleChooser.addItem(r))
+    ruleChooser.setMaximumSize(ruleChooser.getPreferredSize)
+    ruleChooser.setSelectedItem(selectedName)
+    ruleChooser.addActionListener(this)
   }
 
   private val tk = java.awt.Toolkit.getDefaultToolkit
@@ -761,8 +735,8 @@ class VllGui extends MainFrame with ActionListener {
   preferredSize = new Dimension(frameWidth, frameHeight)
 
   var lastPoppedName = ""
-  val parserChooser = new JComboBox()
-  parserChooser.addActionListener(this)
+  val ruleChooser = new JComboBox()
+  ruleChooser.addActionListener(this)
   var isDirty = false
   val parsers = new ParsingActor(this)
   
@@ -774,23 +748,18 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   val stopButton = new Button(stopAction) 
-  var currentParserName = "Main"
+  var currentRuleName = "Main"
   var customTreeHandlerClassName: Option[String] = None
   var customTreeHandler: Option[ParseTreeHandler] = None
-  val parserTreePanel = new ParserTreePanel(this, parsers)
+  val ruleTreePanel = new RuleTreePanel(this, parsers)
   private var grammarFile: Option[File] = None
   val logTextPane = new LogTextPane(this)
-  val typeDisplayPane = new ParseTreeUtility(this/* , logTextPane */)
-  //val innerSplitPane = new SplitPane(Orientation.Vertical, typeDisplayPane, logTextPane) {
-
-  //}
-  //val leftSplitPane = new SplitPane(Orientation.Horizontal, parserTreePanel, typeDisplayPane)
-  val splitPane = new SplitPane(Orientation.Vertical, parserTreePanel, typeDisplayPane) {
+  val typeDisplayPane = new RuleTreeUtility(this/* , logTextPane */)
+  val splitPane = new SplitPane(Orientation.Vertical, ruleTreePanel, typeDisplayPane) {
     dividerLocation = treeWidth
   }
 
   val outerSplitPane = new SplitPane(Orientation.Horizontal, splitPane, logTextPane) {
-//    dividerLocation = treeWidth
   }
 
   val vllIconImage = swing.Swing.Icon(getClass.getResource("images/Icon.gif"))
@@ -830,11 +799,11 @@ class VllGui extends MainFrame with ActionListener {
   toolBar.add(fileSaveAsAction.peer)
   toolBar.addSeparator()
   toolBar.add(backButton.peer)
-  toolBar.add(parserChooser)
+  toolBar.add(ruleChooser)
   toolBar.addSeparator()
-  toolBar.add(parserNewAction.peer)
-  toolBar.add(parserReferencesAction.peer)
-  toolBar.add(parserRenameAction.peer)
+  toolBar.add(ruleNewAction.peer)
+  toolBar.add(ruleReferencesAction.peer)
+  toolBar.add(ruleRenameAction.peer)
   toolBar.addSeparator()
   toolBar.add(tokenNewLiteralAction.peer)
   toolBar.add(tokenNewRegexAction.peer)
@@ -855,7 +824,7 @@ class VllGui extends MainFrame with ActionListener {
     add(Component.wrap(toolBar), BorderPanel.Position.North)
   }
 
-  updateParserChooser("Main")
+  updateRuleChooser("Main")
   private val mainFrame = this
 
   System.setOut(new PrintStream(new OutStream(logTextPane, false)))

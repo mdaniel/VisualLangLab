@@ -22,11 +22,11 @@ package vll.core
 
 import scala.collection.mutable.HashMap
 
-class ParserBank extends HashMap[String, RootNode] {
+class RuleBank extends HashMap[String, RootNode] {
 
   def rename(oldName: String, newName: String) {
     foreach(_._2.allNodes.foreach(_ match {
-        case refNode @ ReferenceNode(_, name) => if (name == oldName) refNode.parserName = newName
+        case refNode @ ReferenceNode(_, name) => if (name == oldName) refNode.ruleName = newName
         case rootNode @ RootNode(name, _) => if (name == oldName) rootNode.name = newName
         case _ =>
     }))
@@ -41,23 +41,17 @@ class ParserBank extends HashMap[String, RootNode] {
       })).map(_._1).toList
   }
 
-  def parserInUse(parserName: String, excludeSelf: Boolean = false): List[String] = {
-    filter(kv => !excludeSelf || parserName != kv._1).filter(_._2.allNodes.exists({
-          case ReferenceNode(_, `parserName`) => true
+  def ruleInUse(ruleName: String, excludeSelf: Boolean = false): List[String] = {
+    filter(kv => !excludeSelf || ruleName != kv._1).filter(_._2.allNodes.exists({
+          case ReferenceNode(_, `ruleName`) => true
           case _ => false
         })).map(_._1).toList
   }
 
-  def parserNames: Array[String] = keys.toArray.sorted
+  def ruleNames: Array[String] = keys.toArray.sorted
   override def clear() {
-//printf("ParserBank: size BEFORE clear: %d%n", size)
     super.clear()
-//printf("ParserBank: size AFTER clear: %d%n", size)
-    //nNParser.clear()
     put("Main", RootNode("Main"))
-//printf("ParserBank: size after put(Main): %d%n", size)
-//printf("ParserBank: size of Main: %d%n", get("Main").get.size)
   }
-//  private val nNParser = /* new  */RootNode("Main")
   put("Main", RootNode("Main"))
 }
