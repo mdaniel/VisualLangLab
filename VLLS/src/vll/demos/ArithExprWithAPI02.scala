@@ -24,7 +24,7 @@ import java.io.File
 import scala.util.parsing.input.CharSequenceReader
 import vll.core.VllParsers
 
-object ArithExprWithAPI {
+object ArithExprWithAPI02 {
   
   private def evalFactorAST(ast: Any): Float = ast match {
     case Pair(0, f: String) => f.toFloat
@@ -52,7 +52,7 @@ object ArithExprWithAPI {
   }
 
   def main(args: Array[String]) {
-    val vll = VllParsers.fromFile(new File("ArithExpr.vll"))
+    val vll = VllParsers.fromString(grammar)
     val phraseParser = vll.phrase(vll.getParserFor("Expr"))
     val parseResult = phraseParser(new CharSequenceReader("(3 + 5) / (8 - 4)"))
     parseResult match {
@@ -60,4 +60,62 @@ object ArithExprWithAPI {
       case vll.Failure(msg, where) => printf("Error: '%s' at line %d col %d%n", msg, where.pos.line, where.pos.column)
     }
   }
+  
+  val grammar = """
+<VLL-Grammar>
+  <Whitespace>\\s+</Whitespace>
+  <Comments></Comments>
+  <Tokens>
+    <Literal Name="RPAREN" Pattern=")"/>
+    <Regex Name="floatingPointNumber" Pattern="(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?"/>
+    <Literal Name="MULT" Pattern="*"/>
+    <Literal Name="LPAREN" Pattern="("/>
+    <Literal Name="MINUS" Pattern="-"/>
+    <Literal Name="DIV" Pattern="/"/>
+    <Literal Name="PLUS" Pattern="+"/>
+  </Tokens>
+  <Parsers>
+    <Parser Name="Expr">
+        <Sequence >
+          <Reference Ref="term" />
+          <Choice Mult="*">
+            <Sequence >
+              <Token Ref="PLUS" Drop="true"/>
+              <Reference Ref="term" />
+            </Sequence>
+            <Sequence >
+              <Token Ref="MINUS" Drop="true"/>
+              <Reference Ref="term" />
+            </Sequence>
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="factor">
+        <Choice >
+          <Token Ref="floatingPointNumber" />
+          <Sequence >
+            <Token Ref="LPAREN" Drop="true"/>
+            <Reference Ref="Expr" />
+            <Token Ref="RPAREN" Drop="true"/>
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="term">
+        <Sequence >
+          <Reference Ref="factor" />
+          <Choice Mult="*">
+            <Sequence >
+              <Token Ref="MULT" Drop="true"/>
+              <Reference Ref="factor" />
+            </Sequence>
+            <Sequence >
+              <Token Ref="DIV" Drop="true"/>
+              <Reference Ref="factor" />
+            </Sequence>
+          </Choice>
+        </Sequence>
+    </Parser>
+  </Parsers>
+</VLL-Grammar>
+"""
 }
