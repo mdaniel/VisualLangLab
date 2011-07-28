@@ -2,7 +2,7 @@
  Copyright 2010, Sanjay Dasgupta
  sanjay.dasgupta@gmail.com
 
- This file is part of VisualLangLab (https://vll.dev.java.net/).
+ This file is part of VisualLangLab (http://vll.java.net/).
 
  VisualLangLab is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
