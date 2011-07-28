@@ -13,12 +13,18 @@
         <jar destfile="VLLS.jar" compress="false" manifest="manifest.mf">
             <fileset dir="build/classes" includes="**/*.*" />
         </jar>
-        <zip zipfile="VLLS-3.05.zip" compress="true">
-            <fileset dir="." includes="docs/**/*.*"/>
-            <fileset dir="." includes="licenses/**/*.*"/>
+        <jar destfile="VLLS-All.jar" compress="true" manifest="manifest.mf">
+            <fileset dir="build/classes" includes="**/*.*" />
+            <zipfileset src="jars/scala-library.jar" />
+            <zipfileset src="jars/scala-swing.jar" />
+            <zipfileset src="jars/scala-compiler.jar" />
+        </jar>
+        <zip zipfile="VLLS-3.09.zip" compress="true">
+            <fileset dir="." includes="docs/**/*.*" />
+            <fileset dir="." includes="licenses/**/*.*" />
             <fileset dir="." includes="copying.txt, readme.txt, changes.txt, index.html"/>
-            <fileset dir="." includes="vlls.bat, vlls"/>
-            <fileset dir="." includes="VLLS.jar"/>
+            <fileset dir="." includes="vlls.bat, vlls" />
+            <fileset dir="." includes="VLLS.jar" />
         </zip>
     </target>
     <!--

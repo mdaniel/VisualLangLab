@@ -21,9 +21,10 @@ using the mouse for menu-bar and context-menu operations.
 Textual input from the keyboard is required only for naming parsers and tokens, 
 and for specifying regular expression patterns for tokens. 
 
-The grammar is saved as an intuitive XML file that can be loaded again later 
-for further editing and testing. An API is also available for client programs 
-(in Scala or Java) to load the saved XML file and regenerate the parser. 
+The grammar is saved as a XML file that can be loaded again 
+for further editing and/or testing. An API is also available for client programs 
+(in Scala or Java) to load the saved XML file and regenerate the parser 
+(an instance of scala.util.parsing.combinator.Parsers). 
 Parser regeneration happens on the fly, (when the XML file-name is passed to the API) 
 and does not require any intermediate steps or other manual intervention. 
 
@@ -32,3 +33,5 @@ The software uses Scala's parallel-collections API, so version 2.9.0+ is require
 This software is released under the GNU General Public License. 
 See the file "copying.txt" for further details. For more information, go to: 
     http://vll.java.net/
+
+The licenses directory contains copyright files for other software used by VisualLangLab.

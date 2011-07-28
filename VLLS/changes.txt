@@ -1,3 +1,17 @@
+3.09 28-JUL-2011
+    Fix for bug VLL-8 (Whitespace and Comment fields accepting illegal escape sequences. 
+        Regression from earlier change)
+    Added API client demo programs
+3.08 25-JUL-2011
+    Changed "parser" to "rule" globally in code & docs 
+3.07 22-JUL-2011
+    Fix for issues VLL-6 (Remove "Code" button from action-code area) and 
+    VLL-7 (When test input is provided from action-code, 
+        stats reports "(0 chars in ... ms)").
+3.06 21-JUL-2011
+    Changes to allow Javascript to access the InputArea and LogArea, 
+    and perform getText and setText operations on them. 
+    This allows action-code to perform wrap-around tests on parsers.
 3.05 21-JUL-2011
     Updated reference to "Programming in Scala" to second edition.
     Removed reference to dk.brics.automaton in the about-dialog
