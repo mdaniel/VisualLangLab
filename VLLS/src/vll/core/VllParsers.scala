@@ -142,7 +142,7 @@ class VllParsers extends Parsers with PackratParsers {
   // The PRIVATE part (implementation) follows ...
   
   private var commentRe = ""
-  private var whiteSpaceRe = "\\s+"
+  private var whiteSpaceRe = "\\\\s+"
   private var skipRe = whiteSpaceRe
   private var whitespaceMatcher = Automata.matcher(Utils.unEscape(skipRe))
 

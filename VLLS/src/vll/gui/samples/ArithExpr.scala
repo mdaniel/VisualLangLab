@@ -57,11 +57,11 @@ Output: Array(Array(Pair(1, Array(Array(Pair(0, 2), List()),
   }
 
   val grammar = <VLL-Grammar>
-  <Whitespace>\s+</Whitespace>
+  <Whitespace>\\s+</Whitespace>
   <Comments></Comments>
   <Tokens>
     <Literal Name="RPAREN" Pattern=")"/>
-    <Regex Name="floatingPointNumber" Pattern="(\d+(\\.\d*)?|\d*\\.\d+)([eE][+-]?\d+)?[fFdD]?"/>
+    <Regex Name="floatingPointNumber" Pattern="(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?"/>
     <Literal Name="MULT" Pattern="*"/>
     <Literal Name="LPAREN" Pattern="("/>
     <Literal Name="MINUS" Pattern="-"/>

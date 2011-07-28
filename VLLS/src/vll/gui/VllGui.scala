@@ -372,12 +372,12 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   def createNewToken(isRegex: Boolean) {
-    val pattern = """\s*([a-zA-Z_]\w*)\s*,\s*(.+?)\s*""".r
+    val pattern = """([a-zA-Z_][a-zA-Z_0-9]*)\s*,\s*(\S.*)""".r
     val title = "New " + (if (isRegex) "regex" else "literal")
     val msg = "Enter name, comma, " + (if (isRegex) "regex" else "literal")
     Dialog.showInput(splitPane, msg, title, Dialog.Message.Question, null, Array[String](), null) match {
       case Some(tokenInfo) =>
-        tokenInfo match {
+        tokenInfo.trim match {
           case pattern(name, value) =>
             if (parsers.tokenBank contains name) {
               Dialog.showMessage(splitPane, "A token named '" + name + "' already exists", title, Dialog.Message.Error, null)
@@ -553,7 +553,7 @@ class VllGui extends MainFrame with ActionListener {
   val globalWhitespaceAction = new Action("Whitespace") {
     def apply {
     Dialog.showInput(splitPane, "Whitespace regex", "Define whitespace", Dialog.Message.Question, 
-        null, Array[String](), Utils.reEscape(parsers.wspace)) match {
+        null, Array[String](), parsers.wspace) match {
       case Some(whiteSpace) =>
         parsers.wspace = whiteSpace.asInstanceOf[String]
         isDirty = true
@@ -678,7 +678,7 @@ class VllGui extends MainFrame with ActionListener {
     contents.append(helpSampleItem1, helpSampleItem2, helpSampleItem3)
   }
   val helpMenuItem = new MenuItem("Help") {
-    val msg = "Not yet implemented\nCheck for documentation at https://vll.dev.java.net"
+    val msg = "Check for documentation at http://vll.java.net"
     reactions += {case ButtonClicked(_) =>
         Dialog.showMessage(splitPane, msg, "VisualLangLab", Dialog.Message.Info, null)
     }

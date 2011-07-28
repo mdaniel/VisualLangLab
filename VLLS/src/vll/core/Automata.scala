@@ -92,9 +92,7 @@ object Automata {
     sb.toString
   }
   
-  def canMatchEmptyString(rex: String) = {
-    emptyStringPattern.matcher(rex).matches
-  }
+  def canMatchEmptyString(rex: String) = "".matches(rex)
 
-  private val emptyStringPattern = Pattern.compile("")
+//  private val emptyStringPattern = Pattern.compile("")
 }

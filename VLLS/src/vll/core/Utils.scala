@@ -41,7 +41,7 @@ object Utils {
         case (1, '\"') => buf = ""; sb.append('\"')
         case (1, '\\') => buf = ""; sb.append('\\')
         case (1, n) if n >= '0' && n <= '7' => buf += n
-        case (1, _) => buf = ""; sb.append("\\" + c)
+//        case (1, _) => buf = ""; sb.append("\\" + c)
         case (2, n) if n >= '0' && n <= '7' => buf += n
         case (2, _) => sb.append(Integer.parseInt(buf.substring(1), 8).asInstanceOf[Char]); buf = ""
           if (c == '\\') buf = "\\" else sb.append(c)
@@ -50,17 +50,7 @@ object Utils {
           if (c == '\\') buf = "\\" else sb.append(c)
         case (4, _) => sb.append(Integer.parseInt(buf.substring(1), 8).asInstanceOf[Char]); buf = ""
           if (c == '\\') buf = "\\" else sb.append(c)
-        //  Regular-expression escapes ...
-        //case (1, '.') => buf = ""; sb.append("\\.")
-        //case (1, 'd') => buf = ""; sb.append("[0-9]")
-        //case (1, 's') => buf = ""; sb.append("[ \t\n\f\r\013]")
-        //case (1, 'w') => buf = ""; sb.append("[a-zA-Z_0-9]")
-        //case (1, 'D') => buf = ""; sb.append("[^0-9]")
-        //case (1, 'S') => buf = ""; sb.append("[^ \t\n\f\r\013]")
-        //case (1, 'W') => buf = ""; sb.append("[^a-zA-Z_0-9]")
-        //case (1, 'a') => buf = ""; sb.append("\07")
-        //case (1, 'e') => buf = ""; sb.append("\033")
-        //case _ => throw new IllegalArgumentException("Bad escape: '%s%c'".format(buf, c))
+        case _ => throw new IllegalArgumentException("Bad escape: '%s%c'".format(buf, c))
       }
       i += 1
     }

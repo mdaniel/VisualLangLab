@@ -62,7 +62,7 @@ You can find sample input in the book or PDF document referred above.
     <Literal Name="RBKT" Pattern="]"/>
     <Literal Name="RCURLY" Pattern="}"/>
     <Literal Name="TRUE" Pattern="true"/>
-    <Regex Name="floatingPointNumber" Pattern="\\-?(\d+(\\.\d*)?|\d*\\.\d+)([eE][+-]?\d+)?[fFdD]?"/>
+    <Regex Name="floatingPointNumber" Pattern="\\-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?"/>
     <Regex Name="stringLiteral" Pattern="\&quot;[^&quot;]*\&quot;"/>
   </Tokens>
   <Parsers>
