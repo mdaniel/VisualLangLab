@@ -1,4 +1,7 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Using the API</title>
   </head>
@@ -7,9 +10,333 @@
     <h1>VisualLangLab - Using the API</h1>
 
     <p>
-      Still under construction!
+      The API itself is quite small and simple, and is best understood in the 
+      context of a real example. 
     </p>
 
+    <h2>A Quick Example</h2>
+
+    <p>
+      The following code segment uses the API to load the programmatically use 
+      the <i>ArithExpr</i> parser (from the <a href="SampleGrammars.html">Sample Grammars</a>). 
+      The parser is then <i>applied to</i> the string "(3 + 5) / (8 - 4)" 
+      to obtain an AST that represents its structure. 
+      Other functions that use the AST to actually evaluate the expression are also shown later. 
+    </p>
+
+<pre><code>import java.io.File
+import scala.util.parsing.input.CharSequenceReader
+import vll.core.VllParsers
+
+  def main(args: Array[String]) {
+    val vll = VllParsers.fromFile(new File("ArithExpr.vll"))
+    val phraseParser = vll.phrase(vll.getParserFor("Expr"))
+    val parseResult = phraseParser(new CharSequenceReader("(3 + 5) / (8 - 4)"))
+    parseResult match {
+      case vll.Success(resultAST, _) => println(evalExprAST(resultAST))
+      case vll.Failure(msg, where) => printf("Error: '%s' at line %d col %d%n", 
+          msg, where.pos.line, where.pos.column)
+    }
+  }
+</code></pre>
+
+    <p>
+      The API calls used in the code are explained below. But before getting into the details 
+      observe that the class <code>VLLParsers</code> is central to all IDE operations. 
+      It has factory methods for creating instances from previously saved grammar-files. 
+      The instances created by the factory methods extend 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> with  
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>. 
+      and also have other convenience methods for retrieving parser-rules by name, and for applying 
+      them to strings.
+    </p>
+
+    <ul>
+      <li><code>VllParsers.fromFile(File)</code> - This is the entry point for IDE operations. It takes 
+          a <a href="">File</a> named <i>ArithExpr.vll</i> containing the grammar-file, and returns a unique instance of 
+          <code>VLLParsers</code> that has all the parser-rules defined in the grammar-file.</li>
+      <li><code>getParserFor(String)</code> - This <code>VLLParsers</code> instance method returns a 
+          <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+          for the named parser-rule. The code above uses it to retrieve the top-level parser-rule 
+          (named <i>Expr</i>)</li>
+      <li><code>phrase(<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>)</code> 
+          - This <code>VLLParsers</code> instance method returns a <i>phrase-parser</i> created 
+          from the supplied Parser. A phrase-parser must consume all of the input text to succeed.</li>
+      <li><code>apply(<a href="http://www.scala-lang.org/api/current/scala/util/parsing/input/CharSequenceReader.html">CharSequenceReader</a>)</code> 
+          - This <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+          instance method applies itself to the argument (effectively a wrapped String). 
+          This is actually how you parse a string via the API. 
+          In Scala, the <code>apply</code> instance method is invoked by just using 
+          parenthesis that enclose the argument. So the line 
+          <code>val parseResult = parser(new CharSequenceReader("(3 + 5) / (8 - 4)"))</code> 
+          actually invokes the <code>apply</code> method to parse the string supplied.</li>
+      <li><code>Success</code> and <code>Failure</code> 
+          - Case-classes inherited by <code>VLLParsers</code> from 
+          <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> 
+          that are useful for testing the result of parsing a string. Details of these classes 
+          can be found in the standard Scala documentation.</li>
+    </ul>
+
+    <p>
+      There is not much more to say about the API. The class <code>VLLParsers</code> has two 
+      more factory methods that facilitate the creation of parsers from other sources:
+    </p>
+
+    <ul>
+      <li><code>fromString(s: String): VllParsers</code> - creates a parser from a string 
+          (the contents of a saved grammar-file). This can be useful for completely 
+          encapsulating small grammar files within a program -- see the example under 
+          <i>Code with Embedded Grammar</i> below.</li>
+      <li><code>fromXml(xml: 
+          <a href="http://www.scala-lang.org/api/current/scala/xml/Elem.html">Elem</a>): VllParsers</code> 
+          - creates a parser from an XML structure in the program.</li>
+    </ul>
+
+    <p>
+      Since the class <code>VLLParsers</code> extends 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> with  
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>, 
+      familiarity with that part of the Scala API is also an important prerequisite. 
+    </p>
+
+    <h2>Handling the AST</h2>
+
+    <p>
+      The description in this part is not related to the VisualLangLab API. 
+      However, an application program must also process the AST returned by the parser, 
+      and the example presented here shows some useful techniques. Before proceeding further, 
+      review the structure of the ASTs of the three parser-rules (<i>Expr</i>, 
+      <i>factor</i>, and <i>term</i>) in Table-1 below. 
+    </p>
+
+
+  <table border="1">
+    <tr><td colspan="3" align="center">Table-1. AST Structure</td></tr>
+    <tr>
+      <td>Expr</td>
+      <td>factor</td>
+      <td>term</td>
+    </tr>
+    <tr>
+      <td><img src="images/GrammarAstExpr1.png" /></td>
+      <td><img src="images/GrammarAstFactor1.png" /></td>
+      <td><img src="images/GrammarAstTerm1.png" /></td>
+    </tr>
+  </table>
+
+    <p>
+      The code below is the <code>evalExprAST</code> method to which 
+      <code>main()</code> passes the entire AST. 
+    </p>
+
+<pre><code>  private def evalExprAST(ast: Any): Float = ast match {
+    case Array(term, list: List[_]) => 
+      var result: Float = evalTermAST(term)
+      list.foreach(_ match {
+          case Pair(0, plusAST) => result += evalTermAST(plusAST)
+          case Pair(1, minusAST) => result -= evalTermAST(minusAST)
+        })
+      result
+  }
+</code></pre>
+
+    <p>
+      The methods <code>evalFactorAST</code> and <code>evalTermAST</code> which 
+      handle the ASTs from <i>factor</i> and <i>term</i> respectively are shown 
+      below. 
+    </p>
+
+<pre><code>  private def evalFactorAST(ast: Any): Float = ast match {
+    case Pair(0, f: String) => f.toFloat
+    case Pair(1, expr) => evalExprAST(expr)
+  }
+  
+  private def evalTermAST(ast: Any): Float = ast match {
+    case Array(factor, list: List[_]) => 
+      var result: Float = evalFactorAST(factor)
+      list.foreach(_ match {
+          case Pair(0, multAST) => result *= evalFactorAST(multAST)
+          case Pair(1, divAST) => result /= evalFactorAST(divAST)
+        })
+      result
+  }
+</code></pre>
+
+    <p>
+      Observe that all these methods accept an <code>Any</code> argument that is 
+      split into its constituent parts by pattern matching. The returned value is 
+      a <code>Float</code>. If you are unable to relate the code to the information 
+      in Table-1 above, review the section on AST structure in 
+      <a href="ASTAndActionCode.html">AST and Action Code.html</a>
+    </p>
+
+    <h2>Running the Code</h2>
+
+    <p>
+      The complete code of the example is shown below. Apart from the code you will 
+      also need the <i>ArithExpr</i> grammar-file. The grammar-file can be created by 
+      opening the sample code (<i>Help -> Sample grammars -> ArithExpr</i> from 
+      the main menu) in the VisualLangLab GUI and saving it (<i>File -> Save As</i> 
+      from the main menu) to a file named "ArithExpr.vll". 
+      This file should be placed in the directory where the demo program will be run. 
+      The VisualLangLab JAR file must be on the classpath during compilation and 
+      at run-time.
+    </p>
+
+<pre><code>import java.io.File
+import scala.util.parsing.input.CharSequenceReader
+import vll.core.VllParsers
+
+object ArithExprWithAPI {
+  
+  private def evalFactorAST(ast: Any): Float = ast match {
+    case Pair(0, f: String) => f.toFloat
+    case Pair(1, expr) => evalExprAST(expr)
+  }
+  
+  private def evalTermAST(ast: Any): Float = ast match {
+    case Array(factor, list: List[_]) => 
+      var result: Float = evalFactorAST(factor)
+      list.foreach(_ match {
+          case Pair(0, multAST) => result *= evalFactorAST(multAST)
+          case Pair(1, divAST) => result /= evalFactorAST(divAST)
+        })
+      result
+  }
+  
+  private def evalExprAST(ast: Any): Float = ast match {
+    case Array(term, list: List[_]) => 
+      var result: Float = evalTermAST(term)
+      list.foreach(_ match {
+          case Pair(0, plusAST) => result += evalTermAST(plusAST)
+          case Pair(1, minusAST) => result -= evalTermAST(minusAST)
+        })
+      result
+  }
+
+  def main(args: Array[String]) {
+    val vll = VllParsers.fromFile(new File("ArithExpr.vll"))
+    val phraseParser = vll.phrase(vll.getParserFor("Expr"))
+    val parseResult = phraseParser(new CharSequenceReader("(3 + 5) / (8 - 4)"))
+    parseResult match {
+      case vll.Success(resultAST, _) => println(evalExprAST(resultAST))
+      case vll.Failure(msg, where) => printf("Error: '%s' at line %d col %d%n", 
+          msg, where.pos.line, where.pos.column)
+    }
+  }
+}
+</code></pre>
+
+    <h2>Code with Embedded Grammar</h2>
+
+    <p>
+      It is sometimes required to embed all resources (including the grammar-file) 
+      within the program. The code below is another version of <code>ArithExprWithAPI</code> 
+      with the grammar (extracted from the grammar-file) supplied as a string to a factory method. 
+    </p>
+
+<pre><code>import java.io.File
+import scala.util.parsing.input.CharSequenceReader
+import vll.core.VllParsers
+
+object ArithExprWithAPI02 {
+  
+  private def evalFactorAST(ast: Any): Float = ast match {
+    case Pair(0, f: String) => f.toFloat
+    case Pair(1, expr) => evalExprAST(expr)
+  }
+  
+  private def evalTermAST(ast: Any): Float = ast match {
+    case Array(factor, list: List[_]) => 
+      var result: Float = evalFactorAST(factor)
+      list.foreach(_ match {
+          case Pair(0, multAST) => result *= evalFactorAST(multAST)
+          case Pair(1, divAST) => result /= evalFactorAST(divAST)
+        })
+      result
+  }
+  
+  private def evalExprAST(ast: Any): Float = ast match {
+    case Array(term, list: List[_]) => 
+      var result: Float = evalTermAST(term)
+      list.foreach(_ match {
+          case Pair(0, plusAST) => result += evalTermAST(plusAST)
+          case Pair(1, minusAST) => result -= evalTermAST(minusAST)
+        })
+      result
+  }
+
+  def main(args: Array[String]) {
+    val vll = VllParsers.fromString(grammar)
+    val phraseParser = vll.phrase(vll.getParserFor("Expr"))
+    val parseResult = phraseParser(new CharSequenceReader("(3 + 5) / (8 - 4)"))
+    parseResult match {
+      case vll.Success(resultAST, _) => println(evalExprAST(resultAST))
+      case vll.Failure(msg, where) => printf("Error: '%s' at line %d col %d%n", 
+          msg, where.pos.line, where.pos.column)
+    }
+  }
+  
+  val grammar = """
+&lt;VLL-Grammar>
+  &lt;Whitespace>\\s+&lt;/Whitespace>
+  &lt;Comments>&lt;/Comments>
+  &lt;Tokens>
+    &lt;Literal Name="RPAREN" Pattern=")"/>
+    &lt;Regex Name="floatingPointNumber" Pattern="(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?"/>
+    &lt;Literal Name="MULT" Pattern="*"/>
+    &lt;Literal Name="LPAREN" Pattern="("/>
+    &lt;Literal Name="MINUS" Pattern="-"/>
+    &lt;Literal Name="DIV" Pattern="/"/>
+    &lt;Literal Name="PLUS" Pattern="+"/>
+  &lt;/Tokens>
+  &lt;Parsers>
+    &lt;Parser Name="Expr">
+        &lt;Sequence >
+          &lt;Reference Ref="term" />
+          &lt;Choice Mult="*">
+            &lt;Sequence >
+              &lt;Token Ref="PLUS" Drop="true"/>
+              &lt;Reference Ref="term" />
+            &lt;/Sequence>
+            &lt;Sequence >
+              &lt;Token Ref="MINUS" Drop="true"/>
+              &lt;Reference Ref="term" />
+            &lt;/Sequence>
+          &lt;/Choice>
+        &lt;/Sequence>
+    &lt;/Parser>
+    &lt;Parser Name="factor">
+        &lt;Choice >
+          &lt;Token Ref="floatingPointNumber" />
+          &lt;Sequence >
+            &lt;Token Ref="LPAREN" Drop="true"/>
+            &lt;Reference Ref="Expr" />
+            &lt;Token Ref="RPAREN" Drop="true"/>
+          &lt;/Sequence>
+        &lt;/Choice>
+    &lt;/Parser>
+    &lt;Parser Name="term">
+        &lt;Sequence >
+          &lt;Reference Ref="factor" />
+          &lt;Choice Mult="*">
+            &lt;Sequence >
+              &lt;Token Ref="MULT" Drop="true"/>
+              &lt;Reference Ref="factor" />
+            &lt;/Sequence>
+            &lt;Sequence >
+              &lt;Token Ref="DIV" Drop="true"/>
+              &lt;Reference Ref="factor" />
+            &lt;/Sequence>
+          &lt;/Choice>
+        &lt;/Sequence>
+    &lt;/Parser>
+  &lt;/Parsers>
+&lt;/VLL-Grammar>
+"""
+}
+
+</code></pre>
 
   </body>
 </html>

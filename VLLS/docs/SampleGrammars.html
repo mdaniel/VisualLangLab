@@ -8,39 +8,38 @@
 
     <p>
       So that users may quickly become familiar with grammar-trees, 
-      <a href="">VisualLangLab</a> includes two built-in sample grammars that can 
-      be inspected and edited. These grammars, one for arithmetic-expressions and 
-      another for JSON, can be opened by invoking <i>Help -> Samples -> ArithExpr</i> 
-      or <i>Help -> Samples -> SampleJSON</i> from the main menu as shown in Figure-1 
-      below.
+      <a href="">VisualLangLab</a> has some built-in sample grammars that can 
+      be inspected and edited. 
+      These grammars can be opened by invoking <i>Help -> Sample grammars</i> 
+      from the main menu as shown in Figure-1 below. 
     </p>
 
     <img src="images/SampleGrammar1.png"/><br/>
     <i>Figure-1. Opening sample grammars</i>
 
     <p>
-      The grammar-trees of these two parsers are shown in the sub-sections below. 
+      The grammar-trees of these parsers are shown in the sub-sections below. 
       However, for best results readers should start 
       <a href="http://vll.java.net">VisualLangLab</a> and use its menus to 
-      review the grammar-trees and understand the operations that can be performed on them.
+      review the grammar-trees, understand the operations that can be performed on them, 
+      and also run them using their own text input.
     </p>
 
     <h2>Reviewing a Parser</h2>
 
     <p>
-      <a href="http://vll.java.net">VisualLangLab</a> provides numerous tools for 
+      <a href="http://vll.java.net">VisualLangLab</a> provides numerous menus for 
       editing grammar-trees in parsers. Those same tools can also be used to review 
-      the structure and properties grammar-trees. The first step in a review 
-      is to load (or <i>open</i>) a grammar. Once opened, the tool-bar's ComboBox 
-      (deployed in Figure-2 below) can be used to list the constituent grammar-trees, 
-      and to select one of them for review (or editing).
+      the structure and properties of grammar-trees. When any of the built-in parsers 
+      is opened, the tool-bar's ComboBox (shown deployed in Figure-2 below) 
+      can be used to list the constituent parser-rules, and to select one of them.
     </p>
 
     <img src="images/GuiComboBox1.png"/><br/>
     <i>Figure-2. Listing and selecting a grammar-tree</i>
 
     <p>
-      Once a grammar-tree is selected and displayed, the arrangement, type, and 
+      When a parser-rule is selected its grammar-tree is displayed. The arrangement, type, and 
       annotations of the nodes should be examined carefully. The grammar-tree with 
       its icons and annotations reveals most of the information about the corresponding 
       parser clause. However, certain other information (action-code for instance) 
@@ -162,6 +161,32 @@
       Two of the grammar-trees in this parser (<i>arr</i> and <i>obj</i>) use a <i>RepSep</i> 
       node -- something not many parser enthusiasts know. 
       For more details see <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
+    </p>
+
+    <h2>The <i>ArithExpr with action-code</i> Parser</h2>
+
+    <p>
+      This grammar is identical to the <i>ArithExpr</i> grammar discussed above (and depicted in 
+      Figure-4). While the grammars are structurally identical to the <i>ArithExpr</i> versions, 
+      each one includes a snippet of <i>action-code</i> associated with the apex node 
+      (the node just under the root-node). 
+      The action-code can be seen in the <i>Action Code</i> area when the owning node is 
+      selected as in Figure-6 below.
+    </p>
+
+    <img src="images/SampleGrammarWithActionCode1.png" /><br/>
+    <i>Figure-6. Action code associated with grammar-tree node</i>
+
+    <p>
+      The action-code (explained fully in <a href="ASTAndActionCode.html">AST and Action Code</a>) 
+      evaluates the AST (the result of parsing the arithmetic expression) to a number.
+      The effect of this can be seen by testing the parser with the same input (<i>12 / 4 + 5 * 5</i>). 
+      The parser's result should be <i>23.0</i>.
+    </p>
+
+    <p>
+      For purposes of illustration, the parser has two action-code snippets written in Javascript, 
+      and one in Scala. These are the two supported languages for action-code.
     </p>
 
   </body>

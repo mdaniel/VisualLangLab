@@ -1,4 +1,7 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>User Guide</title>
   </head>
@@ -7,9 +10,138 @@
     <h1>VisualLangLab - User Guide</h1>
 
     <p>
-      Still under construction!
+      The following sections describe the two distinct roles (and skills)
+      of VisualLangLab users and the workflow that connects their activities. 
+      The same individual could (and perhaps typically will) of course perform 
+      both roles. 
     </p>
 
+    <h2>Some Essential Jargon</h2>
+
+    <p>
+      Before proceeding any further, readers should note 
+      the following definitions.
+    </p>
+
+    <ul>
+      <li><u>action-code</u>: a function literal, coded in Javascript or Scala, associated with 
+          any grammar-tree node (also known as <i>semantic action</i> or just <i>action</i> in 
+          CS theory). The function is executed when 
+          <a href="http://vll.java.net/">VisualLangLab</a> matches parser input to the node. 
+          more details can be found in <a href="ASTAndActionCode.html">AST and Action Code.html</a></li>
+      <li><u>grammar-file</u>: a XML file containing parsers developed with the VisualLangLab 
+          GUI. These files do not contain any code -- just a description of all the 
+          parser-specific information available to the GUI. The format of a grammar-file is very 
+          intuitive, and it should be easy to use <i>XSLT</i> or something similar to translate 
+          it into code or other form</li>
+      <li><u>grammar-tree</u>: the visual tree that is used to display a parser-rule at the 
+          top left of <a href="TheGUI.html">The GUI</a>. To the GUI user
+          <i>the grammar-tree is the parser-rule</i> and there is no other user-accessible 
+          form of the parser-rule. Because of this, <i>grammar-tree</i> and <i>parser-rule</i> 
+          are used interchangably in the documentation. 
+      <li><u>parser</u>: generally used to refer to a program or body of code that parses 
+          text in a particular format (or <i>grammar</i>), <u>but see note below</u>. <a href="TheGUI.html">The GUI</a> itself is  
+          a parser because it can parse text when <a href="TestingParsers.html">Testing Parsers</a>. 
+          An application program that loads a grammar-file by <a href="UsingTheAPI.html">Using the API</a> is also a parser.</li>
+      <li><u>parser-rule</u>: non-trivial parsers are simplified by breaking them down 
+          into a number of simpler parser-rules (sometimes also called parser-predicates), 
+          <u>but see note below</u>. 
+          Each parser-rule is known by a unique name, and one of the parser-rules must be  
+          distinguished as the top-level (entry-point) entity</li>
+    </ul>
+
+    <p>
+      <u>Note</u>: Readers, particularly those who will be <a href="UsingTheAPI.html">Using the API</a>, 
+      should be aware that Scala's 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a> 
+      (which VisualLangLab uses internally) assign a type called <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+      to parser-rules (and even the nodes that comprise them). Most of these documents avoid using 
+      that meaning of <i>parser</i>, but be careful when reading <a href="UsingTheAPI.html">Using the API</a>. 
+      The <a href="RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a> 
+      has more details.
+    </p>
+
+    <h2>Workflow and User Roles</h2>
+
+    <p>
+      Figure-1 below illustrates the development workflow, and shows the 
+      different ways in which different groups of people use the VisualLangLab 
+      software.
+    </p>
+
+    <p>
+      <img src="images/WorkflowAndRoles.png" /><br />
+      <i>Figure-1. Development workflow using VisualLangLab</i>
+    </p>
+
+    <h3>Grammar Expert</h3>
+
+    <p>
+      The grammar expert is responsible for developing and testing a parser. 
+      In the VisualLangLab context, a <i>parser</i> is not a piece of code, 
+      but an XML file containing a specification of the code. 
+      The parser is saved as an XML file (with suffix <i>vll</i>) that can 
+      be published for use by application developers. The grammar files can 
+      also be reopened in the IDE for reviewing, testing, or modification. 
+    </p>
+
+    <p>
+      Anyone with a knowledge of parsing concepts can be trained to develop 
+      and test parsers using the interface described in 
+      <a href="TheGUI.html">The GUI</a>. 
+      Manual testing, following prescribed test cases, 
+      is also possible without knowledge of programming. Development of 
+      automated test cases (e.g. using Javascript action-code or JUnit) 
+      however does require knowledge of programming, and is described in 
+      <a href="TestingParsers.html">Testing Parsers</a>.
+    </p>
+
+    <p>
+      <a href="TheGUI.html">The GUI</a> (the grammar editor) 
+      can be run by following the instructions in 
+      <a href="DownloadInstallAndRun.html">Download Install and Run</a>, and 
+      a grammar can be created or edited by following the instructions in 
+      <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
+      An understanding of the <a href="RelationshipWithScalaParserCombinators.html">Relationship 
+      with Scala Parser Combinators</a> provides a bridge to the Application developer's 
+      perspective.  
+    </p>
+
+    <h3>Application Developer</h3>
+
+    <p>
+      An application developer uses already available grammar files to create 
+      applications for specific requirements. While an applicaion developer 
+      may use <a href="TheGUI.html">The GUI</a> to understand and review the grammar, 
+      his primary focus is <a href="UsingTheAPI.html">Using the API</a> and the 
+      description of the <a href="ASTAndActionCode.html">AST and Action Code</a>. 
+    </p>
+
+    <p>
+      An application developer also needs to be an expert in the use of programming 
+      tools, have a good understanding of <a href="http://www.scala-lang.org/">Scala</a>, 
+      and have access to a domain expert 
+      who understands the application's requirements well.
+    </p>
+
+    <h3>Application User</h3>
+
+    <p>
+      The Application user is typically unaware of the constituents of his 
+      dedicated application, and the process that was used to design and 
+      develop it. The VisualLangLab runtime library and one or more grammar files 
+      are embedded in the product, 
+      and depending on the nature or purpose of the application it may or 
+      may not be necessary for the user to be aware of these factors.
+    </p>
+
+    <h2>Quick Start</h2>
+
+    <p>
+      The good way to quickly get an understand of VisualLangLab is to 
+      start up the IDE, review and modify the <a href="SampleGrammars.html">Sample Grammars</a> 
+      and <a href="TestingParsers.html">test the parsers</a>.
+    </p>
 
   </body>
 </html>

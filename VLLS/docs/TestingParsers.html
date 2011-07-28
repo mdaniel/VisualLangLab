@@ -7,12 +7,13 @@
     <h1>VisualLangLab - Testing Parsers</h1>
 
     <p>
-      The greatest advantage of VisualLangLab over other tools is ease of testing. 
+      The greatest advantage of <a href="http://vll.java.net">VisualLangLab</a> 
+      over other tools is ease of testing. 
       Every other parser development tool requires 
       a quite complex code-generation step that must be completed without 
       errors before the parser can be run for testing. 
-      But the grammar-tree in VisualLangLab is <i>executable</i> -- 
-      meaning it can be run <i>directly</i> without any code-generation or 
+      But the grammar-trees in VisualLangLab are <i>executable</i> -- 
+      meaning they can be run <i>directly</i> without any code-generation or 
       other manual activity. 
     </p>
 
@@ -44,8 +45,8 @@
       The approach shown above is tedious as it requires manual verification 
       of potentially complex data-structures. So while several approaches to 
       test automation will be described below, note that manual testing is 
-      very useful during active development -- particularly to support an 
-      iterative, incremental process.
+      very useful during prototyping or active development -- 
+      particularly to support an iterative, incremental process.
     </p>
 
     <h3>Divide and Conquer</h3>
@@ -60,7 +61,7 @@
       However, if a grammar-tree contains any <i>Reference</i> nodes, 
       execution will spill over to the other referred nodes. 
       This is essential behavior, being the mechanism by which large parsers 
-      are built up from smaller ones. There are a few important points to be 
+      are built up from smaller <i>parser-rules</i>. There are a few important points to be 
       remembered from this insight:
     </p>
 
@@ -69,22 +70,23 @@
           part being a grammar-tree (or a tree of grammar-trees)</li>
       <li>While recursion and mutual recursion can lead to elegant solutions, 
           they are often difficult to test, and should be avoided if possible</li>
-      <li>When testing a complete parser, make sure that the top-level grammar-tree
-          (the <i>entry point</i>) is displayed</li>
+      <li>When testing a complete parser, make sure that the top-level parser-rule
+          (or grammar-tree) is selected</li>
     </ul>
 
     <p>
-      Forgetting the last point above is a souce of much confusion during development and testing 
-      of parsers. The ComboBox for selection of grammar-trees lists their names 
+      Forgetting the last point above is a souce of much confusion during testing 
+      of parsers. The ComboBox for selection of parser-rules lists their names 
       alphabetically, so the grammar-tree displayed immediately after a new file 
-      is loaded is not necessarily the entry-point. To alleviate this problem, 
-      the top-level grammar-tree should be given a name with an intial capital letter. 
-      If all the other grammar-trees are given names beginning with lower-case 
-      letters, the top-level grammar-tree will always be at the top of the list 
+      is loaded is not necessarily the top-level parser-rule. To alleviate this problem, 
+      the top-level parser-rule should be given a name with an intial capital letter. 
+      If all the other parser-rules have names beginning with lower-case 
+      letters, the top-level parser-rule will always be at the top of the list 
       in the ComboBox, and be the first to display when the containing file is opened.
+      This convention is used in all the built-in <a href="SampleGrammars.html">Sample Grammars</a>.
     </p>
 
-    <h3>Test Input from Files</h3>
+    <h3>Getting Test Input from Files</h3>
 
     <p>
       Input for testing can also be obtained from a file instead of the 
@@ -94,7 +96,7 @@
       (next to the <i>Parse input</i> button). 
       When the <i>Parse file</i> button is clicked a file-chooser dialog 
       is presented. Selecting a file and clicking the file-chooser's 
-      <i>Open</i> button causes the parser to the run using text from 
+      <i>Open</i> button causes the parser to process input text from 
       the file.
     </p>
 
@@ -109,7 +111,7 @@
     <p>
       While a parser is being run the <i>Stop parsing</i> button 
       <img src="images/ToolBarButtonStopRun.gif" align="center" /> 
-      is enabled. This is not noticed during a typical test as the 
+      is enabled. This is not noticeable during a typical test as the 
       run ends very quickly, and the button returns to its usual 
       disabled state. However, a test run that appears to be running 
       for too long can be terminated by clicking this button.
@@ -118,26 +120,173 @@
     <h2>Automated Testing</h2>
 
     <p>
-     To be defined ...
+     A variety of approaches to automated testing are possible. 
+     The right choice for any particular parser should depend on 
+     complexity, size, frequency of regression tests, etc.
     </p>
 
-    <h3>Standard Tools</h3>
+    <h3>Wrapper with Action-Code</h3>
 
     <p>
-      To be defined ...
+      This simple yet highly effective approach uses an additional 
+      parser-rule to wrap <i>before</i> and <i>after</i> test-code around the 
+      grammar under test. Figure-2 below illustrates the technique being used 
+      to test the built-in <i>ArithExpr with action-code</i> grammar. 
+      The grammar-tree shown (<i>tester</i>) is the additional <i>wrapper</i> 
+      created only for testing. Given it's limited purpose, it merely invokes 
+      <i>expr</i> (the top-level parser-rule of the parser under test) using a 
+      <i>Reference</i> node. It also 
+      uses a Javascript function as action-code to wrap testing logic around the 
+      invocation of <i>expr</i>. 
     </p>
 
-
-    <h3>JUnit <i>et al</i> and VisualLangLab API</h3>
+    <img src="images/TestingWithActionCode1.png" /><br/>
+    <i>Figure-2. Wrapper with action-code for testing</i>
 
     <p>
-      To be defined ...
+      Clicking the <i>Parser input</i> button (1) invokes <i>tester</i>, which in 
+      turn triggers the following series of actions: 
     </p>
 
-    <h3>Action Code</h3>
+    <ul>
+      <li>the setup/before code block (2) is run</li> 
+      <li>this causes the input for the test (3) to be placed 
+          in the <i>Parser Test Input</i> area</li> 
+      <li>the parser under test is invoked (which parses the input provided in 
+          the preceding step)</li>
+      <li>finally, the <i>after</i> code block (4) is run. This part validates the 
+          parser's output, and prints out a suitable message</li>
+    </ul>
 
     <p>
-      To be defined ...
+      The result of the test (<i>Ok</i> in this case) can be seen at (5) in the 
+      <i>Parser Log</i> area. This is a simple example, but the technique can be 
+      extended to run an exhaustive set of tests as well. The example in Figure-3 
+      below uses a 2-layered tester to run a set of separate tests. 
+    </p>
+
+    <img src="images/TestingMultWithActionCode1.png" /><br/>
+    <i>Figure-3. A 2-layer wrapper for multiple tests</i>
+
+    <p>
+      In this example <i>testMain</i> the top-level wrapper contains a sequence 
+      that references several tests (for division, subtraction, multiplication, 
+      and addition respectively). The action code at this level just sets up the 
+      input required for all the tests.
+      One of the 2nd-layer wrappers is depicted in Figure-4 below. These are the 
+      actual tests (each invokes a specific parser for testing), and checks the 
+      result against the expected value.
+    </p>
+
+    <img src="images/TestingMultOneWithActionCode1.png" /><br/>
+    <i>Figure-4. An example 2nd-layer wrapper</i>
+
+    <p>
+      In this example the outputs at both levels are just printed 
+      (see Figure-3 above), so manual inspection is still needed. 
+      In a real-life automated test scenario, 
+      the 2nd-level parsers should return a true/false value to 
+      indicate success or failure, and the top-level wrapper would inspect 
+      the individual results and consolidate the results into a report. 
+    </p>
+
+    <h3>Using JUnit and the VisualLangLab API</h3>
+
+    <p>
+      The following code is a standalone JUnit test (in Scala) to validate the 
+      <i>ArithExpr</i> parser. 
+      Before running the test the grammar file must be written out to an XML file 
+      by invoking <i>File -> SaveAs</i> from the main menu, and entering <i>ArithExpr.vll</i> 
+      (the name used in the code) into the SaveAs dialog box. 
+      Information on using the VisualLangLab API in client programs can be found in 
+      <a href="UsingTheAPI.html">Using the API</a>. 
+    </p>
+
+<pre><code>import java.io.File
+import org.junit.Before
+import org.junit.Test
+import org.junit.Assert._
+import org.junit.runner.JUnitCore
+import scala.util.parsing.input.CharSequenceReader
+import vll.core.VllParsers
+import scala.collection.JavaConversions._
+
+class ApiJUnitTest01 {
+  def areSameAST(a: Any, b: Any): Boolean = (a, b) match {
+    case (aa: Array[_], bb: Array[_]) =&gt; aa.length == bb.length && 
+      aa.zip(bb).forall(p =&gt; areSameAST(p._1, p._2))
+    case (aa: List[_], bb: List[_]) =&gt; aa.length == bb.length && 
+      aa.zip(bb).forall(p =&gt; areSameAST(p._1, p._2))
+    case (None, None) =&gt; true
+    case (aa: Some[_], bb: Some[_]) =&gt; areSameAST(aa.get, bb.get)
+    case (aa: Pair[_,_], bb: Pair[_,_]) =&gt; areSameAST(aa._1, bb._1) && areSameAST(aa._2, bb._2)
+    case (_, _) =&gt; a == b
+  }
+  var parser: VllParsers#Parser[_] = null
+  def parse(s: String) = {
+    val pr = parser(new CharSequenceReader(s))
+    if (pr.successful)
+      pr.get
+    else
+      throw new Exception("Parser failure")
+  }
+
+  @Before def setUp() {
+    val vll = VllParsers.fromFile(new File("./ArithExpr.vll"))
+    parser = vll.phrase(vll.getParserFor("Expr"))
+  }
+
+  @Test def addition() {
+    val parseResult = parse("33 + 55")
+    val expectedValue = Array(Array(Pair(0, "33"), Nil), List(Pair(0, Array(Pair(0, "55"), Nil))))
+    assertTrue(areSameAST(parseResult, expectedValue))
+  }
+  @Test def subtraction() {
+    val parseResult = parse("63 - 21")
+    val expectedValue = Array(Array(Pair(0, "63"), Nil), List(Pair(1, Array(Pair(0, "21"), Nil))))
+    assertTrue(areSameAST(parseResult, expectedValue))
+  }
+  @Test def multiplication() {
+    val parseResult = parse("11 * 12")
+    val expectedValue = Array(Array(Pair(0, "11"), List(Pair(0, Pair(0, "12")))), Nil)
+    assertTrue(areSameAST(parseResult, expectedValue))
+  }
+  @Test def division() {
+    val parseResult = parse("132 / 11")
+    val expectedValue = Array(Array(Pair(0, "132"), List(Pair(1, Pair(0, "11")))), Nil)
+    assertTrue(areSameAST(parseResult, expectedValue))
+  }
+}
+
+object ApiJUnitTest01 {
+  def main(args: Array[String]) {
+    val res = JUnitCore.runClasses(classOf[ApiJUnitTest01])
+    println(res.getFailureCount)
+    res.getFailures.foreach(println)
+  }
+}
+</code></pre>
+
+    <p>
+      JUnit tests are best run on grammars without embedded action-code. 
+      The Scala and Javascript interpreters have concurrency behaviors 
+      that are not handled correctly by the current version of VisualLangLab 
+      when used with JUnit tests. 
+    </p>
+
+    <p>
+      JUnit tests can be written in Java as well, if awkward syntax is acceptable. 
+      However, this is best left to users with a knowledge of how 
+      Scala names and types (particularly those in the package 
+      <code>scala.util.parsing.combinator</code> map to names in Java. 
+    </p>
+
+    <h3>Standard GUI-Testing Tools</h3>
+
+    <p>
+      Since <a href="http://vll.java.net">VisualLangLab</a>'s GUI is based 
+      on Java/Swing, many free and commercial GUI testing products may be 
+      used very effectively.  
     </p>
 
   </body>

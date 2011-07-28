@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Relationship with Scala Parser Combinators</title>
+  </head>
+
+  <body>
+    <h1>VisualLangLab - Relationship with Scala Parser Combinators</h1>
+
+    <p>
+      The UML class diagram in Figure-1 below is an approximate but useful abstraction of 
+      VisualLangLab's relationship with Scala's 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>. Think of the 
+      GUI as an instance of a class derived from 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>, 
+      and of the grammar-trees as members of that class defined as follows: 
+    </p> 
+
+<pre><code>    lazy val aParser: <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">scala.util.parsing.combinator.Parser</a>[Any] = ...</code></pre>
+
+    <p>
+      We use <i>lazy val</i> instead of the more usual <i>def</i> as the container class 
+      also mixes-in the 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a> trait, 
+      and any of the grammar-trees can be marked as packrat parsers by the user 
+      (see <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>). 
+      The relationships in the figure are obviously 
+      incorrect in a strictly technical sense, but they represent the 
+      capabilities and functions of the entities well. 
+      An authoritative, <i>strictly technical</i> description of the entities and their relationships 
+      can be found in <a href="UsingTheAPI.html">Using the API</a>
+    </p>
+
+    <p>
+      <img src="images/RelationshipWithScalaParserCombinators.png" /><br />
+      <i>Figure-1. Class diagram relating VisualLangLab with Scala classes</i>
+    </p>
+
+    <p>
+      So, in the terms of the <i>Essential Jargon</i> in the 
+      <a href="UserGuide.html">User Guide</a>, the GUI is a <i>parser</i> while 
+      members like <code>aParser</code> are <i>parser-rule</i>s that 
+      bring <i>grammar-tree</i>s to life. The line of Scala 
+      code above shows that <code>aParser</code> is of type <code>Parser</code> 
+      which of course is different from the idea of <i>parser</i> in the <i>Essential Jargon</i>. 
+      The spelling of the two terms has a subtle difference -- the case of the inital 
+      letter. In the rest of this document we will use <i>Parser</i> (with an 
+      initial capital) consistently to mean Scala's
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>, 
+      not the <i>Essential Jargon</i>'s <i>parser</i>. 
+    </p> 
+
+    <p>
+      The line of Scala code shown above seems to imply that VisualLangLab generages 
+      and compiles source-code at run-time. That is not so. Because of the way 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">combinator</a>s 
+      work, it is possible to weave together a <i>parser-rule</i> using the 
+      information available in the <i>grammar-tree</i> without generating or compiling any code. 
+    </p> 
+
+    <h2>Grammar-Tree to Parser-Rule</h2>
+
+    <p>
+      The toolkit that enables VisualLangLab to produce a <i>parser-rule</i> from information 
+      in a <i>grammar-tree</i> is the set of methods of the three Scala classes in Figure-1 above 
+      (<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>, 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>, and 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>). 
+      VisualLangLab uses those methods, and in many cases provides its own versions or value additions 
+      to these methods. 
+    </p>
+
+    <p>
+      VisualLangLab does not depend on 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>, 
+      but provides its own lexer-like capabilities for handling tokens (literal and regex), whitespace, and comments. 
+      More information on this aspect is given below. 
+    </p> 
+
+    <h3>Sequence and Choice vs "~" and "|" Combinators</h3>
+
+    <p>
+      The Sequence node is converted into a <code>Parser</code> 
+      that returns an <code>Array[Any]</code> instead of instances of 
+      the class "~". Arrays are simpler to handle, and lead to less complex code 
+      in actions or application programs. It also handles the <i>drop</i> annotation 
+      applied to its child nodes, combining them with the "<~", "~>", and "~" functions 
+      as required. It also handles the <i>commit</i> annotation on a child node.
+    </p> 
+
+    <p>
+      The Choice node is converted into a <code>Parser</code> 
+      that returns a <code>Pair[Int,Any]</code>. The first member is a 
+      (0-based) index of the matching alternative. 
+      This makes it easier (or even possible) for actions to understand and use the result 
+      of parsing. 
+    </p> 
+
+    <h3>Trace Annotation vs log()</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h3>Node Names</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h2>The Built-In Lexer</h2>
+
+    <p>
+      Parsers that use tokens defined with regular-expression patterns are typically based on 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>. 
+      Unfortunately, this class does not really use a lexer, and the <code>Parser</code>s 
+      produced by its <i>literal(String)</i> and <i>regex(Regex)</i> methods do not behave 
+      as sometimes required (or expected). Because of this, VisualLangLab uses its own 
+      internal lexer -- simple and somewhat slow, but functions as lexers normally do. 
+    </p> 
+
+    <h2>Error Checking</h2>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h3>Bad Regex and Literal Definitions</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h3>Parser-Rules that Match the Empty String</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h3>Nodes with Bad Action-Code</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h2>Parser Run-Time Elements</h2>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h3>Whitespace and Comments</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h3>Trace All</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h3>Error Reporting</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+    <h3>Input Management</h3>
+
+    <p>
+      To be defined ... 
+    </p> 
+
+  </body>
+</html>
