@@ -67,7 +67,7 @@ class VllParsers extends Parsers with PackratParsers {
     tokenBank.clear()
     ruleBank.clear()
     commentRe = ""
-    whiteSpaceRe = "\\s+"
+    whiteSpaceRe = "\\\\s+"
     updateSkipExpression()
   }
   
