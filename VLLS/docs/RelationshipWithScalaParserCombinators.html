@@ -10,27 +10,9 @@
     <h1>VisualLangLab - Relationship with Scala Parser Combinators</h1>
 
     <p>
-      The UML class diagram in Figure-1 below is an approximate but useful abstraction of 
+      The UML class diagram in Figure-1 below is an abstraction of 
       VisualLangLab's relationship with Scala's 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>. Think of the 
-      GUI as an instance of a class derived from 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>, 
-      and of the grammar-trees as members of that class defined as follows: 
-    </p> 
-
-<pre><code>    lazy val aParser: <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">scala.util.parsing.combinator.Parser</a>[Any] = ...</code></pre>
-
-    <p>
-      We use <i>lazy val</i> instead of the more usual <i>def</i> as the container class 
-      also mixes-in the 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a> trait, 
-      and any of the grammar-trees can be marked as packrat parsers by the user 
-      (see <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>). 
-      The relationships in the figure are obviously 
-      incorrect in a strictly technical sense, but they represent the 
-      capabilities and functions of the entities well. 
-      An authoritative, <i>strictly technical</i> description of the entities and their relationships 
-      can be found in <a href="UsingTheAPI.html">Using the API</a>
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>. 
     </p>
 
     <p>
@@ -39,11 +21,28 @@
     </p>
 
     <p>
-      So, in the terms of the <i>Essential Jargon</i> in the 
-      <a href="UserGuide.html">User Guide</a>, the GUI is a <i>parser</i> while 
+      The GUI owns an instance of the class <code>VLLParsers</code> which extends  
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> with 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>, 
+      and the grammar-trees effectively become members of that instance as though defined as follows: 
+    </p> 
+
+<pre><code>    lazy val aParser: <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">scala.util.parsing.combinator.Parser</a>[Any] = ...</code></pre>
+
+    <p>
+      However, because of the way Scala's 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a> 
+      work, it is not necessary to generate or compile any code under the hood. 
+    </p> 
+
+    <p>
+      In terms of the <i>Essential Jargon</i> in the 
+      <a href="UserGuide.html">User Guide</a>, the GUI 
+      (by owning an instance of <code>VLLParsers</code>) is a <i>parser</i>, while 
       members like <code>aParser</code> are <i>parser-rule</i>s that 
       bring <i>grammar-tree</i>s to life. The line of Scala 
-      code above shows that <code>aParser</code> is of type <code>Parser</code> 
+      code above shows that <code>aParser</code> is of type 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
       which of course is different from the idea of <i>parser</i> in the <i>Essential Jargon</i>. 
       The spelling of the two terms has a subtle difference -- the case of the inital 
       letter. In the rest of this document we will use <i>Parser</i> (with an 
@@ -53,24 +52,81 @@
     </p> 
 
     <p>
-      The line of Scala code shown above seems to imply that VisualLangLab generages 
-      and compiles source-code at run-time. That is not so. Because of the way 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">combinator</a>s 
-      work, it is possible to weave together a <i>parser-rule</i> using the 
-      information available in the <i>grammar-tree</i> without generating or compiling any code. 
-    </p> 
+      This abstraction is not 100% technically accurate, but represents the 
+      capabilities and functions of the resulting assembly well. 
+      More details, along with a programming-level view 
+      can be found in <a href="UsingTheAPI.html">Using the API</a>
+    </p>
 
     <h2>Grammar-Tree to Parser-Rule</h2>
 
     <p>
       The toolkit that enables VisualLangLab to produce a <i>parser-rule</i> from information 
-      in a <i>grammar-tree</i> is the set of methods of the three Scala classes in Figure-1 above 
-      (<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>, 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>, and 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>). 
-      VisualLangLab uses those methods, and in many cases provides its own versions or value additions 
-      to these methods. 
+      in a <i>grammar-tree</i> is the set of methods of the classes <code>Parsers</code>, 
+      <code>PackratParsers</code>, and <code>Parser</code> as augmented by 
+      the methods in <code>Parsers</code>. The following description highlights the 
+      significant changes made by VisualLangLab. 
     </p>
+
+    <h3>Sequence Node vs "~" Combinator</h3>
+
+    <p>
+      The Sequence node is converted into a 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+      that returns an <code>Array[Any]</code> instead of instances of 
+      the class named "~". Arrays are simpler to handle, and lead to less complex code 
+      in actions or application programs (see examples in 
+      <a href="UsingTheAPI.html">Using the API</a>). A 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+      produced from a Sequence node also handles the <i>drop</i> annotation 
+      on child nodes, combining the child nodes with the "<~", "~>", and "~" functions 
+      as required. The generated 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+      also handles the <i>commit</i> annotation on a child node.
+    </p> 
+
+    <h3>Choice Node vs "|" Combinator</h3>
+
+    <p>
+      The Choice node is converted into a 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+      that returns a <code>Pair[Int,Any]</code>. The first member is a 
+      (0-based) index of the matching alternative. 
+      This is the key to developing the parser separately from AST handling code 
+      (see examples in <a href="UsingTheAPI.html">Using the API</a>). 
+      Developers using the Scala API's "|" combinator directly can not separate the 
+      parser from action-code and <i>must</i> provide some 
+      action code co-located with each alternative. 
+    </p> 
+
+    <h3>Trace Annotation vs log()</h3>
+
+    <p>
+      VisualLangLab provides a <i>trace</i> annotation 
+      (see <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>) that 
+      allows you to conveniently enable tracing of any parser-rule or part of a 
+      parser-rule. The output generated by this facility is properly indented 
+      to indicate nesting of traced levels, and is more helpful than the <code>log()</code> method in 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>. 
+      The <i>trace</i> annotation on any grammar-tree node is toggled by using the grammar-tree's pop-up context menu.
+    </p> 
+
+    <h3>Node Names</h3>
+
+    <p>
+      VisualLangLab gives every grammar-tree node a unique name based on the name of the 
+      <i>parser-rule</i> and the node's position in the tree (see Figure-2 below). 
+      The names are used for identifying nodes in error reports or trace logs. 
+      To reduce clutter <a href="TheGUI.html">The GUI</a> does not normally display node names, 
+      but they can be made visible by selecting <i>View -> Full names</i> from the main menu. 
+    </p> 
+
+    <p>
+      <img src="images/GrammarNodeNaming.png" /><br />
+      <i>Figure-2. Node names in a grammar-tree</i>
+    </p>
+
+    <h2>The Built-In Lexer</h2>
 
     <p>
       VisualLangLab does not depend on 
@@ -78,39 +134,6 @@
       but provides its own lexer-like capabilities for handling tokens (literal and regex), whitespace, and comments. 
       More information on this aspect is given below. 
     </p> 
-
-    <h3>Sequence and Choice vs "~" and "|" Combinators</h3>
-
-    <p>
-      The Sequence node is converted into a <code>Parser</code> 
-      that returns an <code>Array[Any]</code> instead of instances of 
-      the class "~". Arrays are simpler to handle, and lead to less complex code 
-      in actions or application programs. It also handles the <i>drop</i> annotation 
-      applied to its child nodes, combining them with the "<~", "~>", and "~" functions 
-      as required. It also handles the <i>commit</i> annotation on a child node.
-    </p> 
-
-    <p>
-      The Choice node is converted into a <code>Parser</code> 
-      that returns a <code>Pair[Int,Any]</code>. The first member is a 
-      (0-based) index of the matching alternative. 
-      This makes it easier (or even possible) for actions to understand and use the result 
-      of parsing. 
-    </p> 
-
-    <h3>Trace Annotation vs log()</h3>
-
-    <p>
-      To be defined ... 
-    </p> 
-
-    <h3>Node Names</h3>
-
-    <p>
-      To be defined ... 
-    </p> 
-
-    <h2>The Built-In Lexer</h2>
 
     <p>
       Parsers that use tokens defined with regular-expression patterns are typically based on 
@@ -121,58 +144,39 @@
       internal lexer -- simple and somewhat slow, but functions as lexers normally do. 
     </p> 
 
+    <h3>Whitespace and Comments</h3>
+
+    <p>
+      Although 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> 
+      is not used, a similar mechanism is used for handling whitespace and comments. 
+      More details can be found in <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
+    </p> 
+
     <h2>Error Checking</h2>
 
     <p>
-      To be defined ... 
-    </p> 
-
-    <h3>Bad Regex and Literal Definitions</h3>
-
-    <p>
-      To be defined ... 
+      <a href="TheGUI.html">The GUI</a> checks all parser-rules for certain types of errors, 
+      and will flag offending grammar-tree nodes by overlaying them with the error mark 
+      (<img src="images/GrammarIconErrorMark.gif" align="center" />). 
+      The tool-tip text of the node is altered to indicate the source of the problem. 
+      The following types of error are detected:
     </p> 
 
     <h3>Parser-Rules that Match the Empty String</h3>
 
     <p>
-      To be defined ... 
+      Using parser-rules that can match the empty string can lead to difficult-to-fix 
+      problems. Redesign your grammar to use multiplicity in a suitable way and avoid 
+      the need for such parser-rules. 
     </p> 
 
     <h3>Nodes with Bad Action-Code</h3>
 
     <p>
-      To be defined ... 
-    </p> 
-
-    <h2>Parser Run-Time Elements</h2>
-
-    <p>
-      To be defined ... 
-    </p> 
-
-    <h3>Whitespace and Comments</h3>
-
-    <p>
-      To be defined ... 
-    </p> 
-
-    <h3>Trace All</h3>
-
-    <p>
-      To be defined ... 
-    </p> 
-
-    <h3>Error Reporting</h3>
-
-    <p>
-      To be defined ... 
-    </p> 
-
-    <h3>Input Management</h3>
-
-    <p>
-      To be defined ... 
+      Action code associated with any grammar-tree node 
+      (see <a href="ASTAndActionCode.html">AST and Action Code</a>) is checked for correct 
+      syntax, and any errors are flagged. 
     </p> 
 
   </body>

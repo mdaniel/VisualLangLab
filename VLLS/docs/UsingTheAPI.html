@@ -11,10 +11,12 @@
 
     <p>
       The API itself is quite small and simple, and is best understood in the 
-      context of a real example. 
+      context of a real example. Since the AST contains standard 
+      Scala data structures, an API client program is most conveniently written 
+      in Scala. A Java version of the same program is also shown for comparison. 
     </p>
 
-    <h2>A Quick Example</h2>
+    <h2>A Quick Example (in Scala)</h2>
 
     <p>
       The following code segment uses the API to load the programmatically use 
@@ -99,7 +101,7 @@ import vll.core.VllParsers
       familiarity with that part of the Scala API is also an important prerequisite. 
     </p>
 
-    <h2>Handling the AST</h2>
+    <h3>Handling the AST</h3>
 
     <p>
       The description in this part is not related to the VisualLangLab API. 
@@ -170,7 +172,7 @@ import vll.core.VllParsers
       <a href="ASTAndActionCode.html">AST and Action Code.html</a>
     </p>
 
-    <h2>Running the Code</h2>
+    <h3>Running the Code</h3>
 
     <p>
       The complete code of the example is shown below. Apart from the code you will 
@@ -224,6 +226,87 @@ object ArithExprWithAPI {
           msg, where.pos.line, where.pos.column)
     }
   }
+}
+</code></pre>
+
+    <h2>A Java Version</h2>
+
+    <p>
+      The Java version shown below uses the same method names as the Scala 
+      version to facilitate comparison with the Scala version. The Scala 
+      libraries and the VisualLangLab JAR file must be on the classpath 
+      when you run this program. As with the Scala version, the grammar-file 
+      <i>ArithExpr.vll</i> is expected to be in the working directory.
+    </p>
+
+    <p>
+      The Java version is 63 lines compared with 41 lines for the Scala program, 
+      but the loss of clarity and intuitiveness of the Java version 
+      (when handling Scala types) is the main disadvantage. 
+    </p>
+
+<pre><code>import java.io.File;
+import scala.Tuple2;
+import scala.collection.immutable.List;
+import scala.util.parsing.input.CharSequenceReader;
+import vll.core.VllParsers;
+
+public class ArithExprJavaDemo {
+    
+    static Float evalFactorAST(Object ast) {
+        Tuple2&lt;Integer, Object&gt; pair = (Tuple2&lt;Integer, Object&gt;) ast;
+        Float result = -1f;
+        if (pair._1.equals(new Integer(0))) {
+            result =  Float.parseFloat((String)pair._2);
+        } else if (pair._1.equals(new Integer(1))) {
+            result = evalExprAST(pair._2);
+        }
+        return result;
+    }
+  
+    static Float evalExprAST(Object ast) {
+        Object[] arr = (Object[]) ast;
+        Float result = evalTermAST(arr[0]);
+        List&lt;Object&gt; aList = (List&lt;Object&gt;) arr[1];
+        for (int i = 0; i &lt; aList.length(); ++i) {
+            Tuple2&lt;Integer, Object&gt; pair = (Tuple2&lt;Integer, Object&gt;) aList.apply(i);
+            if (pair._1.equals(new Integer(0))) {
+                result += evalTermAST(pair._2);
+            } else if (pair._1.equals(new Integer(1))) {
+                result -= evalTermAST(pair._2);
+            }
+        }
+        return result;
+    }
+  
+    static Float evalTermAST(Object ast) {
+        Object[] arr = (Object[]) ast;
+        Float result = evalFactorAST(arr[0]);
+        List&lt;Object&gt; aList = (List&lt;Object&gt;) arr[1];
+        for (int i = 0; i &lt; aList.length(); ++i) {
+            Tuple2&lt;Integer, Object&gt; pair = (Tuple2&lt;Integer, Object&gt;) aList.apply(i);
+            if (pair._1.equals(new Integer(0))) {
+                result *= evalFactorAST(pair._2);
+            } else if (pair._1.equals(new Integer(1))) {
+                result /= evalFactorAST(pair._2);
+            }
+        }
+        return result;
+    }
+  
+    public static void main(String[] args) {
+        String input = "(3 + 5) * (8 - 4)";
+        VllParsers vll = VllParsers.fromFile(new File("ArithExpr.vll"));
+        VllParsers.Parser phraseParser = vll.phrase(vll.getParserFor("Expr"));
+        VllParsers.ParseResult&lt;Object&gt; parseResult = phraseParser.apply(new CharSequenceReader(input));
+        if (parseResult.successful()) {
+            Object ast = parseResult.get();
+            Float result = evalExprAST(ast);
+            System.out.println(result);
+        } else {
+            System.out.println(parseResult);
+        }
+    }
 }
 </code></pre>
 
