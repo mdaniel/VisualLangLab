@@ -247,7 +247,7 @@ class VllParsers extends Parsers with PackratParsers {
         val in2 = if (spaces > 0) in.drop(spaces) else in
         val n = localTokenMatcher(in2)
         if (n > 0)
-          Success(in2.source.subSequence(0, n).asInstanceOf[String], in2.drop(n))
+          Success(in2.source.subSequence(in2.offset, in2.offset + n).asInstanceOf[String], in2.drop(n))
         else
           Failure(failureMsg1(node.nodeName, tokenName), in)
       })
