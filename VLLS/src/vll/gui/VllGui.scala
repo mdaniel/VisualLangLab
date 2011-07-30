@@ -381,7 +381,8 @@ class VllGui extends MainFrame with ActionListener {
           case pattern(name, value) =>
             if (parsers.tokenBank contains name) {
               Dialog.showMessage(splitPane, "A token named '" + name + "' already exists", title, Dialog.Message.Error, null)
-            } else if (parsers.tokenBank.valuesIterator.exists(_.equals(if (isRegex) Right(value) else Left(value)))) {
+            } else if (parsers.tokenBank.exists(p => {(p._1.endsWith("_") == name.endsWith("_")) &&
+                  p._2.equals(if (isRegex) Right(value) else Left(value))})) {
               Dialog.showMessage(splitPane, "Another token with value '" + value + "' exists", title, Dialog.Message.Error, null)
             } else {
               if (isRegex) {
