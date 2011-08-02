@@ -736,7 +736,7 @@ class VllGui extends MainFrame with ActionListener {
   preferredSize = new Dimension(frameWidth, frameHeight)
 
   var lastPoppedName = ""
-  val ruleChooser = new JComboBox()
+  val ruleChooser = new JComboBox[String]()
   ruleChooser.addActionListener(this)
   var isDirty = false
   val parsers = new ParsingActor(this)

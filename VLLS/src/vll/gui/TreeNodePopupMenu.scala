@@ -54,6 +54,9 @@ class TreeNodePopupMenu(val ruleTreePanel: RuleTreePanel) extends JPopupMenu {
     errorMsg.setEnabled(!isRootNode)
     errorMsg.setSelected(errorMsg.isEnabled && selectedNode.errorMessage == "")
 
+    description.setEnabled(selectedNode.pNode.isInstanceOf[SequenceNode] || selectedNode.pNode.isInstanceOf[ChoiceNode] || 
+        selectedNode.pNode.isInstanceOf[RepSepNode] || selectedNode.pNode.isInstanceOf[PredicateNode])
+
     val mv = Array(multOne, multZeroOrOne, multZeroOrMore, multOneOrMore, multNot, multGuard)
     mv(selectedNode.multiplicity.id).setSelected(true)
     multOne.setEnabled(!selectedNode.pNode.isInstanceOf[RepSepNode])
@@ -180,6 +183,10 @@ class TreeNodePopupMenu(val ruleTreePanel: RuleTreePanel) extends JPopupMenu {
   val errorMsg = new JMenuItem("Error message")
   add(errorMsg)
   errorMsg.addActionListener(ruleTreePanel)
+
+  val description = new JMenuItem("Description")
+  add(description)
+  description.addActionListener(ruleTreePanel)
   addSeparator()
 
   val traceNode = new JCheckBoxMenuItem("Trace")

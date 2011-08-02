@@ -27,6 +27,7 @@ abstract sealed class RuleTreeNode (
 ) extends mutable.ArrayBuffer[RuleTreeNode] {
   val seqNbr = RuleTreeNode.getSeqNbr
   var errorMessage = ""
+  var description = ""
   var drop = false
   var trace = false
   var parent: RuleTreeNode = null

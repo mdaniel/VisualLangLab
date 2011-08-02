@@ -66,6 +66,14 @@ class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel
     }
   }
   
+  def setDescription() {
+    Dialog.showInput(guiTop, "Enter Description", "Node Description", Dialog.Message.Question,
+                     null, Array[String](), selectedNode.description) match {
+      case Some(descr) => selectedNode.description = descr.asInstanceOf[String]
+      case None => 
+    }
+  }
+  
   def chooseToken(): Option[GuiNode] = {
     if (hub.tokenBank.isEmpty) {
       Dialog.showMessage(guiTop, "No tokens defined yet", "Add token", Dialog.Message.Info, null)
@@ -177,17 +185,9 @@ class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel
           guiTop.isDirty = true; changeToRoot(selectedNode)
       case treeNodePopupMenu.multGuard => selectedNode.multiplicity = Multiplicity.Guard; //theModel.nodeChanged(selectedNode)
           guiTop.isDirty = true; changeToRoot(selectedNode)
-/*       case treeNodePopupMenu.moveUp => val idx = parent.getIndex(selectedNode)
-        parent.remove(selectedNode)
-        parent.insert(selectedNode, idx - 1)
-          theModel.nodeStructureChanged(parent)
-          guiTop.isDirty = true
-      case treeNodePopupMenu.moveDown => val idx = parent.getIndex(selectedNode)
-        parent.remove(selectedNode)
-        parent.insert(selectedNode, idx + 1)
-          theModel.nodeStructureChanged(parent)
-          guiTop.isDirty = true
- */      case treeNodePopupMenu.errorMsg => setErrorMessage()
+      case treeNodePopupMenu.errorMsg => setErrorMessage()
+        theModel.nodeChanged(selectedNode)
+      case treeNodePopupMenu.description => setDescription()
         theModel.nodeChanged(selectedNode)
       case treeNodePopupMenu.commitPoint =>
         val seqParent = parent.pNode.asInstanceOf[SequenceNode]

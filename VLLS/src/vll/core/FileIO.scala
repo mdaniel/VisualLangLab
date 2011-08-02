@@ -81,6 +81,8 @@ class FileIO(hub: VllParsers) {
         sb.append("Mult=\"%s\" ".format(t.multiplicity))
       if (!t.errorMessage.isEmpty)
         sb.append("ErrMsg=\"%s\" ".format(encode(t.errorMessage)))
+      if (!t.description.isEmpty)
+        sb.append("Description=\"%s\" ".format(encode(t.description)))
       if (t.drop)
         sb.append("Drop=\"true\" ")
       if (t.isInstanceOf[SequenceNode] && t.asInstanceOf[SequenceNode].commitPoint != -1)
@@ -228,6 +230,8 @@ class FileIO(hub: VllParsers) {
         val mult = if (multNode.isEmpty) "1" else (node \ "@Mult").toString
         val errMsgNode = (node \ "@ErrMsg")
         val errMsg = if (errMsgNode.isEmpty) "" else decode(errMsgNode.toString)
+        val descriptionNode = (node \ "@Description")
+        val description = if (descriptionNode.isEmpty) "" else decode(descriptionNode.toString)
         val dropNode = (node \ "@Drop")
         val drop = !dropNode.isEmpty
         val actionTextNode = (node \ "@ActionText")
@@ -267,6 +271,7 @@ class FileIO(hub: VllParsers) {
         //printf("  Sequence: %s%n", mult)
         aNode = /* new  */SequenceNode(strMap(mult))
         aNode.errorMessage = errMsg
+        aNode.description = description
         aNode.actionText = actionText
         aNode.drop = drop
         aNode.parent = parent
@@ -282,6 +287,7 @@ class FileIO(hub: VllParsers) {
         //printf("  Sequence: %s%n", mult)
         aNode = /* new  */RepSepNode(strMap(mult))
         aNode.errorMessage = errMsg
+        aNode.description = description
         aNode.actionText = actionText
         aNode.drop = drop
         aNode.parent = parent
@@ -296,6 +302,7 @@ class FileIO(hub: VllParsers) {
         //val distinguish = !distinguishNode.isEmpty
         aNode = /* new  */ChoiceNode(strMap(mult))
         aNode.errorMessage = errMsg
+        aNode.description = description
         aNode.actionText = actionText
         aNode.drop = drop
 //        aNode.asInstanceOf[ChoiceNode].distinguish = distinguish
@@ -311,6 +318,7 @@ class FileIO(hub: VllParsers) {
         //val distinguish = !distinguishNode.isEmpty
         aNode = /* new  */PredicateNode()
         aNode.errorMessage = errMsg
+        aNode.description = description
         aNode.actionText = actionText
         aNode.drop = drop
 //        aNode.asInstanceOf[ChoiceNode].distinguish = distinguish

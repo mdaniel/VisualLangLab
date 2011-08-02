@@ -49,6 +49,8 @@ class GuiNode private (val pNode: RuleTreeNode) extends MutableTreeNode
   def nodeName = pNode.nodeName
   def errorMessage = pNode.errorMessage
   def errorMessage_=(msg: String) {pNode.errorMessage = msg}
+  def description = pNode.description
+  def description_=(descr: String) {pNode.description = descr}
   def drop = pNode.drop
   def drop_=(d: Boolean) {pNode.drop = d}
   def multiplicity = pNode.multiplicity
@@ -78,11 +80,11 @@ class GuiNode private (val pNode: RuleTreeNode) extends MutableTreeNode
         case ref: ReferenceNode => if (full) (ref.ruleName + "@" + ref.nodeName) else ref.ruleName
         case lit: LiteralNode => if (full) (lit.literalName + "@" + lit.nodeName) else lit.literalName
         case reg: RegexNode => if (full) (reg.regexName + "@" + reg.nodeName) else reg.regexName
-        case seq: SequenceNode => if (full) seq.nodeName else "(Sequence)"
+        case seq: SequenceNode => if (full) (seq.description + " @" + seq.nodeName) else seq.description
         case rn: RootNode => if (rn.isPackrat) rn.name + " (Packrat)" else rn.name
-        case choice: ChoiceNode => if (full) choice.nodeName else "(Choice)"
-        case rs: RepSepNode => if (full) rs.nodeName else "(RepSep)"
-        case pn: PredicateNode => if (full) pn.nodeName else "(Predicate)"
+        case choice: ChoiceNode => if (full) (choice.description + " @" + choice.nodeName) else choice.description
+        case rs: RepSepNode => if (full) (rs.description + " @" + rs.nodeName) else rs.description
+        case pn: PredicateNode => if (full) (pn.description + " @" + pn.nodeName) else pn.description
       }}
   def nodeAnnotations(showEpsOk: Boolean): String = {
     val commit = (pNode.parent ne null) && pNode.parent.isInstanceOf[SequenceNode] &&
