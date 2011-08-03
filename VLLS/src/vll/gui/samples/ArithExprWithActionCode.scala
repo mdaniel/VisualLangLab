@@ -65,9 +65,9 @@ Output: 20
   </Tokens>
   <Parsers>
     <Parser Name="Expr">
-        <Sequence ActionText="function (arg) {&#xA;  if (!arg) {&#xA;    return;&#xA;  }&#xA;  var expr = arg[0];&#xA;  var list = arg[1];&#xA;  for (var i = 0; i &lt; list.length; ++i) {&#xA;    var pair = list[i];&#xA;    switch (pair[0]) {&#xA;    case 0:&#xA;      expr += pair[1]; break;&#xA;    case 1:&#xA;      expr -= pair[1]; break;&#xA;    }&#xA;  }&#xA;  return expr;&#xA;}">
+        <Sequence ActionText="function (arg) {&#xA;  if (!arg) {&#xA;    return;&#xA;  }&#xA;  var expr = arg[0];&#xA;  var list = arg[1];&#xA;  for (var i = 0; i &lt; list.length; ++i) {&#xA;    var pair = list[i];&#xA;    switch (pair[0]) {&#xA;    case 0:&#xA;      expr += pair[1]; break;&#xA;    case 1:&#xA;      expr -= pair[1]; break;&#xA;    }&#xA;  }&#xA;  return expr;&#xA;}" Description="The &apos;expr&apos; parser-rule&apos;s structure">
           <Reference Ref="term" />
-          <Choice Mult="*">
+          <Choice Mult="*" Description="PLUS or MINUS">
             <Sequence >
               <Token Ref="PLUS" Drop="true"/>
               <Reference Ref="term" />
@@ -80,7 +80,7 @@ Output: 20
         </Sequence>
     </Parser>
     <Parser Name="factor">
-        <Choice ActionText="function (arg) {&#xA;  if (!arg) {&#xA;    return;&#xA;  }&#xA;  switch (arg[0]) {&#xA;  case 0:&#xA;    return parseFloat(arg[1]); break;&#xA;  case 1: &#xA;    return arg[1]; break;&#xA;  } &#xA;}">
+        <Choice ActionText="function (arg) {&#xA;  if (!arg) {&#xA;    return;&#xA;  }&#xA;  switch (arg[0]) {&#xA;  case 0:&#xA;    return parseFloat(arg[1]); break;&#xA;  case 1: &#xA;    return arg[1]; break;&#xA;  } &#xA;}" Description="The &apos;factor&apos; parser-rule&apos;s structure">
           <Token Ref="floatingPointNumber" />
           <Sequence >
             <Token Ref="LPAREN" Drop="true"/>
@@ -90,9 +90,9 @@ Output: 20
         </Choice>
     </Parser>
     <Parser Name="term">
-        <Sequence ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt; null&#xA;  case Array(f: Double, lst:List[_]) =&gt; &#xA;    var res = f&#xA;    lst.foreach(_ match {&#xA;      case Pair(0, f2:Double) =&gt; res *= f2&#xA;      case Pair(1, f2:Double) =&gt; res /= f2&#xA;    })&#xA;    res&#xA;}">
+        <Sequence ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt; null&#xA;  case Array(f: Double, lst:List[_]) =&gt; &#xA;    var res = f&#xA;    lst.foreach(_ match {&#xA;      case Pair(0, f2:Double) =&gt; res *= f2&#xA;      case Pair(1, f2:Double) =&gt; res /= f2&#xA;    })&#xA;    res&#xA;}" Description="The &apos;term&apos; parser-rule&apos;s structure">
           <Reference Ref="factor" />
-          <Choice Mult="*">
+          <Choice Mult="*" Description="MULT or DIV">
             <Sequence >
               <Token Ref="MULT" Drop="true"/>
               <Reference Ref="factor" />

@@ -70,9 +70,9 @@ Output: Array(Array(Pair(1, Array(Array(Pair(0, 2), List()),
   </Tokens>
   <Parsers>
     <Parser Name="Expr">
-        <Sequence>
+        <Sequence Description="The &apos;expr&apos; parser-rule&apos;s structure">
           <Reference Ref="term" />
-          <Choice Mult="*">
+          <Choice Mult="*" Description="PLUS or MINUS">
             <Sequence >
               <Token Ref="PLUS" Drop="true"/>
               <Reference Ref="term" />
@@ -85,7 +85,7 @@ Output: Array(Array(Pair(1, Array(Array(Pair(0, 2), List()),
         </Sequence>
     </Parser>
     <Parser Name="factor">
-        <Choice>
+        <Choice Description="The &apos;factor&apos; parser-rule&apos;s structure">
           <Token Ref="floatingPointNumber" />
           <Sequence >
             <Token Ref="LPAREN" Drop="true"/>
@@ -95,9 +95,9 @@ Output: Array(Array(Pair(1, Array(Array(Pair(0, 2), List()),
         </Choice>
     </Parser>
     <Parser Name="term">
-        <Sequence>
+        <Sequence Description="The &apos;term&apos; parser-rule&apos;s structure">
           <Reference Ref="factor" />
-          <Choice Mult="*">
+          <Choice Mult="*" Description="MULT or DIV">
             <Sequence >
               <Token Ref="MULT" Drop="true"/>
               <Reference Ref="factor" />

@@ -50,59 +50,59 @@ You can find sample input in the book or PDF document referred above.
   }
 
   val grammar = <VLL-Grammar>
-  <Whitespace>[ \t\n\013\f\r]+</Whitespace>
+  <Whitespace>\\s+</Whitespace>
   <Comments></Comments>
   <Tokens>
-    <Literal Name="COLON" Pattern=":"/>
-    <Literal Name="COMMA" Pattern=","/>
-    <Literal Name="FALSE" Pattern="false"/>
-    <Literal Name="LBKT" Pattern="["/>
-    <Literal Name="LCURLY" Pattern="{"/>
-    <Literal Name="NULL" Pattern="null"/>
     <Literal Name="RBKT" Pattern="]"/>
-    <Literal Name="RCURLY" Pattern="}"/>
-    <Literal Name="TRUE" Pattern="true"/>
+    <Literal Name="COLON" Pattern=":"/>
+    <Literal Name="NULL" Pattern="null"/>
     <Regex Name="floatingPointNumber" Pattern="\\-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?"/>
     <Regex Name="stringLiteral" Pattern="\&quot;[^&quot;]*\&quot;"/>
+    <Literal Name="FALSE" Pattern="false"/>
+    <Literal Name="LBKT" Pattern="["/>
+    <Literal Name="COMMA" Pattern=","/>
+    <Literal Name="TRUE" Pattern="true"/>
+    <Literal Name="LCURLY" Pattern="{"/>
+    <Literal Name="RCURLY" Pattern="}"/>
   </Tokens>
   <Parsers>
-    <Parser Name="arr">
-        <Sequence Mult="1" ErrMsg="">
-          <Token Ref="LBKT" Mult="1" ErrMsg=""/>
-          <RepSep Mult="*" ErrMsg="">
-            <Reference Ref="Value" Mult="1" ErrMsg=""/>
-            <Token Ref="COMMA" Mult="1" ErrMsg=""/>
-          </RepSep>
-          <Token Ref="RBKT" Mult="1" ErrMsg=""/>
-        </Sequence>
+    <Parser Name="Value">
+        <Choice ErrMsg="illegal start of value" Description="The JSON alternative forms">
+          <Reference Ref="obj" />
+          <Reference Ref="arr" />
+          <Token Ref="stringLiteral" />
+          <Token Ref="floatingPointNumber" />
+          <Token Ref="NULL" />
+          <Token Ref="TRUE" />
+          <Token Ref="FALSE" />
+        </Choice>
     </Parser>
     <Parser Name="member">
-        <Sequence Mult="1" ErrMsg="">
-          <Token Ref="stringLiteral" Mult="1" ErrMsg=""/>
-          <Token Ref="COLON" Mult="1" ErrMsg=""/>
-          <Reference Ref="Value" Mult="1" ErrMsg=""/>
+        <Sequence Description="A JSON member&apos;s structure">
+          <Token Ref="stringLiteral" />
+          <Token Ref="COLON" />
+          <Reference Ref="Value" />
+        </Sequence>
+    </Parser>
+    <Parser Name="arr">
+        <Sequence Description="A JSON array&apos;s structure ">
+          <Token Ref="LBKT" />
+          <RepSep Mult="*">
+            <Reference Ref="Value" />
+            <Token Ref="COMMA" />
+          </RepSep>
+          <Token Ref="RBKT" />
         </Sequence>
     </Parser>
     <Parser Name="obj">
-        <Sequence Mult="1" ErrMsg="">
-          <Token Ref="LCURLY" Mult="1" ErrMsg=""/>
-          <RepSep Mult="*" ErrMsg="">
-            <Reference Ref="member" Mult="1" ErrMsg=""/>
-            <Token Ref="COMMA" Mult="1" ErrMsg=""/>
+        <Sequence Description="A JSON object&apos;s structure">
+          <Token Ref="LCURLY" />
+          <RepSep Mult="*">
+            <Reference Ref="member" />
+            <Token Ref="COMMA" />
           </RepSep>
-          <Token Ref="RCURLY" Mult="1" ErrMsg=""/>
+          <Token Ref="RCURLY" />
         </Sequence>
-    </Parser>
-    <Parser Name="Value">
-        <Choice Mult="1" ErrMsg="illegal start of value">
-          <Reference Ref="obj" Mult="1" ErrMsg=""/>
-          <Reference Ref="arr" Mult="1" ErrMsg=""/>
-          <Token Ref="stringLiteral" Mult="1" ErrMsg=""/>
-          <Token Ref="floatingPointNumber" Mult="1" ErrMsg=""/>
-          <Token Ref="NULL" Mult="1" ErrMsg=""/>
-          <Token Ref="TRUE" Mult="1" ErrMsg=""/>
-          <Token Ref="FALSE" Mult="1" ErrMsg=""/>
-        </Choice>
     </Parser>
   </Parsers>
 </VLL-Grammar>
