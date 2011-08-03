@@ -126,10 +126,10 @@
       <li>Literal - the name of the literal token</li>
       <li>Regexp - the name of the regular-expression token</li>
       <li>Reference - the name of referred-to parser-rule</li>
-      <li>Choice - the fixed text <i>(Choice)</i></li>
-      <li>Sequence - the fixed text <i>(Sequence)</i></li>
-      <li>RepSep - the fixed text <i>(RepSep)</i></li>
-      <li>Semantic predicate - the fixed text <i>(Predicate)</i></li>
+      <li>Choice - the description (see below) if defined, null otherwise</li>
+      <li>Sequence - the description (see below) if defined, null otherwise</li>
+      <li>RepSep - the description (see below) if defined, null otherwise</li>
+      <li>Semantic predicate - the description (see below) if defined, null otherwise</li>
     </ul>
 
     <p>
@@ -141,6 +141,8 @@
     <ul>
       <li>commit - backtracking to optional parser clauses (at an upper level) will be 
           prevented if this node is successfully parsed</li>
+      <li>description - an optional user-assigned string (see below) that can be assigned 
+          to certain types of node</li>
       <li>drop - the node will not be entered into the AST. You can see examples of 
           its use in the built-in <i>ArithExpr</i> <a href="SampleGrammars.html">Sample Grammars</a></li>
       <li>message - the node has an associated error-message</li>
@@ -273,7 +275,7 @@
       dialog box that is presented when <i>Whitespace</i> is chosen. 
       The dialog box for <i>Comment</i> is similar, except that the default value 
       is an empty string. The default value for <i>Whitespace</i>, shown in 
-      Figure-5 above, is the regular expression <i>\s+</i>.
+      Figure-5 above, is the regular expression <i>\\s+</i>.
     </p>
 
     <h3>Recursion, Mutual Recursion, and Left Recursion</h3>
@@ -295,7 +297,7 @@
 
     <p>
       In the grammar shown above, the token <i>number</i> is defined as the 
-      regular expression <i>\d+</i>. It can parse strings like <i>3 + 5</i> and 
+      regular expression <i>\\d+</i>. It can parse strings like <i>3 + 5</i> and 
       <i>7 - 9</i> etc. Trying to run it without the packrat annotation 
       causes a stack-overflow error. 
     </p>
@@ -358,9 +360,18 @@
       Java regular expression 
       <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">pattern</a> 
       in the second.
+      Regular expressions patterns should be formed as they would be if contained inside a 
+      <code>String</code> in a Java program (hence the two back-slash characters in the 
+      &quot;\\d+&quot; example above). 
       Token names should ideally have high mnemonic value, and are conventionally in all upper case. 
       Also, empty strings (as literal patterns), and regular-expressions that match 
       empty strings are not accepted. 
+    </p>
+
+    <p>
+      Two tokens may obviously not have the same name. 
+      Two tokens may also not have the same pattern part if both of them are 
+      either globally scoped or privately scoped (see below).
     </p>
 
     <h3>Modifying Token Patterns</h3>
@@ -418,7 +429,7 @@
     <p>
       All tokens exist in a single global scope, and VisualLangLab does not support scoped 
       tokens. However most scoping needs can be served by a rudimentary, 
-      sledgehammer-strength  mechanism as follows: Ending a token name with an underscore 
+      sledgehammer-strength  mechanism as follows: Ending a token's name with an underscore 
       (_) places it in its own private scope. When the parser tests for such a token, the 
       lexer does not come into play, so other token definitions (in the global scope) are 
       not considered.

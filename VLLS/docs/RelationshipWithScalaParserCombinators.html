@@ -21,7 +21,7 @@
     </p>
 
     <p>
-      The GUI owns an instance of the class <code>VLLParsers</code> which extends  
+      The GUI owns an instance of the class <code>VllParsers</code> which extends  
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> with 
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>, 
       and the grammar-trees effectively become members of that instance as though defined as follows: 
@@ -38,7 +38,7 @@
     <p>
       In terms of the <i>Essential Jargon</i> in the 
       <a href="UserGuide.html">User Guide</a>, the GUI 
-      (by owning an instance of <code>VLLParsers</code>) is a <i>parser</i>, while 
+      (by owning an instance of <code>VllParsers</code>) is a <i>parser</i>, while 
       members like <code>aParser</code> are <i>parser-rule</i>s that 
       bring <i>grammar-tree</i>s to life. The line of Scala 
       code above shows that <code>aParser</code> is of type 
