@@ -125,7 +125,7 @@ class VllGui extends MainFrame with ActionListener {
               parsers.load(grammarFile.get)
             } catch {
               case e: IOException => val sb = new StringBuilder(); sb.append("Missing ")
-                  Dialog.showMessage(splitPane, sb.toString, "File open", Dialog.Message.Error, null)
+                  Dialog.showMessage(splitPane, sb.toString, "ERROR - File open", Dialog.Message.Error, null)
             }
             val firstRule = parsers.ruleBank.ruleNames(0)
             updateRuleChooser(firstRule)
@@ -239,7 +239,7 @@ class VllGui extends MainFrame with ActionListener {
         name match {
           case pattern(newRuleName) =>
             if (parsers.ruleBank contains newRuleName) {
-              Dialog.showMessage(splitPane, "A rule named '" + newRuleName + "' already exists", "New rule", Dialog.Message.Error, null)
+              Dialog.showMessage(splitPane, "A rule named '" + newRuleName + "' already exists", "ERROR - New rule", Dialog.Message.Error, null)
             } else {
               val newRoot = /* new  */RootNode(newRuleName)
               parsers.ruleBank(newRuleName) = newRoot
@@ -249,7 +249,7 @@ class VllGui extends MainFrame with ActionListener {
               currentRuleName = newRuleName
             }
           case _ =>
-            Dialog.showMessage(splitPane, "Bad rule name - identifier expected", "New rule", Dialog.Message.Error, null)
+            Dialog.showMessage(splitPane, "Bad rule name - identifier expected", "ERROR - New rule", Dialog.Message.Error, null)
         }
       case None =>
     }
@@ -267,7 +267,7 @@ class VllGui extends MainFrame with ActionListener {
         name match {
           case pattern(newRuleName) =>
             if (parsers.ruleBank contains newRuleName) {
-              Dialog.showMessage(splitPane, "A rule named '" + newRuleName + "' already exists", "Rename rule", Dialog.Message.Error, null)
+              Dialog.showMessage(splitPane, "A rule named '" + newRuleName + "' already exists", "ERROR - Rename rule", Dialog.Message.Error, null)
             } else {
               parsers.ruleBank.rename(currentName, newRuleName)
               ruleTreePanel.setRule(newRuleName)
@@ -276,7 +276,7 @@ class VllGui extends MainFrame with ActionListener {
               currentRuleName = newRuleName
             }
           case _ =>
-            Dialog.showMessage(splitPane, "Bad rule name - identifier expected", "Rename rule", Dialog.Message.Error, null)
+            Dialog.showMessage(splitPane, "Bad rule name - identifier expected", "ERROR - Rename rule", Dialog.Message.Error, null)
         }
       case None =>
     }
@@ -300,7 +300,7 @@ class VllGui extends MainFrame with ActionListener {
       val ruleNames = parsers.ruleBank.ruleNames 
       if (ruleNames.size == 1) {
         Dialog.showMessage(splitPane, "Can't delete last rule (use rename instead)",
-            "Delete rule", Dialog.Message.Error, null)
+            "ERROR - Delete rule", Dialog.Message.Error, null)
       } else {
         parsers.ruleBank.ruleInUse(ruleToDelete, true) match {
           case Nil =>
@@ -314,7 +314,7 @@ class VllGui extends MainFrame with ActionListener {
               isDirty = true
           case users: Seq[String] =>
                 val msg = "Can't delete '%s' - used by: \n%s".format(ruleToDelete, users.mkString(",\n"))
-                Dialog.showMessage(splitPane, msg, "Delete rule", Dialog.Message.Error, null)
+                Dialog.showMessage(splitPane, msg, "ERROR - Delete rule", Dialog.Message.Error, null)
         }
       }
     }
@@ -370,31 +370,25 @@ class VllGui extends MainFrame with ActionListener {
       }
     }
   }
-
-  def createNewToken(isRegex: Boolean) {
-    val pattern = """([a-zA-Z_][a-zA-Z_0-9]*)\s*,\s*(\S.*)""".r
-    val title = "New " + (if (isRegex) "regex" else "literal")
-    val msg = "Enter name, comma, " + (if (isRegex) "regex" else "literal")
-    Dialog.showInput(splitPane, msg, title, Dialog.Message.Question, null, Array[String](), null) match {
-      case Some(tokenInfo) =>
-        tokenInfo.trim match {
-          case pattern(name, value) =>
-            if (parsers.tokenBank contains name) {
-              Dialog.showMessage(splitPane, "A token named '" + name + "' already exists", title, Dialog.Message.Error, null)
+  
+  def validateAndAssignTokenValue(isNew: Boolean, isRegex: Boolean, name: String, value: String) {
+    val errorTitle = "ERROR - " + (if (isNew) "New " else "Edit ") + (if (isRegex) "regex" else "literal")
+            if (isNew && (parsers.tokenBank contains name)) {
+              Dialog.showMessage(splitPane, "A token named '" + name + "' already exists", errorTitle, Dialog.Message.Error, null)
             } else if (parsers.tokenBank.exists(p => {(p._1.endsWith("_") == name.endsWith("_")) &&
                   p._2.equals(if (isRegex) Right(value) else Left(value))})) {
-              Dialog.showMessage(splitPane, "Another token with value '" + value + "' exists", title, Dialog.Message.Error, null)
+              Dialog.showMessage(splitPane, "Another token with pattern '" + value + "' exists", errorTitle, Dialog.Message.Error, null)
             } else {
               if (isRegex) {
                 try {
                   if (Automata.canMatchEmptyString(Utils.unEscape(value))) {
-                    Dialog.showMessage(splitPane, "'%s' matches empty string, not allowed".format(value), title, Dialog.Message.Error, null)
+                    Dialog.showMessage(splitPane, "'%s' matches empty string, not allowed".format(value), errorTitle, Dialog.Message.Error, null)
                   } else {
                     Automata.testRegexp(Utils.unEscape(value))
                     parsers.tokenBank(name) = Right(value)
                   }
                 } catch {
-                  case x => Dialog.showMessage(splitPane, "Error in '%s': %s".format(value, x.getMessage), title, Dialog.Message.Error, null)
+                  case x => Dialog.showMessage(splitPane, "Error in '%s': %s".format(value, x.getMessage), errorTitle, Dialog.Message.Error, null)
                 }
               } else {
                 try {
@@ -402,13 +396,23 @@ class VllGui extends MainFrame with ActionListener {
                   parsers.tokenBank(name) = Left(value)
                 } catch {
                   case x =>
-                    Dialog.showMessage(splitPane, x.getMessage, title, Dialog.Message.Error, null)
+                    Dialog.showMessage(splitPane, x.getMessage, errorTitle, Dialog.Message.Error, null)
                 }
               }
               isDirty = true
             }
+  }
+
+  def createNewToken(isRegex: Boolean) {
+    val pattern = """([a-zA-Z_][a-zA-Z_0-9]*)\s*,\s*(\S.*)""".r
+    val msg = "Enter name, comma, " + (if (isRegex) "pattern" else "pattern")
+    Dialog.showInput(splitPane, msg, "New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Question, null, Array[String](), null) match {
+      case Some(tokenInfo) =>
+        tokenInfo.trim match {
+          case pattern(name, value) => validateAndAssignTokenValue(true, isRegex, name, value)
           case _ =>
-            Dialog.showMessage(splitPane, "Bad input. Expected name, comma, regex/literal", title, Dialog.Message.Error, null)
+            Dialog.showMessage(splitPane, "Bad input. Expected name, comma, regex/literal", 
+                "ERROR - New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Error, null)
         }
       case None =>
     }
@@ -443,7 +447,7 @@ class VllGui extends MainFrame with ActionListener {
           }
           Dialog.showInput(splitPane, title, "Edit token", Dialog.Message.Question, null, Array[String](), str) match {
             case Some(newVal) =>
-              parsers.tokenBank(tokenName) = if (isRegex) Right(newVal) else Left(newVal)
+              validateAndAssignTokenValue(false, isRegex, tokenName, newVal)
             case None =>
           }
         case None =>
@@ -487,7 +491,7 @@ class VllGui extends MainFrame with ActionListener {
               isDirty = true
             case lst: Seq[String] =>
               val msg = "Can't delete '%s' - used by: \n%s".format(tokenName, lst.mkString(",\n"))
-              Dialog.showMessage(splitPane, msg, "Delete token", Dialog.Message.Error, null)
+              Dialog.showMessage(splitPane, msg, "ERROR - Delete token", Dialog.Message.Error, null)
           }
         case None =>
     }
@@ -507,7 +511,7 @@ class VllGui extends MainFrame with ActionListener {
           } catch {
             case e: Exception => 
               Dialog.showMessage(splitPane, "%s(%s)".format(e.getClass.getName, e.getMessage), 
-                                 "Import tokens", Dialog.Message.Error, null)
+                                 "ERROR - Import tokens", Dialog.Message.Error, null)
           }
         case _ =>
       }
@@ -616,7 +620,7 @@ class VllGui extends MainFrame with ActionListener {
                     customTreeHandlerClassName = Some(className)
                   } catch {
                     case ex =>
-                      Dialog.showMessage(splitPane, ex, "Custom tree handler", Dialog.Message.Error, null)
+                      Dialog.showMessage(splitPane, ex, "ERROR - Custom tree handler", Dialog.Message.Error, null)
                       runHandlerBasicMenuItem.selected = true
                   }
                 }
@@ -736,7 +740,7 @@ class VllGui extends MainFrame with ActionListener {
   preferredSize = new Dimension(frameWidth, frameHeight)
 
   var lastPoppedName = ""
-  val ruleChooser = new JComboBox()
+  val ruleChooser = new JComboBox[String]()
   ruleChooser.addActionListener(this)
   var isDirty = false
   val parsers = new ParsingActor(this)

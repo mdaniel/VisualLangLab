@@ -121,13 +121,13 @@ class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel
           case RegexNode(_, regexName: String) =>
             Dialog.showInput(guiTop.splitPane, "Edit regex '%s'".format(regexName), "Edit token", Dialog.Message.Question, null, Array[String](), guiTop.parsers.tokenBank(regexName).right.get) match {
             case Some(newVal) =>
-              guiTop.parsers.tokenBank(regexName) = Right(newVal.asInstanceOf[String])
+              guiTop.validateAndAssignTokenValue(false, true, regexName, newVal.asInstanceOf[String])
             case None =>
           }
           case LiteralNode(_, literalName: String) =>
             Dialog.showInput(guiTop.splitPane, "Edit literal '%s'".format(literalName), "Edit token", Dialog.Message.Question, null, Array[String](), guiTop.parsers.tokenBank(literalName).left.get) match {
             case Some(newVal) =>
-              guiTop.parsers.tokenBank(literalName) = Left(newVal.asInstanceOf[String])
+              guiTop.validateAndAssignTokenValue(false, false, literalName, newVal.asInstanceOf[String])
             case None =>
           }
           case _ =>
