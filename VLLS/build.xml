@@ -19,7 +19,7 @@
             <zipfileset src="jars/scala-swing.jar" />
             <zipfileset src="jars/scala-compiler.jar" />
         </jar>
-        <zip zipfile="VLLS-3.09.zip" compress="true">
+        <zip zipfile="VLLS.zip" compress="true">
             <fileset dir="." includes="docs/**/*.*" />
             <fileset dir="." includes="licenses/**/*.*" />
             <fileset dir="." includes="copying.txt, readme.txt, changes.txt, index.html"/>

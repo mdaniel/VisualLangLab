@@ -1,3 +1,17 @@
+3.16 10-AUG-2011
+    Fix for VLL-12 (Editing a token bypasses value validation checks) 
+    and VLL-13 (error-reporting dialogs should have a title starting with "ERROR - ").
+3.15 07-AUG-2011
+    Minor cosmetic changes to dialog titles etc.
+3.14 03-AUG-2011
+    Documentation files synchronized with software changes.
+3.13 03-AUG-2011
+    Added description field for nodes (non-root, non-terminal).
+    Added illustrative descriptions to sample grammars.
+3.12 30-JUL-2011
+    Corrected problem with scanning of local tokens (VLL-10, VLL-11).
+3.11 30-JUL-2011
+    Added sample Java API-clients code, and corresponding documentation.
 3.09 28-JUL-2011
     Fix for bug VLL-8 (Whitespace and Comment fields accepting illegal escape sequences. 
         Regression from earlier change)
