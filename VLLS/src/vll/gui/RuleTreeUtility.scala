@@ -107,7 +107,7 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
           if (actionTextArea.text.trim.isEmpty)
             node.actionText = ""
           else
-            node.actionText = actionTextArea.text
+            assignAction()
           VllGui.top.ruleTreePanel.nodeChanged()
         }
       }
@@ -116,31 +116,33 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
     }
     private var node: RuleTreeNode = null
     private val actionTextArea = new TextArea
+    private def assignAction() {
+      if (actionTextArea.text.trim.isEmpty) {
+        node.actionText = ""
+        VllGui.top.ruleTreePanel.nodeChanged()
+      } else {
+        try {
+          node.actionText = actionTextArea.text
+          VllGui.top.ruleTreePanel.nodeChanged()
+          Dialog.showMessage(VllGui.top.contents(0), "Syntax OK - action saved", "OK, action saved", Dialog.Message.Info, null)
+          gui.isDirty = true
+        } catch {
+          case se: Exception => 
+          VllGui.top.ruleTreePanel.nodeChanged()
+            val msg = se.getMessage
+            if (se.isInstanceOf[ScriptException])
+              Dialog.showMessage(VllGui.top.contents(0), msg.substring(msg.indexOf(": ") + 2), 
+                "ERROR - Action syntax", Dialog.Message.Error, null)
+              else
+                Dialog.showMessage(VllGui.top.contents(0), msg, 
+                  "ERROR - Action syntax", Dialog.Message.Error, null)
+        }
+      }
+    }
     private val btnPanel = new BorderPanel() {
       val saveBtn = new Button("Save") {
         reactions += {
-          case ButtonClicked(_) => 
-            val actionText = actionTextArea.text
-            val fmtOk = if (node.isInstanceOf[PredicateNode]) Utils.isPredicateCode(actionText) else Utils.isActionCode(actionText)
-            if (fmtOk) {
-              val isJS = actionText.trim.startsWith("function")
-              try {
-                if (isJS) JsEngine.compile(actionText) else ScalaEngine.compile(actionText)
-                node.actionText = actionText
-                VllGui.top.ruleTreePanel.nodeChanged()
-                Dialog.showMessage(VllGui.top.contents(0), "Syntax OK - text saved", "OK, saved", Dialog.Message.Info, null)
-                gui.isDirty = true
-              } catch {
-                case se: Exception => 
-                val msg = se.getMessage
-                Dialog.showMessage(VllGui.top.contents(0), msg.substring(msg.indexOf(": ") + 2), 
-                    "Script syntax error", Dialog.Message.Error, null)
-              }
-            } else if (actionText.trim.isEmpty) {
-              node.actionText = ""
-              VllGui.top.ruleTreePanel.nodeChanged()
-            } else
-              Dialog.showMessage(VllGui.top.contents(0), "Click \"Code\" button for outline code", "Action format error", Dialog.Message.Error, null)
+          case ButtonClicked(_) => assignAction()
         }
       }
       add(saveBtn, BorderPanel.Position.East)

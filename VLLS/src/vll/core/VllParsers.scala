@@ -29,7 +29,6 @@ import scala.util.parsing.combinator.Parsers
 import scala.util.parsing.input.CharSequenceReader
 import scala.xml.XML
 import scala.xml.{Elem => XMLElem}
-import sun.org.mozilla.javascript.internal.NativeArray
 
 class VllParsers extends Parsers with PackratParsers {
 
@@ -293,33 +292,6 @@ class VllParsers extends Parsers with PackratParsers {
       })._1
   }
 
-  private def objToJsArray(tree: Any): Object = {
-    def nativeArray(na: Array[Object]) = new NativeArray(na) {
-      override def toString = getDefaultValue(null)
-      override def getDefaultValue(claz: Class[_]) = {
-        val b = mutable.Buffer[Object]()
-        for (i <- 0 until getLength.asInstanceOf[Int]) {
-          b.append(get(i, this) match {
-              case narr: NativeArray => "[" + narr.getDefaultValue(null) + "]"
-              case x => x
-            })
-        }
-        b.mkString(",")
-      }
-    }
-    val rv = tree match {
-      case null => null
-      case a: Array[_] => nativeArray(a.map(objToJsArray).toArray[Object])
-      case p: Pair[_, _] => objToJsArray(Array[Any](p._1, p._2))
-      case opt: Option[_] => objToJsArray(if (opt.isEmpty) Array[Any]() else Array[Any](opt.get))
-      case lst: List[_] => objToJsArray(lst.map(objToJsArray).toArray)
-      case s: String => s
-      case i: Int => java.lang.Double.valueOf(i) // produced only by "combine-choice" parser 
-      case r: AnyRef => r
-    }
-    rv
-  }
-
   private def node2parser(node: RuleTreeNode): Parser[_] = {
     val parser1: Parser[_] =
     if (!node.isValid) {
@@ -360,14 +332,7 @@ class VllParsers extends Parsers with PackratParsers {
         case pn: PredicateNode => if (node.actionText.isEmpty) 
             failure("Predicate has no code")
           else {
-            val actionText: String = node.actionText.trim
-            val isJS = Utils.isJavascriptCode(actionText)
-            var compiledScript = if (isJS)
-              JsEngine.compile(actionText)
-            else
-              ScalaEngine.compile(actionText)
-            Parser(in => {
-                compiledScript(in.pos.line, in.pos.column, null) match {
+            Parser(in => {node.actionFunction(in.pos.line, in.pos.column, null) match {
                   case b: java.lang.Boolean if b.booleanValue => Success("", in)
                   case errMsg: String => Failure(errMsg, in)
                   case _ => Failure("Predicate error", in)
@@ -388,21 +353,18 @@ class VllParsers extends Parsers with PackratParsers {
           parser3
     }
     val parser5: Parser[_] = if (node.isInstanceOf[PredicateNode] || node.actionText.isEmpty) parser4 else {
-      val actionText: String = node.actionText.trim
-      val isJS = Utils.isJavascriptCode(actionText)
-      val compiledScript = if (isJS)
-        JsEngine.compile(actionText)
+      if (node.actionFunction eq null)
+        failure("Action code has syntax error")
       else
-        ScalaEngine.compile(actionText)
-      Parser(in => {
-          compiledScript(in.pos.line, in.pos.column, null)
+        Parser(in => {
+          node.actionFunction(in.pos.line, in.pos.column, null)
           parser4(in) match {
             case Success(tree, next) =>
-              var actionResult = compiledScript(next.pos.line, next.pos.column, if (isJS)objToJsArray(tree) else tree)
+              var actionResult = node.actionFunction(next.pos.line, next.pos.column, tree)
               Success(if (actionResult == null) tree else actionResult, next)
             case other => other
           }
-      })
+        })
     }
     parser5.named(node.nodeName)
   }
@@ -436,6 +398,7 @@ class VllParsers extends Parsers with PackratParsers {
 
 object VllParsers {
   type Parser[T] = VllParsers#Parser[T]
+  type ActionType = Function3[Int,Int,Any,Any]
   def fromFile(f: File): VllParsers = {
     val rv = new VllParsers
     rv.load(f)

@@ -243,7 +243,7 @@ class FileIO(hub: VllParsers) {
         //printf("  Reference: %s, %s%n", ref, mult)
         aNode = /* new  */ReferenceNode(strMap(mult), ref)
         aNode.errorMessage = errMsg
-        aNode.actionText = actionText
+        try {aNode.actionText = actionText} catch {case _ =>}
         aNode.drop = drop
         aNode.parent = parent
         parent.append(aNode)
@@ -260,7 +260,7 @@ class FileIO(hub: VllParsers) {
             sys.exit()
         }
         aNode.errorMessage = errMsg
-        aNode.actionText = actionText
+        try {aNode.actionText = actionText} catch {case _ =>}
         aNode.drop = drop
         //aNode = new TokenTreeNode(ref, strMap(mult))
         aNode.parent = parent
@@ -272,7 +272,7 @@ class FileIO(hub: VllParsers) {
         aNode = /* new  */SequenceNode(strMap(mult))
         aNode.errorMessage = errMsg
         aNode.description = description
-        aNode.actionText = actionText
+        try {aNode.actionText = actionText} catch {case _ =>}
         aNode.drop = drop
         aNode.parent = parent
         val commit = (node \ "@Commit").toString
@@ -288,7 +288,7 @@ class FileIO(hub: VllParsers) {
         aNode = /* new  */RepSepNode(strMap(mult))
         aNode.errorMessage = errMsg
         aNode.description = description
-        aNode.actionText = actionText
+        try {aNode.actionText = actionText} catch {case _ =>}
         aNode.drop = drop
         aNode.parent = parent
         if (parent != null)
@@ -303,7 +303,7 @@ class FileIO(hub: VllParsers) {
         aNode = /* new  */ChoiceNode(strMap(mult))
         aNode.errorMessage = errMsg
         aNode.description = description
-        aNode.actionText = actionText
+        try {aNode.actionText = actionText} catch {case _ =>}
         aNode.drop = drop
 //        aNode.asInstanceOf[ChoiceNode].distinguish = distinguish
         aNode.parent = parent
@@ -319,7 +319,7 @@ class FileIO(hub: VllParsers) {
         aNode = /* new  */PredicateNode()
         aNode.errorMessage = errMsg
         aNode.description = description
-        aNode.actionText = actionText
+        try {aNode.actionText = actionText} catch {case _ =>}
         aNode.drop = drop
 //        aNode.asInstanceOf[ChoiceNode].distinguish = distinguish
         aNode.parent = parent

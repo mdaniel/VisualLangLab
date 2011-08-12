@@ -27,10 +27,10 @@ import scala.swing.Label
 class AboutHelper(gui: VllGui) {
     private val vllCopyright = """<html><body><pre>
       |<b>VisualLangLab</b>
-      |An IDE for LL(*) Parsers using Scala Combinators
+      |A Visual Parser-Generator using Scala Combinators
       |(<i>http://vll.java.net/</i> and <i>https://vll.dev.java.net/</i>)
 
-      |Copyright 2010, Sanjay Dasgupta (sanjay.dasgupta@gmail.com)
+      |Copyright 2004, 2010, Sanjay Dasgupta (sanjay.dasgupta@gmail.com)
 
       |VisualLangLab is free software: you can redistribute it and/or
       |modify it under the terms of the GNU General Public License as

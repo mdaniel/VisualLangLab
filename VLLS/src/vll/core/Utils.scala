@@ -82,9 +82,6 @@ object Utils {
   def isJavascriptCode(s: String) = isJavascriptPredicate(s) | isJavascriptAction(s)
   def isScalaCode(s: String) =  isScalaAction(s) | isScalaPredicate(s)
 
-  def isPredicateCode(s: String) = isJavascriptPredicate(s) | isScalaPredicate(s)
-  def isActionCode(s: String) =  isJavascriptAction(s) | isScalaAction(s)
-
   def isScalaAction(s: String) =  s.trim.matches("(?s)\\(\\s*[a-zA-Z0-9_]+\\s*\\:\\s*[a-zA-Z0-9_]+\\s*\\)\\s*\\=\\>.+") 
   def isScalaPredicate(s: String) =  s.trim.matches("(?s)\\(\\s*\\)\\s*\\=\\>.+") 
 

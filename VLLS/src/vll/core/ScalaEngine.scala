@@ -50,7 +50,7 @@ object ScalaEngine {
 //    println("bind $$ >>>" + outputStream.toString)
 //  interp.allDefinedNames.foreach(println)
 
-  def compile(f: String): Function3[Int,Int,Any,Any] = {
+  def compile(f: String): VllParsers.ActionType = {
 //    printf("Enter compile(%s)%n", f)
     compiledFunctionHolder.value = null
     outputStream.clear()

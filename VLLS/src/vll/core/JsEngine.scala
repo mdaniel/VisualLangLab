@@ -20,10 +20,12 @@
 
 package vll.core
 
+import scala.collection._
 import javax.script.Compilable
 import javax.script.Invocable
 import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
+import sun.org.mozilla.javascript.internal.NativeArray
 import sun.org.mozilla.javascript.internal.NativeObject
 import vll.gui.VllGui
 
@@ -40,11 +42,38 @@ object JsEngine {
 //  context.setAttribute("VLLINPUT", null, ScriptContext.ENGINE_SCOPE)
 //  def eval(s: String) = engine.eval(s)
 //  def invoke(fName: String, args: Any*) = invocable.invokeFunction(fName, args.map(_.asInstanceOf[Object]):_*)
-  def compile(sName: String): Function3[Int,Int,Any,Any] = {
+  private def objToJsArray(tree: Any): Object = {
+    def nativeArray(na: Array[Object]) = new NativeArray(na) {
+      override def toString = getDefaultValue(null)
+      override def getDefaultValue(claz: Class[_]) = {
+        val b = mutable.Buffer[Object]()
+        for (i <- 0 until getLength.asInstanceOf[Int]) {
+          b.append(get(i, this) match {
+              case narr: NativeArray => "[" + narr.getDefaultValue(null) + "]"
+              case x => x
+            })
+        }
+        b.mkString(",")
+      }
+    }
+    val rv = tree match {
+      case null => null
+      case a: Array[_] => nativeArray(a.map(objToJsArray).toArray[Object])
+      case p: Pair[_, _] => objToJsArray(Array[Any](p._1, p._2))
+      case opt: Option[_] => objToJsArray(if (opt.isEmpty) Array[Any]() else Array[Any](opt.get))
+      case lst: List[_] => objToJsArray(lst.map(objToJsArray).toArray)
+      case s: String => s
+      case i: Int => java.lang.Double.valueOf(i) // produced only by "combine-choice" parser 
+      case r: AnyRef => r
+    }
+    rv
+  }
+
+  def compile(sName: String): VllParsers.ActionType = {
     val cs = compilable.compile("(%s)(VLLARGS)".format(sName))
     new Function3[Int,Int,Any,Any] {
       def apply(line: Int, col: Int, arg: Any): Any = {
-        cs.getEngine.put("VLLARGS", arg)
+        cs.getEngine.put("VLLARGS", objToJsArray(arg))
         cs.getEngine.put("$line", line)
         cs.getEngine.put("$col", col)
         cs.eval()

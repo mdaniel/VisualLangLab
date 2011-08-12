@@ -31,18 +31,29 @@ abstract sealed class RuleTreeNode (
   var drop = false
   var trace = false
   var parent: RuleTreeNode = null
-  var actionText: String = ""
+  private var actionHasSyntaxError = false
+  private var actionCode: String = ""
+  var actionFunction: VllParsers.ActionType = null
+  def actionText = actionCode
+  def actionText_=(newCode: String) {
+    actionCode = newCode
+    actionHasSyntaxError = false
+    if (!actionCode.trim.isEmpty) {
+      if (Utils.isJavascriptCode(actionCode))
+        try {actionFunction = JsEngine.compile(actionCode)} catch {case x => actionHasSyntaxError = true; actionFunction = null; throw x}
+      else if (Utils.isScalaCode(actionCode))
+        try {actionFunction = ScalaEngine.compile(actionCode)} catch {case x => actionHasSyntaxError = true; actionFunction = null; throw x}
+      else {
+        actionHasSyntaxError = true
+        actionFunction = null
+        throw new Exception("Not a Javascript or Scala function")
+      }
+    }
+  }
   def cloneTree: RuleTreeNode
   def epsilonOk: Boolean
   protected var isValidChecks = List[Pair[Function0[Boolean], String]](
-    Pair(()=>{if (actionText.isEmpty) {true} else {
-          if (Utils.isJavascriptCode(actionText))
-            try {JsEngine.compile(actionText); true} catch {case _ => false}
-          else if (Utils.isScalaCode(actionText))
-            try {ScalaEngine.compile(actionText); true} catch {case _ => false}
-          else
-            false
-        }}, "Syntax error in JS action text")
+    Pair(() => !actionHasSyntaxError, "Syntax error in action code")
   )
   def isValid: Boolean = {
     isValidMessage = null
@@ -62,7 +73,7 @@ abstract sealed class RuleTreeNode (
   protected def copyFieldsFrom(n: RuleTreeNode) {
     drop = n.drop
     errorMessage = n.errorMessage
-    actionText = n.actionText
+    try {actionText = n.actionText} catch {case _ =>}
   }
 }
 
