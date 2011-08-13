@@ -74,6 +74,8 @@ abstract sealed class RuleTreeNode (
     drop = n.drop
     errorMessage = n.errorMessage
     try {actionText = n.actionText} catch {case _ =>}
+    actionFunction = n.actionFunction
+    actionHasSyntaxError = n.actionHasSyntaxError
   }
 }
 

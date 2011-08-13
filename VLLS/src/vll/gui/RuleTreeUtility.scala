@@ -23,10 +23,8 @@ package vll.gui
 import vll.core.Multiplicity
 import vll.core.RegexNode
 import vll.core.RuleTreeNode
-import vll.core.JsEngine
 import vll.core.LiteralNode
 import vll.core.RootNode
-import vll.core.ScalaEngine
 import vll.core.SequenceNode
 import vll.core.RepSepNode
 import vll.core.ReferenceNode
@@ -48,7 +46,6 @@ import scala.swing.event.ButtonClicked
 import scala.swing.SplitPane
 import scala.swing.Swing._
 import vll.core.ChoiceNode
-import vll.core.Utils
 
 class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
   private val astStructurePanel = new BorderPanel {
@@ -129,13 +126,13 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
         } catch {
           case se: Exception => 
           VllGui.top.ruleTreePanel.nodeChanged()
-            val msg = se.getMessage
-            if (se.isInstanceOf[ScriptException])
-              Dialog.showMessage(VllGui.top.contents(0), msg.substring(msg.indexOf(": ") + 2), 
-                "ERROR - Action syntax", Dialog.Message.Error, null)
-              else
-                Dialog.showMessage(VllGui.top.contents(0), msg, 
-                  "ERROR - Action syntax", Dialog.Message.Error, null)
+            val txt = se.getMessage
+            val msg = if (se.isInstanceOf[ScriptException]) txt.substring(txt.indexOf(": ") + 2) else txt
+            val ta = new TextArea(msg) {
+              font = new Font(Font.MONOSPACED, Font.PLAIN, font.getSize)
+            }
+            Dialog.showMessage(VllGui.top.contents(0), ta.peer, "ERROR - Action syntax", 
+                Dialog.Message.Error, null)
         }
       }
     }

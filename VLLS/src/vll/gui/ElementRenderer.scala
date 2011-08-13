@@ -25,7 +25,7 @@ import javax.swing.tree.{DefaultTreeCellRenderer}
 import java.awt.event.MouseEvent
 import java.awt.{Component, Font, Color, Graphics}
 import scala.swing.Swing
-import vll.core.{ LiteralNode, SequenceNode, Multiplicity, RegexNode, VllParsers, RootNode }
+import vll.core.{ LiteralNode, SequenceNode, Multiplicity, RegexNode, VllParsers, RootNode , ChoiceNode, RepSepNode, PredicateNode, ReferenceNode}
 
 class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeCellRenderer {
   override def getTreeCellRendererComponent(tree: JTree, value: Object, selected: Boolean, 
@@ -36,8 +36,22 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
       isRoot = guiNode.pNode.isInstanceOf[RootNode]
       ruleValid = guiNode.isValid
       toolTipText = guiNode.pNode match {
-        case lit: LiteralNode => hub.tokenBank(lit.literalName).left.get
-        case reg: RegexNode => hub.tokenBank(reg.regexName).right.get
+        case LiteralNode(_, name) => if (guiNode.isValidMessage eq null)
+          "Literal('%s')".format(hub.tokenBank(name).left.get) else guiNode.isValidMessage
+        case RegexNode(_, name) => if (guiNode.isValidMessage eq null)
+          "Regex('%s')".format(hub.tokenBank(name).right.get) else guiNode.isValidMessage
+        case SequenceNode(_) => if (guiNode.isValidMessage eq null)
+          "Sequence" else guiNode.isValidMessage
+        case ChoiceNode(_) => if (guiNode.isValidMessage eq null)
+          "Choice" else guiNode.isValidMessage
+         case RepSepNode(m) => if (guiNode.isValidMessage eq null)
+          (if (m == Multiplicity.ZeroOrMore) "RepSep" else "Rep1Sep") else guiNode.isValidMessage
+        case PredicateNode() => if (guiNode.isValidMessage eq null)
+          "Predicate" else guiNode.isValidMessage
+        case ReferenceNode(_, name) => if (guiNode.isValidMessage eq null)
+          "Reference(%s)".format(name) else guiNode.isValidMessage
+        case RootNode(name, _) => if (guiNode.isValidMessage eq null)
+          "Root(%s)".format(name) else guiNode.isValidMessage
         case _ => guiNode.isValidMessage
       }
       displayName = guiNode.displayName(gui.viewFullNamesMenuItem.selected)
