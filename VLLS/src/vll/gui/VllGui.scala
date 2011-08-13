@@ -287,37 +287,37 @@ class VllGui extends MainFrame with ActionListener {
     toolTip = title
     icon = swing.Swing.Icon(getClass.getResource("images/Delete16.gif"))
     def apply {
-    def purgeStack(p: String) {
-      var lst = List[String]()
-      while(!ruleTreePanel.displayStack.isEmpty)
-        lst ::= ruleTreePanel.displayStack.pop
-      lst.filter(_ != p).foreach(ruleTreePanel.displayStack.push)
-    }
-    val ruleToDelete = ruleChooser.getSelectedItem.asInstanceOf[String]
-    val ok = Dialog.showConfirmation(splitPane, "Delete '" + ruleToDelete + "' ?",
-        "Delete rule", Dialog.Options.YesNo, Dialog.Message.Question, null)
-    if (ok == Dialog.Result.Yes) {
-      val ruleNames = parsers.ruleBank.ruleNames 
-      if (ruleNames.size == 1) {
-        Dialog.showMessage(splitPane, "Can't delete last rule (use rename instead)",
-            "ERROR - Delete rule", Dialog.Message.Error, null)
-      } else {
-        parsers.ruleBank.ruleInUse(ruleToDelete, true) match {
-          case Nil =>
-            val idx = ruleNames.indexOf(ruleToDelete)
-              parsers.ruleBank -= ruleToDelete
-              val newDisplay = if (idx == ruleNames.size - 1)
-                ruleNames(idx - 1) else ruleNames(idx + 1)
-              updateRuleChooser(newDisplay)
-              ruleTreePanel.setRule(newDisplay)
-              purgeStack(ruleToDelete)
-              isDirty = true
-          case users: Seq[String] =>
+      def purgeStack(p: String) {
+        var lst = List[String]()
+        while(!ruleTreePanel.displayStack.isEmpty)
+          lst ::= ruleTreePanel.displayStack.pop
+        lst.filter(_ != p).foreach(ruleTreePanel.displayStack.push)
+      }
+      val ruleToDelete = ruleChooser.getSelectedItem.asInstanceOf[String]
+      val ok = Dialog.showConfirmation(splitPane, "Delete '" + ruleToDelete + "' ?",
+          "Delete rule", Dialog.Options.YesNo, Dialog.Message.Question, null)
+      if (ok == Dialog.Result.Yes) {
+        val ruleNames = parsers.ruleBank.ruleNames 
+        if (ruleNames.size == 1) {
+          Dialog.showMessage(splitPane, "Can't delete last rule (use rename instead)",
+              "ERROR - Delete rule", Dialog.Message.Error, null)
+        } else {
+          parsers.ruleBank.ruleInUse(ruleToDelete, true) match {
+            case Nil =>
+              val idx = ruleNames.indexOf(ruleToDelete)
+                parsers.ruleBank -= ruleToDelete
+                val newDisplay = if (idx == ruleNames.size - 1)
+                  ruleNames(idx - 1) else ruleNames(idx + 1)
+                updateRuleChooser(newDisplay)
+                ruleTreePanel.setRule(newDisplay)
+                purgeStack(ruleToDelete)
+                isDirty = true
+            case users: Seq[String] =>
                 val msg = "Can't delete '%s' - used by: \n%s".format(ruleToDelete, users.mkString(",\n"))
                 Dialog.showMessage(splitPane, msg, "ERROR - Delete rule", Dialog.Message.Error, null)
+          }
         }
       }
-    }
     }
   }
   
@@ -701,13 +701,13 @@ class VllGui extends MainFrame with ActionListener {
     tooltip = "Back"
     enabled = false
     reactions += {case bc: ButtonClicked =>
-         if (!ruleTreePanel.displayStack.isEmpty) {
-          val ruleName = ruleTreePanel.displayStack.pop
+        if (ruleTreePanel.displayStack.size > 1) {
+          ruleTreePanel.displayStack.pop
+          val ruleName = ruleTreePanel.displayStack(0)
           lastPoppedName = ruleName
           ruleChooser.setSelectedItem(ruleName)
-          if (ruleTreePanel.displayStack.isEmpty)
-            enabled = false
         }
+        enabled = ruleTreePanel.displayStack.size > 1
      }
   }
   

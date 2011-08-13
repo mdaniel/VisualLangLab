@@ -21,19 +21,16 @@
 package vll.gui
 
 import javax.swing.{JTree, ToolTipManager, DropMode}
-import javax.script.ScriptException
 import javax.swing.event.TreeSelectionEvent
 import javax.swing.event.TreeSelectionListener
 import javax.swing.tree.{TreePath, DefaultTreeModel, TreeSelectionModel}
-import scala.collection.mutable.Stack
+import scala.collection._
 import scala.swing.BorderPanel
 import scala.swing.Button
 import scala.swing.Dialog
 import scala.swing.GridPanel
 import scala.swing.Swing._
-import scala.swing.TextArea
 import swing.{ScrollPane, Component}
-import java.awt.Color
 import java.awt.event.{ActionListener, ActionEvent}
 import vll.core.ChoiceNode
 import vll.core.LiteralNode
@@ -257,10 +254,10 @@ class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel
     GuiNode.clearCache()
     rootNode = GuiNode(hub.ruleBank(newRule))
     theTree.removeTreeSelectionListener(this)
-    if (newRule != guiTop.lastPoppedName) {
-      displayStack.push(newRule/* rootNode.nodeName */)
-      guiTop.backButton.enabled = true
+    if (newRule != guiTop.lastPoppedName && (displayStack.isEmpty || newRule != displayStack(0))) {
+      displayStack.push(newRule)
     }
+    guiTop.backButton.enabled = displayStack.size > 1
     theTree.removeMouseListener(treeNodePopupListener)
     theTree.clearSelection()
     selectedNode = rootNode
@@ -289,15 +286,9 @@ class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel
   val theModel = new DefaultTreeModel(rootNode)
   var selectedNode: GuiNode = rootNode
   private var parent: GuiNode = selectedNode.getParent
-  val displayStack = new Stack[String]()
+  val displayStack = new mutable.Stack[String]()
   val theTree = new JTree(theModel)
-  //theTree.setComponentPopupMenu(treeNodePopupMenu)
-/*   printf("DragEnabled: %s%n", theTree.getDragEnabled)
-  printf("DropTarget: %s%n", theTree.getDropTarget)
-  printf("TransferHandler: %s%n", theTree.getTransferHandler)
-  theTree.setDragEnabled(true) // ***************************
-  theTree.setDropTarget(new DropTarget(theTree, null))
- */  theTree.setSelectionRow(0)
+  theTree.setSelectionRow(0)
   theTree.getSelectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION)
   theTree.setDragEnabled(true)
   theTree.setDropMode(DropMode.INSERT)
