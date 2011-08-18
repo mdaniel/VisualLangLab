@@ -664,6 +664,11 @@ class VllGui extends MainFrame with ActionListener {
         new AboutHelper(mainFrame).presentAboutDialog()
     }
   }
+  val scalaLicenseMenuItem = new MenuItem("Scala license") {
+    reactions += {case ButtonClicked(_) =>
+        new ScalaLicenseHelper(mainFrame).presentAboutDialog()
+    }
+  }
   val helpSampleItem1 = new MenuItem("ArithExpr") {
     reactions += {
       case ButtonClicked(_) => new ArithExpr(mainFrame).load()
@@ -689,7 +694,8 @@ class VllGui extends MainFrame with ActionListener {
     }
   }
   val helpMenu = new Menu("Help") {
-    contents.append(helpMenuItem, new Separator, helpSamples, new Separator, aboutMenuItem)
+    contents.append(helpMenuItem, new Separator, helpSamples, new Separator, aboutMenuItem, 
+                    scalaLicenseMenuItem)
   }
 
   menuBar = new MenuBar {
