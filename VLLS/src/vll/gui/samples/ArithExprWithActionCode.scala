@@ -20,8 +20,8 @@
 
 package vll.gui.samples
 
-import scala.swing.Dialog
-import scala.swing.Label
+import scala.swing.{Dialog, Label, Swing}
+import scala.concurrent.ops
 import vll.gui.VllGui
 
 class ArithExprWithActionCode(val gui: VllGui) {
@@ -41,11 +41,15 @@ Sample input (remove quotes): "(2 + 3) * (7 - 3)"
 Output: 20
 
 </pre></body></html>"""
-    gui.parsers.load(grammar)
-    val firstRule = gui.parsers.ruleBank.ruleNames(0)
-    gui.updateRuleChooser(firstRule)
+    ops.spawn {
+      gui.parsers.load(grammar)
+      val firstRule = gui.parsers.ruleBank.ruleNames(0)
+      Swing.onEDT {
+        gui.updateRuleChooser(firstRule)
+        gui.ruleTreePanel.setRule(firstRule)
+      }
+    }
     gui.title = "VisualLangLab/S - ArithExprWithActionCode"
-    gui.ruleTreePanel.setRule(firstRule)
     gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
         "VisualLangLab sample - ArithExprWithActionCode", Dialog.Message.Info, null)

@@ -314,23 +314,22 @@ class VllParsers extends Parsers with PackratParsers with Aggregates {
       }
     }
     val parser2 = if (node.errorMessage.isEmpty) parser1 else withMessage(parser1, node)
-    val parser3 = if (node.trace || (traceAll && node.parent == null)) withTrace(parser2, node) else parser2
-    val parser4 = node match {
+    val parser3 = node match {
       case RepSepNode(_) | RootNode(/* _,  */_, _) =>
-        parser3
+        parser2
       case _ =>
         if (node.multiplicity != Multiplicity.One) {
-          withMultiplicity(parser3, node)
+          withMultiplicity(parser2, node)
         } else
-          parser3
+          parser2
     }
-    val parser5: Parser[_] = if (node.isInstanceOf[PredicateNode] || node.actionText.isEmpty) parser4 else {
+    val parser4: Parser[_] = if (node.isInstanceOf[PredicateNode] || node.actionText.isEmpty) parser3 else {
       if (node.actionFunction eq null)
         failure("Action code has syntax error")
       else
         Parser(in => {
           node.actionFunction(in.pos.line, in.pos.column, null)
-          parser4(in) match {
+          parser3(in) match {
             case Success(tree, next) =>
               var actionResult = node.actionFunction(next.pos.line, next.pos.column, tree)
               Success(if (actionResult == null) tree else actionResult, next)
@@ -338,6 +337,7 @@ class VllParsers extends Parsers with PackratParsers with Aggregates {
           }
         })
     }
+    val parser5 = if (node.trace || (traceAll && node.parent == null)) withTrace(parser4, node) else parser4
     parser5.named(node.nodeName)
   }
 
