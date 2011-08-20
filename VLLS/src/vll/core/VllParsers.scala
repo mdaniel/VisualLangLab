@@ -30,7 +30,7 @@ import scala.util.parsing.input.CharSequenceReader
 import scala.xml.XML
 import scala.xml.{Elem => XMLElem}
 
-class VllParsers extends Parsers with PackratParsers {
+class VllParsers extends Parsers with PackratParsers with Aggregates {
 
   override type Elem = Char
   
@@ -188,9 +188,9 @@ class VllParsers extends Parsers with PackratParsers {
         }}
     case Multiplicity.Guard => Parser {in => parser(in) match {
           case Success(s, _) => Success(s, in)
-          case Failure(_, _) => Failure("%s missing expected text at (%s,%s)".format(
+          case Failure(_, _) => Failure("%s missing GUARD text at (%s,%s)".format(
                                                node.nodeName, in.pos.line, in.pos.column), in)
-          case Error(_, _) => Error("%s missing expected text at (%s,%s)".format(
+          case Error(_, _) => Error("%s missing GUARD text at (%s,%s)".format(
                                            node.nodeName, in.pos.line, in.pos.column), in)
         }}
 
@@ -207,23 +207,6 @@ class VllParsers extends Parsers with PackratParsers {
         res
       }
     )
-  }
-
-  private def tilde2array(t: Any): Any = {
-    def add(t: ~[_, _], buf: mutable.ArrayBuffer[Any]) {
-      val a ~ b = t
-      a match {
-        case tt: ~[_, _] => add(tt, buf)
-        case _ => buf.append(a)
-      }
-      buf.append(b)
-    }
-    t match {
-      case x: ~[_, _] => val aBuf = new mutable.ArrayBuffer[Any]()
-        add(x, aBuf)
-        aBuf.toArray
-      case _ => t
-    }
   }
 
   private def tokenParser(tokenName: String, rex: String, isRegex: Boolean, isLocal: Boolean, node: RuleTreeNode): Parser[String] = {
@@ -272,26 +255,6 @@ class VllParsers extends Parsers with PackratParsers {
     }
   }
 
-  private def combineChoice(node: ChoiceNode): Parser[_] = {
-//    node.zipWithIndex.map(tup => node2parser(tup._1) ^^ (res => Array(tup._2, res))).reduceLeft(_ | _)
-    node.zipWithIndex.map(tup => node2parser(tup._1) ^^ (res => Pair(tup._2, res))).reduceLeft(_ | _)
-  }
-
-  private def combineSequence(node: SequenceNode): Parser[_] = {
-    def toDrop(n: RuleTreeNode) = n.drop || n.multiplicity == Multiplicity.Not || n.multiplicity == Multiplicity.Guard || n.isInstanceOf[PredicateNode]
-    val t3 = node.zipWithIndex.map(nz => Tuple3(node2parser(nz._1), toDrop(nz._1), (node.commitPoint != -1 && nz._2 > node.commitPoint)))
-    t3.reduceLeft((p1, p2) => (p1._2, p2._2, p2._3) match {
-        case (false, false, false) => Tuple3(p1._1 ~ p2._1, (p1._2 && p2._2), false)
-        case (false, false, true) => Tuple3(p1._1 ~ commit(p2._1), (p1._2 && p2._2), false)
-        case (false, true, false) => Tuple3((p1._1 <~ p2._1), (p1._2 && p2._2), false)
-        case (false, true, true) => Tuple3(p1._1 <~ commit(p2._1), (p1._2 && p2._2), false)
-        case (true, false, false) => Tuple3((p1._1 ~> p2._1), (p1._2 && p2._2), false)
-        case (true, false, true) => Tuple3(p1._1 ~> commit(p2._1), (p1._2 && p2._2), false)
-        case (true, true, false) => Tuple3((p1._1 ~> p2._1), (p1._2 && p2._2), false)
-        case (true, true, true) => Tuple3(p1._1 ~> commit(p2._1), (p1._2 && p2._2), false)
-      })._1
-  }
-
   private def node2parser(node: RuleTreeNode): Parser[_] = {
     val parser1: Parser[_] =
     if (!node.isValid) {
@@ -319,8 +282,17 @@ class VllParsers extends Parsers with PackratParsers {
             tokenParserCache(tokenName) = p
             p
           }
-        case sn: SequenceNode => combineSequence(sn) ^^ tilde2array
-        case cn: ChoiceNode => combineChoice(cn)
+        case sn: SequenceNode => sequence(sn.zipWithIndex.map(
+              n => {
+                val sm = if (n._1.drop) Drop(node2parser(n._1)) 
+                else if (n._1.multiplicity == Multiplicity.Not) Not(node2parser(n._1))
+                else if (n._1.multiplicity == Multiplicity.Guard) Guard(node2parser(n._1))
+                else new SequenceMbr(node2parser(n._1))
+              
+                if (sn.commitPoint != -1 && n._2 >= sn.commitPoint)
+                  Commit(sm) else sm
+              }):_*)
+        case cn: ChoiceNode => choice(cn.map(node2parser):_*)
         case ReferenceNode(_, tokenName) => Parser(x => getParser(tokenName)(x))
         case RepSepNode(_) =>
           val rep = node2parser(node(0))
