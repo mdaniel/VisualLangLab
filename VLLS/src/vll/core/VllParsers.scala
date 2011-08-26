@@ -25,12 +25,11 @@ import java.io.PrintStream
 import scala.collection._
 import scala.io.Source
 import scala.util.parsing.combinator.PackratParsers
-import scala.util.parsing.combinator.Parsers
 import scala.util.parsing.input.CharSequenceReader
 import scala.xml.XML
 import scala.xml.{Elem => XMLElem}
 
-class VllParsers extends Parsers with PackratParsers with Aggregates {
+class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggregates {
 
   override type Elem = Char
   
@@ -74,18 +73,8 @@ class VllParsers extends Parsers with PackratParsers with Aggregates {
     globalTokenParserTime = 0
     globalTokenParserTime2 = 0
     val (lits, regs) = tokenBank.toArray.filterNot(_._1.endsWith("_")).partition(_._2.isInstanceOf[Left[_,_]])
-    val sortedLits = lits.sortWith((a, b) => a._1 < b._1)
-    val sortedRegs = regs.sortWith((a, b) => a._1 < b._1)
-    val sortedTokens = Array(sortedLits, sortedRegs).flatMap(x => x)
-    globalTokenIds.clear()
+    setupLexer(lits.map(p => Utils.unEscape(p._2.left.get)), regs.map(p => Utils.unEscape(p._2.right.get)))
     tokenParserCache.clear()
-    for (i <- 0 until sortedTokens.length) {
-//printf("%s:%s=%d%n", sortedTokens(i)._1, sortedTokens(i)._2, i)
-      globalTokenIds(sortedTokens(i)._1) = i
-    }
-    globalTokens = sortedTokens.map(kv => Pair(kv._1, kv._2 match {case Left(s) => Automata.escapeMetaChars(Utils.unEscape(s)); case Right(s) => Utils.unEscape(s)}))
-//    globalTokenLexer = Automata.lexer(globalTokens.map(_._2))
-    globalTokenLexer = Automata.lexer(globalTokens.map(_._2))
     var theParser: Parser[_] = null
     try {
       parserCache.clear()
@@ -94,44 +83,14 @@ class VllParsers extends Parsers with PackratParsers with Aggregates {
     } catch {
       case e => ok = false; e.printStackTrace()
     }
-/*     if (ok) {
-      Parser(in => {stringToParse = in.source.toString; theParser(in)})
-    } else
-      null
- */
     if (ok) theParser else null
   }
 
-  override def phrase[T](p: Parser[T]) = super.phrase[T](p <~ eofParser)
-  
   // The PACKAGE PRIVATE part (internal API) follows ...
   
-  private def eofParser = {
-    val parser = Parser(in => {
-        if (in.atEnd)
-          Success("", in)
-//         val spaces = math.max(whitespaceMatcher(stringToParse, in.offset), 0)
-        val spaces = math.max(whitespaceMatcher(in), 0)
-        if (in.drop(spaces).atEnd)
-          Success("", in.drop(spaces))
-        else
-          Failure("Expected EOF", in)
-      })
-    parser
-  }
+  override def handleWhiteSpace(source: java.lang.CharSequence, offset: Int): Int =
+    offset + whitespaceMatcher(source.subSequence(offset, source.length))
 
-  private lazy val globalTokenParser: PackratParser[Pair[String, Int]] = Parser(in => {
-        val spaces = whitespaceMatcher(in)
-        val in2 = if (spaces > 0) in.drop(spaces) else in
-        val n = globalTokenLexer(in2)
-        if (n(0) > 0) {
-          Success(Pair(in2.source.subSequence(in2.offset, in2.offset + n(0)).asInstanceOf[String], n(1)), in2.drop(n(0)))
-        } else {
-          Failure(if (in2.atEnd) "End-of-input" else "No-known-token", in2)
-        }
-      }
-    )
-    
   val ruleBank = new RuleBank(/* this */)
   val tokenBank = new mutable.HashMap[String, Either[String, String]] {
     def getTokenNames = keys.toArray.sorted
@@ -175,11 +134,8 @@ class VllParsers extends Parsers with PackratParsers with Aggregates {
 
   private def withMultiplicity(parser: Parser[_], node: RuleTreeNode): Parser[_] = node.multiplicity match {
     case Multiplicity.One => parser
-//    case Multiplicity.ZeroOrOne => ((parser)?) ^^ {r => if (r.isEmpty) Array() else Array(r.get)}
     case Multiplicity.ZeroOrOne => (parser)? 
-//    case Multiplicity.ZeroOrMore => ((parser)*) ^^ {_.toArray}
     case Multiplicity.ZeroOrMore => (parser)*
-//    case Multiplicity.OneOrMore => ((parser)+) ^^ {_.toArray}
     case Multiplicity.OneOrMore => (parser)+
     case Multiplicity.Not => Parser {in => parser(in) match {
           case Success(s, _)  => Failure("%s does NOT expect '%s' at (%s,%s)".format(
@@ -209,48 +165,29 @@ class VllParsers extends Parsers with PackratParsers with Aggregates {
     )
   }
 
-  private def tokenParser(tokenName: String, rex: String, isRegex: Boolean, isLocal: Boolean, node: RuleTreeNode): Parser[String] = {
+   private def tokenParser(tokenName: String, rex: String, isRegex: Boolean, isLocal: Boolean, node: RuleTreeNode): Parser[String] = {
     def failureMsg1(nodeName: String, expected: String) = "%s needs %s".format(nodeName, expected)
     def failureMsg2(nodeName: String, expected: String, found: String) = "%s needs %s (got %s)".format(nodeName, expected, found)
+    val unescapedString = Utils.unEscape(rex)
     if (isLocal) {
-        val unescapedString = Utils.unEscape(rex)
-        val regExp = if (isRegex) unescapedString else Automata.escapeMetaChars(unescapedString)
-        val localTokenMatcher = if (localTokenMatcherCache.contains(regExp)) 
-          localTokenMatcherCache(regExp) 
-        else {
-          val newMatcher = Automata.matcher(regExp)
-          localTokenMatcherCache(regExp) = newMatcher
-          newMatcher
-        }
+      val p = if (isRegex) regex$(unescapedString.r) else literal$(unescapedString)
       Parser(in => {
         if (userRequestedStop)
           throw new InterruptedException("Interrupted by user")
-        val spaces = whitespaceMatcher(in)
-        val in2 = if (spaces > 0) in.drop(spaces) else in
-        val n = localTokenMatcher(in2)
-        if (n > 0)
-          Success(in2.source.subSequence(in2.offset, in2.offset + n).asInstanceOf[String], in2.drop(n))
-        else
-          Failure(failureMsg1(node.nodeName, tokenName), in)
+        p(in) match {
+          case s: Success[_] => s
+          case Failure(msg, _) => Failure(msg, in)
+        }
       })
     } else {
-        val tokenId = globalTokenIds(tokenName)
+      val p = if (isRegex) regex(unescapedString.r) else literal(unescapedString)
       Parser(in => {
         if (userRequestedStop)
           throw new InterruptedException("Interrupted by user")
-        val startTime = System.currentTimeMillis
-        val gtp = globalTokenParser(in)
-        val startTime2 = System.currentTimeMillis
-        globalTokenParserTime += startTime2 - startTime
-        val result: ParseResult[String] = gtp match {
-          case Success(stringAndId, next) =>
-            if (stringAndId._2 == tokenId) Success(stringAndId._1, next) else 
-              Failure(failureMsg2(node.nodeName, tokenName, globalTokens(stringAndId._2)._1), in)
+        p(in) match {
+          case s: Success[_] => s
           case Failure(msg, _) => Failure(msg, in)
-          case Error(msg, _) => Error(msg, in)
         }
-        globalTokenParserTime2 += System.currentTimeMillis - startTime2
-        result
       })
     }
   }
@@ -351,21 +288,12 @@ class VllParsers extends Parsers with PackratParsers with Aggregates {
     }
   }
 
-  var fileToParse: File = null;
-  private var currentLine, currentColumn = 0
+//  var fileToParse: File = null;
   private val tokenParserCache = mutable.HashMap[String,Parser[String]]()
-  private var globalTokens: Array[Pair[String,String]] = null
-//  private var globalTokenLexer: Automata.LexerType = null
-  private var globalTokenLexer: Automata.LexerType = null
-//  private var stringToParse = ""
   var globalTokenParserTime, globalTokenParserTime2: Long = 0
-  val globalTokenIds = mutable.HashMap[String, Int]()
-//  private var allLiterals = mutable.HashSet[String]()
   private var traceDepth = 0
   private var ok = true
   private val parserCache = mutable.Map[String, Parser[_]]()
-//  private val localTokenMatcherCache = mutable.Map[String, Automata.MatcherType]()
-  private val localTokenMatcherCache = mutable.Map[String, Automata.MatcherType]()
 }
 
 object VllParsers {

@@ -28,7 +28,7 @@ object Automata {
   
   type Input = VllParsers#Input
   
-  type MatcherType = Function1[Input,Int]
+  type MatcherType = Function1[CharSequence,Int]
   type LexerType = Function1[Input,Array[Int]]
   
   def lexer(p: Array[String]): LexerType = {
@@ -62,13 +62,13 @@ object Automata {
   
   def matcher(re: String): MatcherType = {
     val pat = Pattern.compile(re)
-    val m = (in: Input) => {
-      val s = in.source.subSequence(in.offset, in.source.length)
+    val m = (s: CharSequence) => {
+//      val s = in.source.subSequence(in.offset, in.source.length)
       try {
         val mat = pat.matcher(s)
         if (mat.lookingAt) mat.end else 0
       } catch {
-        case x => printf("Automata.matcher() regex problem (%s) at (%d, %d)%n", re, in.pos.line, in.pos.column)
+        case x => printf("Automata.matcher() regex problem (%s)%n", re)
           throw x
       }
     }

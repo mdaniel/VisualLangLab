@@ -83,7 +83,7 @@ class ParsingActor(gui: VllGui) extends VllParsers with DaemonActor {
             printf("%4d %s ", i, f.getAbsolutePath)
           else
             printf("%s ", f.getAbsolutePath)
-          fileToParse = f
+//          fileToParse = f
           val text = file2string(f)
           printf("(%d chars) ", text.length)
           val startTime = System.currentTimeMillis
