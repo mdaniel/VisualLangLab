@@ -73,7 +73,8 @@ class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggre
     globalTokenParserTime = 0
     globalTokenParserTime2 = 0
     val (lits, regs) = tokenBank.toArray.filterNot(_._1.endsWith("_")).partition(_._2.isInstanceOf[Left[_,_]])
-    setupLexer(lits.map(p => Utils.unEscape(p._2.left.get)), regs.map(p => Utils.unEscape(p._2.right.get)))
+    lits.foreach(p => literal(Utils.unEscape(p._2.left.get)))
+    regs.foreach(p => regex(Utils.unEscape(p._2.right.get).r))
     tokenParserCache.clear()
     var theParser: Parser[_] = null
     try {

@@ -46,15 +46,15 @@ trait SimpleLexingRegexParsers extends RegexParsers {
   implicit override def literal(lit: String): Parser[String] = {
     if ((lit eq null) || lit.isEmpty)
       throw new IllegalArgumentException("Null or empty literal string")
-    val lit2 = escapeRegexMetachars(lit)
-    if (tokenParserMap.contains(lit2))
-      tokenParserMap(lit2)
+    if (tokenParserMap.contains(lit))
+      tokenParserMap(lit)
     else {
-      if (tokenPatterns eq null)
-        throw new IllegalStateException("Define literal(%s) before use".format(lit))
-      val id = tokenIndices(lit2)
-      val parser = parserById(id)
-      tokenParserMap(lit2) = parser
+      setupNeeded = true
+      // literals have IDs -1, -2, -3 ...
+      // order of following 2 lines must not be changed
+      lit +=: theLiterals
+      val parser = parserById(-theLiterals.size)
+      tokenParserMap(lit) = parser
       parser
     }
   }
@@ -68,18 +68,18 @@ trait SimpleLexingRegexParsers extends RegexParsers {
     if (tokenParserMap.contains(regAsString))
       tokenParserMap(regAsString)
     else {
-      if (tokenPatterns eq null)
-        throw new IllegalStateException("Define regex(%s) before use".format(reg))
-      val id = tokenIndices(regAsString)
-      val parser = parserById(id)
-//println("parserById: " + id)
+      setupNeeded = true
+      // regexs have IDs 0, 1, 2 ...
+      // order of following 2 lines must not be changed
+      val parser = parserById(theRegexs.size)
+      theRegexs += regAsString 
       tokenParserMap(regAsString) = parser
       parser
     }
   }
 
   private def parserById(id: Int): Parser[String] = {
-    def formatToken(tid: Int) = "%s(%s)".format((if (tid < regexBaseIndex) "literal" else "regex"), allTokens(tid))
+    def formatToken(tid: Int) = "%s(%s)".format((if (tid < 0) "literal" else "regex"), allTokens(tid + literalBaseIndex))
     Parser(in => {
         if (traceTokens)
           printf("Trying %s @ (%d,%d)%n", formatToken(id), in.pos.line, in.pos.column)
@@ -114,12 +114,16 @@ trait SimpleLexingRegexParsers extends RegexParsers {
   }
   
   private def globalTokenLexer(inStr: String, offset: Int): LexResults = {
+    if (setupNeeded) {
+      setupLexer()
+      setupNeeded = false
+    }
     if (/* offset > maxOffset ||  */!lexResultsCache.contains(offset)) {
       val postSpaces = handleWhiteSpace(inStr, offset)
       val res = lex(inStr, postSpaces)
       val lexResult = (res._1, res._2, if (res._1 eq null) (postSpaces - offset) else (postSpaces - offset + res._1.length))
-//println("lex: " + res + "lexResult: " + lexResult)
-      lexResultsCache(offset) = lexResult
+      if (res._1 ne null)
+        lexResultsCache(offset) = lexResult
 //      maxOffset = offset
       lexResult
     } else {
@@ -133,15 +137,15 @@ trait SimpleLexingRegexParsers extends RegexParsers {
     super.phrase(p)
   }
 
-  def setupLexer(lits: Array[String], regs: Array[String]) {
-    val escLits = lits.map(escapeRegexMetachars)
+  private def setupLexer() {
     tokenIndices.clear()
-    escLits.zipWithIndex.foreach(p => tokenIndices(p._1) = p._2)
-    regexBaseIndex = escLits.size
-    regs.zipWithIndex.foreach(p => tokenIndices(p._1) = p._2 + regexBaseIndex)
-//println(tokenIndices.mkString(", "))
-    allTokens = Array(escLits, regs).flatMap(x => x)
-    tokenPatterns = allTokens.map(Pattern.compile(_, (Pattern.MULTILINE | Pattern.DOTALL))).zipWithIndex.par
+    literalBaseIndex = theLiterals.size
+    theLiterals.zipWithIndex.foreach(p => tokenIndices(p._1) = p._2 - literalBaseIndex)
+    theRegexs.zipWithIndex.foreach(p => tokenIndices(p._1) = p._2)
+    val escLits = theLiterals.map(escapeRegexMetachars)
+    allTokens = Array(escLits, theRegexs).flatMap(x => x)
+    tokenPatterns = allTokens.map(Pattern.compile(_, (Pattern.MULTILINE | Pattern.DOTALL))).
+      zipWithIndex.map(p => Pair(p._1, p._2 - literalBaseIndex)).par
     tokenParserMap(escapeRegexMetachars("\\z")) = super.regex("\\z".r)
   }
 
@@ -162,7 +166,7 @@ trait SimpleLexingRegexParsers extends RegexParsers {
       byLengthAndPriority.head
     }
   }
-
+  
   private var tokenPatterns: parallel.mutable.ParArray[Tuple2[Pattern, Int]] = null
   private val tokenParserMap = mutable.HashMap[String, Parser[String]]()
   var traceTokens = false
@@ -171,14 +175,17 @@ trait SimpleLexingRegexParsers extends RegexParsers {
   private val lexResultsCache = mutable.HashMap[Int, LexResults]()
   private var allTokens: Array[String] = null
   private val tokenIndices = mutable.HashMap[String, Int]()
-  private var regexBaseIndex = 0
+  private val theLiterals, theRegexs = mutable.Buffer[String]()
+  private var setupNeeded = true
+  var literalBaseIndex = 0
 }
 
 object Main extends SimpleLexingRegexParsers {
   def main(args: Array[String]) {
-    setupLexer(Array("begin", "end"), Array("\\d+", "[a-z]+"))
-    val line = "begin" ~ rep("[a-z]+".r | "\\d+".r) ~ "end"
-    println(parseAll(line, "begin 12345 alphabeticstuff end"))
+    literal("end")
+    lazy val line = "begin" ~ rep("[a-z]+".r | "\\d+".r) ~ "end"
+    println(parseAll(line, "begin 12345 end"))
+    println(parseAll(line, "begin 12345 alphabetics %^$#@ end"))
     println(parseAll(line, "begin 12345 begin end"))
     println(parseAll(line, "begin hello 1984 this is 2011 end"))
     println(parseAll(line, "begin 12345 alphas end begin-again!"))
