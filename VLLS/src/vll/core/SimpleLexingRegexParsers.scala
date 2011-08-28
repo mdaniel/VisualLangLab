@@ -180,14 +180,16 @@ trait SimpleLexingRegexParsers extends RegexParsers {
   var literalBaseIndex = 0
 }
 
-object Main extends SimpleLexingRegexParsers {
+object Main extends /* SimpleLexing */RegexParsers {
   def main(args: Array[String]) {
-    literal("end")
+      // priming the lexer ...
+    literal("begin"); literal("end"); 
+    regex("[a-z]+".r); regex("\\d+".r)
+      // define a parser ...
     lazy val line = "begin" ~ rep("[a-z]+".r | "\\d+".r) ~ "end"
-    println(parseAll(line, "begin 12345 end"))
-    println(parseAll(line, "begin 12345 alphabetics %^$#@ end"))
-    println(parseAll(line, "begin 12345 begin end"))
-    println(parseAll(line, "begin hello 1984 this is 2011 end"))
-    println(parseAll(line, "begin 12345 alphas end begin-again!"))
+      // test the parser ...
+    println(parseAll(line, "begin hi 1984 i am 2011 end"))
+    println(parseAll(line, "begin the ending of 2010 end"))
+    println(parseAll(line, "begin the end of 2010 end"))
   }
 }
