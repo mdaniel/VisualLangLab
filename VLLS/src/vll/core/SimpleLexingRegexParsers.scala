@@ -177,10 +177,10 @@ trait SimpleLexingRegexParsers extends RegexParsers {
   private val tokenIndices = mutable.HashMap[String, Int]()
   private val theLiterals, theRegexs = mutable.Buffer[String]()
   private var setupNeeded = true
-  var literalBaseIndex = 0
+  private var literalBaseIndex = 0
 }
 
-object Main extends /* SimpleLexing */RegexParsers {
+object Main extends SimpleLexingRegexParsers {
   def main(args: Array[String]) {
       // priming the lexer ...
     literal("begin"); literal("end"); 

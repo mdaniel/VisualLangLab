@@ -121,8 +121,8 @@ class ParsingActor(gui: VllGui) extends VllParsers with DaemonActor {
         }
         val endTime = System.currentTimeMillis
         if (file.isDirectory)
-          printf("%d files, %d errors in %d ms (%d,%d)%n", i, errors, endTime - startTime,
-                 gui.parsers.globalTokenParserTime, gui.parsers.globalTokenParserTime2)
+          printf("%d files, %d errors in %d ms (lexing: %d)%n", i, errors, endTime - startTime,
+                 gui.parsers.globalTokenParserTime)
       } else
         System.err.printf("No such file: %s%n", file.getAbsolutePath)
     } else {
@@ -153,7 +153,8 @@ class ParsingActor(gui: VllGui) extends VllParsers with DaemonActor {
         val duration = parseEndTime - combinatorEndTime
         res match {
            case gui.parsers.Success(tree, rest) =>
-            printf("(%d chars in %d ms), result follows:%n", theReader.source.length, duration)
+            printf("Parsed %d chars in %d ms (lexer: %d), result follows:%n", 
+                   theReader.source.length, duration, gui.parsers.globalTokenParserTime)
              handleTree(tree)
            case gui.parsers.NoSuccess(msg, rest) =>
 /*                 val res2 = gui.parsers.globalTokenParser(rest) match {

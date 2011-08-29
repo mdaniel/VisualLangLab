@@ -71,7 +71,6 @@ class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggre
   
   def getParserFor(parserName: String): Parser[_] = {
     globalTokenParserTime = 0
-    globalTokenParserTime2 = 0
     val (lits, regs) = tokenBank.toArray.filterNot(_._1.endsWith("_")).partition(_._2.isInstanceOf[Left[_,_]])
     lits.foreach(p => literal(Utils.unEscape(p._2.left.get)))
     regs.foreach(p => regex(Utils.unEscape(p._2.right.get).r))
@@ -173,23 +172,29 @@ class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggre
     if (isLocal) {
       val p = if (isRegex) regex$(unescapedString.r) else literal$(unescapedString)
       Parser(in => {
-        if (userRequestedStop)
-          throw new InterruptedException("Interrupted by user")
-        p(in) match {
-          case s: Success[_] => s
-          case Failure(msg, _) => Failure(msg, in)
-        }
-      })
+          val t = System.currentTimeMillis
+          if (userRequestedStop)
+            throw new InterruptedException("Interrupted by user")
+          val rv = p(in) match {
+            case s: Success[String] => s
+            case Failure(msg, _) => Failure(msg, in)
+          }
+          globalTokenParserTime += System.currentTimeMillis - t
+          rv
+        })
     } else {
       val p = if (isRegex) regex(unescapedString.r) else literal(unescapedString)
       Parser(in => {
-        if (userRequestedStop)
-          throw new InterruptedException("Interrupted by user")
-        p(in) match {
-          case s: Success[_] => s
-          case Failure(msg, _) => Failure(msg, in)
-        }
-      })
+          val t = System.currentTimeMillis
+          if (userRequestedStop)
+            throw new InterruptedException("Interrupted by user")
+          val rv = p(in) match {
+            case s: Success[String] => s
+            case Failure(msg, _) => Failure(msg, in)
+          }
+          globalTokenParserTime += System.currentTimeMillis - t
+          rv
+        })
     }
   }
 
@@ -291,7 +296,7 @@ class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggre
 
 //  var fileToParse: File = null;
   private val tokenParserCache = mutable.HashMap[String,Parser[String]]()
-  var globalTokenParserTime, globalTokenParserTime2: Long = 0
+  var globalTokenParserTime: Long = 0
   private var traceDepth = 0
   private var ok = true
   private val parserCache = mutable.Map[String, Parser[_]]()
