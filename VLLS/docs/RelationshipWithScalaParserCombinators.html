@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Relationship with Scala Parser Combinators</title>
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   </head>
 
   <body>
@@ -21,27 +22,28 @@
     </p>
 
     <p>
-      The GUI owns an instance of the class <code>VllParsers</code> which extends  
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> with 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>, 
-      and the grammar-trees effectively become members of that instance as though defined as follows: 
+      The GUI owns an instance of <code>vll.core.VllParsers</code>, which indirectly extends  
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> with 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>. 
+      The grammar-trees effectively become members of that instance 
+      (of <code>VllParsers</code>) as though defined as follows: 
     </p> 
 
-<pre><code>    lazy val aParser: <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">scala.util.parsing.combinator.Parser</a>[Any] = ...</code></pre>
+<pre><code>    lazy val someParser: <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">scala.util.parsing.combinator.Parser</a>[Any] = ...</code></pre>
 
     <p>
       However, because of the way Scala's 
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a> 
-      work, it is not necessary to generate or compile any code under the hood. 
+      work, it is not necessary to generate or compile any code to obtain this effect. 
     </p> 
 
     <p>
       In terms of the <i>Essential Jargon</i> in the 
       <a href="UserGuide.html">User Guide</a>, the GUI 
       (by owning an instance of <code>VllParsers</code>) is a <i>parser</i>, while 
-      members like <code>aParser</code> are <i>parser-rule</i>s that 
+      objects like <code>someParser</code> are <i>parser-rule</i>s that 
       bring <i>grammar-tree</i>s to life. The line of Scala 
-      code above shows that <code>aParser</code> is of type 
+      code above shows that <code>someParser</code> is of type 
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
       which of course is different from the idea of <i>parser</i> in the <i>Essential Jargon</i>. 
       The spelling of the two terms has a subtle difference -- the case of the inital 
@@ -52,29 +54,143 @@
     </p> 
 
     <p>
-      This abstraction is not 100% technically accurate, but represents the 
-      capabilities and functions of the resulting assembly well. 
-      More details, along with a programming-level view 
-      can be found in <a href="UsingTheAPI.html">Using the API</a>
+      The following descriptions explain the function and role of the other classes 
+      in the <code>vll</code> (VisualLangLab) package. 
     </p>
 
-    <h2>Grammar-Tree to Parser-Rule</h2>
+    <h2 id="ClassSimpleLexing">Class vll.core.SimpleLexingRegexParsers (Built-in Lexer)</h2>
 
     <p>
-      The toolkit that enables VisualLangLab to produce a <i>parser-rule</i> from information 
-      in a <i>grammar-tree</i> is the set of methods of the classes <code>Parsers</code>, 
-      <code>PackratParsers</code>, and <code>Parser</code> as augmented by 
-      the methods in <code>Parsers</code>. The following description highlights the 
-      significant changes made by VisualLangLab. 
+      This class <i>is</i> the built-in simple 
+      <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexer</a>. 
+      It extends the Scala API's 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>, 
+      overriding the <code>literal(String)</code> and <code>regex(Regex)</code> methods 
+      with versions implemented on top of the lexer. The class does not add anything to 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>'s 
+      interface, but changes the behaviour of the <code>literal()</code> and 
+      <code>regex()</code> methods in two ways demonstrated by the code below.
+    </p>
+
+<pre><code>object Main extends SimpleLexingRegexParsers {
+  def main(args: Array[String]) {
+
+      /**** priming the built-in lexer ... ****/
+    literal("begin"); literal("end"); 
+    regex("[a-z]+".r); regex("\\d+".r)
+
+      /**** define a parser ... ****/
+    lazy val line = "begin" ~ rep("[a-z]+".r | "\\d+".r) ~ "end"
+
+      /**** test the parser ... ****/
+    println(parseAll(line, "begin hi 1984 i am 2011 end"))
+    println(parseAll(line, "begin the ending of 2010 end"))
+    println(parseAll(line, "begin the end of 2010 end"))
+  }
+}</code></pre>
+
+    <p>
+      The first change is quite obvious: the two lines of <i>lexer-priming</i> code. 
+      The built-in lexer must be <i>setup</i> by making it aware of all 
+      literal and regex tokens before they are actually used. 
+      The second difference is behavioural, and can only be seen 
+      in the output of the code (see below). 
+    </p>
+
+<pre><code>    [1.28] parsed: ((begin~List(hi, 1984, i, am, 2011))~end)
+    [1.29] parsed: ((begin~List(the, ending, of, 2010))~end)
+    [1.15] failure: string matching regex `\z' expected but `o' found
+
+    begin the end of 2010 end
+                  ^
+</code></pre>
+
+    <p>
+      The failure message in the example above is quite clear: nothing more is 
+      expected after the <i>end</i> in the middle of the input line, so the parser 
+      complains about the remaining text.
+      But compare this with the output obtained when <code>object Main</code> extends 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> 
+      instead of <code>SimpleLexingRegexParsers</code> (see below). 
+    </p>
+
+<pre><code>    [1.28] failure: `end' expected but end of source found
+
+    begin hi 1984 i am 2011 end
+                               ^
+    [1.29] failure: `end' expected but end of source found
+
+    begin the ending of 2010 end
+                                ^
+    [1.26] failure: `end' expected but end of source found
+
+    begin the end of 2010 end
+                             ^
+</code></pre>
+
+    <p>
+      What's happening here is that the <i>end</i> in the input text is actually 
+      matching the token <code>regex("[a-z]+".r)</code>, not the token 
+      <code>literal("end")</code>. So the parser complains about the missing 
+      <i>end</i>. 
+    </p>
+
+    <p>
+      The essential point here is that the built-in lexer treats tokens created with 
+      <code>literal()</code> as reserved keywords with higher priority than tokens 
+      created with <code>regex()</code>. So, although the regular-expression 
+      <code>[a-z]+</code> matches <i>end</i>, the literal token created 
+      (implicitly) for <i>"end"</i> takes precedence, and the 
+      <i>end</i> in the input is not allowed to match the token created (implicitly) 
+      for <i>"[a-z]+".r</i>. The lexer also uses the longest 
+      possible section of input that matches any token. So, the 
+      word <i>ending</i> is treated as an instance of the token 
+      <code>regex("[a-z]+".r)</code>, not as an instance of <code>literal("end")</code> 
+      followed by an instance of <code>regex("[a-z]+".r)</code>.
+    </p>
+
+    <h3>Whitespace and Comments</h3>
+
+    <p>
+      The lexer depends on 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>'s 
+      standard mechanism for handling whitespace (<code>handleWhiteSpace()</code>). 
+      The class <code>vll.gui.VllGui</code>, which extends this class overrides the 
+      method to provide support for comments as well. 
+    </p> 
+
+    <h3>Lexer Performance</h3>
+
+    <p>
+      The focus at this time is on functionality, so the performance of the lexer 
+      now is quite poor. However, it is hoped to improve the design of the lexer 
+      in future versions to alleviate this problem. 
+    </p> 
+
+    <h3>Use as Standalone Lexer</h3>
+
+    <p>
+      This class has no dependencies on any other component of VisualLangLab, and so 
+      may be used as a standalone lexer. A version of this code can be found 
+      at <a href="">simple-lexing-regex-parser</a>. 
+    </p> 
+
+    <h2 id="TraitAggregates">Trait vll.core.Aggregates</h2>
+
+    <p>
+      This trait adds functionality to the "~" and "|" combinators, facilitating 
+      smoother integration with a graphical user-interface, and transforming the 
+      parser's result to a more user-friendly structure. 
     </p>
 
     <h3>Sequence Node vs "~" Combinator</h3>
 
     <p>
-      The Sequence node is converted into a 
+      Sequence nodes are converted into a 
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
-      that returns an <code>Array[Any]</code> instead of instances of 
-      the class named "~". Arrays are simpler to handle, and lead to less complex code 
+      that returns an <code>Array[Any]</code> instead of instances of the class 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$$tilde.html">~</a>. 
+      Arrays are simpler to handle, and lead to less complex code 
       in actions or application programs (see examples in 
       <a href="UsingTheAPI.html">Using the API</a>). A 
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
@@ -90,16 +206,23 @@
     <p>
       The Choice node is converted into a 
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
-      that returns a <code>Pair[Int,Any]</code>. The first member is a 
+      that returns a <a href="http://www.scala-lang.org/api/current/scala/Predef$.html">Pair</a>[Int,Any]. 
+      The first member of the <code>Pair</code> is a 
       (0-based) index of the matching alternative. 
       This is the key to developing the parser separately from AST handling code 
       (see examples in <a href="UsingTheAPI.html">Using the API</a>). 
-      Developers using the Scala API's "|" combinator directly can not separate the 
-      parser from action-code and <i>must</i> provide some 
-      action code co-located with each alternative. 
+      Developers using the Scala API's "|" combinator directly can often not separate the 
+      action-code from the parser as the identity of the matching alternative is not retained. 
     </p> 
 
-    <h3>Trace Annotation vs log()</h3>
+    <h2>Class vll.core.VllParsers</h2>
+
+    <p>
+      This class extends <code>vll.core.SimpleLexingRegexParsers</code>, and adds 
+      all needed finishing touches to the parser framework. 
+    </p>
+
+    <h3 id="TraceAnnotation">Trace Annotation vs log()</h3>
 
     <p>
       VisualLangLab provides a <i>trace</i> annotation 
@@ -111,7 +234,7 @@
       The <i>trace</i> annotation on any grammar-tree node is toggled by using the grammar-tree's pop-up context menu.
     </p> 
 
-    <h3>Node Names</h3>
+    <h3 id="NodeNames">Node Names</h3>
 
     <p>
       VisualLangLab gives every grammar-tree node a unique name based on the name of the 
@@ -126,34 +249,7 @@
       <i>Figure-2. Node names in a grammar-tree</i>
     </p>
 
-    <h2>The Built-In Lexer</h2>
-
-    <p>
-      VisualLangLab does not depend on 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>, 
-      but provides its own lexer-like capabilities for handling tokens (literal and regex), whitespace, and comments. 
-      More information on this aspect is given below. 
-    </p> 
-
-    <p>
-      Parsers that use tokens defined with regular-expression patterns are typically based on 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>. 
-      Unfortunately, this class does not really use a lexer, and the <code>Parser</code>s 
-      produced by its <i>literal(String)</i> and <i>regex(Regex)</i> methods do not behave 
-      as sometimes required (or expected). Because of this, VisualLangLab uses its own 
-      internal lexer -- simple and somewhat slow, but functions as lexers normally do. 
-    </p> 
-
-    <h3>Whitespace and Comments</h3>
-
-    <p>
-      Although 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> 
-      is not used, a similar mechanism is used for handling whitespace and comments. 
-      More details can be found in <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
-    </p> 
-
-    <h2>Error Checking</h2>
+    <h2 id="ErrorChecking">Error Checking</h2>
 
     <p>
       <a href="TheGUI.html">The GUI</a> checks all parser-rules for certain types of errors, 
@@ -171,7 +267,19 @@
       the need for such parser-rules. 
     </p> 
 
-    <h3>Nodes with Bad Action-Code</h3>
+    <h3>Child Counts</h3>
+
+    <p>
+      <i>Sequence</i> and <i>Choice</i> nodes must have at least two child nodes. 
+      <i>Sequence</i> nodes must also have at least one child node that contributes 
+      to the AST (not all child nodes may be <i>drop</i>ped, or have multiplicities 
+      of <i>0 (not)</i> or <i>= (guard)</i>). 
+      <i>RepSep</i> nodes must have exactly two child nodes. 
+      <i>Root</i> nodes must have one child node. Nodes that violate those 
+      requirements will be flagged. 
+    </p> 
+
+    <h3>Bad Action-Code</h3>
 
     <p>
       Action code associated with any grammar-tree node 

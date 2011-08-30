@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>VisuaLangLab</title>
-  <meta name="description" content="A Visual Parser-Generator">
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   <meta name="keywords" content="scala visual parser-generator lexer parser">
   <meta name="google-site-verification" content=
   "GvglxosW1fsjQKPP8hSWs5bb0tyA7ijssyOl8LzQbX0" />
@@ -13,10 +13,10 @@
 <body>
   <h1>VisualLangLab - A Visual Parser-Generator</h1>
 
-  <p><a href="http://vll.java.net/">VisualLangLab</a> is a completely visual IDE for
+  <p><a href="http://vll.java.net/">VisualLangLab</a> is a visual IDE for
   development of parsers without code or script of any kind. It is simple in use, and
-  very easy to learn. 
-  Unlike other parser-generators, VisualLangLab represents parser-rules as visual 
+  easy to learn.
+  Unlike other parser-generators, VisualLangLab represents parser rules as visual 
   <i>grammar-trees</i> with distinct icons for the grammar-tree nodes. 
   The following figures show how it represents the rules of the
   arithmetic expression parser in <a href=
@@ -25,13 +25,13 @@
   Scala</a>. The icons and annotations are explained fully in <a href=
   "EditingTheGrammarTree.html">Editing the Grammar Tree</a>.</p>
 
-  <table border="1">
+  <table border="1" style="border: 1px solid black;"><tbody>
     <tr>
-      <td>expr</td>
+      <th style="text-align: center; font-weight: bold;">expr</th>
 
-      <td>factor</td>
+      <th style="text-align: center; font-weight: bold;">factor</th>
 
-      <td>term</td>
+      <th style="text-align: center; font-weight: bold;">term</th>
     </tr>
 
     <tr>
@@ -41,53 +41,101 @@
 
       <td><img src="images/GrammarTreeTerm1.png" /></td>
     </tr>
-  </table>
+  </tbody></table>
 
-  <p><a href="http://vll.java.net/">VisualLangLab</a>'s grammar-trees are <i>executable</i>, 
-  and can be run at any time -- without delay or other manual intervention -- 
-  at the click of a button. Test input for the parser can be
-  entered directly into the IDE or obtained from user-nominated files. Running the parser
-  does not require any other skills or tools. This simplifies testing, 
+  <p>The grammar-trees are <i>executable</i>, and can be run at any time at the 
+  click of a button. No other skills or tools are needed. 
+  Input for the parser can be entered into the IDE or obtained from user-nominated files. 
+  This simplifies <a href="TestingParsers.html">testing</a>, 
   promotes an iterative-incremental development process, and speeds up development manyfold.
-  Optional <i>actions</i> -- snippets of code in Javascript or Scala -- 
+  Optional <i>actions</i> &mdash; <a href="ASTAndActionCode.html">snippets of code</a> in Javascript or Scala &mdash; 
   can also be embedded in the grammar.</p>
 
-  <p>The parser-development process is reduced to creating the equivalent grammar-tree(s) 
-  using menu-bar and context-menu operations. 
+  <p>The parser development process is reduced to creating the equivalent grammar-tree(s) 
+  <a href="EditingTheGrammarTree.html">using menu-bar and context-menu</a> operations 
+  of <a href="TheGUI.html">the GUI</a>. 
   Textual input from the keyboard is required only
   for naming the parser rules and tokens, and for specifying regular expression patterns for
-  tokens. The user-interface is explained fully in <a href="TheGUI.html">The Gui</a> and
-  <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.</p>
+  tokens.</p>
 
-  <p>The grammar is saved as a XML file that can be reloaded for further editing and testing. 
-  An API enables client programs to load the XML file and regenerate the parser. 
-  Because of the way Scala parser 
-  <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">combinators</a> 
-  work, no source-code generation or compilation is required, so parser regeneration happens 
-  very fast. 
-  Further details and examples can be found in <a href="UsingTheAPI.html">Using the API</a>.
-  The API supports Scala and Java.</p>
+  <p id="ParserType"><a href="http://vll.java.net/">VisualLangLab</a> is written in 
+  <a href="http://www.scala-lang.org/">Scala</a>, and produces 
+  <a href="http://en.wikipedia.org/wiki/Recursive_descent_parser">backtracking, 
+  recursive-descent parsers</a>. But a Scala installation is 
+  not required for running it.
+  VisualLangLab's dependence on Scala is described 
+  <a href="RelationshipWithScalaParserCombinators.html">here</a>.</p>
 
-  <p><b>Check out the <a href="UserGuide.html">User Guide</a></b></p>
+  <p>The grammar is saved as a XML file that can be reloaded for further 
+  <a href="EditingTheGrammarTree.html">editing</a> and 
+  <a href="TestingParsers.html">testing</a>.</p>
+ 
+  <p>An <a href="UsingTheAPI.html">API</a> enables client programs (Scala or Java) 
+  to load the XML file and regenerate the parser. Scala's 
+  <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a> 
+  turn tree (or XML) data directly into a parser at run-time without code-generation, 
+  so parser regeneration is very fast. 
+  </p>
+
+  <p><b>Check out the <a href="FAQ.html">FAQ</a></b>. 
+  Depending on your perspective, you may also find some of the following pages interesting:</p>
+
+  <table border="1"  style="border: 1px solid black;">
+    <tr><td style="text-align: center; font-weight: bold;">Manager</td><td style="text-align: center; font-weight: bold;">Grammar/Domain Expert</td><td style="text-align: center; font-weight: bold;">Application Developer</td></tr>
+    <tr>
+      <td>
+        <a href="http://vll.java.net/DownloadInstallAndRun.html">Download, Install and Run</a><br />
+        <a href="http://vll.java.net/UserGuide.html">User Guide</a><br />
+        <a href="http://vll.java.net/TheGUI.html">The GUI</a><br />
+        <a href="http://vll.java.net/SampleGrammars.html">Sample Grammars</a><br />
+        <a href="http://vll.java.net/TestingParsers.html">Testing Parsers</a><br />
+      </td>
+      <td>
+        <a href="http://vll.java.net/DownloadInstallAndRun.html">Download, Install and Run</a><br />
+        <a href="http://vll.java.net/UserGuide.html">User Guide</a><br />
+        <a href="http://vll.java.net/TheGUI.html">The GUI</a><br />
+        <a href="http://vll.java.net/SampleGrammars.html">Sample Grammars</a><br />
+        <a href="http://vll.java.net/EditingTheGrammarTree.html">Editing the Grammar Tree</a><br />
+        <a href="http://vll.java.net/TestingParsers.html">Testing Parsers</a><br />
+      </td>
+      <td>
+        <a href="http://vll.java.net/DownloadInstallAndRun.html">Download, Install and Run</a><br />
+        <a href="http://vll.java.net/TheGUI.html">The GUI</a><br />
+        <a href="http://vll.java.net/SampleGrammars.html">Sample Grammars</a><br />
+        <a href="http://vll.java.net/ASTAndActionCode.html">AST and Action Code</a><br />
+        <a href="http://vll.java.net/TestingParsers.html">Testing Parsers</a><br />
+        <a href="http://vll.java.net/UsingTheAPI.html">Using the API</a><br />
+        <a href="http://vll.java.net/RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a><br />
+      </td>
+    </tr>
+  </table>
 
   <h2>Download, Installation, and Running</h2>
 
-  <p>You can download the latest version <a href="http://java.net/projects/vll/downloads/download/VLLS.zip">here</a>.</p>
+  <p>The latest binary relase is 
+  <a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>. 
+  The contents of the zip and their use is described <a href="DownloadInstallAndRun.html">here</a>.</p>
 
-  <p>Full information on installation and running can be found <a href="DownloadInstallAndRun.html">here</a>.</p>
+  <p><u>If you do not have Scala</u>, you should also download 
+  <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>. 
+  Double-clicking this file starts the VisualLangLab GUI (requires a 6.0+ JRE).</p> 
 
-  <h2>Prerequisites</h2>
+  <p></p>
 
-  <p>Beginning version 3.01 (July 2011), Scala 2.9.0+ is required. If required, you can
-  download Scala from <a href="http://www.scala-lang.org/downloads">here</a>.</p>
+  <h2 id="Prerequisites">Prerequisites</h2>
 
-  <p>Although VisualLangLab uses Scala's 
-  <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a> internally, 
-  the user does not have to know any programming language or parser generation tool. 
-  Advanced users may, however, provide action-code snippets 
-  (as standalone Javascript or Scala functions) to augment testing effectiveness.</p>
+  <p>The only mandatory prerequisite is a 6.0+ JRE.</p> 
 
-  <h2>History</h2>
+  <p>Scala 2.9.0+ is recommended (but not <i>required</i>) only for developing and running 
+  application programs that <a href="UsingTheAPI.html">use the API</a>. 
+  You can download Scala from <a href="http://www.scala-lang.org/downloads">here</a>. 
+  </p>
+
+  <h2 id="License">License</h2>
+
+  <p>VisualLangLab is distributed under the GNU General Public License, Version-3</p> 
+
+  <h2 id="History">History</h2>
 
   <p><a href="http://vll.java.net/">VisualLangLab</a> was born on 5<sup>th</sup> March
   2004 as <i>A Visual LL(K) Parser Generator</i>. This first version was written in Java,

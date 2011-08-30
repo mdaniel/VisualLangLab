@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Editing the Grammar Tree</title>
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   </head>
   <body>
     <h1>VisualLangLab - Editing the Grammar Tree</h1>
@@ -31,8 +32,8 @@
       <i>grammar-trees</i> should be quite obvious.
     </p>
 
-    <table border="1">
-      <tr><td>expr</td><td>factor</td><td>term</td></tr>
+    <table border="1" style="border: 1px solid black;">
+      <tr><td style="text-align: center; font-weight: bold;">expr</td><td style="text-align: center; font-weight: bold;">factor</td><td style="text-align: center; font-weight: bold;">term</td></tr>
       <tr><td><img src="images/GrammarTreeExpr1.png"/></td><td><img src="images/GrammarTreeFactor1.png"/></td><td><img src="images/GrammarTreeTerm1.png"/></td></tr>
     </table>
     <i>Figure-1. Grammar-trees of arithmetic-expression parser.</i>
@@ -59,10 +60,10 @@
       understand the icon types and their annotations (the text following each icon).
     </p>
 
-    <h3>Icons</h3>
+    <h3 id="Icons">Icons</h3>
 
-    <table border="1">
-      <tr><td colspan="2" align="center"><b>Non-terminals</b></td></tr>
+    <table border="1" style="border: 1px solid black;">
+      <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Non-terminals</b></td></tr>
       <tr><td><img src="images/GrammarIconRoot.gif"/></td><td>Root - this icon is used for the root 
           node of every grammar tree (as in Figure-1 above)</td></tr>
       <tr><td><img src="images/GrammarIconChoice.gif"/></td><td>Choice - used as the parent of a group 
@@ -76,19 +77,19 @@
       <tr><td><img src="images/GrammarIconSemPred.gif"/></td><td>Semantic predicate - 
           makes a parser-rule succeed or fail depending on the run-time value of a 
           user-provided expression</td></tr>
-      <tr><td colspan="2" align="center"><b>Terminals</b></td></tr>
+      <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Terminals</b></td></tr>
       <tr><td><img src="images/GrammarIconLiteral.gif"/></td><td>Literal - a token that matches a 
           specified pattern literally</td></tr>
       <tr><td><img src="images/GrammarIconRegex.gif"/></td><td>Regexp - a token that matches a 
           specified regular-expression</td></tr>
-      <tr><td colspan="2" align="center"><b>Icon overlays</b></td></tr>
+      <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Icon overlays</b></td></tr>
       <tr><td><img src="images/GrammarIconCommitMark.gif"/></td><td>Commit - displayed on top 
           of a parser-rule node that has the <i>commit</i> annotation</td></tr>
       <tr><td><img src="images/GrammarIconErrorMark.gif"/></td><td>Error: indicates that an error 
           is present in the associated parser</td></tr>
     </table>
 
-    <h3>Annotations</h3>
+    <h3 id="Annotations">Annotations</h3>
 
     <p>
       The first annotation is a 1-character flag that indicates the node's <i>multiplicity</i> 
@@ -98,14 +99,14 @@
       Multiplicity has one of the following values:
     </p>
 
-    <ul>
+    <table><tr><td>
       <li>1 - exactly one occurrence</li>
       <li>? - 0 or 1 occurrence (also called <i>optional</i>)</li>
       <li>* - 0 or more occurrences</li>
       <li>+ - 1 or more occurrences</li>
       <li>0 - the associated entity must <i>not</i> occur in the input (but see note below)</li>
       <li>= - the associated entity <i>must</i> occur in the input (but see note below)</li>
-    </ul>
+    </td></tr></table>
 
     <p>
       <u>Note</u>: Observe that the last two values ("0" and "=") are actually commonly required 
@@ -121,7 +122,7 @@
       type of the node as described below.
     </p>
 
-    <ul>
+    <table><tr><td>
       <li>Root - the name of the parser-rule itself</li>
       <li>Literal - the name of the literal token</li>
       <li>Regexp - the name of the regular-expression token</li>
@@ -130,7 +131,7 @@
       <li>Sequence - the description (see below) if defined, null otherwise</li>
       <li>RepSep - the description (see below) if defined, null otherwise</li>
       <li>Semantic predicate - the description (see below) if defined, null otherwise</li>
-    </ul>
+    </td></tr></table>
 
     <p>
       All icons have at least the two annotations described above. All other annotations, 
@@ -138,7 +139,7 @@
       enclosed within square brackets.
     </p>
 
-    <ul>
+    <table><tr><td>
       <li>commit - backtracking to optional parser clauses (at an upper level) will be 
           prevented if this node is successfully parsed</li>
       <li>description - an optional user-assigned string (see below) that can be assigned 
@@ -150,9 +151,9 @@
           <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers$PackratParser.html">packrat parser</a> 
           (applicable only to a root-node)</li>
       <li>trace - the parser's use of the node will be logged at run-time</li>
-    </ul>
+    </td></tr></table>
 
-    <h2>Creating a new Parser-Rule (and Grammar-Tree)</h2>
+    <h2 id="CreatingNewParserRule">Creating a new Parser-Rule (and Grammar-Tree)</h2>
 
     <p>
       When <a href="http://vll.java.net/">VisualLangLab</a> is started, 
@@ -208,7 +209,7 @@
       you to leave rule definitions incomplete to support this mode of work. 
     </p>
 
-    <h3>Adding Required Annotations</h3>
+    <h3 id="AddingRequiredAnnotations">Adding Required Annotations</h3>
 
     <p>
       Once a node is added to the grammar-tree, its properties can be tuned as 
@@ -229,7 +230,7 @@
       <i>on the fly</i> without delay or the need for any other intervention. 
     </p>
 
-    <h3>Associating Action-Code with Grammar Nodes</h3>
+    <h3 id="AssociatingActionCode">Associating Action-Code with Grammar Nodes</h3>
 
     <p>
       Figure-4 below shows how action-code is associated with a grammar-tree node. 
@@ -254,7 +255,7 @@
       action-code can be found in <a href="ASTAndActionCode.html">AST and Action Code</a>. 
     </p>
 
-    <h3>Whitespace and Comments</h3>
+    <h3 id="WhitespaceAndComments">Whitespace and Comments</h3>
 
     <p>
       Whitespace and comment speciifications are, strictly speaking, not 
@@ -278,7 +279,7 @@
       Figure-5 above, is the regular expression <i>\\s+</i>.
     </p>
 
-    <h3>Recursion, Mutual Recursion, and Left Recursion</h3>
+    <h3 id="Recursion">Recursion, Mutual Recursion, and Left Recursion</h3>
 
     <p>
       Since <a href="http://vll.java.net/">VisualLangLab</a> is based on Scala's 
@@ -302,7 +303,7 @@
       causes a stack-overflow error. 
     </p>
 
-    <h3>Grammar Errors</h3>
+    <h3 id="GrammarErrors">Grammar Errors</h3>
 
     <p>
       VisualLangLab can detect certain errors in the parser-rule, and flags the 
@@ -311,7 +312,7 @@
       error condition. 
     </p>
 
-    <h2>Modifying a Grammar-Tree</h2>
+    <h2 id="ModifyingGrammarTree">Modifying a Grammar-Tree</h2>
 
     <p>
       An existing parser-rule can be modified just as easily as creating a new one. 
@@ -334,7 +335,7 @@
       select <i>File -> Save</i> from the main menu. 
     </p>
 
-    <h2>Creating Tokens for the Grammar</h2>
+    <h2 id="CreatingTokens">Creating Tokens for the Grammar</h2>
 
     <p>
       Every parser uses a well-defined set of <i>tokens</i> to represent its 
@@ -374,7 +375,7 @@
       either globally scoped or privately scoped (see below).
     </p>
 
-    <h3>Modifying Token Patterns</h3>
+    <h3 id="ModifyingTokenPatterns">Modifying Token Patterns</h3>
 
     <p>
       You will sometimes need to edit a token's pattern during development. 
@@ -387,7 +388,7 @@
       and click the <i>OK</i> button. 
     </p>
 
-    <h3>Token Libraries</h3>
+    <h3 id="TokenLibraries">Token Libraries</h3>
 
     <p>
       Tokens tend to be reused, so VisualLangLab allows you to create, maintain, and 
@@ -413,7 +414,7 @@
       maintain the contents of token libraries. 
     </p>
 
-    <h3>Lexing and Token Scope</h3>
+    <h3 id="LexingAndTokenScope">Lexing, Reserved Keywords, Token Scope, etc.</h3>
 
     <p>
       As explained in <a href="RelationshipWithScalaParserCombinators.html">Relationship 
@@ -424,6 +425,14 @@
       <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexer</a> is used, and 
       the behavior of the parser (in matching tokens with the input) is quite different 
       from that of <code>RegexParsers.literal()</code> and <code>RegexParsers.regex()</code>.
+    </p>
+
+    <p>
+      All <i>Literal</i> nodes effectively define reserved symbols (or <i>keywords</i>), 
+      and take precedence over tokens defined using <i>Regex</i> nodes. The precedence of 
+      a conflicting reserved symbol can be temporirily suspended (to allow a keyword 
+      to be used as a normal name in a limited context, for example) by using the escaping 
+      mechanism described in the following paragraph. 
     </p>
 
     <p>

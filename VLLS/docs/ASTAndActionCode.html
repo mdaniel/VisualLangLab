@@ -3,10 +3,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
-
   <title>AST Structure and Action Code</title>
+  <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
 </head>
 
 <body>
@@ -24,7 +22,7 @@
   to process an AST. The same knowledge is also required when writing a custom application 
   as described in <a href="UsingTheAPI.html">Using the API</a></p>
 
-  <h2>A Smattering of Scala</h2>
+  <h2 id="SmatteringOfScala">A Smattering of Scala</h2>
 
   <p>This version of <a href="http://vll.java.net/">VisualLangLab</a> is written in
   <a href="http://www.scala-lang.org/">Scala</a>, so the AST is expressed in terms of
@@ -33,11 +31,11 @@
   understanding the AST. For a formal introduction to Scala use any of the books featured
   on the <a href="http://www.scala-lang.org">official Scala web-site</a>.</p>
 
-  <h3>Essential Data-Structures</h3>
+  <h3 id="EssentialDataStructures">Essential Data-Structures</h3>
 
   <p>The following standard Scala types are used in constructing ASTs. </p>
 
-  <ul>
+  <table><tr><td>
     <li><a href=
     "http://download.oracle.com/javase/6/docs/api/java/lang/String.html">String</a>
     - used to represent nodes of type <i>Literal</i> or <i>Regex</i></li>
@@ -59,20 +57,20 @@
     and <a href=
     "http://www.scala-lang.org/api/current/index.html#scala.Tuple2">Tuple2[Int,Any]</a>
     - used to represent <i>Choice</i> nodes</li>
-  </ul>
+  </td></tr></table>
 
   <p>The AST of a complete parser-rule (or grammar-tree) is built up by recursively nesting these
   structures as required. That is why the content-type parameter is always
   <code>Any</code> (to permit unconstrained nesting). The examples in the following
   sections illustrate this concept.</p>
 
-  <h2>AST Structure</h2>
+  <h2 id="ASTStructure">AST Structure</h2>
 
   <p>The structure of an AST for any particular grammar-tree is determined by the
   arrangement, type, and multiplicity of the nodes comprising the grammar-tree. Starting
   from the root-node, the following rules are applied recursively:</p>
 
-  <ul>
+  <table><tr><td>
     <li>The <i>Root</i> node does not influence the AST structure -- its AST is the same
     as that of the contained tree</li>
 
@@ -91,12 +89,12 @@
 
     <li>A <i>RepSep</i> contributes a <code>List[Any]</code> containing all the matched
     items</li>
-  </ul>
+  </td></tr></table>
 
   <p>Additionally, certain annotations cause the structure defined above to be modified
   in the following ways:</p>
 
-  <ul>
+  <table><tr><td>
     <li>A node with multiplicity <i>?</i> (0 or 1) contributes an
     <code>Option[Any]</code>. A <code>None</code> is returned if the expected item was
     not found in the input, and a <code>Some[Any]</code> is returned if the item was
@@ -116,14 +114,14 @@
     other child nodes have a <i>drop</i> annotation, or have multiplicities of <i>0</i>
     (not) or <i>=</i> (guard)) does not produce an <code>Array[Any]</code>, but just
     passes on the AST produced by its one contributing child node</li>
-  </ul>
+  </td></tr></table>
 
   <p>The examples below illustrate these principles using grammar trees from the built-in
   parser for <i>SimpleJSON</i>. Remember that the AST shown in the figures is the AST of
   the <i>selected</i> node. Also, remember that the root-node of a grammar-tree merely
   reflects the AST of the contained tree.</p>
 
-  <h3>Sequence Node Example</h3>
+  <h3 id="SequenceNodeExample">Sequence Node Example</h3>
 
   <p>Figure-1 below illustrates the AST of a Sequence node. It also shows the result of
   testing the grammar-tree with some user-provided input.</p>
@@ -137,7 +135,7 @@
   child-nodes of the Sequence node). The format used for the array's elements is
   described below:</p>
 
-  <ul>
+  <table><tr><td>
     <li>[stringLiteral] - this form (name of a Regex node within square brackets)
     represents the lexeme matching the regular-expression</li>
 
@@ -145,7 +143,7 @@
 
     <li>@Value - an <i>@</i> prefixed parser-clause (or grammar-tree) name represent the
     AST returned by the named grammar-tree</li>
-  </ul>
+  </td></tr></table>
 
   <p>The two TextAreas at the bottom of the GUI show the result of actually testing the
   parser. Some test input (<i>"count" : 55</i>) has been typed into the <i>Parser Test
@@ -158,7 +156,7 @@
   clicking on the corresponding toolbar button (<img src=
   "images/ToolBarButtonParseInput.gif" align="center" />).</p>
 
-  <h3>Choice Node Example</h3>
+  <h3 id="ChoiceNodeExample">Choice Node Example</h3>
 
   <p>The grammar-tree in Figure-2 below illustrates the AST of a <i>Choice</i> node.</p>
 
@@ -177,7 +175,7 @@
   <code>Pair</code> in this example (the value <i>3</i>) is the 0-based index of the
   matching alternative (the Regex node <i>floatingPointNumber</i>).</p>
 
-  <h3>RepSep Node Example</h3>
+  <h3 id="RepSepNodeExample">RepSep Node Example</h3>
 
   <p>The grammar-tree in Figure-3 below illustrates the AST of a <i>RepSep</i> node.</p>
 
@@ -193,7 +191,7 @@
   produces this AST as output: <i>Array([, List(Pair(6, false), Pair(3, 3.14), Pair(2,
   "hello")), ])</i>.</p>
 
-  <h3>Sequence Node Example with One Contributing Node</h3>
+  <h3 id="SequenceNodeWithOneContributingNode">Sequence Node Example with One Contributing Node</h3>
 
   <p>Our last example Figure-4 below illustrates the AST of a <i>Sequence</i> node with
   just 1 contributing node. It also shows the effect of applying the <i>drop</i>
@@ -213,13 +211,13 @@
   that contributes to the AST (the RepSep), the Sequence merely passes on the AST of the
   RepSep. It does not need to produce an <code>Array</code>.</p>
 
-  <h2>Action-Code Design</h2>
+  <h2 id="ActionCodeDesign">Action-Code Design</h2>
 
   <p>Within <a href="http://vll.java.net/">VisualLangLab</a> action-code is an anonymous
   function literal written in Scala or Javascript, and this section assumes that the reader 
   knows one of those languages reasonably well.</p>
 
-  <h3>Code Structure and Invocation</h3>
+  <h3 id="CodeStructureAndInvocation">Code Structure and Invocation</h3>
 
   <p>An action-code function literal must have one argument that can accept <i>any</i>
   value. The value returned by the function depends on the overall design of the
@@ -234,18 +232,18 @@
   is necessarily non-null) during the second invocation. Action-code functions must
   test the argument's value and act accordingly.</p>
 
-  <h3>Predefined Global Variables</h3>
+  <h3 id="PredefinedGlobalVariables">Predefined Global Variables</h3>
 
   <p>To facilitate the design of stateful behavior, and give action-code access to
   required environmental information, the action-code launcher arranges for certain
   predefined global variables to be available. These variables are listed in Table-1
   below.</p><i>Table-1. Predefined global variables</i>
 
-  <table border="1">
+  <table border="1" style="border: 1px solid black;">
     <tr>
-      <td align="center">Name</td>
+      <td  style="text-align: center; font-weight: bold;">Name</td>
 
-      <td align="center">Description</td>
+      <td  style="text-align: center; font-weight: bold;">Description</td>
     </tr>
 
     <tr>
@@ -283,7 +281,7 @@
   writing automated test scripts as described in <a href="TestingParsers.html">Testing
   Parsers</a>.</p>
 
-  <h3>Scala</h3>
+  <h3 id="ActionCodeScalaExample">Scala</h3>
 
   <p>Action-code in Scala is written as a function-literal that accepts a single argument
   of type <code>Any</code> and returns a value of any type (depending on the overall
@@ -313,7 +311,7 @@
   use, so the presence of action-code in Scala does perceptibly slow down the <a href=
   "http://vll.java.net/">VisualLangLab</a> GUI at certain points.</p>
 
-  <h3>Javascript</h3>
+  <h3 id="ActionCodeJavascriptExample">Javascript</h3>
 
   <p>Action-code in Javascript is written as an anonymous function that accepts one
   argument and returns a value that depends on the overall design. To simplify the
@@ -321,7 +319,7 @@
   transforms all Scala container types into native Javascript arrays. The following
   transformations are performed:</p>
 
-  <ul>
+  <table><tr><td>
     <li>Scala <a href=
     "http://www.scala-lang.org/api/current/index.html#scala.Array">Array[Any]</a>s become
     Javascript arrays</li>
@@ -342,7 +340,7 @@
     "http://www.scala-lang.org/api/current/scala/Predef$$Pair$.html">Pair</a> (or
     <a href="http://www.scala-lang.org/api/current/index.html#scala.Tuple2">Tuple2[Int,Any]</a>)
     becomes a Javascript array of 2 elements</li>
-  </ul>
+  </td></tr></table>
 
   <p>The code is interpreted by the JVM's embedded Javascript engine (<a href=
   "http://www.mozilla.org/rhino/">Rhino</a>), and can therefore <a href=

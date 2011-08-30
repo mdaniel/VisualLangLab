@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Using the API</title>
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   </head>
 
   <body>
@@ -16,7 +17,7 @@
       in Scala. A Java version of the same program is also shown for comparison. 
     </p>
 
-    <h2>A Quick Example (in Scala)</h2>
+    <h2 id="ScalaExample">A Quick Example (in Scala)</h2>
 
     <p>
       The following code segment uses the API to load the programmatically use 
@@ -53,7 +54,7 @@ import vll.core.VllParsers
       them to strings.
     </p>
 
-    <ul>
+    <table><tr><td>
       <li><code>VllParsers.fromFile(File)</code> - This is the entry point for IDE operations. It takes 
           a <a href="">File</a> named <i>ArithExpr.vll</i> containing the grammar-file, and returns a unique instance of 
           <code>VLLParsers</code> that has all the parser-rules defined in the grammar-file.</li>
@@ -77,14 +78,14 @@ import vll.core.VllParsers
           <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> 
           that are useful for testing the result of parsing a string. Details of these classes 
           can be found in the standard Scala documentation.</li>
-    </ul>
+    </td></tr></table>
 
     <p>
       There is not much more to say about the API. The class <code>VLLParsers</code> has two 
       more factory methods that facilitate the creation of parsers from other sources:
     </p>
 
-    <ul>
+    <table><tr><td>
       <li><code>fromString(s: String): VllParsers</code> - creates a parser from a string 
           (the contents of a saved grammar-file). This can be useful for completely 
           encapsulating small grammar files within a program -- see the example under 
@@ -92,7 +93,7 @@ import vll.core.VllParsers
       <li><code>fromXml(xml: 
           <a href="http://www.scala-lang.org/api/current/scala/xml/Elem.html">Elem</a>): VllParsers</code> 
           - creates a parser from an XML structure in the program.</li>
-    </ul>
+    </td></tr></table>
 
     <p>
       Since the class <code>VLLParsers</code> extends 
@@ -112,12 +113,12 @@ import vll.core.VllParsers
     </p>
 
 
-  <table border="1">
-    <tr><td colspan="3" align="center">Table-1. AST Structure</td></tr>
+  <table border="1" style="border: 1px solid black;">
+    <tr><td colspan="3" align="center" style="text-align: center; font-weight: bold;">Table-1. AST Structure</td></tr>
     <tr>
-      <td>Expr</td>
-      <td>factor</td>
-      <td>term</td>
+      <th style="text-align: center; font-weight: bold;">Expr</th>
+      <th style="text-align: center; font-weight: bold;">factor</th>
+      <th style="text-align: center; font-weight: bold;">term</th>
     </tr>
     <tr>
       <td><img src="images/GrammarAstExpr1.png" /></td>
@@ -229,7 +230,7 @@ object ArithExprWithAPI {
 }
 </code></pre>
 
-    <h2>A Java Version</h2>
+    <h2 id="JavaExample">A Java Version</h2>
 
     <p>
       The Java version shown below uses the same method names as the Scala 
@@ -310,7 +311,7 @@ public class ArithExprJavaDemo {
 }
 </code></pre>
 
-    <h2>Code with Embedded Grammar</h2>
+    <h2 id="CodeWithEmbeddedGrammar">Code with Embedded Grammar</h2>
 
     <p>
       It is sometimes required to embed all resources (including the grammar-file) 

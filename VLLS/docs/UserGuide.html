@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>User Guide</title>
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   </head>
 
   <body>
@@ -16,14 +17,14 @@
       both roles. 
     </p>
 
-    <h2>Some Essential Jargon</h2>
+    <h2 id="SomeEssentialJargon">Some Essential Jargon</h2>
 
     <p>
       Before proceeding any further, readers should note 
       the following definitions.
     </p>
 
-    <ul>
+    <table><tr><td>
       <li><u>action-code</u>: a function literal, coded in Javascript or Scala, associated with 
           any grammar-tree node (also known as <i>semantic action</i> or just <i>action</i> in 
           CS theory). The function is executed when 
@@ -48,7 +49,7 @@
           <u>but see note below</u>. 
           Each parser-rule is known by a unique name, and one of the parser-rules must be  
           distinguished as the top-level (entry-point) entity</li>
-    </ul>
+    </td></tr></table>
 
     <p>
       <u>Note</u>: Readers, particularly those who will be <a href="UsingTheAPI.html">Using the API</a>, 
@@ -63,7 +64,7 @@
       has more details.
     </p>
 
-    <h2>Workflow and User Roles</h2>
+    <h2 id="WorkflowAndUserRoles">Workflow and User Roles</h2>
 
     <p>
       Figure-1 below illustrates the development workflow, and shows the 
@@ -76,7 +77,7 @@
       <i>Figure-1. Development workflow using VisualLangLab</i>
     </p>
 
-    <h3>Grammar Expert</h3>
+    <h3>Grammar/Domain Expert</h3>
 
     <p>
       The grammar expert is responsible for developing and testing a parser. 

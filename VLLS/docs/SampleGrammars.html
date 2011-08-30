@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Sample Grammars</title>
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   </head>
 
   <body>
@@ -77,7 +78,7 @@
       <a href="ASTAndActionCode.html">AST and Action Code</a>.
     </p>
 
-    <h3>Test-Running a Parser</h3>
+    <h3 id="TestRunning">Test-Running a Parser</h3>
 
     <p>
       Figure-3 below shows the grammar-tree <i>expr</i> of the builtin <i>ArithExpr</i> 
@@ -97,7 +98,7 @@
       <a href="TestingParsers.html">Testing Parsers</a>
     </p>
 
-    <h2>The ArithExpr Parser</h2>
+    <h2 id="TheArithExprParser">The ArithExpr Parser</h2>
 
     <p>
       As mentioned elsewhere, the grammar trees in Figure-2 implement the following 
@@ -122,8 +123,8 @@
       that should be reviewed carefully. 
     </p>
 
-    <table border="1">
-      <tr><td>expr</td><td>factor</td><td>term</td></tr>
+    <table border="1" style="border: 1px solid black;">
+      <tr><td style="text-align: center; font-weight: bold;">expr</td><td style="text-align: center; font-weight: bold;">factor</td><td style="text-align: center; font-weight: bold;">term</td></tr>
       <tr><td><img src="images/GrammarTreeExpr1.png"/></td><td><img src="images/GrammarTreeFactor1.png"/></td><td><img src="images/GrammarTreeTerm1.png"/></td></tr>
     </table>
     <i>Figure-4. Grammar-trees of the ArithExpr parser</i>
@@ -144,15 +145,15 @@
       <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
     </p>
 
-    <h2>The SimpleJSON Parser</h2>
+    <h2 id="TheSimpleJSONParser">The SimpleJSON Parser</h2>
 
     <p>
       The grammar-trees of the SimpleJSON parser are shown in Figure-3 below for 
       easy reference.
     </p>
 
-    <table border="1">
-      <tr><td>value</td><td>arr</td><td>member</td><td>obj</td></tr>
+    <table border="1" style="border: 1px solid black;">
+      <tr><td style="text-align: center; font-weight: bold;">value</td><td style="text-align: center; font-weight: bold;">arr</td><td style="text-align: center; font-weight: bold;">member</td><td style="text-align: center; font-weight: bold;">obj</td></tr>
       <tr><td><img src="images/SampleGrammarJsonValue.png"/></td><td><img src="images/SampleGrammarJsonArr.png"/></td><td><img src="images/SampleGrammarJsonMember.png"/></td><td><img src="images/SampleGrammarJsonObj.png"/></td></tr>
     </table>
     <i>Figure-5. Grammar-trees of the SimpleJSON parser</i>
@@ -163,7 +164,7 @@
       For more details see <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
     </p>
 
-    <h2>The <i>ArithExpr with action-code</i> Parser</h2>
+    <h2 id="ArithExprWithActionCode">The <i>ArithExpr with action-code</i> Parser</h2>
 
     <p>
       This grammar is identical to the <i>ArithExpr</i> grammar discussed above (and depicted in 

@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Download, Install, and Run</title>
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   </head>
 
   <body>
@@ -9,11 +10,13 @@
     <p>
       The latest binary release can be found in the 
       <a href="http://java.net/projects/vll/downloads">Downloads area</a> of the project page.
-      Download the latest ZIP release, and extract the contents to a directory. You should 
+      Download the latest ZIP release 
+      <a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>, 
+      and extract the contents to a directory. You should 
       have the following files and directories:
     </p>
 
-    <ul>
+    <table><tr><td>
       <li><i>VLLS.jar</i> - the run-time class-library</li>
       <li><i>vlls.bat</i> - a launcher for Windows. It assumes that <i>VLLS.jar</i> is also in 
           the same directory</li>
@@ -25,7 +28,13 @@
       <li><i>index.html</i> - Documentation in HTML</li>
       <li><i>docs</i> - Directory containing documentation files</li>
       <li><i>licenses</i> - Directory containing copyright files</li>
-    </ul>
+    </td></tr></table>
+
+    <p>
+      <u>If you do not have <a href="http://www.scala-lang.org/">Scala</a>, you should also download</u> 
+      <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>. 
+      Double-clicking this file starts the VisualLangLab GUI (only requires a 6.0+ JRE).
+    </p>
 
     <p>
       There is no particular installation action required. After <i>VLLS.jar</i> is added to 
@@ -44,7 +53,10 @@
     </p>
 
     <p>
-      Scala 2.9.0+ is a prerequisite for running this version. If required, you can download 
+      Scala is recommended for writing application programs that 
+      <a href="http://vll.java.net/UsingTheAPI.html">use the API</a>. 
+       (Java <i>can</i> be used, though with some awkwardness). 
+      If required, you can download 
       Scala from <a href="http://www.scala-lang.org/downloads">here</a>.
     </p>
 

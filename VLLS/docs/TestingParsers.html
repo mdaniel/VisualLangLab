@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Testing Parsers</title>
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   </head>
 
   <body>
@@ -18,20 +19,20 @@
     </p>
 
 
-    <h2>Validation is Easy as A-B-C</h2>
+    <h2 id="Validation">Validation is Easy as A-B-C</h2>
 
     <p>
       Since the grammar-tree is <i>executable</i>, validation is just 
       three simple steps:
     </p>
 
-    <ul>
+    <table><tr><td>
       <li>Enter test input in the <i>Parser Test Input</i> area (as at "A" 
           in Figure-1 below)</li>
       <li>Click the <i>Parse input</i> button (at "B" in Figure-1), 
           or select <i>Test -> Parse input</i> from the main menu</li>
       <li>Verify that the parser's output (at "C") is correct</li>
-    </ul>
+    </td></tr></table>
 
     <p>
       If you need help in understanding how to interpret the output go to 
@@ -65,14 +66,14 @@
       remembered from this insight:
     </p>
 
-    <ul>
+    <table><tr><td>
       <li>Parsers should be divided into logically separate parts, with each 
           part being a grammar-tree (or a tree of grammar-trees)</li>
       <li>While recursion and mutual recursion can lead to elegant solutions, 
           they are often difficult to test, and should be avoided if possible</li>
       <li>When testing a complete parser, make sure that the top-level parser-rule
           (or grammar-tree) is selected</li>
-    </ul>
+    </td></tr></table>
 
     <p>
       Forgetting the last point above is a souce of much confusion during testing 
@@ -86,7 +87,7 @@
       This convention is used in all the built-in <a href="SampleGrammars.html">Sample Grammars</a>.
     </p>
 
-    <h3>Getting Test Input from Files</h3>
+    <h3 id="GettingTestInputFromFiles">Getting Test Input from Files</h3>
 
     <p>
       Input for testing can also be obtained from a file instead of the 
@@ -106,7 +107,7 @@
       the directory tree rooted at the selected directory. 
     </p>
 
-    <h3>Terminating a Long Running Test</h3>
+    <h3 id="Terminating">Terminating a Long Running Test</h3>
 
     <p>
       While a parser is being run the <i>Stop parsing</i> button 
@@ -117,7 +118,7 @@
       for too long can be terminated by clicking this button.
     </p>
 
-    <h3>Trace and Trace-All</h3>
+    <h3 id="Trace">Trace and Trace-All</h3>
 
     <p>
       If you need to know which parser-rules are being fired and why, 
@@ -131,7 +132,7 @@
     <img src="images/TestingTraceAll.png" /><br/>
     <i>Figure-2. Enabling trace-all</i>
 
-    <h2>Automated Testing</h2>
+    <h2 id="AutomatedTesting">Automated Testing</h2>
 
     <p>
      A variety of approaches to automated testing are possible. 
@@ -139,7 +140,7 @@
      complexity, size, frequency of regression tests, etc.
     </p>
 
-    <h3>Wrapper with Action-Code</h3>
+    <h3 id="WrapperWithActionCode">Wrapper with Action-Code</h3>
 
     <p>
       This simple yet highly effective approach uses an additional 
@@ -162,7 +163,7 @@
       turn triggers the following series of actions: 
     </p>
 
-    <ul>
+    <table><tr><td>
       <li>the setup/before code block (2) is run</li> 
       <li>this causes the input for the test (3) to be placed 
           in the <i>Parser Test Input</i> area</li> 
@@ -170,7 +171,7 @@
           the preceding step)</li>
       <li>finally, the <i>after</i> code block (4) is run. This part validates the 
           parser's output, and prints out a suitable message</li>
-    </ul>
+    </td></tr></table>
 
     <p>
       The result of the test (<i>Ok</i> in this case) can be seen at (5) in the 
@@ -204,7 +205,7 @@
       the individual results and consolidate the results into a report. 
     </p>
 
-    <h3>Using JUnit and the VisualLangLab API</h3>
+    <h3 id="UsingJUnit">Using JUnit and the VisualLangLab API</h3>
 
     <p>
       The following code is a standalone JUnit test (in Scala) to validate the 

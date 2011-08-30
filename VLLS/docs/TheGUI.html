@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>The GUI</title>
+    <meta name="description" content="A visual parser-generator IDE that does not use code or scripts" />
   </head>
 
   <body>
@@ -14,13 +15,13 @@
     <img src="images/GuiFull1.png"/><br/>
     <i>Figure-1. The VisualLangLab GUI</i>
 
-    <h2>The Menu Bar</h2>
+    <h2 id="TheMenuBar">The Menu Bar</h2>
 
     <p>
       The <i>Menu Bar</i> (across the top of the GUI) contains the following menus:
     </p>
 
-    <ul>
+    <table><tr><td>
       <li>File - the <i>New</i>, <i>Open</i>, <i>Save</i>, <i>SaveAs</i>, and 
           <i>Exit</i> menu-items support the usual operations. 
           The editor-oriented items operate on <i>grammar files</i> which are 
@@ -40,16 +41,16 @@
           enabling <i>Trace all</i> (parsers)</li>
       <li>Log - the menu-items <i>copy</i> or <i>clear</i> operate on the Parser Log area</li>
       <li>Help - gives access to documentation, sample grammars, and the <i>About</i> page</li>
-    </ul>
+    </td></tr></table>
 
-    <h2>The Tool Bar</h2>
+    <h2 id="TheToolBar">The Tool Bar</h2>
 
     <p>
       The <i>Tool Bar</i> just below the Menu Bar enables quick invocation of commonly 
       used operations:
     </p>
 
-    <ul>
+    <table><tr><td>
       <li>File - <i>New</i>, <i>Open</i>, <i>Save</i>, and <i>SaveAs</i> operations</li></li>
       <li>Back button to display last viewed parser-rule (or grammar-tree)</li>
       <li>Combo box to select parser-rule (or grammar-tree) by name</li>
@@ -58,9 +59,9 @@
           <i>Import</i>, and <i>Export</i> operations</li>
       <li>Test - run and stop parser operations</li>
       <li>Log - <i>Copy</i>, and <i>Clear</i>  operations</li>
-    </ul>
+    </td></tr></table>
 
-    <h2>The Grammar Tree</h2>
+    <h2 id="TheGrammarTree">The Grammar Tree</h2>
 
     <p>
       The <i>Grammar Tree</i> is the JTree at the top left of the GUI (below the toolbar). 
@@ -70,7 +71,7 @@
       further in <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
     </p>
 
-    <h2>The Parse Tree (AST) Area</h2>
+    <h2 id="TheAST">The AST Area</h2>
 
     <p>
       The <i>Parse Tree (or <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a>) 
@@ -84,7 +85,7 @@
       <a href="ASTAndActionCode.html">AST and Action Code</a>.
     </p>
 
-    <h2>The Action Code Area</h2>
+    <h2 id="TheActionCodeArea">The Action Code Area</h2>
 
     <p>
       The action-code area is the text area at the top right (below the toolbar).
@@ -98,7 +99,7 @@
       <a href="ASTAndActionCode.html">AST and Action Code</a>.
     </p>
 
-    <h2>The Testing Area</h2>
+    <h2 id="TheTestingArea">The Testing Area</h2>
 
     <p>
       The two text areas along the bottom of the GUI (<i>Parser Test Input</i> 
