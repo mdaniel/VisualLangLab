@@ -1,3 +1,27 @@
+4.02 29-AUG-2011
+    Restored reporting of lexer stats (VLL-21)
+4.01 28-AUG-2011
+    FAQ web-page added
+    Refactored code in vll.core to reduce complexity (VLL-20) and create independent 
+    traits for the built-in lexer and associated functionality
+3.23 22-AUG-2011
+    FAQ web-page added
+3.22 20-AUG-2011
+    Fix for VLL-?? (Trace treatment being applied before multiplicity)
+    Added copyright, readme, license files to jar files
+    Changed loading of sample with Scala actions to reduce delay
+3.21 20-AUG-2011
+    Reduced size of splash-image
+    Refactored VllParsers.scala and created Aggregates.scala
+3.20 14-AUG-2011
+    Added dialog for displaying Scala license
+3.19 13-AUG-2011
+    Fix for VLL-5 (Toolbar back button NOT working properly)
+3.18 13-AUG-2011
+    Fix for VLL-14 (Dialog for syntax errors in action code should use monospaced font)
+    and VLL-15 (Token tool-tip-text does not show error-message when action code has error) 
+3.17 12-AUG-2011
+    Fix for VLL-16 (Reorganize and centralize all code that handles Scala action-code) 
 3.16 10-AUG-2011
     Fix for VLL-12 (Editing a token bypasses value validation checks) 
     and VLL-13 (error-reporting dialogs should have a title starting with "ERROR - ").

@@ -1,2 +1,2 @@
-SplashScreen-Image: vll/gui/images/SplashImage25.gif
+SplashScreen-Image: vll/gui/images/SplashImage.png
 Main-Class: vll.gui.VllGui
