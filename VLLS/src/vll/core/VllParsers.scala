@@ -29,7 +29,7 @@ import scala.util.parsing.input.CharSequenceReader
 import scala.xml.XML
 import scala.xml.{Elem => XMLElem}
 
-class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggregates {
+class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggregates {
 
   override type Elem = Char
   
@@ -61,7 +61,8 @@ class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggre
   var traceAll = false
   var userRequestedStop = false
   
-  def reset() {
+  override def reset() {
+    super.reset()
     tokenBank.clear()
     ruleBank.clear()
     commentRe = ""
@@ -124,9 +125,9 @@ class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggre
   private def withMessage[T](p: Parser[T], node: RuleTreeNode): Parser[T] = {
     Parser(in => p(in) match {
         case Error(_, nxt) => Error("%s %s at (%d,%d)".format(
-                                           node.nodeName, node.errorMessage, in.pos.line, in.pos.column), nxt)
+                 node.nodeName, node.errorMessage, in.pos.line, in.pos.column), nxt)
         case Failure(_, nxt) => Failure("%s %s at (%d,%d)".format(
-                                               node.nodeName, node.errorMessage, in.pos.line, in.pos.column), nxt)
+                 node.nodeName, node.errorMessage, in.pos.line, in.pos.column), nxt)
         case success => success
       }
     )

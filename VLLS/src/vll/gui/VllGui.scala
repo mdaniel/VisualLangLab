@@ -97,9 +97,9 @@ class VllGui extends MainFrame with ActionListener {
     toolTip = title
     def apply {
       saveChanges()
+      parsers.reset()
       if (!isDirty) {
         GuiNode.clearCache()
-        parsers.reset()
         ruleTreePanel.setRule("Main")
         updateRuleChooser("Main")
         grammarFile = None
@@ -116,6 +116,7 @@ class VllGui extends MainFrame with ActionListener {
     toolTip = title
     def apply {
       saveChanges()
+      parsers.reset()
       if (!isDirty) {
       grammarFileChooser.title = "Open"
         grammarFileChooser.showOpenDialog(splitPane) match {
