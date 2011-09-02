@@ -1,0 +1,652 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- java.net  article template
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>VisualLangLab - Grammar without Tears</title>
+</head>
+
+<body>
+<!-- article title
+     enter your title in an <h2> tag, a blank line, and your name 
+     as you wish it to be displayed on java.net
+-->
+<h2>VisualLangLab - Grammar without Tears</h2>
+<p>
+by Sanjay Dasgupta
+</p>
+
+<table width="100%" border="1" style="border: 1px solid black;"><tr>
+<td>This is a <a href="">periodically revised version</a> of an article submitted 
+for publication on the <a href="http://www.java.net/">java.net</a> website in August 2011. 
+These revisions keep the contents compatible with the current version of 
+<a href="http://vll.java.net/">VisualLangLab</a><br />
+A history of the revisions can be seen <a href="#RevisionHistory">here</a>.</td>
+</tr></table>
+
+<p>
+In the world of computing a grammar is a somewhat different thing 
+from the object implied in 
+<a href="http://www.google.co.in/search?sourceid=chrome&amp;ie=UTF-8&amp;q=%22grammar+without+tears%22">grammar without tears</a>. 
+But in terms of the misery caused to those 
+who have to deal with them, the two grammars appear to be closely related.
+This article describes a no tears approach to parser development 
+using the free, open-source parser-generator <a href="http://vll.java.net">VisualLangLab</a>. 
+It has an 
+<a href="http://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a> that represents grammar rules 
+(or <a href="http://en.wikipedia.org/wiki/Top-down_parsing">productions</a>) 
+as intuitive trees, like those in Figure-1 below, 
+without code or scripts of any kind. 
+</p>
+
+<p id="Figure1">
+<img src="images/grammar-tree-examples.png" /><br/>
+<em>Figure 1. VisualLangLab's grammar-trees</em>
+</p>
+
+<p>
+The grammar-trees are also <i>executable</i>, and can be run directly 
+at the click of a button. 
+This encourages the use of tight 
+<a href="http://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative-incremental</a> 
+development cycles, and improves the pace of development manyfold. 
+These features also make it an effective prototyping environment and a training tool.
+</p>
+
+<p>
+VisualLangLab is itself written in 
+<a href="http://www.scala-lang.org/">Scala</a>, a 
+JVM language that supports object-orientation as well as 
+<a href="http://en.wikipedia.org/wiki/Functional_programming">functional-programming</a>, 
+but you don't have to know much Scala to use VisualLangLab.
+</p>
+
+<p>
+Parsing techniques and parser-generator tools are a great addition 
+to any developer's arsenal, 
+and VisualLangLab provides a convenient, gentle introduction to those topics. 
+A later article will describe the use of VisualLangLab to produce 
+a <i>domain specific language</i> or 
+<a href="http://en.wikipedia.org/wiki/Domain-specific_language">DSL</a> 
+for testing Java-Swing programs. 
+</p>
+
+<h3 id="GeneratedCode">Can I see the Generated Code?</h3>
+
+<p>
+As a now-famous panda discovered, powerful recipes sometimes have 
+<a href="http://www.imdb.com/title/tt0441773/quotes?qt0448742">no secret ingredient</a>. 
+And there is no generated code.
+</p>
+
+<p>
+VisualLangLab uses Scala's parser 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">combinator</a> 
+functions to turn grammar-trees (or XML from a 
+<a href="#SavingTheGrammar">saved grammar-file</a>) directly into a 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">parser</a> 
+at run-time without producing or compiling source-code. 
+But users of the <a href="#TheGUI">GUI</a> and the <a href="#UsingTheAPI">API</a> 
+do not have to know anything about combinators to use these capabilities. 
+</p>
+
+<h3 id="DownloadAndRun">Download and Run VisualLangLab</h3>
+
+<p>
+The VisualLangLab <a href="http://vll.java.net/">web-site</a> has a 
+<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">zip file</a> 
+that includes everything you need. The only prerequisite is a 1.6+ JDK or JRE. 
+To run the tool, proceed as follows.
+</p>
+
+<h4>No Scala Installation</h4>
+
+<p>
+A Scala installation is not a mandatory prerequisite. 
+If you do not have Scala (or just want to avoid version issues), 
+download the executable JAR file 
+<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
+(which bundles the required Scala libraries). 
+VisualLangLab is started by double-clicking <i>VLLS-All.jar</i> 
+in a file browser, or by issuing the following command at a system prompt: 
+</p>
+
+<pre><code>    java -jar VLL-All.jar</code></pre>
+
+<p>
+Linux or UNIX users will, of course, have to enable execution (<code>chmod +x ...</code>) 
+to have it start by double-clicking. 
+</p>
+
+<h4>Have a Scala Installation</h4>
+
+<p>
+To run VisualLangLab with your installed version of Scala 
+use one of the launchers included in the zip file 
+(<i>vlls.bat</i> for Windows, <i>vlls</i> for Linux).
+Linux or UNIX users will need to enable execution (<code>chmod +x ...</code>) 
+of the launcher script. 
+</p>
+
+<h3 id="TheGUI">The GUI</h3>
+
+<p>
+When started, VisualLangLab displays the GUI shown in Figure-2 below. 
+The article explains the menus and buttons as needed, but a full 
+description can also be found online at 
+<a href="http://vll.java.net/TheGUI.html">The GUI</a> and in the download zip. 
+All toolbar buttons have tool-tip texts that explain their use. 
+</p>
+
+<p id="Figure2">
+<img src="images/vll-gui.png" /><br/>
+<em>Figure 2. The VisualLangLab GUI</em>
+</p>
+
+<p>
+The graphical and text panels are used as described below.
+</p>
+
+<ul>
+  <li>A is used for the grammar-tree as described in 
+      <a href="#ManagingRules">Managing Rules</a> below</li>
+  <li>B displays the <a href="#TheParseTree">AST structure</a> 
+      of the selected grammar-tree node</li>
+  <li>C is where the selected node's <a href="#ActionCode">action code</a> 
+      is displayed and edited. If this appears to break the 
+      <i>no code, no script</i> promise, rest assured that action-code 
+      is always optional</li>
+  <li>D and E are used for <a href="#TestingYourParser">testing the parser</a> 
+      as described below</li>
+</ul>
+
+<p>
+The following sections are a tutorial introduction that lead you through the 
+steps of creating a simple parser. 
+</p>
+
+<h3 id="ManagingTokens">Managing Tokens</h3>
+
+<p>
+There are two kinds of token, <i>literal</i> and <i>regex</i>, that 
+the following discussion and examples will help you differentiate. 
+We create 2 literals and 1 regex that are 
+<a href="#ManagingRules">used in a rule</a> later.
+</p>
+
+<h4>Literal Token Creation</h4>
+
+<p>
+To create a literal token select <i>Tokens -> New literal</i> from the main 
+menu as in Figure-3 below. Enter the literal's name (<i>PLUS</i>), 
+a comma, and the pattern (<i>+</i>) into the popped up dialog box and click 
+the <i>OK</i> button. 
+A token's name is used to refer to it from 
+rules, while the pattern describes its contents. 
+All instances of a particular literal token (during the parser's run) 
+have the same fixed content.
+</p>
+
+<p>
+Now create another <i>literal</i> token 
+named <i>MINUS</i> with a <i>-</i> pattern (as in the second dialog box 
+in Figure-3). 
+</p>
+
+<p>
+<img src="images/literal-creation.png" /><br/>
+<em>Figure 3. Creating a literal token</em>
+</p>
+
+<h4>Regex Token Creation</h4>
+
+<p>
+Figure-4 below shows how you can create a <i>regex</i> token. 
+Select <i>Tokens -> New regex</i> from the main menu, 
+and enter the token's name (<i>NUMBER</i>), a comma, and the 
+pattern (<i>\\d+</i>) into the dialog box and click <i>OK</i>. 
+You probably recognize the pattern as a Java  
+<a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">regular-expression</a> 
+that matches numbers.
+</p>
+
+<p>
+<img src="images/regex-creation.png" /><br/>
+<em>Figure 4. Creating a regex token</em>
+</p>
+
+<p>
+Observe that the pattern part in the dialogs above (for literal as well as regex tokens) 
+should be written exactly as if they were inside a <i>String</i> in a Java program 
+(without the surrounding quote marks).
+</p>
+
+<p>
+There is not a great deal more to tokens, but if you would like to read the 
+fine print, check out the last part of 
+<a href="http://vll.java.net/EditingTheGrammarTree.html">Editing the Grammar Tree</a>. 
+</p>
+
+<h4>Miscellaneous Token Operations</h4>
+
+<p>
+The main menu and toolbar also support several other operations. You can find which 
+rules use any particular token (<i>Tokens -> Find token</i>), 
+edit tokens (<i>Tokens -> Edit token</i>), and delete unused tokens (<i>Tokens -> Delete token</i>). 
+</p>
+
+<h4>Token Libraries</h4>
+
+<p>
+Tokens tend to be reused within application domains, so VisualLangLab allows you to 
+create and use token libraries. These operations are invoked from the main menu 
+by selecting <i>Tokens -> Import tokens</i> and <i>Tokens -> Export tokens</i>, 
+or by using corresponding toolbar buttons. 
+</p>
+
+<h4>Whitespace and Comments</h4>
+
+<p>
+You can specify the character patterns that separate adjacent tokens by invoking 
+<i>Globals -> Whitespace</i> from the main menu, and entering a regular expression 
+into the popped up dialog box. The default whitespace specification is "\\s+".
+</p>
+
+<p>
+You can also provide a regular expression for recognizing comments in the input text. 
+Select <i>Globals -> Comment</i> from the main menu, and enter a regular expression 
+into the dialog box. There is no default value for this parameter.
+</p>
+
+<h3 id="ManagingRules">Managing Rules</h3>
+
+<p>
+VisualLangLab represents rules as grammar-trees with distinctive icons 
+(as in <a href="#Figure1">Figure-1</a> above) and 
+a context-sensitive popup-menu. 
+This graphical depiction makes grammars comprehensible to a wider range of users. 
+The icons and textual annotations used in the grammar-trees are described below.
+</p>
+
+<h4>Node Icons</h4>
+
+<p>
+The table below lists the icons from which grammar-trees are constructed.
+</p>
+
+<table border="1">
+  <tr><td colspan="2" align="center"><b>Non-terminals</b></td></tr>
+  <tr><td><img src="images/GrammarIconRoot.gif"/></td><td>Root - used for the root 
+      node of every grammar tree</td></tr>
+  <tr><td><img src="images/GrammarIconChoice.gif"/></td><td>Choice - used as the parent of a group 
+      of alternative items (any one of which occurs in the input)</td></tr>
+  <tr><td><img src="images/GrammarIconSequence.gif"/></td><td>Sequence - used as the parent of a 
+      sequence of items which occur in the order specified</td></tr>
+  <tr><td><img src="images/GrammarIconRepSep.gif"/></td><td>RepSep - parent of a sequence 
+      of similar items that also uses a specified separator</td></tr>
+  <tr><td><img src="images/GrammarIconReference.gif"/></td><td>Reference - invokes another 
+      named parser</td></tr>
+  <tr><td><img src="images/GrammarIconSemPred.gif"/></td><td>Semantic predicate - 
+      succeeds or fails depending on the run-time value of an expression</td></tr>
+  <tr><td colspan="2" align="center"><b>Terminals</b></td></tr>
+  <tr><td><img src="images/GrammarIconLiteral.gif"/></td><td>Literal - matches a 
+      specified literal token</td></tr>
+  <tr><td><img src="images/GrammarIconRegex.gif"/></td><td>Regexp - matches a 
+      specified regex token</td></tr>
+  <tr><td colspan="2" align="center"><b>Icon overlays</b></td></tr>
+  <tr><td><img src="images/GrammarIconCommitMark.gif"/></td><td>Commit - displayed on top 
+      of a node that has the <i>commit</i> annotation</td></tr>
+  <tr><td><img src="images/GrammarIconErrorMark.gif"/></td><td>Error: indicates an error 
+      in the associated node or rule</td></tr>
+</table>
+
+<h4>Node Annotations</h4>
+
+<p>
+Each grammar-tree node has characteristics (such as multiplicity) that are 
+represented as the node's <i>annotations</i>, and 
+are displayed as text beside each node's icon. You can change a node's 
+annotations by right-clicking the node and choosing the required settings 
+from the context-menu as in Figure-5 below.
+</p>
+
+<p>
+<img src="images/setting-annotations.png" /><br/>
+<em>Figure 5. Setting node annotations</em>
+</p>
+
+<p>
+The first annotation is a 1-character flag that indicates the node's <i>multiplicity</i> 
+-- the number of times the corresponding entity may occur in the parser's input. 
+You can see examples of its use everywhere in the built-in 
+<a href="#SampleGrammars">Sample Grammars</a>.
+Multiplicity has one of the following values:
+</p>
+
+<ul>
+  <li>1 - exactly one occurrence</li>
+  <li>? - 0 or 1 occurrence</li>
+  <li>* - 0 or more occurrences</li>
+  <li>+ - 1 or more occurrences</li>
+  <li>0 - the associated entity must <i>not</i> occur in the input (but see note below)</li>
+  <li>= - the associated entity <i>must</i> occur in the input (but see note below)</li>
+</ul>
+
+<p>
+<u>Note</u>: Observe that the last two values ("0" and "=") are actually commonly required 
+<a href="http://en.wikipedia.org/wiki/Syntactic_predicate">syntactic predicates</a> 
+and have no influence on the structure of the 
+<a href="#TheParseTree">AST</a>. The names <i>not</i> and <i>guard</i> are inspired 
+by functions of the same name and function in Scala's 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>.
+</p>
+
+<p>
+The second annotation is the <i>name</i> of the entity. The value displayed depends on the 
+type of the node as described below.
+</p>
+
+<ul>
+  <li>Root - the name of the parser-rule itself</li>
+  <li>Literal - the name of the literal token</li>
+  <li>Regexp - the name of the regular-expression token</li>
+  <li>Reference - the name of referred-to parser-rule</li>
+  <li>Choice - the description (see below) if defined</li>
+  <li>Sequence - the description (see below) if defined</li>
+  <li>RepSep - the description (see below) if defined</li>
+  <li>Semantic predicate - the description (see below) if defined</li>
+</ul>
+
+<p>
+All icons have at least the two annotations described above. All other annotations, 
+described below, are optional. If any of the optional annotations are present, they are 
+enclosed within square brackets.
+</p>
+
+<ul>
+  <li>commit - backtracking to optional parser clauses (at an upper level) will be 
+      prevented if this node is successfully parsed</li>
+  <li>description - an optional user-assigned string (see below) that can be assigned 
+      to certain types of node</li>
+  <li>drop - the node will not be entered into the AST. You can see examples of 
+      its use in the built-in <i>ArithExpr</i> <a href="SampleGrammars.html">Sample Grammars</a></li>
+  <li>message - the node's associated error-message</li>
+  <li>packrat - the parser-rule is a 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers$PackratParser.html">packrat parser</a> 
+      (applicable only to a root-node)</li>
+  <li>trace - the parser's use of the node will be logged at run-time</li>
+</ul>
+
+<p>
+All node attributes can be reviewed and changed via the context-menu as shown in 
+Figure-5 above. 
+</p>
+
+<h4>Creating Rules</h4>
+
+<p>
+The grammar-tree popup menu is the tool used for creating and editing grammar-trees, 
+and is described fully in 
+<a href="http://vll.java.net/EditingTheGrammarTree.html">Editing the Grammar Tree</a>. 
+In the following example we get our feet just a little wet by composing a simple rule 
+with the <a href="#ManagingTokens">tokens we created above</a>. 
+</p>
+
+<p>
+First, add a <i>Sequence</i> node to the grammar-tree by right-clicking the root node 
+(<img src="images/GrammarIconRoot.gif" align="middle" />) and selecting 
+<i>Add -> Sequence</i> from the popup menu as shown on the left side of Figure-6 below. 
+A sequence icon 
+(<img src="images/GrammarIconSequence.gif" align="middle" />) is added to the root, 
+as on the right of the figure.
+</p>
+
+<p>
+<img src="images/add-sequence.png" /><br/>
+<em>Figure 6. Adding a sequence node</em>
+</p>
+
+<p>
+Then perform the following steps:
+</p>
+
+<ul>
+<li>right-click the newly added sequence node 
+    (<img src="images/GrammarIconSequence.gif" align="middle" />) and select <i>Add -> Token</i>. 
+    This will bring up a dialog containing a list of token names. 
+    Select <i>NUMBER</i> and click the dialog's <i>OK</i> button. 
+    A regex icon (<img src="images/GrammarIconRegex.gif" align="middle" />) is added 
+    to the sequence node</li> 
+<li>right-click the sequence node again and select <i>Add -> Choice</i> from the popup menu. 
+    This should add a <i>Choice</i> node icon 
+    (<img src="images/GrammarIconChoice.gif" align="middle" />) 
+    to the sequence node</li>
+<li>right-click the newly created choice node (<img src="images/GrammarIconChoice.gif" align="middle" />) 
+    and select <i>Add -> Token</i>. 
+    Select <i>PLUS</i> in the dialog box and click <i>OK</i>. 
+    A literal icon (<img src="images/GrammarIconLiteral.gif" align="middle" />) 
+    is added to the choice node. 
+    Repeat this action once more, and add the <i>MUNUS</i> token to the choice node</li> 
+<li>repeat the first step above to add another <i>NUMBER</i> to the sequence node</li>
+</ul>
+
+<p>
+You're done! If your parser does not look like the one in Figure-7 below, 
+use <i>Edit</i> from the grammar-tree's context menu to make the required changes. 
+</p>
+
+<p>
+<img src="images/first-parser.png" /><br/>
+<em>Figure 7. Your first visual parser</em>
+</p>
+
+<p>
+The text displayed in the panel to the right of the grammar-tree is the 
+<a href="#TheParseTree">AST</a> of the <i>selected</i> node, 
+and so depends on which icon you clicked last. 
+</p>
+
+<h4>Miscellaneous Rule Operations</h4>
+
+<p>
+The main menu and toolbar also support several other operations. You can find which 
+other rules refer any particular rule (<i>Rules -> Find rule</i>), 
+rename rules (<i>Rules -> Rename rule</i>), and delete unused rules (<i>Rules -> Delete rule</i>). 
+</p>
+
+<h4 id="SavingTheGrammar">Saving the Grammar</h4>
+
+<p>
+A grammar can be saved to a file by invoking <i>File -> Save</i> from the main menu. 
+Grammars are stored in XML files with a <i>.vll</i> suffix. 
+The contained XML captures the structure of the rules, the token definitions, and 
+other details, but no <a href="#GeneratedCode">generated code</a> of any kind. 
+The XML is quite intuitive and you can use XSLT or a similar technology to 
+transform it into another format 
+(a grammar for another tool, or code of some sort, for example) if required.
+</p>
+
+<p>
+A saved grammar can be read back into the GUI by invoking <i>File -> Open</i> from 
+the main menu. This is useful for review, further editing, or testing. 
+<a href="#UsingTheAPI">The API</a> can also load a saved grammar, 
+and regenerate the parser for use from a client program.
+</p>
+
+<h3 id="TestingYourParser">Testing your Parser</h3>
+
+<p>
+Testing is really simple. Key in the test input under 
+<i>Parser Test Input</i> (as at "A" in Figure-8 below), 
+click the <i>Parse input</i> button (under the red rectangle), 
+and validate the output that appears under <i>Parser Log</i> 
+(at "C" in the figure). 
+You don't have to write any code, use any other tools, or do anything else. 
+</p>
+
+<p>
+<img src="images/testing-parser.png" /><br/>
+<em>Figure 8. Testing your parser</em>
+</p>
+
+<p>
+The figure shows the result of testing the parser with "3 + 5" 
+as the input. 
+The <i>Parser Log</i> are should contain the following text:
+</p>
+
+<pre><code>    Generating parsers ... (10 ms)
+    Parsing ... (3 chars in 0 ms), result follows:
+    <u>Array(3, Pair(0, +), 5)</u></code></pre>
+
+<p>
+The first two lines contain performance information that is safely ignored. 
+The last line (underlined) is the parser's result. The result is an 
+<a href="#TheParseTree">AST</a> 
+with a predefined structure shown under <i>Parse Tree (AST) Structure</i>. 
+Since the test input entered was "3 + 5", we <i>know</i> that the result is correct. 
+However, real-life parsers are too complex for manual testing, so VisualLangLab supports 
+several approaches to automated testing that are described online in 
+<a href="http://vll.java.net/TestingParsers.html">Testing Parsers</a>. 
+</p>
+
+<p>
+That brings us to the end of this quick example. If you feel that the result of 
+parsing "3 + 5" should be 8 instead of <code>Array(3,Pair(0,+),5)</code> check out 
+the section <i>ArithExpr with action-code</i> in 
+<a href="http://vll.java.net/SampleGrammars.html">Sample Grammars</a>.
+</p>
+
+<h3 id="TheParseTree">The Parse-Tree (or AST)</h3>
+
+<p>
+The terms <i>parse-tree</i> and 
+<a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">Abstract Syntax Tree</a> 
+(or just <i>AST</i>) are used interchangeably to mean the 
+structure of information gathered during the parsing process. 
+VisualLangLab displays the AST of the selected grammar-tree node in the text area 
+under <i>Parse Tree (AST) Structure</i> as seen in Figure-7 above. 
+ASTs are constructed from mutually nested instances of certain standard Scala types, 
+so a rudimentary understanding of their main features is useful. 
+Examples and more details can be found online at 
+<a href="http://vll.java.net/ASTAndActionCode.html">AST and Action Code</a> or 
+in the downloaded zip.
+</p>
+
+<h3 id="ActionCode">Action Code</h3>
+
+<p>
+Action-code (or just <i>actions</i>) are Scala or Javascript 
+functions associated with grammar-tree nodes, and entered into the text 
+area under <i>Action Code</i> ("C" in <a href="#Figure2">Figure-2</a> above). 
+It is <i>never</i> necessary to have action code embedded in the 
+grammar &mdash; you can always remove all code into an application program that invokes 
+the parser via the <a href="#UsingTheAPI">API</a>, and then processes the 
+<a href="#TheParseTree">AST</a> returned by it. 
+You can see examples of action-code in the <i>ArithExpr with action-code</i> 
+<a href="#SampleGrammars">sample grammar</a>, and more details can be found online at 
+<a href="http://vll.java.net/ASTAndActionCode.html">AST and Action Code</a> 
+or in the downloaded zip.
+</p>
+
+<h3 id="UsingTheAPI">Using the API</h3>
+
+<p>
+The VisualLangLab API enables applications written in Scala (and Java with 
+some awkwardness) to use parsers created with the GUI. The API is very small, 
+and contains the types and functions required to perform the following 
+operations.
+</p>
+
+<ul>
+  <li>load a parser from a <a href="#SavingTheGrammar">saved grammar-file</a></li>
+  <li>parse a string using the parser</li>
+  <li>test the result, and retrieve the AST or error information</li>
+</ul>
+
+<p>
+More details and examples can be found online at 
+<a href="http://vll.java.net/UsingTheAPI.html">Using the API</a>. 
+</p>
+
+<h3 id="SampleGrammars">Sample Grammars</h3>
+
+<p>
+To enable users to quickly gain hands-on experience with VisualLangLab grammars, 
+the tool contains some built-in sample grammars. These samples can be reviewed, 
+tested, modified, and saved just like any other grammar created from scratch. 
+To open a sample grammar select <i>Help -> Sample grammars</i> from the main 
+menu, and choose one of the samples shown as in Figure-9 below.
+</p>
+
+<p>
+<img src="images/SampleGrammar1.png" /><br/>
+<em>Figure 9. Sample grammars available</em>
+</p>
+
+<p>
+More information about these samples can be found online at 
+<a href="http://vll.java.net/SampleGrammars.html">Sample Grammars</a> or 
+in the downloaded zip file. 
+</p>
+
+<h3 id="DifferencesFromScala">Differences from Scala's Combinators</h3>
+
+<p>
+The <a href="http://en.wikipedia.org/wiki/Class_diagram">class diagram</a> 
+in Figure-10 below shows VisualLangLab's relationship with Scala's parser combinators.  
+</p>
+
+<p id="Figure10">
+<img src="images/RelationshipWithScalaParserCombinators.png" /><br/>
+<em>Figure 10. Relationship With Scala parser combinators</em>
+</p>
+
+<p>
+However, the tool's classes override and augment a few key functionalities of the 
+underlying Scala classes, so the behavior and AST of VisualLangLab's parsers 
+is significantly different in certain ways. 
+</p>
+
+<ul>
+  <li>The <i>Literal</i> and <i>Regex</i> node types use an internal 
+      <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexical analyzer</a>, 
+      and do not match input text in the same way 
+      as <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>'s 
+      <code>literal()</code> and <code>regex()</code> methods</li>
+  <li>The <i>Sequence</i> and <i>Choice</i> node types use 
+      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>'s 
+      <code>~</code> and <code>|</code> combinators internally, but have different return types</li>
+</ul>
+
+<p>
+More details can be found online 
+at <a href="http://vll.java.net/RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a>, 
+or in the downloaded zip. 
+</p>
+
+<h3>Conclusion</h3>
+
+<p>
+The article introduces readers to parser development using the completely visual 
+tool <a href="http://vll.java.net/">VisualLangLab</a>. 
+Its features make it an effective prototyping environment and a training tool, 
+and will hopefully be a useful addition to any developer's skills.
+</p>
+
+<h3 id="Resources">Resources (or References)</h3>
+
+<ul>
+<li><a href="http://vll.java.net">VisualLangLab</a> - The VisualLangLab web-site</li>
+</ul>
+
+<table id="RevisionHistory" width="100%" border="1" style="border: 1px solid black;"><tr><th>Revision History</th><tr><td>
+<li>02-SEP-2011 - (before publication on java.net): <a href="#Figure10">Figure-10</a> under 
+    <a href="#DifferencesFromScala">Differences from Scala's Combinators</a> changed. </li>
+</td></tr></table>
+
+</body>
+</html>
