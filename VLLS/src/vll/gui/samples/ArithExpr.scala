@@ -46,12 +46,13 @@ Output: Array(Array(Pair(1, Array(Array(Pair(0, 2), List()),
     Array(Pair(0, 3), List())))))))), List())
 
 </pre></body></html>"""
+    gui.parsers.reset()
     gui.parsers.load(grammar)
     val firstRule = gui.parsers.ruleBank.ruleNames(0)
     gui.updateRuleChooser(firstRule)
     gui.title = "VisualLangLab/S - ArithExpr"
     gui.ruleTreePanel.setRule(firstRule)
-    gui.logTextPane.clearLogText()
+//    gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
         "VisualLangLab sample - ArithExpr", Dialog.Message.Info, null)
   }

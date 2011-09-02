@@ -39,12 +39,13 @@ the parser.
 You can find sample input in the book or PDF document referred above.
 </pre></body></html>"""
 
+    gui.parsers.reset()
     gui.parsers.load(grammar)
     val firstRule = gui.parsers.ruleBank.ruleNames(0)
     gui.updateRuleChooser(firstRule)
     gui.title = "VisualLangLab/S - SimpleJSON"
     gui.ruleTreePanel.setRule(firstRule)
-    gui.logTextPane.clearLogText()
+//    gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
         "VisualLangLab sample - SimpleJSON", Dialog.Message.Info, null)
   }

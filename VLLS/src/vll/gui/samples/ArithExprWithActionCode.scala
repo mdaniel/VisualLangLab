@@ -41,6 +41,7 @@ Sample input (remove quotes): "(2 + 3) * (7 - 3)"
 Output: 20
 
 </pre></body></html>"""
+    gui.parsers.reset()
     ops.spawn {
       gui.parsers.load(grammar)
       val firstRule = gui.parsers.ruleBank.ruleNames(0)
@@ -50,7 +51,7 @@ Output: 20
       }
     }
     gui.title = "VisualLangLab/S - ArithExprWithActionCode"
-    gui.logTextPane.clearLogText()
+//    gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
         "VisualLangLab sample - ArithExprWithActionCode", Dialog.Message.Info, null)
   }

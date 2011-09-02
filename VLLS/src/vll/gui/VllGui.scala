@@ -118,7 +118,8 @@ class VllGui extends MainFrame with ActionListener {
       saveChanges()
       parsers.reset()
       if (!isDirty) {
-      grammarFileChooser.title = "Open"
+        GuiNode.clearCache()
+        grammarFileChooser.title = "Open"
         grammarFileChooser.showOpenDialog(splitPane) match {
           case FileChooser.Result.Approve =>
             grammarFile = Some(grammarFileChooser.selectedFile)

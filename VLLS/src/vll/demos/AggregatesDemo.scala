@@ -19,6 +19,7 @@
 */
 package vll.demos
 
+import scala.util.parsing.combinator.JavaTokenParsers
 import scala.util.parsing.combinator.RegexParsers
 import vll.core.Aggregates
 
