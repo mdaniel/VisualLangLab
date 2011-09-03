@@ -1,0 +1,22 @@
+<VLL-Grammar>
+  <Whitespace>\\s+</Whitespace>
+  <Comments></Comments>
+  <Tokens>
+    <Literal Name="RPAREN" Pattern=")"/>
+    <Literal Name="RBKT" Pattern="]"/>
+    <Literal Name="COLON" Pattern=":"/>
+    <Literal Name="STAR" Pattern="*"/>
+    <Literal Name="LPAREN" Pattern="("/>
+    <Literal Name="SLASH" Pattern="/"/>
+    <Literal Name="LBKT" Pattern="["/>
+    <Literal Name="COMMA" Pattern=","/>
+    <Literal Name="DASH" Pattern="-"/>
+    <Literal Name="LCURLY" Pattern="{"/>
+    <Literal Name="RCURLY" Pattern="}"/>
+    <Literal Name="PLUS" Pattern="+"/>
+  </Tokens>
+  <Parsers>
+    <Parser Name="Main">
+    </Parser>
+  </Parsers>
+</VLL-Grammar>
