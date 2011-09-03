@@ -449,7 +449,7 @@ class VllGui extends MainFrame with ActionListener {
           }
           Dialog.showInput(splitPane, title, "Edit token", Dialog.Message.Question, null, Array[String](), str) match {
             case Some(newVal) =>
-              validateAndAssignTokenValue(false, isRegex, tokenName, newVal)
+              if (newVal != str) validateAndAssignTokenValue(false, isRegex, tokenName, newVal)
             case None =>
           }
         case None =>

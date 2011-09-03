@@ -116,15 +116,17 @@ class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel
  */      case treeNodePopupMenu.gotoMenuItem => selectedNode.pNode match {
           case ReferenceNode(_, ruleName) => guiTop.ruleChooser.setSelectedItem(ruleName)
           case RegexNode(_, regexName: String) =>
-            Dialog.showInput(guiTop.splitPane, "Edit regex '%s'".format(regexName), "Edit token", Dialog.Message.Question, null, Array[String](), guiTop.parsers.tokenBank(regexName).right.get) match {
+            val currentValue = guiTop.parsers.tokenBank(regexName).right.get
+            Dialog.showInput(guiTop.splitPane, "Edit regex '%s'".format(regexName), "Edit token", Dialog.Message.Question, null, Array[String](), currentValue) match {
             case Some(newVal) =>
-              guiTop.validateAndAssignTokenValue(false, true, regexName, newVal.asInstanceOf[String])
+              if (currentValue != newVal) guiTop.validateAndAssignTokenValue(false, true, regexName, newVal.asInstanceOf[String])
             case None =>
           }
           case LiteralNode(_, literalName: String) =>
-            Dialog.showInput(guiTop.splitPane, "Edit literal '%s'".format(literalName), "Edit token", Dialog.Message.Question, null, Array[String](), guiTop.parsers.tokenBank(literalName).left.get) match {
+            val currentValue = guiTop.parsers.tokenBank(literalName).left.get
+            Dialog.showInput(guiTop.splitPane, "Edit literal '%s'".format(literalName), "Edit token", Dialog.Message.Question, null, Array[String](), currentValue) match {
             case Some(newVal) =>
-              guiTop.validateAndAssignTokenValue(false, false, literalName, newVal.asInstanceOf[String])
+              if (currentValue != newVal) guiTop.validateAndAssignTokenValue(false, false, literalName, newVal.asInstanceOf[String])
             case None =>
           }
           case _ =>
