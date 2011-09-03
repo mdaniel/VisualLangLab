@@ -375,34 +375,36 @@ class VllGui extends MainFrame with ActionListener {
   
   def validateAndAssignTokenValue(isNew: Boolean, isRegex: Boolean, name: String, value: String) {
     val errorTitle = "ERROR - " + (if (isNew) "New " else "Edit ") + (if (isRegex) "regex" else "literal")
-            if (isNew && (parsers.tokenBank contains name)) {
-              Dialog.showMessage(splitPane, "A token named '" + name + "' already exists", errorTitle, Dialog.Message.Error, null)
-            } else if (parsers.tokenBank.exists(p => {(p._1.endsWith("_") == name.endsWith("_")) &&
-                  p._2.equals(if (isRegex) Right(value) else Left(value))})) {
-              Dialog.showMessage(splitPane, "Another token with pattern '" + value + "' exists", errorTitle, Dialog.Message.Error, null)
-            } else {
-              if (isRegex) {
-                try {
-                  if (Automata.canMatchEmptyString(Utils.unEscape(value))) {
-                    Dialog.showMessage(splitPane, "'%s' matches empty string, not allowed".format(value), errorTitle, Dialog.Message.Error, null)
-                  } else {
-                    Automata.testRegexp(Utils.unEscape(value))
-                    parsers.tokenBank(name) = Right(value)
-                  }
-                } catch {
-                  case x => Dialog.showMessage(splitPane, "Error in '%s': %s".format(value, x.getMessage), errorTitle, Dialog.Message.Error, null)
-                }
-              } else {
-                try {
-                  Utils.unEscape(value)
-                  parsers.tokenBank(name) = Left(value)
-                } catch {
-                  case x =>
-                    Dialog.showMessage(splitPane, x.getMessage, errorTitle, Dialog.Message.Error, null)
-                }
-              }
-              isDirty = true
-            }
+    if (isNew && (parsers.tokenBank contains name)) {
+      Dialog.showMessage(splitPane, "A token named '" + name + "' already exists", errorTitle, Dialog.Message.Error, null)
+    } else if (parsers.tokenBank.exists(p => {(p._1.endsWith("_") == name.endsWith("_")) &&
+        p._2.equals(if (isRegex) Right(value) else Left(value))})) {
+      val otherToken = parsers.tokenBank.find(p => {(p._1.endsWith("_") == name.endsWith("_")) &&
+           p._2.equals(if (isRegex) Right(value) else Left(value))}).get._1
+      Dialog.showMessage(splitPane, "Token '%s' has same value, not allowed".format(otherToken), errorTitle, Dialog.Message.Error, null)
+    } else {
+      if (isRegex) {
+         try {
+           if (Automata.canMatchEmptyString(Utils.unEscape(value))) {
+             Dialog.showMessage(splitPane, "'%s' matches empty string, not allowed".format(value), errorTitle, Dialog.Message.Error, null)
+           } else {
+             Automata.testRegexp(Utils.unEscape(value))
+             parsers.tokenBank(name) = Right(value)
+           }
+         } catch {
+           case x => Dialog.showMessage(splitPane, "Error in '%s': %s".format(value, x.getMessage), errorTitle, Dialog.Message.Error, null)
+         }
+       } else {
+         try {
+           Utils.unEscape(value)
+           parsers.tokenBank(name) = Left(value)
+         } catch {
+            case x =>
+              Dialog.showMessage(splitPane, x.getMessage, errorTitle, Dialog.Message.Error, null)
+         }
+       }
+       isDirty = true
+     }
   }
 
   def createNewToken(isRegex: Boolean) {

@@ -71,6 +71,7 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
   }
   
   def getParserFor(parserName: String): Parser[_] = {
+    super.reset()
     globalTokenParserTime = 0
     val (lits, regs) = tokenBank.toArray.filterNot(_._1.endsWith("_")).partition(_._2.isInstanceOf[Left[_,_]])
     lits.foreach(p => literal(Utils.unEscape(p._2.left.get)))

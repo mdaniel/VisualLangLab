@@ -56,9 +56,9 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
       theLiterals += lit
       val theLiteralsSize = theLiterals.size
       val parser = Parser(in => {
-        val t0 = System.currentTimeMillis
+        val t0 = if (profileCode) System.currentTimeMillis else 0
         val rv = parserById(-theLiteralsSize, "literal(%s)".format(lit))(in)
-        literalTime += System.currentTimeMillis - t0
+        if (profileCode) literalTime += System.currentTimeMillis - t0
         rv
       })
       tokenParserMap(lit) = parser
@@ -80,9 +80,9 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
       // order of following 2 lines must not be changed
       val theRegexsSize = theRegexs.size
       val parser = Parser(in => {
-        val t0 = System.currentTimeMillis
+        val t0 = if (profileCode) System.currentTimeMillis else 0
         val rv = parserById(theRegexsSize, "regex(%s)".format(regAsString))(in)
-        regexTime += System.currentTimeMillis - t0
+        if (profileCode) regexTime += System.currentTimeMillis - t0
         rv
       })
       theRegexs += regAsString 
@@ -94,7 +94,7 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
   private def parserById(id: Int, expect: String): Parser[String] = {
     val failMsg = "Expected " + expect
     Parser(in => {
-        val t0 = System.currentTimeMillis
+        val t0 = if (profileCode) System.currentTimeMillis else 0
 //        if (traceTokens)
 //          printf("Trying %s @ (%d,%d)%n", expect, in.pos.line, in.pos.column)
         val rv = if (in.atEnd)
@@ -106,11 +106,11 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
               if (next.atEnd) {
 //                if (traceTokens)
 //                  printf("Failure %s @ (%d,%d)%n", "End-of-input found", in.pos.line, in.pos.column)
-                Failure("End-of-input found", in)
+                Failure("Unexpected end-of-input", in)
               } else {
 //                if (traceTokens)
 //                  printf("Failure %s @ (%d,%d)%n", expect, in.pos.line, in.pos.column)
-                Failure("Unknown-inputs found", in)
+                Failure(failMsg, in)
               }
             } else {
               if (matchId == id) {
@@ -125,21 +125,21 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
               }
             }
         }
-        parserByIdTime += System.currentTimeMillis - t0
+        if (profileCode) parserByIdTime += System.currentTimeMillis - t0
         rv
       })
   }
   
   private def globalTokenLexer(inStr: String, offset: Int): LexResults = {
-    val t0 = System.currentTimeMillis
+    val t0 = if (profileCode) System.currentTimeMillis else 0
     if (setupNeeded) {
       setupLexer()
       setupNeeded = false
     }
     val rv = if (offset > maxOffset || !lexResultsCache.contains(offset)) {
-      val t00 = System.currentTimeMillis
+      val t00 = if (profileCode) System.currentTimeMillis else 0
       val postSpaces = handleWhiteSpace(inStr, offset)
-      handleWhitespaceTime += System.currentTimeMillis - t00
+      if (profileCode) handleWhitespaceTime += System.currentTimeMillis - t00
       val res = lex(inStr.substring(postSpaces))
       val lexResult = (res._1, res._2, if (res._1 eq null) (postSpaces - offset) else (postSpaces - offset + res._1.length))
       if (res._1 ne null) {
@@ -150,7 +150,7 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
     } else {
       lexResultsCache(offset)
     }
-    globalTokenLexerTime += System.currentTimeMillis - t0
+    if (profileCode) globalTokenLexerTime += System.currentTimeMillis - t0
     rv
   }
   
@@ -158,12 +158,12 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
     lexResultsCache.clear()
     maxOffset = -1
     Parser(in => {val rv = super.phrase(p)(in)
-//            **** DO NOT DELETE LINES BELOW ****
-//        printf("literalTime: %d, regexTime: %d%n", literalTime, regexTime)
-//        printf("parserByIdTime: %d, globalTokenLexerTime: %d%n", parserByIdTime, globalTokenLexerTime)
-//        printf("handleWhitespaceTime: %d, lexTime: %d%n", handleWhitespaceTime, lexTime)
-//        printf("literalsMatcherTime: %d, regexMatcherTime: %d%n", literalsMatcherTime, regexMatcherTime)
-//            **** DO NOT DELETE LINES ABOVE ****
+        if (profileCode) {
+          printf("literalTime: %d, regexTime: %d%n", literalTime, regexTime)
+          printf("parserByIdTime: %d, globalTokenLexerTime: %d%n", parserByIdTime, globalTokenLexerTime)
+          printf("handleWhitespaceTime: %d, lexTime: %d%n", handleWhitespaceTime, lexTime)
+          printf("literalsMatcherTime: %d, regexMatcherTime: %d%n", literalsMatcherTime, regexMatcherTime)
+        }   
         rv 
     })
   }
@@ -181,9 +181,9 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
   }
 
   private def lex(s: String) = {
-    val t0 = System.currentTimeMillis
+    val t0 = if (profileCode) System.currentTimeMillis else 0
     val matchingLiteral = {
-      val t01 = System.currentTimeMillis
+      val t01 = if (profileCode) System.currentTimeMillis else 0
       val rv = if ((literalsMatcher ne null) && {literalsMatcher.reset(s); literalsMatcher.lookingAt}) {
         var k = -1
         for (i <- 1 to literalsMatcher.groupCount) 
@@ -192,11 +192,11 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
         (literalsMatcher.group, literalIds(k - 1))
       } else
         (null, 0)
-      literalsMatcherTime += System.currentTimeMillis - t01
+      if (profileCode) literalsMatcherTime += System.currentTimeMillis - t01
       rv
     }
     val matchingRegex = {
-      val t02 = System.currentTimeMillis
+      val t02 = if (profileCode) System.currentTimeMillis else 0
       val rv = regexMatchers.map(pi => {
         val m = (pi._1).reset(s)
         if (m.lookingAt) {
@@ -206,7 +206,7 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
         }
       }).seq.filter(_._1 ne null).sortWith((a, b) => {(a._1.length > b._1.length) || 
              ((a._1.length == b._1.length) && (a._2 < b._2))});
-      regexMatcherTime += System.currentTimeMillis - t02
+      if (profileCode) regexMatcherTime += System.currentTimeMillis - t02
       rv
     }
     val rv = if (matchingRegex.isEmpty) {
@@ -215,7 +215,7 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
       if ((matchingLiteral._1 eq null) || (matchingRegex.head._1.length > matchingLiteral._1.length))
         matchingRegex.head else matchingLiteral
     }
-    lexTime += System.currentTimeMillis - t0
+    if (profileCode) lexTime += System.currentTimeMillis - t0
     rv
   }
   
@@ -240,6 +240,7 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
     parserByIdTime = 0
   }
 
+  private var profileCode = false
   private var literalsMatcher: Matcher = null
   private var literalIds: Array[Int] = null
   private var regexMatchers: parallel.mutable.ParArray[Tuple2[Matcher, Int]] = null
