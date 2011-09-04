@@ -24,10 +24,13 @@ import java.io.File
 import java.io.PrintStream
 import scala.collection._
 import scala.io.Source
+import scala.swing.TextComponent
 import scala.util.parsing.combinator.PackratParsers
 import scala.util.parsing.input.CharSequenceReader
 import scala.xml.XML
 import scala.xml.{Elem => XMLElem}
+import vll.gui.VllGui
+import vll.gui.VllGui._
 
 class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggregates {
 
@@ -249,7 +252,9 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
         case pn: PredicateNode => if (node.actionText.isEmpty) 
             failure("Predicate has no code")
           else {
-            Parser(in => {node.actionFunction(in.pos.line, in.pos.column, null) match {
+            Parser(in => {node.actionFunction(VllGui.top.logTextPane.inputArea, 
+                       new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea}, 
+                       in.pos.line, in.pos.column, null) match {
                   case b: java.lang.Boolean if b.booleanValue => Success("", in)
                   case errMsg: String => Failure(errMsg, in)
                   case _ => Failure("Predicate error", in)
@@ -273,10 +278,14 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
         failure("Action code has syntax error")
       else
         Parser(in => {
-          node.actionFunction(in.pos.line, in.pos.column, null)
+          node.actionFunction(VllGui.top.logTextPane.inputArea, 
+                              new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea},  
+                              in.pos.line, in.pos.column, null)
           parser3(in) match {
             case Success(tree, next) =>
-              var actionResult = node.actionFunction(next.pos.line, next.pos.column, tree)
+              var actionResult = node.actionFunction(VllGui.top.logTextPane.inputArea, 
+                                                     new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea}, 
+                                                     next.pos.line, next.pos.column, tree)
               Success(if (actionResult == null) tree else actionResult, next)
             case other => other
           }
@@ -306,7 +315,7 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
 
 object VllParsers {
   type Parser[T] = VllParsers#Parser[T]
-  type ActionType = Function3[Int,Int,Any,Any]
+  type ActionType = Function5[TextComponent,TextComponent,Int,Int,Any,Any]
   def fromFile(f: File): VllParsers = {
     val rv = new VllParsers
     rv.load(f)

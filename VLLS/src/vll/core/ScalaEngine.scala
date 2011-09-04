@@ -23,6 +23,7 @@ package vll.core
 import java.io.OutputStream
 import java.io.PrintWriter
 import scala.collection._
+import scala.swing.TextComponent
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.IMain
 
@@ -36,7 +37,7 @@ object ScalaEngine {
     def clear() {buf.clear()}
     override def toString() = buf.toString
   }
-  private val compiledFunctionHolder = new AnyHolder[Function3[Int,Int,Any,Any]]
+  private val compiledFunctionHolder = new AnyHolder[Function5[TextComponent,TextComponent,Int,Int,Any,Any]]
   private val vll = new AnyHolder[Any]
   private val interp = new IMain(new Settings, new PrintWriter(outputStream))  
   interp.settings.usejavacp.value = true
@@ -54,7 +55,7 @@ object ScalaEngine {
 //    printf("Enter compile(%s)%n", f)
     compiledFunctionHolder.value = null
     outputStream.clear()
-    interp.interpret("$$.value = ($line:Int,$col:Int,%s".format(f.substring(1)))
+    interp.interpret("$$.value = (InputArea:scala.swing.TextComponent,LogArea:scala.swing.TextComponent,$line:Int,$col:Int,%s".format(f.substring(1)))
 //    println(outputStream.toString)
     if (!outputStream.toString.trim.isEmpty) {
       val msg = outputStream.toString

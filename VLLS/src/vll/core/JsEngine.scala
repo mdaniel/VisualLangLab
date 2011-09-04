@@ -25,6 +25,7 @@ import javax.script.Compilable
 import javax.script.Invocable
 import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
+import scala.swing.TextComponent
 import sun.org.mozilla.javascript.internal.NativeArray
 import sun.org.mozilla.javascript.internal.NativeObject
 import vll.gui.VllGui
@@ -36,8 +37,8 @@ object JsEngine {
   private val compilable = engine.asInstanceOf[Compilable]
   private val context = engine.getContext
   context.setAttribute("VLL", new NativeObject(), ScriptContext.ENGINE_SCOPE)
-  context.setAttribute("InputArea", VllGui.top.logTextPane.inputArea, ScriptContext.ENGINE_SCOPE)
-  context.setAttribute("LogArea", VllGui.top.logTextPane.logArea, ScriptContext.ENGINE_SCOPE)
+//  context.setAttribute("InputArea", VllGui.top.logTextPane.inputArea, ScriptContext.ENGINE_SCOPE)
+//  context.setAttribute("LogArea", VllGui.top.logTextPane.logArea, ScriptContext.ENGINE_SCOPE)
 //  context.setAttribute("VLLARGS", null, ScriptContext.ENGINE_SCOPE)
 //  context.setAttribute("VLLINPUT", null, ScriptContext.ENGINE_SCOPE)
 //  def eval(s: String) = engine.eval(s)
@@ -71,8 +72,10 @@ object JsEngine {
 
   def compile(sName: String): VllParsers.ActionType = {
     val cs = compilable.compile("(%s)(VLLARGS)".format(sName))
-    new Function3[Int,Int,Any,Any] {
-      def apply(line: Int, col: Int, arg: Any): Any = {
+    new Function5[TextComponent,TextComponent,Int,Int,Any,Any] {
+      def apply(input: TextComponent, log: TextComponent, line: Int, col: Int, arg: Any): Any = {
+        cs.getEngine.put("InputArea", input)
+        cs.getEngine.put("LogArea", log)
         cs.getEngine.put("VLLARGS", objToJsArray(arg))
         cs.getEngine.put("$line", line)
         cs.getEngine.put("$col", col)
