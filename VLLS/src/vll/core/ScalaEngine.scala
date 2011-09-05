@@ -26,6 +26,7 @@ import scala.collection._
 import scala.swing.TextComponent
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.IMain
+import scala.tools.nsc.interpreter.IR.Result
 
 object ScalaEngine {
   
@@ -55,14 +56,18 @@ object ScalaEngine {
 //    printf("Enter compile(%s)%n", f)
     compiledFunctionHolder.value = null
     outputStream.clear()
-    interp.interpret("$$.value = (InputArea:scala.swing.TextComponent,LogArea:scala.swing.TextComponent,$line:Int,$col:Int,%s".format(f.substring(1)))
+    val res: Result = interp.interpret("$$.value = (InputArea:scala.swing.TextComponent,LogArea:scala.swing.TextComponent,$line:Int,$col:Int,%s".format(f.substring(1)))
 //    println(outputStream.toString)
     if (!outputStream.toString.trim.isEmpty) {
       val msg = outputStream.toString
-      if (msg.startsWith("<console>:"))
+      if (!msg.contains("$$.value: java.lang.Object ="))
         throw new IllegalArgumentException(msg)
+    } else if (res.toString != "Success") {
+      throw new IllegalArgumentException(res.toString)
     }
 //    printf("Exit compile(%s)%n", compiledFunctionHolder.value)
+    if (compiledFunctionHolder.value eq null)
+        throw new IllegalArgumentException("Unknown syntax error")
     compiledFunctionHolder.value
   }
   

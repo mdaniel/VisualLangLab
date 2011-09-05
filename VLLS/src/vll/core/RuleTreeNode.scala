@@ -36,16 +36,16 @@ abstract sealed class RuleTreeNode (
   var actionFunction: VllParsers.ActionType = null
   def actionText = actionCode
   def actionText_=(newCode: String) {
+    actionFunction = null
     actionCode = newCode
     actionHasSyntaxError = false
     if (!actionCode.trim.isEmpty) {
       if (Utils.isJavascriptCode(actionCode))
-        try {actionFunction = JsEngine.compile(actionCode)} catch {case x => actionHasSyntaxError = true; actionFunction = null; throw x}
+        try {actionFunction = JsEngine.compile(actionCode)} catch {case x => actionHasSyntaxError = true; throw x}
       else if (Utils.isScalaCode(actionCode))
-        try {actionFunction = ScalaEngine.compile(actionCode)} catch {case x => actionHasSyntaxError = true; actionFunction = null; throw x}
+        try {actionFunction = ScalaEngine.compile(actionCode)} catch {case x => actionHasSyntaxError = true; throw x}
       else {
         actionHasSyntaxError = true
-        actionFunction = null
         throw new Exception("Not a Javascript or Scala function")
       }
     }
