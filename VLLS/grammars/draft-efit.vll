@@ -1,0 +1,55 @@
+<VLL-Grammar>
+  <Whitespace>\\s+</Whitespace>
+  <Comments></Comments>
+  <Tokens>
+    <Literal Name="REPEAT1" Pattern="repeat"/>
+    <Literal Name="DO2" Pattern="Do"/>
+    <Literal Name="BEFORE1" Pattern="before"/>
+    <Regex Name="INTEGER" Pattern="\\d+"/>
+    <Literal Name="DO1" Pattern="do"/>
+    <Literal Name="WHILE2" Pattern="While"/>
+    <Literal Name="WHILE1" Pattern="while"/>
+    <Literal Name="DASH" Pattern="-"/>
+    <Literal Name="REPEAT2" Pattern="Repeat"/>
+    <Literal Name="AFTER1" Pattern="after"/>
+  </Tokens>
+  <Parsers>
+    <Parser Name="stmtDo">
+        <Sequence >
+          <Choice >
+            <Token Ref="DO1" />
+            <Token Ref="DO2" />
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="statementList">
+        <Sequence Mult="+">
+          <Token Ref="DASH" Drop="true"/>
+          <Reference Ref="anyStatement" />
+        </Sequence>
+    </Parser>
+    <Parser Name="stmtWhile">
+        <Sequence >
+          <Choice >
+            <Token Ref="WHILE1" />
+            <Token Ref="WHILE2" />
+          </Choice>
+        </Sequence>
+    </Parser>
+    <Parser Name="anyStatement">
+        <Choice >
+          <Reference Ref="stmtDo" />
+          <Reference Ref="stmtRepeat" />
+          <Reference Ref="stmtWhile" />
+        </Choice>
+    </Parser>
+    <Parser Name="stmtRepeat">
+        <Sequence >
+          <Choice >
+            <Token Ref="REPEAT1" />
+            <Token Ref="REPEAT2" />
+          </Choice>
+        </Sequence>
+    </Parser>
+  </Parsers>
+</VLL-Grammar>

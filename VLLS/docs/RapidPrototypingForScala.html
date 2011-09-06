@@ -1,0 +1,506 @@
+<html>
+  <head>
+    <title>VisualLangLab - Rapid Prototyping for Scala Parser Combinators</title>
+  </head>
+
+  <body>
+
+<h1>Still under Construction!</h1>
+<h2>VisualLangLab - Rapid Prototyping for Scala Parser Combinators</h2>
+
+<p>
+<a href="http://vll.java.net/">VisualLangLab</a> is a visual parser-generator 
+IDE for developing parsers without code or scripts of any kind. 
+Parser-rules are depicted as 
+visual <i>grammar-trees</i> with intuitive icons for different nodes types. 
+The following figures show how it represents some rules of the payroll-parser 
+external DSL described on page 233 of 
+<a href="http://programmingscala.com/">Programming Scala</a>. 
+The parser code can also be found online at 
+<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#AScalaImplementationExternalDSLGrammar">
+A Scala Implementation of the External DSL Grammar</a>. 
+<!-- 
+The icons and annotations are explained fully in 
+<a href="http://vll.java.net/EditingTheGrammarTree.html">Editing the Grammar Tree</a>. 
+--> 
+</p>
+
+<table border="1" style="border: 1px solid black;"><tbody>
+  <tr>
+    <th style="text-align: center; font-weight: bold;">amount</th>
+    <th style="text-align: center; font-weight: bold;">deductKind</th>
+    <th style="text-align: center; font-weight: bold;">deduct</th>
+    <th style="text-align: center; font-weight: bold;">deductItems</th>
+  </tr>
+  <tr>
+    <td><img src="images/amount.png" /></td>
+    <td><img src="images/deductKind.png" /></td>
+    <td><img src="images/deduct.png" /></td>
+    <td><img src="images/deductItems.png" /></td>
+  </tr>
+</tbody></table>
+
+<p>
+The grammar-trees are <i>executable</i>, and can be run at any time at the click of a button. 
+No other skills or tools are needed. 
+<!-- 
+Input for the parser can be entered into the IDE or obtained from user-nominated files. 
+-->
+This simplifies <a href="#Testing">testing</a>, promotes an iterative-incremental development process, 
+and speeds up development manyfold.
+<!-- 
+Optional <i>actions</i> &mdash; <a href="#ActionCode">snippets of code</a> in Javascript or Scala &mdash; 
+can also be embedded in the grammar. 
+-->
+</p>
+
+<p>
+The grammar is saved as a XML file that can be reloaded for further 
+<a href="EditingTheGrammarTree.html">editing</a> and 
+<a href="#Testing">testing</a>. 
+An <a href="UsingTheAPI.html">API</a> enables client programs (Scala or Java) 
+to load the XML file and regenerate the parser. 
+</p>
+
+<p>
+Each grammar-tree <i>is</i> a parser. There is no generated-code or other underlying code representation. 
+VisualLangLab uses Scala's parser 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">combinator functions</a> 
+to turn each grammar-tree directly into a 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+at run-time as needed. Parser generation is therefore much faster than a code-based approach. 
+</p>
+
+<p>
+In this tutorial we recreate the 
+<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#AScalaImplementationExternalDSLGrammar">
+payroll DSL</a> using <a href="http://vll.java.net/">VisualLangLab</a>, 
+highlighting its features for parser development and testing.
+</p>
+
+<table border="1" style="border: 1px solid black; width="100%">
+<tr><th>Some Essential Jargon</th></tr>
+<tr><td><ul>
+  <li><i>parser</i> (with lower-case inital <i>p</i>) - a program or function for 
+    <a href="http://en.wikipedia.org/wiki/Parsing#Parser">parsing and processing input</a> 
+     in a certain format. </li>
+  <li><i>parser-rule</i> - the 
+    <a href="http://en.wikipedia.org/wiki/Formation_rule">simpler units</a> 
+    into which a parser is normally broken down. 
+    In a Scala combinator-based parser, each <code>def ... : Parser[...] = ...</code> 
+    may be considered a parser rule. </li>
+  <li><i>grammar-tree</i> - the visual tree used to represent a parser rule 
+    in VisualLangLab.</li>
+  <li><i>Parser</i> (with upper-case inital <i>P</i>) - a Scala 
+    <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">type</a> used to 
+    implement <i>parser</i>s as well as <i>parser-rule</i>s</li>
+</ul></td></tr>
+</table>
+
+<h2>Download and Run VisualLangLab</h2>
+
+<p>
+To run VisualLangLab, just download 
+<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
+and double-click it in a file-browser. Linux and UNIX users will have to enable execution 
+(<i>chmod +x ...</i>) first. The only prerequisite is a JRE 6.0+ installation. 
+You should see the GUI in Figure-? below. The menus and buttons are explained as needed.
+</p>
+
+<p>
+<img src="images/GuiFull2.png" /><br />
+<i>Figure-?. The VisualLangLab GUI</i>
+</p>
+
+<p>
+Another file, <a href="http://java.net/projects/vll/downloads/download/VLLS.jar">VLLS.zip</a>, 
+which contains the documentation files, sample grammars, etc. should also be downloaded.
+</p>
+
+<h2>Creating the Parser-Rules</h2>
+
+<p>
+The parser code is organized in top-down fashion, with the high-level 
+structures at the top, and the simple structures at the bottom. 
+In this tutorial, however, we will start at the bottom, with <i>doubleNumber</i>, 
+and work our way up through progressively larger structures till we reach 
+the top-level parser <i>payCheck</i>. The following sub-sections 
+hand-hold you through the first few (last few actually) parsers.
+</p>
+
+<h3>Import Required Tokens</h3>
+
+<p>
+Your first step is to import the tokens in <code>JavaTokenParsers</code>, and VisualLangLab 
+provides a corresponding <i>token library</i> containing these tokens. 
+Select <i>Tokens -> Import tokens</i> from the main menu, or click the <i>Import tokens</i> 
+(<img src="images/Import16.gif" align="center"/>) button, and choose the file 
+<i>grammars/TL-JavaTokenParsers.vll</i> from the contents of <i>VLLS.zip</i>.
+</p>
+
+<p>
+Also note that because of differences between Scala's <a href="">RegexParsers</a> 
+and VisualLangLab's <a href="">internal lexer</a>, we shall be substituting the 
+token <code>decimalNumber</code> wherever <code>floatingPointNumber</code> was used 
+in the original code. 
+</p>
+
+<h3>def doubleNumber = floatingPointNumber</h3>
+
+<p>
+Create the new rule by clicking the <i>New rule</i> 
+button (<img src="images/NewReference.gif" align="center"/>), and entering 
+the rule name (<i>doubleNumber</i>) into the Dialog box presented. 
+Clicking the <i>OK</i> button creates a new rule with just the <i>Root</i> node.
+Now right-click the Root node, and select <i>Add -> Token</i> from the popup 
+context-menu. Another Dialog with all the known token names is presented. 
+Select <i>decimalNumber</i> and click the <i>ok</i> button. 
+</p>
+
+<p>
+As mentioned above, we will modifying this parser definition, and implementing it 
+as the following line instead. 
+</p>
+
+<pre><code>    def doubleNumber = <i>decimalNumber</i>
+</pre></code> 
+
+<p>
+This parser contains just one node: the <i>decimalNumber</i> token. 
+</p>
+
+<p>
+<img src="images/doubleNumber.png" /><br />
+<i>Figure-?. The </i>doubleNumber<i> parser</i>
+</p>
+
+<p>
+The <i>doubleNumber</i> parser ... 
+</p>
+
+<h3>def toBe = "is" | "are"</h3>
+
+<p>
+This parser uses a <i>Choice</i> 
+(the <img src="images/GrammarIconChoice.gif" align="center"/> icon) as its top-level node. 
+</p>
+
+<p>
+<img src="images/toBe.png" /><br />
+<i>Figure-?. The </i>toBe<i> parser</i>
+</p>
+
+<p>
+The <i>toBe</i> parser ... 
+</p>
+
+<h3>def amount = toBe ~> doubleNumber <~ "percent" <~ "of" <~ "gross"</h3>
+
+<p>
+This parser uses a <i>Sequence</i> 
+(the <img src="images/GrammarIconSequence.gif" align="center"/> icon) as its top-level node. 
+</p>
+
+<p>
+<img src="images/amount.png" /><br />
+<i>Figure-?. The </i>amount<i> parser</i>
+</p>
+
+<p>
+The <i>amount</i> parser ... 
+</p>
+
+<h2 id="TestingAShortDetour">Testing - A Short Detour</h2>
+
+<p>
+A <a href="#Testing">full section</a> on testing comes later, 
+this section demonstrates the simplicity and power of VisualLangLab's 
+manual testing facilities. It shows how you can effortlessly 
+validate every little addition or change without using or learning 
+any other skills or tools. To manually test a parser-rule proceed as follows.
+</p>
+
+<ul>
+  <li>enter test input under <i>Parser Test Input</i> 
+    (colored green in Figure-? below)</li> 
+  <li>click the <i>Parse input</i> button (colored red in the figure)</li> 
+  <li>validate the parser's result printed under <i>Parser Log</i> 
+    (filled with cyan in the figure below)</li> 
+</ul>
+
+<p>
+The first two lines of output contain performance 
+information that should be ignored (not part of the parser's result). 
+</p>
+
+<h3>Validating doubleNumber</h3>
+
+<p>
+Figure-? below shows <i>doubleNumber</i> being validated. 
+</p>
+
+<p>
+<img src="images/testing-doubleNumber.png" /><br />
+<i>Figure-?. Testing the </i>doubleNumber<i> parser</i>
+</p>
+
+<p>
+If you do not see any red text (as in Figure-? below) in the 
+<i>Parser Log</i> area, your parser executed without run-time errors. 
+But that alone is not enough, you should verify that the result returned 
+(for example, <i>25.5</i> in Figure-?) is the value expected. 
+</p>
+
+<h3>Validating toBe</h3>
+
+<p>
+Before you start to enter test data for <i>toBe</i> take a moment to understand 
+the structure of its output. All parser rules return an 
+<a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">abstract syntax tree</a> (or AST) 
+whose structure depends on the arrangement and properties of the grammar-tree's constituent nodes 
+as <a href="http://vll.java.net/ASTAndActionCode.html">explained here</a>. 
+The text area under <i>Parse Tree (AST) Structure</i> also displays the expected AST 
+structure of the selected grammar-tree node. Figure-? below tells you that the returned 
+result is one of two <code>scala.Pair</code> objects (depending on what was found in the input). 
+</p>
+
+<p>
+<img src="images/AST-toBe.png" /><br />
+<i>Figure-?. The AST of the </i>toBe<i> parser rule</i>
+</p>
+
+<p>
+Figure-? below shows the result of exercising <i>toBe</i> with three different 
+inputs: <i>is</i>, <i>are</i>, and <i>other</i>. 
+</p>
+
+<table>
+  <tr><td><img src="images/AST-toBe-is.png" /></td></tr>
+  <tr><td><img src="images/AST-toBe-are.png" /></td></tr>
+  <tr><td><img src="images/AST-toBe-other.png" /></td></tr>
+  <tr><td><i>Figure-?. Validating </i>toBe<i> with different inputs</i></td></tr>
+</table>
+
+<p>
+The performance data in the two lines preceding the parser's result can be 
+safely ignored. The first run is typically much slower than subsequent 
+runs possibly due to JVM warmup effects. 
+</p>
+
+<h2>The Rest of the Parsers</h2>
+
+<p>
+All of the remaining parsers, except one that uses a <code>repsep</code> and 
+is described fully below, present no new difficulties. We therfore skip the 
+details and just show you how they look. If you have understood how the parsers 
+described above were created, you should be able to create the remaining ones 
+yourself. If you don't have the time, just open the file <i>payroll-parser-comb-v1.vll</i> 
+available in the <i>grammars</i> directory of the distribution 
+(<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>). 
+As before, we continue northward.
+</p>
+
+<table>
+<tr><td><img src="images/percentage.png" /></td><td><img src="images/deductAmount.png" /></td><td><img src="images/retirement.png" /></td><td><img src="images/insurance.png" /></td></tr>
+</table>
+
+<p>
+None of these grammar-rules have anything special or new, so if you are using VisualLangLab 
+as you read the article, observe (and possibly try) some of it's features. You should also 
+try to validate some of the grammar-trees with your own data. 
+</p>
+
+<table>
+<tr><td><img src="images/fedState.png" /></td><td><img src="images/tax.png" /></td><td><img src="images/deductKind.png" /></td><td><img src="images/deductItem.png" /></td></tr>
+</table>
+
+<p>
+Remember that the grammar-trees <i>are</i> the parser. There is no generated-code or 
+intermediate-code. VisualLangLab uses Scala's parser 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">combinator functions</a> to turn the grammar-tree directly into a 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> at run-time without compiling any code. 
+That is why the displayed parser-rule <i>runs</i> almost immediately when the 
+<i>Parse input</i> button is clicked. 
+</p>
+
+<table>
+<tr><td><img src="images/weekDays.png" /></td><td><img src="images/duration.png" /></td><td><img src="images/employeeName.png" /></td><td><img src="images/deduct.png" /></td></tr>
+</table>
+
+<p>
+When you finish developing and testing a parser (or when work must be suspended 
+temorarily) the parser can be saved to a file by invoking <i>File -> Save</i> 
+from the main menu. The saved grammar file has a <i>.vll</i> extension, 
+and contains only an XML representation of all the data entered into the GUI 
+(but no other data, code or serialized Scala objects). 
+A saved grammar can be opened again later for review, testing, or further modification 
+by invoking <i>File -> Open</i> from the main menu. 
+</p>
+
+<table>
+<tr><td><img src="images/gross.png" /></td><td><img src="images/empl.png" /></td><td><img src="images/paycheck.png" /></td></tr>
+</table>
+
+<p>
+The remaining parsers ... 
+</p>
+
+<h3>def deductItems = repsep(deductItem, ",")</h3>
+
+<p>
+This parser uses a <i>RepSep</i> 
+(the <img src="images/GrammarIconRepSep.gif" align="center"/> icon) as its top-level node. 
+</p>
+
+<p>
+
+<img src="images/deductItems-star.png" /> <img src="images/deductItems.png" /><br />
+<i>Figure-?. The </i>deductItems<i> parser</i>
+</p>
+
+<p>
+As mentioned above, we will modifying this parser definition, and implementing it 
+as the following line instead. 
+</p>
+
+<h2 id="Actions">Actions</h2>
+
+<p>
+approach to automated testing. 
+</p>
+
+<h2 id="Testing">Testing</h2>
+
+<p>
+Testing is much simpler in VisualLangLab than in almost every other tool. 
+<a href="#TestingAShortDetour">Testing - A Short Detour</a> showed 
+how effective ad hoc manual testing can be in certain situations. 
+VisualLangLab also supports automated testing, and the following  
+sections describe two different approaches for different situations. 
+</p>
+
+<h3 id="WrapperWithActions">Wrapper with Actions</h3>
+
+<p>
+This approach uses an additional parser-rule to <i>wrap</i> the main 
+(or top-level) parser-rule with <i>before</i> and <i>after</i> scripts.
+The <i>before</i> script sets up initial conditions before the main 
+parser-rule is invoked, and the <i>after</i> script validates the parse-tree 
+returned by the main parser-rule. 
+Figure-? below shows details of the wrapper rule used for testing. 
+To display the <i>before</i> and <i>after</i> scripts (actually 
+parts of a single action-code function) you must select 
+the <i>Reference</i> node that points to the <i>Paycheck</i> parser-rule. 
+</p>
+
+<p>
+<img src="images/test-wrapper-scala.png" /><br />
+<i>Figure-?. Wrapper rule for automated testing</i>
+</p>
+
+<p>
+The Scala function with the before and after scripts is reproduced below for clarity. 
+The setup code deposits a few lines of test input (from 
+<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#c_para_let_s_try_it_out_here_is_a_sp">here</a> in 
+the OFPS version of <i>Programming Scala</i>) 
+into the <i>Parser Test Input</i> area. These lines are processed 
+as input when the main parser-rule runs. The test part of the code checks the structure 
+of the parse-tree returned by the main parser, and prints out an appropriate message. 
+</p>
+
+<pre><code>(arg: Any) => arg match {
+//****************************************
+//          SETUP actions
+//****************************************
+  case null => 
+    ParserTestInput.text = 
+      """|paycheck for employee "Buck Trends"
+      |is salary for 2 weeks minus deductions for {
+      |federal income tax is 25. percent of gross,
+      |state income tax is 5. percent of gross,
+      |insurance premiums are 500. in gross currency,
+      |retirement fund contributions are 10. percent of gross
+      |}""".stripMargin
+//****************************************
+//          TEST actions
+//****************************************
+  case Array(empl, gross: Array[_], deduct) =>
+    Array(
+      if (empl == "\"Buck Trends\"") 
+        "OK" 
+      else 
+        "BAD empl (%s)".format(empl),
+      gross match {
+        case Array("2", Pair(0, "weeks")) => "OK"
+        case _ => "BAD gross (%s)".format(gross.mkString(", "))
+      },
+      deduct match {
+        case List((0,"25."), (0,"5."), (1,"500."), (0,"10.")) => "OK"
+        case _ => "BAD deduct (%s)".format(deduct)
+      }
+    ).mkString(", ")
+  case _ => "BAD AST structure"
+}</code></pre>
+
+<p>
+To understand how this works, let's run it a few times with and 
+without changes to the test input. The underlined part is the 
+changed text (in the table). To run the test after making changes 
+in the action-code click the <i>Save</i> button and wait for 
+a pop-up dialog to confirm that the change was accepted, click 
+the pop-up's <i>OK</i> button, and then click the <i>Parse input</i> 
+(<img src="images/ToolBarButtonParseInput.gif" align="center"/>) button. 
+</p>
+
+<table border="1" style="border: 1px solid black;">
+  <tr>
+    <th style="text-align: center; font-weight: bold;">Input Changes</th>
+    <th style="text-align: center; font-weight: bold;">Result</th>
+  </tr>
+  <tr>
+    <td>No changes</td>
+    <td>OK, OK, OK</td>
+  </tr>
+  <tr>
+    <td>... employee "<u>D</u>uck Trends" ...</td>
+    <td>BAD empl ("Duck Trends"), OK, OK</td>
+  </tr>
+  <tr>
+    <td>... salary for 2<u>2</u> weeks minus ...</td>
+    <td>OK, BAD gross (22, (0,weeks)), OK</td>
+  </tr>
+  <tr>
+    <td>... premiums are <u>9</u>00. in ...</td>
+    <td>OK, OK, BAD deduct (List((0,25.), (0,5.), (1,900.), (0,10.)))
+</td>
+  </tr>
+</table>
+
+<p>
+Near the top of the script, a value called <i>ParserTestInput</i> is 
+used. This name is a reference to the GUI's <code>JTextArea</code> 
+from which the parser under test obtains input (and into 
+which test input is normally entered manually). More information about 
+this can be found under <a href="ASTAndActionCode.html#PredefinedVariables">
+Predefined Variables</a>. 
+</p>
+
+<h3 id="TestingWithJUnit">JUnit + API</h3>
+
+<p>
+The ease of testing is another important feature of VisualLangLab. 
+</p>
+
+<h2>RegexParsers Compatibility</h2>
+
+<p>
+The ease of testing is another important feature of VisualLangLab. 
+</p>
+
+<pre><code>
+</code></pre>
+
+
+
+  </body>
+</html>
