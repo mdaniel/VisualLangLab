@@ -22,8 +22,9 @@ package vll.gui
 
 import java.awt.event.{MouseAdapter, MouseEvent}
 import javax.swing.JPopupMenu
+import javax.swing.JTextArea
 
-class InputPopupListener(val popup: JPopupMenu) extends MouseAdapter {
+class InputPopupListener(val textArea: JTextArea, val popup: JPopupMenu) extends MouseAdapter {
 
   override def mousePressed(e: MouseEvent) {
     maybeShowPopup(e);
@@ -34,7 +35,7 @@ class InputPopupListener(val popup: JPopupMenu) extends MouseAdapter {
   }
 
   private def maybeShowPopup(e: MouseEvent) {
-    if (e.isPopupTrigger()) {
+    if (textArea.isEnabled && e.isPopupTrigger()) {
       popup.show(e.getComponent(), e.getX() + 5, e.getY());
     }
   }

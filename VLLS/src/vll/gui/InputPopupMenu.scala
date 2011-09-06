@@ -26,7 +26,7 @@ import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
 import javax.swing.JTextArea
 
-class InputPopupMenu(c: JTextArea) extends JPopupMenu with ActionListener {
+class InputPopupMenu(textArea: JTextArea) extends JPopupMenu with ActionListener {
 
   val cutMenuItem = new JMenuItem("Cut")
   add(cutMenuItem)
@@ -50,11 +50,11 @@ class InputPopupMenu(c: JTextArea) extends JPopupMenu with ActionListener {
 
   def actionPerformed(ae: ActionEvent) {
     ae.getSource match {
-      case `cutMenuItem` => c.cut()
-      case `copyMenuItem` => c.copy()
-      case `pasteMenuItem` => c.paste()
-      case `clearMenuItem` => c.setText("")
-      case `selectAllMenuItem` => c.selectAll()
+      case `cutMenuItem` => textArea.cut()
+      case `copyMenuItem` => textArea.copy()
+      case `pasteMenuItem` => textArea.paste()
+      case `clearMenuItem` => textArea.setText("")
+      case `selectAllMenuItem` => textArea.selectAll()
     }
   }
 

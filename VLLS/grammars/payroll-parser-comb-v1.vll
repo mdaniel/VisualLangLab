@@ -5,7 +5,7 @@
     <Literal Name="IS" Pattern="is"/>
     <Literal Name="IN" Pattern="in"/>
     <Literal Name="PERCENT" Pattern="percent"/>
-    <Regex Name="floatingPointNumber" Pattern="-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?"/>
+    <Regex Name="floatingPointNumber" Pattern="-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)(([eE][+-]?\\d+)[fFdD]|([eE][+-]?\\d+)|[fFdD])"/>
     <Literal Name="FOR" Pattern="for"/>
     <Literal Name="INSURANCE" Pattern="insurance"/>
     <Literal Name="RETIREMENT" Pattern="retirement"/>
@@ -13,9 +13,9 @@
     <Literal Name="INCOME" Pattern="income"/>
     <Literal Name="CONTRIBUTIONS" Pattern="contributions"/>
     <Regex Name="stringLiteral" Pattern="\&quot;([^\&quot;\\p{Cntrl}\\\\]|\\[\\/bfnrt]|\\\\u[a-fA-F0-9]{4})*\&quot;"/>
+    <Literal Name="DEDUCTIONS" Pattern="deductions"/>
     <Literal Name="SALARY" Pattern="salary"/>
     <Literal Name="FUND" Pattern="fund"/>
-    <Literal Name="DEDUCTIONS" Pattern="deductions"/>
     <Literal Name="DAYS" Pattern="days"/>
     <Regex Name="decimalNumber" Pattern="\\d+(\\.\\d*)?|\\d*\\.\\d+"/>
     <Literal Name="PAYCHECK" Pattern="paycheck"/>
@@ -24,7 +24,6 @@
     <Literal Name="GROSS" Pattern="gross"/>
     <Literal Name="COMMA" Pattern=","/>
     <Literal Name="STATE" Pattern="state"/>
-    <Regex Name="wholeNumber" Pattern="-?\\d+"/>
     <Literal Name="OF" Pattern="of"/>
     <Literal Name="EMPLOYEE" Pattern="employee"/>
     <Literal Name="MINUS" Pattern="minus"/>
@@ -35,7 +34,6 @@
     <Literal Name="WEEK" Pattern="week"/>
     <Literal Name="CURRENCY" Pattern="currency"/>
     <Literal Name="PREMIUMS" Pattern="premiums"/>
-    <Regex Name="ident" Pattern="[a-zA-Z_]\\w*"/>
   </Tokens>
   <Parsers>
     <Parser Name="paycheck">
@@ -53,6 +51,9 @@
           <Reference Ref="duration" />
         </Sequence>
     </Parser>
+    <Parser Name="TestJs">
+        <Reference Ref="paycheck" ActionText="function (a) {&#xA;  if (a) {&#xA;    // Test actions ...&#xA;    var empl = a[0], gross = a[1], deduct = a[2];&#xA;    println(&quot;empl: &quot; + empl);&#xA;    println(&quot;gross: &quot; + gross);&#xA;    println(&quot;deduct: &quot; + deduct);&#xA;//    return &quot;OK&quot;;&#xA;  } else {&#xA;    // Setup actions ...&#xA;  }&#xA;}"/>
+    </Parser>
     <Parser Name="employeeName">
         <Token Ref="stringLiteral" />
     </Parser>
@@ -65,7 +66,7 @@
         </Sequence>
     </Parser>
     <Parser Name="doubleNumber">
-        <Token Ref="floatingPointNumber" />
+        <Token Ref="decimalNumber" />
     </Parser>
     <Parser Name="tax">
         <Sequence >
@@ -100,12 +101,6 @@
           <Token Ref="STATE" />
         </Choice>
     </Parser>
-    <Parser Name="toBe">
-        <Choice >
-          <Token Ref="IS" />
-          <Token Ref="ARE" />
-        </Choice>
-    </Parser>
     <Parser Name="amount">
         <Sequence >
           <Reference Ref="toBe" Drop="true"/>
@@ -114,6 +109,12 @@
           <Token Ref="GROSS" Drop="true"/>
           <Token Ref="CURRENCY" Drop="true"/>
         </Sequence>
+    </Parser>
+    <Parser Name="toBe">
+        <Choice >
+          <Token Ref="IS" />
+          <Token Ref="ARE" />
+        </Choice>
     </Parser>
     <Parser Name="deductAmount">
         <Choice >
@@ -130,6 +131,9 @@
           <Token Ref="GROSS" Drop="true"/>
         </Sequence>
     </Parser>
+    <Parser Name="TestScala">
+        <Reference Ref="paycheck" ActionText="(arg: Any) =&gt; arg match {&#xA;//&#xA;// SETUP actions ...&#xA;//&#xA;  case null =&gt; &#xA;    InputArea.text = &#xA;      &quot;&quot;&quot;|paycheck for employee &quot;Buck Trends&quot;&#xA;      |is salary for 2 weeks minus deductions for {&#xA;      |federal income tax is 25. percent of gross,&#xA;      |state income tax is 5. percent of gross,&#xA;      |insurance premiums are 500. in gross currency,&#xA;      |retirement fund contributions are 10. percent of gross&#xA;      |}&quot;&quot;&quot;.stripMargin&#xA;//&#xA;// TEST actions ...&#xA;//&#xA;  case Array(empl: String, gross: Array[_], deduct: List[_]) =&gt;&#xA;    if (empl != &quot;\&quot;Buck Trends\&quot;&quot;) println(&quot;BAD empl: &quot; + empl)&#xA;    gross match {&#xA;      case Array(&quot;2&quot;, Pair(0, &quot;weeks&quot;)) =&gt; // OK&#xA;      case _ =&gt; println(&quot;BAD gross: &quot; + gross.mkString(&quot;, &quot;))&#xA;    }&#xA;    deduct match {&#xA;      case List((0,&quot;25.&quot;), (0,&quot;5.&quot;), (1,&quot;500.&quot;), (0,&quot;10.&quot;)) =&gt; // OK&#xA;      case _ =&gt; println(&quot;BAD deduct: &quot; + deduct)&#xA;    }&#xA;    arg&#xA;  case _ =&gt; &#xA;    println(&quot;UNEXPECTED AST structure&quot;)&#xA;    arg&#xA;}"/>
+    </Parser>
     <Parser Name="deduct">
         <Sequence >
           <Token Ref="MINUS" Drop="true"/>
@@ -141,7 +145,7 @@
         </Sequence>
     </Parser>
     <Parser Name="deductItems">
-        <RepSep Mult="*">
+        <RepSep Mult="+">
           <Reference Ref="deductItem" />
           <Token Ref="COMMA" />
         </RepSep>

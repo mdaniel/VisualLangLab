@@ -68,12 +68,12 @@ class LogTextPane(val gui: VllGui) extends SplitPane(Orientation.Vertical) {
   def paste() {inputArea.peer.paste()}
   def clear() {inputArea.text = ""}
   def selectAll() {inputArea.selectAll()}
-  val inputArea = new TextArea() {
+  val inputArea = new TextAreaWithMenu/*() {
     font = new Font(Font.MONOSPACED, font.getStyle, font.getSize)
     peer.addMouseListener(new InputPopupListener(new InputPopupMenu(peer)))
     def getText = text
     def setText(t: String) {text = t}
-  }
+  }*/
   val logArea = new JTextPane {
     setFont(new Font(Font.MONOSPACED, getFont.getStyle, getFont.getSize))
     setEditable(false)

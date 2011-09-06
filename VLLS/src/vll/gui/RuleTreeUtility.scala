@@ -112,7 +112,7 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
       actionTextArea.text = node.actionText
     }
     private var node: RuleTreeNode = null
-    private val actionTextArea = new TextArea
+    private val actionTextArea = new TextAreaWithMenu
     private def assignAction() {
       if (actionTextArea.text.trim.isEmpty) {
         node.actionText = ""
