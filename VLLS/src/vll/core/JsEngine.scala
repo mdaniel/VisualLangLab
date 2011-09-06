@@ -28,7 +28,6 @@ import javax.script.ScriptEngineManager
 import scala.swing.TextComponent
 import sun.org.mozilla.javascript.internal.NativeArray
 import sun.org.mozilla.javascript.internal.NativeObject
-import vll.gui.VllGui
 
 object JsEngine {
   private val sem = new ScriptEngineManager
@@ -37,12 +36,6 @@ object JsEngine {
   private val compilable = engine.asInstanceOf[Compilable]
   private val context = engine.getContext
   context.setAttribute("VLL", new NativeObject(), ScriptContext.ENGINE_SCOPE)
-//  context.setAttribute("InputArea", VllGui.top.logTextPane.inputArea, ScriptContext.ENGINE_SCOPE)
-//  context.setAttribute("LogArea", VllGui.top.logTextPane.logArea, ScriptContext.ENGINE_SCOPE)
-//  context.setAttribute("VLLARGS", null, ScriptContext.ENGINE_SCOPE)
-//  context.setAttribute("VLLINPUT", null, ScriptContext.ENGINE_SCOPE)
-//  def eval(s: String) = engine.eval(s)
-//  def invoke(fName: String, args: Any*) = invocable.invokeFunction(fName, args.map(_.asInstanceOf[Object]):_*)
   private def objToJsArray(tree: Any): Object = {
     def nativeArray(na: Array[Object]) = new NativeArray(na) {
       override def toString = getDefaultValue(null)
@@ -72,9 +65,10 @@ object JsEngine {
 
   def compile(sName: String): VllParsers.ActionType = {
     val cs = compilable.compile("(%s)(VLLARGS)".format(sName))
-    new Function5[TextComponent,TextComponent,Int,Int,Any,Any] {
-      def apply(input: TextComponent, log: TextComponent, line: Int, col: Int, arg: Any): Any = {
-        cs.getEngine.put("ParserTestInput", input)
+    new VllParsers.ActionType {
+      def apply(inputCharSeq: CharSequence, inputArea: TextComponent, log: TextComponent, line: Int, col: Int, arg: Any): Any = {
+        cs.getEngine.put("InputCharSequence", inputCharSeq)
+        cs.getEngine.put("ParserTestInput", inputArea)
         cs.getEngine.put("ParserLog", log)
         cs.getEngine.put("VLLARGS", objToJsArray(arg))
         cs.getEngine.put("$line", line)
@@ -83,5 +77,4 @@ object JsEngine {
       }
     }
   }
-//  def put(key: String, value: Any) = engine.put(key, value.asInstanceOf[Object])
 }

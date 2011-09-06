@@ -252,7 +252,7 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
         case pn: PredicateNode => if (node.actionText.isEmpty) 
             failure("Predicate has no code")
           else {
-            Parser(in => {node.actionFunction(VllGui.top.logTextPane.inputArea, 
+            Parser(in => {node.actionFunction(null, VllGui.top.logTextPane.inputArea, 
                        new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea}, 
                        in.pos.line, in.pos.column, null) match {
                   case b: java.lang.Boolean if b.booleanValue => Success("", in)
@@ -278,12 +278,13 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
         failure("Action code has syntax error")
       else
         Parser(in => {
-          node.actionFunction(VllGui.top.logTextPane.inputArea, 
+          node.actionFunction(null, VllGui.top.logTextPane.inputArea, 
                               new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea},  
                               in.pos.line, in.pos.column, null)
           parser3(in) match {
             case Success(tree, next) =>
-              var actionResult = node.actionFunction(VllGui.top.logTextPane.inputArea, 
+              val source = in.source.subSequence(in.offset, next.offset)
+              var actionResult = node.actionFunction(source, VllGui.top.logTextPane.inputArea, 
                                                      new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea}, 
                                                      next.pos.line, next.pos.column, tree)
               Success(if (actionResult == null) tree else actionResult, next)
@@ -315,7 +316,7 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
 
 object VllParsers {
   type Parser[T] = VllParsers#Parser[T]
-  type ActionType = Function5[TextComponent,TextComponent,Int,Int,Any,Any]
+  type ActionType = Function6[CharSequence,TextComponent,TextComponent,Int,Int,Any,Any]
   def fromFile(f: File): VllParsers = {
     val rv = new VllParsers
     rv.load(f)

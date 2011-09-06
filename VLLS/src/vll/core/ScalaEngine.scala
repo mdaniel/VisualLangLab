@@ -23,7 +23,6 @@ package vll.core
 import java.io.OutputStream
 import java.io.PrintWriter
 import scala.collection._
-import scala.swing.TextComponent
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.IMain
 import scala.tools.nsc.interpreter.IR.Result
@@ -38,26 +37,18 @@ object ScalaEngine {
     def clear() {buf.clear()}
     override def toString() = buf.toString
   }
-  private val compiledFunctionHolder = new AnyHolder[Function5[TextComponent,TextComponent,Int,Int,Any,Any]]
+  private val compiledFunctionHolder = new AnyHolder[VllParsers.ActionType]
   private val vll = new AnyHolder[Any]
   private val interp = new IMain(new Settings, new PrintWriter(outputStream))  
   interp.settings.usejavacp.value = true
   interp.setContextClassLoader()
-//    println("setContextClassLoader() >>>" + outputStream.toString)
-//    outputStream.clear()
   interp.bind("VLL", "{def value: Object; def value_=(v: Object)}", vll)
-//    println("bind VLL >>>" + outputStream.toString)
-//    outputStream.clear()
   interp.bind("$$", "{def value: Object; def value_=(v: Object)}", compiledFunctionHolder)
-//    println("bind $$ >>>" + outputStream.toString)
-//  interp.allDefinedNames.foreach(println)
 
   def compile(f: String): VllParsers.ActionType = {
-//    printf("Enter compile(%s)%n", f)
     compiledFunctionHolder.value = null
     outputStream.clear()
-    val res: Result = interp.interpret("$$.value = (ParserTestInput:scala.swing.TextComponent,ParserLog:scala.swing.TextComponent,$line:Int,$col:Int,%s".format(f.substring(1)))
-//    println(outputStream.toString)
+    val res: Result = interp.interpret("$$.value = (InputCharSequence:CharSequence,ParserTestInput:scala.swing.TextComponent,ParserLog:scala.swing.TextComponent,$line:Int,$col:Int,%s".format(f.substring(1)))
     if (!outputStream.toString.trim.isEmpty) {
       val msg = outputStream.toString
       if (!msg.contains("$$.value: java.lang.Object ="))
@@ -65,7 +56,6 @@ object ScalaEngine {
     } else if (res.toString != "Success") {
       throw new IllegalArgumentException(res.toString)
     }
-//    printf("Exit compile(%s)%n", compiledFunctionHolder.value)
     if (compiledFunctionHolder.value eq null)
         throw new IllegalArgumentException("Unknown syntax error")
     compiledFunctionHolder.value
