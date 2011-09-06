@@ -56,7 +56,7 @@ object ScalaEngine {
 //    printf("Enter compile(%s)%n", f)
     compiledFunctionHolder.value = null
     outputStream.clear()
-    val res: Result = interp.interpret("$$.value = (InputArea:scala.swing.TextComponent,LogArea:scala.swing.TextComponent,$line:Int,$col:Int,%s".format(f.substring(1)))
+    val res: Result = interp.interpret("$$.value = (ParserTestInput:scala.swing.TextComponent,ParserLog:scala.swing.TextComponent,$line:Int,$col:Int,%s".format(f.substring(1)))
 //    println(outputStream.toString)
     if (!outputStream.toString.trim.isEmpty) {
       val msg = outputStream.toString

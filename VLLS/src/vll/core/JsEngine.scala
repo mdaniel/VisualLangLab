@@ -74,8 +74,8 @@ object JsEngine {
     val cs = compilable.compile("(%s)(VLLARGS)".format(sName))
     new Function5[TextComponent,TextComponent,Int,Int,Any,Any] {
       def apply(input: TextComponent, log: TextComponent, line: Int, col: Int, arg: Any): Any = {
-        cs.getEngine.put("InputArea", input)
-        cs.getEngine.put("LogArea", log)
+        cs.getEngine.put("ParserTestInput", input)
+        cs.getEngine.put("ParserLog", log)
         cs.getEngine.put("VLLARGS", objToJsArray(arg))
         cs.getEngine.put("$line", line)
         cs.getEngine.put("$col", col)
