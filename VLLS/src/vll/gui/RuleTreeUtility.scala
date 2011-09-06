@@ -207,7 +207,7 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
   private def retType(node: RuleTreeNode, depth: Int, limit: Int): String = {
     if (!node.actionText.isEmpty) {
       val margin = spacer * depth
-      margin + "js@%s".format(node.nodeName)
+      margin + "action@%s".format(node.nodeName)
     } else
       astType(node, depth, limit)
   }
