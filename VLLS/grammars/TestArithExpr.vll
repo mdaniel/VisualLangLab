@@ -51,8 +51,8 @@
           </Choice>
         </Sequence>
     </Parser>
-    <Parser Name="tester">
-        <Reference Ref="Expr" ActionText="function (a) {&#xA;  if (a) {&#xA;    // AFTER code - test result&#xA;    if (a == 24) {&#xA;      println(&quot;Ok&quot;);&#xA;    } else {&#xA;      println(&quot;ERROR: &quot; + a);&#xA;    }&#xA;  } else {&#xA;    // BEFORE code - setup prerequisites&#xA;    ParserTestInput.setText(&quot;12 / 3 + 4 * 5&quot;);&#xA;  }&#xA;}"/>
+    <Parser Name="ExprTester">
+        <Reference Ref="Expr" ActionText="function (a) {&#xA;  if (a) {&#xA;    // AFTER code - test result&#xA;    if (a == 24) {&#xA;      return &quot;OK&quot;;&#xA;    } else {&#xA;      return &quot;ERROR: &quot; + a;&#xA;    }&#xA;  } else {&#xA;    // BEFORE code - setup prerequisites&#xA;    ParserTestInput.setText(&quot;12 / 3 + 4 * 5&quot;);&#xA;  }&#xA;}"/>
     </Parser>
   </Parsers>
 </VLL-Grammar>

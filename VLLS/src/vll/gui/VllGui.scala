@@ -62,8 +62,8 @@ import vll.gui.samples.{ArithExpr, ArithExprWithActionCode, SimpleJSON}
 
 class VllGui extends MainFrame with ActionListener {
 
-  try {
-    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+   try {
+    UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
   } catch  {
     case e: Throwable => e.printStackTrace()
   }

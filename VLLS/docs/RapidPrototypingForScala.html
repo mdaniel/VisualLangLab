@@ -29,13 +29,11 @@ The icons and annotations are explained fully in
   <tr>
     <th style="text-align: center; font-weight: bold;">amount</th>
     <th style="text-align: center; font-weight: bold;">deductKind</th>
-    <th style="text-align: center; font-weight: bold;">deduct</th>
     <th style="text-align: center; font-weight: bold;">deductItems</th>
   </tr>
   <tr>
     <td><img src="images/amount.png" /></td>
     <td><img src="images/deductKind.png" /></td>
-    <td><img src="images/deduct.png" /></td>
     <td><img src="images/deductItems.png" /></td>
   </tr>
 </tbody></table>
@@ -78,9 +76,9 @@ payroll DSL</a> using <a href="http://vll.java.net/">VisualLangLab</a>,
 highlighting its features for parser development and testing.
 </p>
 
-<table border="1" style="border: 1px solid black; width="100%">
-<tr><th>Some Essential Jargon</th></tr>
-<tr><td><ul>
+<h3>Some Essential Jargon</h3>
+
+<ul style="list-style-type: disc;">
   <li><i>parser</i> (with lower-case inital <i>p</i>) - a program or function for 
     <a href="http://en.wikipedia.org/wiki/Parsing#Parser">parsing and processing input</a> 
      in a certain format. </li>
@@ -94,8 +92,7 @@ highlighting its features for parser development and testing.
   <li><i>Parser</i> (with upper-case inital <i>P</i>) - a Scala 
     <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">type</a> used to 
     implement <i>parser</i>s as well as <i>parser-rule</i>s</li>
-</ul></td></tr>
-</table>
+</ul>
 
 <h2>Download and Run VisualLangLab</h2>
 
@@ -103,21 +100,46 @@ highlighting its features for parser development and testing.
 To run VisualLangLab, just download 
 <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
 and double-click it in a file-browser. Linux and UNIX users will have to enable execution 
-(<i>chmod +x ...</i>) first. The only prerequisite is a JRE 6.0+ installation. 
-You should see the GUI in Figure-? below. The menus and buttons are explained as needed.
+(<i>chmod +x ...</i>) first. 
 </p>
 
+<p>
+When started, VisualLangLab displays the GUI shown in Figure-2 below. 
+The menus and buttons are explained as needed, but a full 
+description can also be found at 
+<a href="TheGUI.html">The GUI</a>. 
+All toolbar buttons have tool-tip texts that explain their use. 
+</p>
+
 <p>
-<img src="images/GuiFull2.png" /><br />
+<img src="images/GuiFull3.png" /><br />
 <i>Figure-?. The VisualLangLab GUI</i>
 </p>
 
+<p>
+The graphical and text panels are used as described below.
+</p>
+
+<ul style="list-style-type: disc;">
+  <li>A is used for the grammar-tree as described in 
+      <a href="#CreatingParserRules">Creating the Parser-Rules</a> below</li>
+  <li>B displays the <a href="#TheParseTree">AST structure</a> 
+      of the selected grammar-tree node</li>
+  <li>C is where the selected node's <a href="#Actions">action-code</a> 
+      (<i>semantic action</i>, or just <i>action</i>) is displayed and edited. 
+      If this appears to break the 
+      <i>no code, no script</i> promise, rest assured that action-code 
+      is always optional</li>
+  <li>D and E are used for <a href="#Testing">testing the parser</a> 
+      as described below</li>
+</ul>
+
 <p>
 Another file, <a href="http://java.net/projects/vll/downloads/download/VLLS.jar">VLLS.zip</a>, 
 which contains the documentation files, sample grammars, etc. should also be downloaded.
 </p>
 
-<h2>Creating the Parser-Rules</h2>
+<h2 id="CreatingParserRules">Creating the Parser-Rules</h2>
 
 <p>
 The parser code is organized in top-down fashion, with the high-level 
@@ -148,50 +170,104 @@ in the original code.
 <h3>def doubleNumber = floatingPointNumber</h3>
 
 <p>
-Create the new rule by clicking the <i>New rule</i> 
-button (<img src="images/NewReference.gif" align="center"/>), and entering 
-the rule name (<i>doubleNumber</i>) into the Dialog box presented. 
-Clicking the <i>OK</i> button creates a new rule with just the <i>Root</i> node.
+This is a very simple parser-rule, and matches just one unconditional token. 
+But as mentioned above, we will modify this parser definition, and implement 
+it as the following line instead.
+</p>
+
+<pre></code>    def doubleNumber = decimalNumber
+</code></pre>
+
+<p>
+To create the new rule click the <i>New rule</i> button 
+(<img src="images/NewReference.gif" align="center"/>), 
+and enter <i>doubleNumber</i> into the dialog box presented as in Figure-? below. 
+Clicking the dialog's <i>OK</i> button creates a new rule with just the 
+<i>Root</i> node (<img src="images/GrammarIconRoot.gif" align="center"/>)</li>.
+</p>
+
+<p>
+<img src="images/CreateRule-doubleNumber.png" /><br />
+<i>Figure-?. Creating the </i>doubleNumber<i> parser-rule</i>
+</p>
+
+<p>
 Now right-click the Root node, and select <i>Add -> Token</i> from the popup 
-context-menu. Another Dialog with all the known token names is presented. 
-Select <i>decimalNumber</i> and click the <i>ok</i> button. 
+context-menu. Another dialog with all the known token names is presented 
+as in Figure-? below. 
+Select <i>decimalNumber</i> and click the <i>OK</i> button</li>
 </p>
 
 <p>
-As mentioned above, we will modifying this parser definition, and implementing it 
-as the following line instead. 
-</p>
-
-<pre><code>    def doubleNumber = <i>decimalNumber</i>
-</pre></code> 
-
-<p>
-This parser contains just one node: the <i>decimalNumber</i> token. 
+<img src="images/AddToken-decimalNumber.png" /><br />
+<i>Figure-?. Selecting the </i>decimalNumber<i> token</i>
 </p>
 
 <p>
-<img src="images/doubleNumber.png" /><br />
-<i>Figure-?. The </i>doubleNumber<i> parser</i>
-</p>
-
-<p>
-The <i>doubleNumber</i> parser ... 
+Your finished parser should look like the one on the right side of Figure-? above. 
 </p>
 
 <h3>def toBe = "is" | "are"</h3>
 
 <p>
-This parser uses a <i>Choice</i> 
-(the <img src="images/GrammarIconChoice.gif" align="center"/> icon) as its top-level node. 
+This parser-rule uses to custom literal tokens (<i>is</i> and <i>are</i>) which must be defined 
+first. Proceed as follows.
+</p>
+
+<ul style="list-style-type: disc;">
+  <li>click the <i>New literal</i> button 
+    (the <img src="images/ToolbarButtonNewLiteral.gif" align="center"/> icon), 
+    enter <i>IS,is</i> into the dialog presented, and click the <i>OK</i> button 
+    (as in Figure-? below)</li>
+  <li>repeat the preceding action once more, but enter <i>ARE,are</i> instead</li>
+</ul>
+
+<p>
+The information entered into the dialog when creating a literal contains the 
+literal's <i>name</i>, and its <i>pattern</i> separated by a comma.
+You can optionally add spaces around the comma for clarity if required. 
+The <i>name</i> is used to refer to the literal in rules (as 
+shown below), while the <i>pattern</i> is it's literal definition. 
 </p>
 
 <p>
-<img src="images/toBe.png" /><br />
+<img src="images/NewLiteral-IsAre.png" /><br />
+<i>Figure-?. Creating the </i>is<i> and </i>are<i> tokens</i>
+</p>
+
+<p>
+This parser uses a <i>Choice</i> 
+(the <img src="images/GrammarIconChoice.gif" align="center"/> icon) as its top-level node. 
+A <i>Choice</i> node is a parent of a group of alternatives (any one of which may occur 
+in the input). To create the parser, perform the following steps.
+</p>
+
+<ul style="list-style-type: disc;">
+  <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center"/>), 
+    enter <i>toBe</i> into the dialog presented, and click its <i>OK</i> button</li>
+  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center"/>) and select 
+    <i>Choice</i> from the context menu. A <i>Choice</i> node 
+    (<img src="images/GrammarIconChoice.gif" align="center"/>) is added to the root node
+    (as in the left and middle parts of Figure-? below)</li>
+  <li>right-click the newly created choice node and select <i>Token</i> from the context menu. 
+    A dialog box with a dropdown list containing known token names is popped up. 
+    Select <i>IS</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>repeat the prceding action, but select the token <i>ARE</i> instead</li>
+</ul>
+
+<p>
+Your <i>toBe</i> parser should now look like the one on the right side of Figure-? below. 
+</p>
+
+<p>
+<img src="images/CreateRule-toBe.png" /><br />
 <i>Figure-?. The </i>toBe<i> parser</i>
 </p>
 
 <p>
-The <i>toBe</i> parser ... 
+The grammar-tree's node icons are designed to be intuitive, but you can find a 
+guide to all the icons in 
+<a href="EditingTheGrammarTree.html#GrammarTreeIconsAndAnnotations">Grammar Tree Icons and Annotations</a>
 </p>
 
 <h3>def amount = toBe ~> doubleNumber <~ "percent" <~ "of" <~ "gross"</h3>
@@ -199,6 +275,33 @@ The <i>toBe</i> parser ...
 <p>
 This parser uses a <i>Sequence</i> 
 (the <img src="images/GrammarIconSequence.gif" align="center"/> icon) as its top-level node. 
+A <i>Sequence</i> node is a parent of a set of nodes which occur 
+in the input in the order specified. To create this parser, perform the following steps.</p>
+
+<ul style="list-style-type: disc;">
+  <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center"/>), 
+    enter <i>amount</i> into the dialog presented, and click its <i>OK</i> button</li>
+  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center"/>) and select 
+    <i>Sequence</i> from the context menu. A <i>Sequence</i> node 
+    (<img src="images/GrammarIconSequence.gif" align="center"/>) is added to the root node</li>
+  <li>right-click the newly created sequence node and select <i>Reference</i> from the context menu. 
+    A dialog box with a dropdown list containing known parser-rule names is presented. 
+    Select <i>toBe</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>repeat the preceding action, but select the reference <i>doubleNumber</i> instead</li>
+  <li>right-click the sequence node and select <i>Token</i> from the context menu. 
+    A dialog box with a dropdown list containing known token names is presented. 
+    Select <i>IN</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>repeat the preceding action two more times, and add the tokens <i>GROSS</i> 
+    and <i>CURRENCY</i> to the sequence node</li>
+</ul>
+
+<p>
+Examining the arrows (<i>~></i> and <i><~</i>) in the <code>def</code>inition, 
+we can deduce that only the result of matching <i>doubleNumber</i> is desired to 
+be retained. All other tokens are to be dropped from the AST. You can <i>drop</i> 
+tokens from the sequence's AST by right-clicking each node's icon and selecting 
+<i>drop</i> from the context menu. Remember not to <i>drop</i> the <i>doubleNumber</i> 
+token. Your parser should now look like Figure-? below.
 </p>
 
 <p>
@@ -207,7 +310,10 @@ This parser uses a <i>Sequence</i>
 </p>
 
 <p>
-The <i>amount</i> parser ... 
+Observe that the icons of <i>drop</i>ped nodes are overlaid with a black line 
+from the lower-left to the upper-right. The 
+<a href="EditingTheGrammarTree.html#Annotations">annotation</a> <i>drop</i> is also added 
+after the name of th node.
 </p>
 
 <h2 id="TestingAShortDetour">Testing - A Short Detour</h2>
@@ -217,26 +323,28 @@ A <a href="#Testing">full section</a> on testing comes later,
 this section demonstrates the simplicity and power of VisualLangLab's 
 manual testing facilities. It shows how you can effortlessly 
 validate every little addition or change without using or learning 
-any other skills or tools. To manually test a parser-rule proceed as follows.
-</p>
-
-<ul>
-  <li>enter test input under <i>Parser Test Input</i> 
-    (colored green in Figure-? below)</li> 
-  <li>click the <i>Parse input</i> button (colored red in the figure)</li> 
-  <li>validate the parser's result printed under <i>Parser Log</i> 
-    (filled with cyan in the figure below)</li> 
-</ul>
-
-<p>
-The first two lines of output contain performance 
-information that should be ignored (not part of the parser's result). 
+any other skills or tools. 
 </p>
 
 <h3>Validating doubleNumber</h3>
 
 <p>
-Figure-? below shows <i>doubleNumber</i> being validated. 
+To manually test <i>doubleNumber</i> proceed as follows (refer Figure-? below).
+</p>
+
+<ul style="list-style-type: disc;">
+  <li>enter test input under <i>Parser Test Input</i> 
+    (green in the figure)</li> 
+  <li>click the <i>Parse input</i> button (red)</li> 
+  <li>validate the parser's result printed under <i>Parser Log</i> 
+    (cyan)</li> 
+</ul>
+
+<p>
+If you do not see any red text (as in Figure-? below) in the 
+<i>Parser Log</i> area, your parser executed without run-time errors. 
+But that alone is not enough, you should verify that the result returned 
+(for example, <i>25.5</i> in Figure-?) is the value expected. 
 </p>
 
 <p>
@@ -245,10 +353,11 @@ Figure-? below shows <i>doubleNumber</i> being validated.
 </p>
 
 <p>
-If you do not see any red text (as in Figure-? below) in the 
-<i>Parser Log</i> area, your parser executed without run-time errors. 
-But that alone is not enough, you should verify that the result returned 
-(for example, <i>25.5</i> in Figure-?) is the value expected. 
+The first two lines of output contain performance 
+information that should be ignored (not part of the parser's result). 
+Also observe the contents of the text area under the <i>Parse Tree (AST) Structure</i> 
+label. AST structuring principles are explained in 
+<a href="ASTAndActionCode.html#ASTStructure">AST Structure</a>. 
 </p>
 
 <h3>Validating toBe</h3>
@@ -258,8 +367,8 @@ Before you start to enter test data for <i>toBe</i> take a moment to understand
 the structure of its output. All parser rules return an 
 <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">abstract syntax tree</a> (or AST) 
 whose structure depends on the arrangement and properties of the grammar-tree's constituent nodes 
-as <a href="http://vll.java.net/ASTAndActionCode.html">explained here</a>. 
-The text area under <i>Parse Tree (AST) Structure</i> also displays the expected AST 
+as explained in <a href="ASTAndActionCode.html#ASTStructure">AST Structure</a>. 
+The text area under <i>Parse Tree (AST) Structure</i> displays the expected AST 
 structure of the selected grammar-tree node. Figure-? below tells you that the returned 
 result is one of two <code>scala.Pair</code> objects (depending on what was found in the input). 
 </p>

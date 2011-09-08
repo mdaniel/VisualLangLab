@@ -143,41 +143,54 @@
     <h3 id="WrapperWithActionCode">Wrapper with Action-Code</h3>
 
     <p>
+      Prerequisite: You should read about 
+      <a href="ASTAndActionCode.html#ActionCodeDesign">Action Code Design</a> first 
+    </p>
+
+    <p>
       This simple yet highly effective approach uses an additional 
       parser-rule to wrap <i>before</i> and <i>after</i> test-code around the 
       grammar under test. Figure-3 below illustrates the technique being used 
       to test the built-in <i>ArithExpr with action-code</i> grammar. 
-      The grammar-tree shown (<i>tester</i>) is the additional <i>wrapper</i> 
+      This grammar can be found in <i>TestArithExpr.vll</i> in the <i>grammars</i> 
+      directory of the zip distribution. 
+      The grammar-tree shown (<i>ExprTester</i>) is the additional <i>wrapper</i> 
       created only for testing. Given it's limited purpose, it merely invokes 
-      <i>expr</i> (the top-level parser-rule of the parser under test) using a 
+      <i>Expr</i> (the top-level parser-rule of the parser under test) using a 
       <i>Reference</i> node. It also 
       uses a Javascript function as action-code to wrap testing logic around the 
-      invocation of <i>expr</i>. 
+      invocation of <i>Expr</i>. The action-code shown in the figure is only 
+      visible when the <i>Reference</i> node is selected. 
     </p>
 
     <img src="images/TestingWithActionCode1.png" /><br/>
     <i>Figure-3. Wrapper with action-code for testing</i>
 
     <p>
-      Clicking the <i>Parser input</i> button (1) invokes <i>tester</i>, which in 
+      Clicking the <i>Parser input</i> button (1) invokes <i>ExprTester</i>, which in 
       turn triggers the following series of actions: 
     </p>
 
     <table><tr><td>
-      <li>the setup/before code block (2) is run</li> 
-      <li>this causes the input for the test (3) to be placed 
-          in the <i>Parser Test Input</i> area</li> 
-      <li>the parser under test is invoked (which parses the input provided in 
-          the preceding step)</li>
-      <li>finally, the <i>after</i> code block (4) is run. This part validates the 
-          parser's output, and prints out a suitable message</li>
+      <li>the <i>before</i> (or <i>setup</i>) code block (2) is run. This causes the input for the test (3)
+           to be placed in the <i>Parser Test Input</i> area (see 
+           <a href="ASTAndActionCode.html#PredefinedVariables">Predefined Variables</a> 
+           for more details)
+          </li> 
+      <li>the parser under test (<i>Expr</i>) is invoked, which parses the input provided in 
+          the preceding step</li>
+      <li>finally, the <i>after</i> (or <i>test</i>) code block (4) is run. This part validates the 
+          AST produced by <i>Expr</i>, and prints out a suitable message (5)</li>
     </td></tr></table>
 
     <p>
-      The result of the test (<i>Ok</i> in this case) can be seen at (5) in the 
-      <i>Parser Log</i> area. This is a simple example, but the technique can be 
+      The result of the test (<i>OK</i> in this case) can be seen at (5) in the 
+      <i>Parser Log</i> area. You can modify the parser input in the script and simulate 
+      a failure. This is a simple example, but the technique can be 
       extended to run an exhaustive set of tests as well. The example in Figure-4 
       below uses a 2-layered tester to run a set of separate tests. 
+      The grammar file used is <i>MultiTestArithExpr.vll</i> in the <i>grammars</i> 
+      directory of the zip distribution.
     </p>
 
     <img src="images/TestingMultWithActionCode1.png" /><br/>

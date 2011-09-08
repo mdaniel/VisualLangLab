@@ -150,7 +150,7 @@ All toolbar buttons have tool-tip texts that explain their use.
 The graphical and text panels are used as described below.
 </p>
 
-<ul>
+<ul style="list-style-type: disc;">
   <li>A is used for the grammar-tree as described in 
       <a href="#ManagingRules">Managing Rules</a> below</li>
   <li>B displays the <a href="#TheParseTree">AST structure</a> 
@@ -326,7 +326,7 @@ You can see examples of its use everywhere in the built-in
 Multiplicity has one of the following values:
 </p>
 
-<ul>
+<ul style="list-style-type: disc;">
   <li>1 - exactly one occurrence</li>
   <li>? - 0 or 1 occurrence</li>
   <li>* - 0 or more occurrences</li>
@@ -349,7 +349,7 @@ The second annotation is the <i>name</i> of the entity. The value displayed depe
 type of the node as described below.
 </p>
 
-<ul>
+<ul style="list-style-type: disc;">
   <li>Root - the name of the parser-rule itself</li>
   <li>Literal - the name of the literal token</li>
   <li>Regexp - the name of the regular-expression token</li>
@@ -366,7 +366,7 @@ described below, are optional. If any of the optional annotations are present, t
 enclosed within square brackets.
 </p>
 
-<ul>
+<ul style="list-style-type: disc;">
   <li>commit - backtracking to optional parser clauses (at an upper level) will be 
       prevented if this node is successfully parsed</li>
   <li>description - an optional user-assigned string (see below) that can be assigned 
@@ -397,10 +397,10 @@ with the <a href="#ManagingTokens">tokens we created above</a>.
 
 <p>
 First, add a <i>Sequence</i> node to the grammar-tree by right-clicking the root node 
-(<img src="images/GrammarIconRoot.gif" align="middle" />) and selecting 
+(<img src="images/GrammarIconRoot.gif" align="center" />) and selecting 
 <i>Add -> Sequence</i> from the popup menu as shown on the left side of Figure-6 below. 
 A sequence icon 
-(<img src="images/GrammarIconSequence.gif" align="middle" />) is added to the root, 
+(<img src="images/GrammarIconSequence.gif" align="center" />) is added to the root, 
 as on the right of the figure.
 </p>
 
@@ -413,21 +413,21 @@ as on the right of the figure.
 Then perform the following steps:
 </p>
 
-<ul>
+<ul style="list-style-type: disc;">
 <li>right-click the newly added sequence node 
-    (<img src="images/GrammarIconSequence.gif" align="middle" />) and select <i>Add -> Token</i>. 
+    (<img src="images/GrammarIconSequence.gif" align="center" />) and select <i>Add -> Token</i>. 
     This will bring up a dialog containing a list of token names. 
     Select <i>NUMBER</i> and click the dialog's <i>OK</i> button. 
-    A regex icon (<img src="images/GrammarIconRegex.gif" align="middle" />) is added 
+    A regex icon (<img src="images/GrammarIconRegex.gif" align="center" />) is added 
     to the sequence node</li> 
 <li>right-click the sequence node again and select <i>Add -> Choice</i> from the popup menu. 
     This should add a <i>Choice</i> node icon 
-    (<img src="images/GrammarIconChoice.gif" align="middle" />) 
+    (<img src="images/GrammarIconChoice.gif" align="center" />) 
     to the sequence node</li>
-<li>right-click the newly created choice node (<img src="images/GrammarIconChoice.gif" align="middle" />) 
+<li>right-click the newly created choice node (<img src="images/GrammarIconChoice.gif" align="center" />) 
     and select <i>Add -> Token</i>. 
     Select <i>PLUS</i> in the dialog box and click <i>OK</i>. 
-    A literal icon (<img src="images/GrammarIconLiteral.gif" align="middle" />) 
+    A literal icon (<img src="images/GrammarIconLiteral.gif" align="center" />) 
     is added to the choice node. 
     Repeat this action once more, and add the <i>MUNUS</i> token to the choice node</li> 
 <li>repeat the first step above to add another <i>NUMBER</i> to the sequence node</li>
@@ -561,7 +561,7 @@ and contains the types and functions required to perform the following
 operations.
 </p>
 
-<ul>
+<ul style="list-style-type: disc;">
   <li>load a parser from a <a href="#SavingTheGrammar">saved grammar-file</a></li>
   <li>parse a string using the parser</li>
   <li>test the result, and retrieve the AST or error information</li>
@@ -611,7 +611,7 @@ underlying Scala classes, so the behavior and AST of VisualLangLab's parsers
 is significantly different in certain ways. 
 </p>
 
-<ul>
+<ul style="list-style-type: disc;">
   <li>The <i>Literal</i> and <i>Regex</i> node types use an internal 
       <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexical analyzer</a>, 
       and do not match input text in the same way 
@@ -639,7 +639,7 @@ and will hopefully be a useful addition to any developer's skills.
 
 <h3 id="Resources">Resources (or References)</h3>
 
-<ul>
+<ul style="list-style-type: disc;">
 <li><a href="http://vll.java.net">VisualLangLab</a> - The VisualLangLab web-site</li>
 </ul>
 

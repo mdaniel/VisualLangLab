@@ -1,17 +1,23 @@
-4.10 05-AUG-2011
+4.12 08-SEP-2011
+    L&F left at default for all platforms except Windows
+    Added grammars to illustrate automatic testing with wrapper-rules
+    Corrected "AUG" to "SEP" in THIS file for some records
+4.11 06-SEP-2011
+    Addresses VLL-29 through VLL-33
+4.10 05-SEP-2011
     Added edit popup-menu to action-code panel
     Added 'grammars' directory to zip file
-4.09 05-AUG-2011
+4.09 05-SEP-2011
     Fix for VLL-28 (Missing closing braces in Scala action-code not detected)
-4.08 03-AUG-2011
+4.08 03-SEP-2011
     Fix for VLL-26 and VLL-27
-4.07 03-AUG-2011
+4.07 03-SEP-2011
     Includes minor changes in revision-184
-4.06 03-AUG-2011
+4.06 03-SEP-2011
     Fixes VLL-24 (When editing a token, pressing the OK button without changing anything causes an error)
-4.05 02-AUG-2011
+4.05 02-SEP-2011
     Fixes a small regression detected in 4.04. 
-4.04 02-AUG-2011 (Not updated to SVN repository)
+4.04 02-SEP-2011 (Not updated to SVN repository)
     Lexer (SimpleLexingRegexParsers2) performance greatly improved.
     "VLLS-All.jar" bundled with Scala 2.9.1-final jars.
 4.03 31-AUG-2011
