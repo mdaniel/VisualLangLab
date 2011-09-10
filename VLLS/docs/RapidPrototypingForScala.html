@@ -5,8 +5,8 @@
 
   <body>
 
-<h1>Still under Construction!</h1>
-<h2>VisualLangLab - Rapid Prototyping for Scala Parser Combinators</h2>
+<h1>VisualLangLab - Rapid Prototyping for Scala Parser Combinators</h1>
+<h2>Still under Construction!</h2>
 
 <p>
 <a href="http://vll.java.net/">VisualLangLab</a> is a visual parser-generator 
@@ -14,27 +14,28 @@ IDE for developing parsers without code or scripts of any kind.
 Parser-rules are depicted as 
 visual <i>grammar-trees</i> with intuitive icons for different nodes types. 
 The following figures show how it represents some rules of the payroll-parser 
-external DSL described on page 233 of 
-<a href="http://programmingscala.com/">Programming Scala</a>. 
-The parser code can also be found online at 
-<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#AScalaImplementationExternalDSLGrammar">
-A Scala Implementation of the External DSL Grammar</a>. 
+external DSL described on page 240 of <a href="http://programmingscala.com/">Programming Scala</a>. 
+The same code can also be found online at 
+<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#_generating_paychecks_with_the_external_dsl">
+Generating Paychecks with the External DSL</a>. 
 <!-- 
 The icons and annotations are explained fully in 
 <a href="http://vll.java.net/EditingTheGrammarTree.html">Editing the Grammar Tree</a>. 
 --> 
 </p>
 
-<table border="1" style="border: 1px solid black;"><tbody>
+<table border="1" cellpadding="1" style="border: 1px solid black; padding: 1px;"><tbody>
   <tr>
     <th style="text-align: center; font-weight: bold;">amount</th>
-    <th style="text-align: center; font-weight: bold;">deductKind</th>
+    <th style="text-align: center; font-weight: bold;">days</th>
     <th style="text-align: center; font-weight: bold;">deductItems</th>
+    <th style="text-align: center; font-weight: bold;">deductKind</th>
   </tr>
   <tr>
     <td><img src="images/amount.png" /></td>
-    <td><img src="images/deductKind.png" /></td>
+    <td><img src="images/days.png" /></td>
     <td><img src="images/deductItems.png" /></td>
+    <td><img src="images/deductKind.png" /></td>
   </tr>
 </tbody></table>
 
@@ -79,19 +80,20 @@ highlighting its features for parser development and testing.
 <h3>Some Essential Jargon</h3>
 
 <ul style="list-style-type: disc;">
-  <li><i>parser</i> (with lower-case inital <i>p</i>) - a program or function for 
+  <li><i>parser</i> (with lower-case inital <i>p</i>) - in VisualLangLab documentation, 
+    a parser is an <i>entire</i> program or function for 
     <a href="http://en.wikipedia.org/wiki/Parsing#Parser">parsing and processing input</a> 
      in a certain format. </li>
   <li><i>parser-rule</i> - the 
     <a href="http://en.wikipedia.org/wiki/Formation_rule">simpler units</a> 
     into which a parser is normally broken down. 
     In a Scala combinator-based parser, each <code>def ... : Parser[...] = ...</code> 
-    may be considered a parser rule. </li>
-  <li><i>grammar-tree</i> - the visual tree used to represent a parser rule 
-    in VisualLangLab.</li>
+    is a parser rule. Parser-rule and grammar-tree are generally synonymous terms.</li>
+  <li><i>grammar-tree</i> - the visual tree used to represent each parser-rule 
+    in VisualLangLab. Grammar-tree and parser-rule are generally synonymous terms.</li>
   <li><i>Parser</i> (with upper-case inital <i>P</i>) - a Scala 
     <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">type</a> used to 
-    implement <i>parser</i>s as well as <i>parser-rule</i>s</li>
+    implement <i>parser-rule</i>s as well as the component nodes of parser-rules</li>
 </ul>
 
 <h2>Download and Run VisualLangLab</h2>
@@ -101,6 +103,8 @@ To run VisualLangLab, just download
 <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
 and double-click it in a file-browser. Linux and UNIX users will have to enable execution 
 (<i>chmod +x ...</i>) first. 
+Another file, <a href="http://java.net/projects/vll/downloads/download/VLLS.jar">VLLS.zip</a>, 
+which contains the documentation files, sample grammars, etc. should also be downloaded.
 </p>
 
 <p>
@@ -125,7 +129,7 @@ The graphical and text panels are used as described below.
       <a href="#CreatingParserRules">Creating the Parser-Rules</a> below</li>
   <li>B displays the <a href="#TheParseTree">AST structure</a> 
       of the selected grammar-tree node</li>
-  <li>C is where the selected node's <a href="#Actions">action-code</a> 
+  <li>C is where the selected node's <a href="#ActionCode">action-code</a> 
       (<i>semantic action</i>, or just <i>action</i>) is displayed and edited. 
       If this appears to break the 
       <i>no code, no script</i> promise, rest assured that action-code 
@@ -135,19 +139,24 @@ The graphical and text panels are used as described below.
 </ul>
 
 <p>
-Another file, <a href="http://java.net/projects/vll/downloads/download/VLLS.jar">VLLS.zip</a>, 
-which contains the documentation files, sample grammars, etc. should also be downloaded.
+The only prerequisite for running VisualLangLab as described above is a 
+<a href="http://www.oracle.com/technetwork/java/javase/overview/index-jsp-136246.html">6.0+ JRE</a>. 
+But if you want to use the VisualLangLab 
+<a href="#APICodeGeneration">API</a> to develop standalone applications, a 
+<a href="http://www.scala-lang.org/downloads">2.9.0+ Scala</a> installation is required. 
 </p>
 
 <h2 id="CreatingParserRules">Creating the Parser-Rules</h2>
 
 <p>
-The parser code is organized in top-down fashion, with the high-level 
-structures at the top, and the simple structures at the bottom. 
-In this tutorial, however, we will start at the bottom, with <i>doubleNumber</i>, 
-and work our way up through progressively larger structures till we reach 
-the top-level parser <i>payCheck</i>. The following sub-sections 
-hand-hold you through the first few (last few actually) parsers.
+In the <a href="http://programmingscala.com/">book</a>, 
+the parser <a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#_generating_paychecks_with_the_external_dsl">code</a> 
+is organized in top-down fashion. 
+We start at the bottom, with <i>doubleNumber</i>, 
+and work our way up, creating some of the parser-rules so as to 
+demonstrate most of VisualLangLab's features. The complete parser is, 
+however, included as the file <i>payroll-parser-comb.vll</i> in the 
+<i>grammars</i> directory of the zip distribution. 
 </p>
 
 <h3>Import Required Tokens</h3>
@@ -167,7 +176,7 @@ token <code>decimalNumber</code> wherever <code>floatingPointNumber</code> was u
 in the original code. 
 </p>
 
-<h3>def doubleNumber = floatingPointNumber</h3>
+<h3>def doubleNumber = floatingPointNumber ...</h3>
 
 <p>
 This is a very simple parser-rule, and matches just one unconditional token. 
@@ -204,7 +213,25 @@ Select <i>decimalNumber</i> and click the <i>OK</i> button</li>
 </p>
 
 <p>
-Your finished parser should look like the one on the right side of Figure-? above. 
+Finally, select (click) the <i>decimalNumber</i> token 
+(<img src="images/GrammarIconRegex.gif" align="center" />), and paste the Scala function 
+given below into the text area under <i>Action Code</i> as in Figure-? 
+below. Click the <i>Save</i> button. 
+</p>
+
+<pre><code>    (a: Any) => a match {
+      case null =>
+      case d: String => d.toDouble
+    }</code></pre>
+
+<p>
+The action-code function is explained further in <a href="#ActionCode">Action Code</a> below. 
+Your finished parser should look like the Figure-? below. 
+</p>
+
+<p>
+<img src="images/Action-doubleNumber.png" /><br />
+<i>Figure-?. Adding action-code to the </i>doubleNumber<i> rule</i>
 </p>
 
 <h3>def toBe = "is" | "are"</h3>
@@ -216,7 +243,7 @@ first. Proceed as follows.
 
 <ul style="list-style-type: disc;">
   <li>click the <i>New literal</i> button 
-    (the <img src="images/ToolbarButtonNewLiteral.gif" align="center"/> icon), 
+    (the <img src="images/ToolBarButtonNewLiteral.gif" align="center"/> icon), 
     enter <i>IS,is</i> into the dialog presented, and click the <i>OK</i> button 
     (as in Figure-? below)</li>
   <li>repeat the preceding action once more, but enter <i>ARE,are</i> instead</li>
@@ -249,7 +276,7 @@ in the input). To create the parser, perform the following steps.
     <i>Choice</i> from the context menu. A <i>Choice</i> node 
     (<img src="images/GrammarIconChoice.gif" align="center"/>) is added to the root node
     (as in the left and middle parts of Figure-? below)</li>
-  <li>right-click the newly created choice node and select <i>Token</i> from the context menu. 
+  <li>right-click the newly created choice node and select <i>Add -> Token</i> from the context menu. 
     A dialog box with a dropdown list containing known token names is popped up. 
     Select <i>IS</i> from the dropdown list, and click the <i>OK</i> button</li>
   <li>repeat the prceding action, but select the token <i>ARE</i> instead</li>
@@ -270,7 +297,7 @@ guide to all the icons in
 <a href="EditingTheGrammarTree.html#GrammarTreeIconsAndAnnotations">Grammar Tree Icons and Annotations</a>
 </p>
 
-<h3>def amount = toBe ~> doubleNumber <~ "percent" <~ "of" <~ "gross"</h3>
+<h3>def percentage = toBe ~> doubleNumber <~ "percent" <~ "of" <~ "gross" ...</h3>
 
 <p>
 This parser uses a <i>Sequence</i> 
@@ -280,19 +307,19 @@ in the input in the order specified. To create this parser, perform the followin
 
 <ul style="list-style-type: disc;">
   <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center"/>), 
-    enter <i>amount</i> into the dialog presented, and click its <i>OK</i> button</li>
+    enter <i>percentage</i> into the dialog presented, and click its <i>OK</i> button</li>
   <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center"/>) and select 
     <i>Sequence</i> from the context menu. A <i>Sequence</i> node 
     (<img src="images/GrammarIconSequence.gif" align="center"/>) is added to the root node</li>
   <li>right-click the newly created sequence node and select <i>Reference</i> from the context menu. 
     A dialog box with a dropdown list containing known parser-rule names is presented. 
     Select <i>toBe</i> from the dropdown list, and click the <i>OK</i> button</li>
-  <li>repeat the preceding action, but select the reference <i>doubleNumber</i> instead</li>
-  <li>right-click the sequence node and select <i>Token</i> from the context menu. 
+  <li>repeat the preceding action once more, selecting the reference <i>doubleNumber</i> instead</li>
+  <li>right-click the sequence node and select <i>Add -> Token</i> from the context menu. 
     A dialog box with a dropdown list containing known token names is presented. 
-    Select <i>IN</i> from the dropdown list, and click the <i>OK</i> button</li>
-  <li>repeat the preceding action two more times, and add the tokens <i>GROSS</i> 
-    and <i>CURRENCY</i> to the sequence node</li>
+    Select <i>PERCENT</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>repeat the preceding action two more times, and add the tokens <i>OF</i> 
+    and <i>GROSS</i> to the sequence node</li>
 </ul>
 
 <p>
@@ -300,23 +327,110 @@ Examining the arrows (<i>~></i> and <i><~</i>) in the <code>def</code>inition,
 we can deduce that only the result of matching <i>doubleNumber</i> is desired to 
 be retained. All other tokens are to be dropped from the AST. You can <i>drop</i> 
 tokens from the sequence's AST by right-clicking each node's icon and selecting 
-<i>drop</i> from the context menu. Remember not to <i>drop</i> the <i>doubleNumber</i> 
-token. Your parser should now look like Figure-? below.
+<i>drop</i> from the context menu (as shown on the left side of the figure). 
+Remember not to <i>drop</i> the <i>doubleNumber</i> token. 
+Your finished parser-rule should now look like the left side of Figure-? below.
 </p>
 
 <p>
-<img src="images/amount.png" /><br />
-<i>Figure-?. The </i>amount<i> parser</i>
+<img src="images/Rule-percentage.png" /><br />
+<i>Figure-?. The </i>percentage<i> parser-rule</i>
 </p>
 
 <p>
 Observe that the icons of <i>drop</i>ped nodes are overlaid with a black line 
 from the lower-left to the upper-right. The 
 <a href="EditingTheGrammarTree.html#Annotations">annotation</a> <i>drop</i> is also added 
-after the name of th node.
+after the name of the node.
 </p>
 
-<h2 id="TestingAShortDetour">Testing - A Short Detour</h2>
+<p>
+Select (click) the <i>Sequence</i> icon 
+(<img src="images/GrammarIconSequence.gif" align="center"/>), and paste the Javascript function 
+given below into the text area under <i>Action Code</i> (red rectangle on right side). 
+Then click the <i>Save</i> button. 
+</p>
+
+<pre><code>    function (arg) {
+      if (arg !== null) {
+        return VLL.grossAmount * (arg / 100);
+      }
+    }</code></pre>
+
+<p>
+Though different from the original text, this action function is actually functionally 
+equivalent, as explained in <a href="#ActionCode">Action Code</a> below. 
+Your finished parser should look like the one on the right side of Figure-? above. 
+</p>
+
+<h3>def days = "days?".r ...</h3>
+
+<p>
+This parser-rule uses a custom regex tokens (<i>days?</i>) which must be defined 
+first. Proceed as follows.
+</p>
+
+<ul style="list-style-type: disc;">
+  <li>click the <i>New regex</i> button 
+    (the <img src="images/ToolBarButtonNewRegex.gif" align="center"/> icon), 
+    enter <i>DAYS,days?</i> into the dialog presented, and click the <i>OK</i> button 
+    (as in Figure-? below). In this case, the pattern is a regular-expression as 
+    defined by the JDK's 
+    <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">Pattern</a> 
+    class</li>
+  <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center"/>), 
+    enter <i>days</i> into the dialog presented, and click its <i>OK</i> button</li>
+  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center"/>) 
+    and select <i>Add -> Token</i> from the context menu. 
+    Select <i>DAYS</i> from the dropdown list, and click the <i>OK</i> button</li>
+</ul>
+
+<p>
+The information entered into the dialog contains the 
+regex's <i>name</i>, and its <i>pattern</i> separated by a comma.
+As for literals, you can optionally add spaces around the comma for clarity. 
+The <i>name</i> is used to refer to the literal in rules (as 
+shown below), while the <i>pattern</i> is it's . 
+</p>
+
+<p>
+<img src="images/NewRegex-days.png" /><br />
+<i>Figure-?. Creating the </i>is<i> and </i>are<i> tokens</i>
+</p>
+
+<p>
+This parser uses a <i>Choice</i> 
+(the <img src="images/GrammarIconChoice.gif" align="center"/> icon) as its top-level node. 
+A <i>Choice</i> node is a parent of a group of alternatives (any one of which may occur 
+in the input). To create the parser, perform the following steps.
+</p>
+
+<ul style="list-style-type: disc;">
+  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center"/>) and select 
+    <i>Choice</i> from the context menu. A <i>Choice</i> node 
+    (<img src="images/GrammarIconChoice.gif" align="center"/>) is added to the root node
+    (as in the left and middle parts of Figure-? below)</li>
+  <li>repeat the prceding action, but select the token <i>ARE</i> instead</li>
+</ul>
+
+<p>
+Select (click) the <i>DAYS</i> icon 
+(<img src="images/GrammarIconRegex.gif" align="center"/>), and paste the Scala function 
+given below into the text area under <i>Action Code</i> (red rectangle on right side). 
+Then click the <i>Save</i> button. 
+</p>
+
+<pre><code>    (a: Any) => a match {
+      case null =>
+      case _ => 1
+    }</code></pre>
+
+<p>
+Action-code function design and use is explained in <a href="#ActionCode">Action Code</a> below. 
+Your finished parser should look like the one on the right side of Figure-? above. 
+</p>
+
+<h2 id="AdHocTesting">Ad Hoc Testing - A Short Detour</h2>
 
 <p>
 A <a href="#Testing">full section</a> on testing comes later, 
@@ -334,10 +448,10 @@ To manually test <i>doubleNumber</i> proceed as follows (refer Figure-? below).
 
 <ul style="list-style-type: disc;">
   <li>enter test input under <i>Parser Test Input</i> 
-    (green in the figure)</li> 
-  <li>click the <i>Parse input</i> button (red)</li> 
+    (red rectangle at bottom left)</li> 
+  <li>click the <i>Parse input</i> button (outlined in red)</li> 
   <li>validate the parser's result printed under <i>Parser Log</i> 
-    (cyan)</li> 
+    (wide red rectangle at bottom right)</li> 
 </ul>
 
 <p>
@@ -353,11 +467,11 @@ But that alone is not enough, you should verify that the result returned
 </p>
 
 <p>
-The first two lines of output contain performance 
-information that should be ignored (not part of the parser's result). 
-Also observe the contents of the text area under the <i>Parse Tree (AST) Structure</i> 
-label. AST structuring principles are explained in 
-<a href="ASTAndActionCode.html#ASTStructure">AST Structure</a>. 
+The parser's <i>result</i> or AST is on the third line (after the <i>result follows:</i>). 
+The previous two lines of output contain performance 
+information that should be ignored. 
+This test passes as <i>25</i> (last line under <i>Parser Log</i>) is the expected 
+result. 
 </p>
 
 <h3>Validating toBe</h3>
@@ -391,50 +505,117 @@ inputs: <i>is</i>, <i>are</i>, and <i>other</i>.
 </table>
 
 <p>
-The performance data in the two lines preceding the parser's result can be 
-safely ignored. The first run is typically much slower than subsequent 
-runs possibly due to JVM warmup effects. 
+This set of tests too pass as all three test cases produce the expected result. 
 </p>
 
-<h2>The Rest of the Parsers</h2>
+<h2>Finishing with Parser-Rules</h2>
 
 <p>
-All of the remaining parsers, except one that uses a <code>repsep</code> and 
-is described fully below, present no new difficulties. We therfore skip the 
-details and just show you how they look. If you have understood how the parsers 
-described above were created, you should be able to create the remaining ones 
-yourself. If you don't have the time, just open the file <i>payroll-parser-comb-v1.vll</i> 
-available in the <i>grammars</i> directory of the distribution 
-(<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>). 
-As before, we continue northward.
+The remaining parsers, except one that uses a <code>repsep</code> and 
+is described fully below, present no new difficulties and 
+we leave them as an exercise for the reader. 
+To save time, you may also just open the file <i>payroll-parser-comb.vll</i> 
+in the <i>grammars</i> directory of the zip distribution. 
 </p>
 
-<table>
-<tr><td><img src="images/percentage.png" /></td><td><img src="images/deductAmount.png" /></td><td><img src="images/retirement.png" /></td><td><img src="images/insurance.png" /></td></tr>
-</table>
+<h3>def deductItems = repsep(deductItem, ",")</h3>
 
 <p>
-None of these grammar-rules have anything special or new, so if you are using VisualLangLab 
-as you read the article, observe (and possibly try) some of it's features. You should also 
-try to validate some of the grammar-trees with your own data. 
+This parser-rule uses a <i>RepSep</i> 
+(the <img src="images/GrammarIconRepSep.gif" align="center"/> icon) as its top-level node. 
+To create this rule proceed as follows.
 </p>
 
-<table>
-<tr><td><img src="images/fedState.png" /></td><td><img src="images/tax.png" /></td><td><img src="images/deductKind.png" /></td><td><img src="images/deductItem.png" /></td></tr>
-</table>
+<ul style="list-style-type: disc;">
+  <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center"/>), 
+    enter <i>deductItems</i> into the dialog presented, and click its <i>OK</i> button</li>
+  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center"/>) and select 
+    <i>RepSep</i> from the context menu (as on the left side of Figure-? below). 
+    A <i>RepSep</i> node 
+    (<img src="images/GrammarIconRepSep.gif" align="center"/>) is added to the root node</li>
+  <li>right-click the newly created repsep node and select <i>Reference</i> from the context menu. 
+    A dialog box with a dropdown list containing known parser-rule names is presented. 
+    Select <i>deductItem</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>repeat the preceding action, but select the reference <i>doubleNumber</i> instead</li>
+  <li>right-click the repsep node again and select <i>Add -> Token</i> from the context menu. 
+    A dialog box with a dropdown list containing known token names is presented. 
+    Select <i>COMMA</i> from the dropdown list, and click the <i>OK</i> button</li>
+</ul>
 
 <p>
-Remember that the grammar-trees <i>are</i> the parser. There is no generated-code or 
+Your finished rule should look like the one on the right side of Figure-? below. 
+</p>
+
+<p>
+<img src="images/Rule-deductItems.png" /><br />
+<i>Figure-?. The </i>deductItems<i> parser-rule</i>
+</p>
+
+<p>
+If you did create <i>deductItems</i> you will notice a little red 'x' at 
+the top-right corner of the rule's root node. 
+This is the error flag, and making the mouse hover over the root-node 
+displays the nature of the problem (in the tool-tip text). 
+Both these features can be seen on the right side of Figure-? above. 
+</p>
+
+<p>
+The problem is that <i>deductItems</i> can return successfully without 
+matching any input. But VisualLangLab forbids the use of such parser-rules 
+as it is possible to create very obscure and difficult-to-diagnose errors 
+with them. The solution, in this case, is quite simple &mdash; implant 
+the contents of  <i>deductItems</i> directly into it's client rule 
+(<i>deduct</i>). Figure-? below shows the required modification of <i>deduct</i>. 
+</p>
+
+<p>
+<img src="images/Rule-deduct-modified.png" /><br />
+<i>Figure-?. Modifying the </i>deduct<i> rule</i>
+</p>
+
+<p>
+In terms of the 
+to the <a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#_generating_paychecks_with_the_external_dsl">
+original parser combinator code</a>, we made the following change. 
+</p>
+
+<pre><code>def deduct = "minus" ~> "deductions" ~> "for" ~> 
+    "{" ~> <del>deductItems</del> <u>repsep(deductItem, "," )</u>  <~ "}"
+<del>def deductItems = repsep(deductItem, "," )</del></code></pre>
+
+<p>
+Finally, select (click) the <i>RepSep</i> node 
+(<img src="images/GrammarIconRepSep.gif" align="center" />), and paste the Scala function 
+given below into the text area under <i>Action Code</i> as in Figure-? below. 
+Click the <i>Save</i> button. 
+</p>
+
+<pre><code>    (a:Any) => a match {
+      case null =>
+      case ld: List[Double] => ld.foldLeft(0.0){_ + _}
+    }</code></pre>
+
+<p>
+
+The action-code function is explained further in <a href="#ActionCode">Action Code</a> below. 
+Your finished parser should look like the Figure-? below. 
+</p>
+
+<p>
+<img src="images/Action-deductItems.png" /><br />
+<i>Figure-?. Adding action-code to the </i>deductItems<i> rule</i>
+</p>
+
+<h3 id="SomeMoreTheory">Some more Theory</h3>
+
+<p>
+Remember that the grammar-trees <i>are</i> parser-rules. There is no generated-code or 
 intermediate-code. VisualLangLab uses Scala's parser 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">combinator functions</a> to turn the grammar-tree directly into a 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> at run-time without compiling any code. 
 That is why the displayed parser-rule <i>runs</i> almost immediately when the 
 <i>Parse input</i> button is clicked. 
 </p>
-
-<table>
-<tr><td><img src="images/weekDays.png" /></td><td><img src="images/duration.png" /></td><td><img src="images/employeeName.png" /></td><td><img src="images/deduct.png" /></td></tr>
-</table>
 
 <p>
 When you finish developing and testing a parser (or when work must be suspended 
@@ -446,43 +627,120 @@ A saved grammar can be opened again later for review, testing, or further modifi
 by invoking <i>File -> Open</i> from the main menu. 
 </p>
 
+<h2 id="ActionCode">Action Code</h2>
+
+<p>
+Action code is written as anonymous funtion literals in Scala or Javascript. 
+Both languages can be used freely for different parser-rules. 
+The choice of language here is based on one criterion: use of non-local references. 
+Functions with no non-local references are coded in Scala, 
+while those with non-local data or function references are coded in Javascript. 
+You can find detailed guidelines at 
+<a href="ASTAndActionCode.html#ActionCodeDesign">Action-Code Design</a>. 
+</p>
+
+<p>
+A few examples of action-code functions in Scala and Javascript are shown below. 
+Observe that grammar-tree nodes with associated action-code have the 
+<i>action</i> attribute marked next to the node's icon. To see the 
+action-code you have to select (click) the specific node.
+</p>
+
+<h3 id="ExternalResources">External Resources</h3>
+
+<p>
+Because action-code functions execute in a closed environment, 
+it is difficult to load and use custom classes (like 
+<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#c_para_here_is_the_simple_paycheck_">
+Paycheck</a>, 
+<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#c_para_the_money_type_handles_arith">
+Money</a>, etc.). This is where Javascript's dynamic features help. 
+As shown in <a href="#WrapperWithActions">Wrapper With Actions</a> 
+below, those features can be used to create Javascript objects and methods 
+to substitute the missing native (Scala or Java) resources. 
+This approach is frequently adequate in a limited context such as testing. 
+More exacting situations that must load external classes must be handled via 
+the <a href="#APICodeGeneration">API</a>. 
+</p>
+
+<h3 id="ScalaActionCodeWeekDays">Scala Action-Code: weekDays</h3>
+
+<p>
+The purpose of this rule is to check its input, and return the integer 5 if either 
+<i>weeks</i> or <i>week</i> is found, and the integer 1 if <i>days</i> or <i>day</i> 
+is found. As described in <a href="#ActionCode">Action Code</a> below, 
+action-code functions must handle two cases: a <i>null</i> argument, and a non-null 
+<i>real</i> AST argument. For this grammar, only the function in 
+<a href="#WrapperWithActions">Wrapper with Actions</a> below needs to handle 
+the <i>null</i>-argument case.  
+</p>
+
+<p>
+To understand the logic of the action-code you must 
+know the structure of the AST passed in (as the argument <i>a</i>). 
+The AST structure is depicted in the text area under the 
+<i>Parse Tree (AST) Structure</i> label. 
+<a href="ASTAndActionCode.html#ASTStructure">AST Structure</a> describes 
+AST structuring principles in general. 
+</p>
+
+<p>
+<img src="images/Action-weekDays.png" /><br />
+<i>Figure-?. A Scala action-code function</i>
+</p>
+
+<p>
+The structure and action-code of the two subordinate rules it uses 
+(<i>weeks</i> and <i>days</i>) is shown in Figure-? below. 
+</p>
+
+<p>
 <table>
-<tr><td><img src="images/gross.png" /></td><td><img src="images/empl.png" /></td><td><img src="images/paycheck.png" /></td></tr>
+  <tr><td><img src="images/Action-weeks.png" /></td></tr>
+  <tr><td><img src="images/Action-days.png" /></td></tr>
 </table>
-
-<p>
-The remaining parsers ... 
-</p>
-
-<h3>def deductItems = repsep(deductItem, ",")</h3>
-
-<p>
-This parser uses a <i>RepSep</i> 
-(the <img src="images/GrammarIconRepSep.gif" align="center"/> icon) as its top-level node. 
+<i>Figure-?. Action functions of weeks and days rules</i>
 </p>
 
 <p>
+Since <i>weekDays</i>' subordinate rules return the required values (5 and 1), 
+its own action-code only needs to pass on the value recieved. Based on the 
+above details we know that the AST passed in to <i>weekDays</i> is one of 
+these two values: <code>Pair(0,5)</code>, and <code>Pair(0,1)</code> (the 
+second member being the value from the subordinate rules). 
+So <i>weekDays</i> merely needs to return the second member of the <code>Pair</code>. 
+</p>
 
-<img src="images/deductItems-star.png" /> <img src="images/deductItems.png" /><br />
-<i>Figure-?. The </i>deductItems<i> parser</i>
+<h3 id="JavascriptActionCodePercentage">Javascript Action-Code: percentage</h3>
+
+<p>
+Figure-? below illustrates the action-code associated with the rule <i>percentage</i>. 
+This function uses a non-local reference <code>VLL.grossAmount</code>. 
+As described in <a href="ASTAndActionCode.html#ActionCodeDesign">Action-Code Design</a>, 
+the symbol <code>VLL</code> refers to a common global object available to all action-code 
+functions, and should be used as a repository for all parser-specific features (methods and 
+functions) and state (data). <a href="#WrapperWithActions">Wrapper With Actions</a> below 
+illustrates how <code>VLL</code> is equipped with required features before 
+testing begins. 
 </p>
 
 <p>
-As mentioned above, we will modifying this parser definition, and implementing it 
-as the following line instead. 
+<img src="images/Action-percentage.png" /><br />
+<i>Figure-?. A Javascript action-code function</i>
 </p>
 
-<h2 id="Actions">Actions</h2>
-
 <p>
-approach to automated testing. 
+The function does not have any setting-up role, so does not have to handle the 
+<code>(arg == null)</code> case. The value of <code>arg</code> it receives is the 
+output from the rule <i>doubleNumber</i> (see AST structure) which is a 
+<code>double</code> value. It computes and returns the required value. 
 </p>
 
 <h2 id="Testing">Testing</h2>
 
 <p>
 Testing is much simpler in VisualLangLab than in almost every other tool. 
-<a href="#TestingAShortDetour">Testing - A Short Detour</a> showed 
+<a href="#AdHocTesting">Ad Hoc Testing - A Short Detour</a> showed 
 how effective ad hoc manual testing can be in certain situations. 
 VisualLangLab also supports automated testing, and the following  
 sections describe two different approaches for different situations. 
@@ -498,57 +756,87 @@ parser-rule is invoked, and the <i>after</i> script validates the parse-tree
 returned by the main parser-rule. 
 Figure-? below shows details of the wrapper rule used for testing. 
 To display the <i>before</i> and <i>after</i> scripts (actually 
-parts of a single action-code function) you must select 
+parts of a single action-code function) you must select (click on)
 the <i>Reference</i> node that points to the <i>Paycheck</i> parser-rule. 
 </p>
 
 <p>
-<img src="images/test-wrapper-scala.png" /><br />
+<b>If you have not read <a href="ASTAndActionCode.html#ActionCodeDesign">
+Action-Code Design</a> and <a href="ASTAndActionCode.html#ASTStructure">AST Structure</a>, 
+please do so now!</b>
+</p>
+
+<p>
+<img src="images/Action-PaycheckTester.png" /><br />
 <i>Figure-?. Wrapper rule for automated testing</i>
 </p>
 
 <p>
-The Scala function with the before and after scripts is reproduced below for clarity. 
-The setup code deposits a few lines of test input (from 
-<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#c_para_let_s_try_it_out_here_is_a_sp">here</a> in 
-the OFPS version of <i>Programming Scala</i>) 
-into the <i>Parser Test Input</i> area. These lines are processed 
-as input when the main parser-rule runs. The test part of the code checks the structure 
+The Javascript function with the before and after scripts is reproduced below for clarity. 
+The setup part of the function performs two functions.
+</p>
+
+<ul style="list-style-type: disc;">
+  <li>sets up the data-member <code>grossSalary</code>, and creates the 
+    method <code>salaryForDays</code> in the global object <code>VLL</code></li>
+  <li>deposits a few lines of test input (from 
+    <a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#c_para_let_s_try_it_out_here_is_a_sp">here</a> in 
+    the OFPS version of <i>Programming Scala</i>) into the <i>Parser Test Input</i> area. 
+    These lines are processed as input when the main parser-rule runs</li>
+</ul>
+
+<p>
+The test part of the code checks the structure 
 of the parse-tree returned by the main parser, and prints out an appropriate message. 
 </p>
 
-<pre><code>(arg: Any) => arg match {
+<pre><code>function (arg) {
+  if (arg === null) {
 //****************************************
 //          SETUP actions
 //****************************************
-  case null => 
-    ParserTestInput.text = 
-      """|paycheck for employee "Buck Trends"
-      |is salary for 2 weeks minus deductions for {
-      |federal income tax is 25. percent of gross,
-      |state income tax is 5. percent of gross,
-      |insurance premiums are 500. in gross currency,
-      |retirement fund contributions are 10. percent of gross
-      |}""".stripMargin
+  // global variables and functions ...
+    VLL.grossSalary = 500.0
+    VLL.salaryForDays = function (days) {
+      return VLL.grossSalary * days;
+    }
+  // Input text for parser ...
+    ParserTestInput.setText(
+      "paycheck for employee \"Buck Trends\"\n" +
+      "is salary for 2 weeks minus deductions for {\n" +
+      "  federal income tax is 25. percent of gross,\n" +
+      "  state income tax is 5. percent of gross,\n" +
+      "  insurance premiums are 500. in gross currency,\n" +
+      "  retirement fund contributions are 10. percent of gross\n" +
+      "}"
+    )
+  } else {
 //****************************************
 //          TEST actions
 //****************************************
-  case Array(empl, gross: Array[_], deduct) =>
-    Array(
-      if (empl == "\"Buck Trends\"") 
-        "OK" 
-      else 
-        "BAD empl (%s)".format(empl),
-      gross match {
-        case Array("2", Pair(0, "weeks")) => "OK"
-        case _ => "BAD gross (%s)".format(gross.mkString(", "))
-      },
-      deduct match {
-        case List((0,"25."), (0,"5."), (1,"500."), (0,"10.")) => "OK"
-        case _ => "BAD deduct (%s)".format(deduct)
+    if (arg.length === 3) {
+      var error = ""
+      var empl = arg[0];
+      if (empl !== "Buck Trends") {
+        error += "BAD empl, "
       }
-    ).mkString(", ")
-  case _ => "BAD AST structure"
+      var gross = arg[1];
+      if (gross !== 5000) {
+        error += "BAD gross, "
+      }
+      var deduct = arg[2];
+      if (deduct !== 2500) {
+        error += "BAD deduct"
+      }
+      if (error === "") {
+        return "OK";
+      } else {
+        return error;
+      }
+    } else {
+      return "BAD AST structure";
+    }
+  }
 }</code></pre>
 
 <p>
@@ -568,20 +856,19 @@ the pop-up's <i>OK</i> button, and then click the <i>Parse input</i>
   </tr>
   <tr>
     <td>No changes</td>
-    <td>OK, OK, OK</td>
+    <td>OK</td>
   </tr>
   <tr>
     <td>... employee "<u>D</u>uck Trends" ...</td>
-    <td>BAD empl ("Duck Trends"), OK, OK</td>
+    <td>BAD empl, </td>
   </tr>
   <tr>
     <td>... salary for 2<u>2</u> weeks minus ...</td>
-    <td>OK, BAD gross (22, (0,weeks)), OK</td>
+    <td>BAD gross, BAD deduct,</td>
   </tr>
   <tr>
     <td>... premiums are <u>9</u>00. in ...</td>
-    <td>OK, OK, BAD deduct (List((0,25.), (0,5.), (1,900.), (0,10.)))
-</td>
+    <td>BAD deduct</td>
   </tr>
 </table>
 
@@ -600,7 +887,13 @@ Predefined Variables</a>.
 The ease of testing is another important feature of VisualLangLab. 
 </p>
 
-<h2>RegexParsers Compatibility</h2>
+<h2 id="APICodeGeneration">The API, Code-Generation, etc.</h2>
+
+<p>
+The ease of testing is another important feature of VisualLangLab. 
+</p>
+
+<h2 id="BuiltinLexicalAnalyzer">Built-in Lexical Analyzer</h2>
 
 <p>
 The ease of testing is another important feature of VisualLangLab. 
