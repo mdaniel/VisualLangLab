@@ -65,23 +65,24 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
           displayAstStruct(/* false */)
       }
     }
-    private val rb5 = new RadioButton("5") {
-      reactions += {
-        case ButtonClicked(_) => displayDepth = 5
-          displayAstStruct(/* false */)
-      }
-    }
-    private val rbFull = new RadioButton("Full") {
+    private val rbRule = new RadioButton("Rule") {
       selected = true
-      tooltip = "Selected clause only"
+      tooltip = "Selected rule only"
       reactions += {
         case ButtonClicked(_) => displayDepth = Int.MaxValue
           displayAstStruct(/* false */)
       }
     }
-    private val bg = new ButtonGroup(rb1, rb3, rb5, rbFull)
+    private val rbFull = new RadioButton("Full") {
+      tooltip = "Full"
+      reactions += {
+        case ButtonClicked(_) => displayDepth = Int.MaxValue
+          displayAstStruct(/* false */)
+      }
+    }
+    private val bg = new ButtonGroup(rb1, rb3, rbRule, rbFull)
     private val southPanel2 = new GridPanel(1, 6) {
-      contents.append(rb1, rb3, rb5, rbFull)
+      contents.append(rb1, rb3, rbRule, rbFull)
     }
     private val southPanel = new BorderPanel {
       add(new Label(" Depth:"), BorderPanel.Position.West)
@@ -91,7 +92,7 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
     add(titleLabel, BorderPanel.Position.North)
     add(new ScrollPane(astStructTextArea), BorderPanel.Position.Center)
     add(southPanel, BorderPanel.Position.South)
-    def isGlobal = false //rbn.selected
+    def isGlobal = rbFull.selected
   }
   private val actionTextPanel = new BorderPanel {
     def setNode(n: RuleTreeNode) {

@@ -30,7 +30,7 @@ class ApiJUnitTest01 {
   }
 
   @Before def setUp() {
-    val vll = VllParsers.fromFile(new File("./ArithExpr.vll"))
+    val vll: VllParsers = VllParsers.fromFile(new File("./ArithExpr.vll"))
     parser = vll.phrase(vll.getParserFor("Expr"))
   }
 

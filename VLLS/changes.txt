@@ -1,3 +1,6 @@
+4.13 11-SEP-2011
+    Updated page "Rapid Prototyping for Scala Parser Combinators"
+    Full-depth AST structure display re-introduced
 4.12 08-SEP-2011
     L&F left at default for all platforms except Windows
     Added grammars to illustrate automatic testing with wrapper-rules
