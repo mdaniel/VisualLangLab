@@ -1,3 +1,5 @@
+4.14 14-SEP-2011
+    Updated documentation.
 4.13 11-SEP-2011
     Updated page "Rapid Prototyping for Scala Parser Combinators"
     Full-depth AST structure display re-introduced

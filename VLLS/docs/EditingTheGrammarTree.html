@@ -99,14 +99,14 @@
       Multiplicity has one of the following values:
     </p>
 
-    <table><tr><td>
+    <ul style="list-style-type: disc;">
       <li>1 - exactly one occurrence</li>
       <li>? - 0 or 1 occurrence (also called <i>optional</i>)</li>
       <li>* - 0 or more occurrences</li>
       <li>+ - 1 or more occurrences</li>
       <li>0 - the associated entity must <i>not</i> occur in the input (but see note below)</li>
       <li>= - the associated entity <i>must</i> occur in the input (but see note below)</li>
-    </td></tr></table>
+    </ul>
 
     <p>
       <u>Note</u>: Observe that the last two values ("0" and "=") are actually commonly required 
@@ -122,7 +122,7 @@
       type of the node as described below.
     </p>
 
-    <table><tr><td>
+    <ul style="list-style-type: disc;">
       <li>Root - the name of the parser-rule itself</li>
       <li>Literal - the name of the literal token</li>
       <li>Regexp - the name of the regular-expression token</li>
@@ -131,7 +131,7 @@
       <li>Sequence - the description (see below) if defined, null otherwise</li>
       <li>RepSep - the description (see below) if defined, null otherwise</li>
       <li>Semantic predicate - the description (see below) if defined, null otherwise</li>
-    </td></tr></table>
+    </ul>
 
     <p>
       All icons have at least the two annotations described above. All other annotations, 
@@ -139,7 +139,7 @@
       enclosed within square brackets.
     </p>
 
-    <table><tr><td>
+    <ul style="list-style-type: disc;">
       <li>commit - backtracking to optional parser clauses (at an upper level) will be 
           prevented if this node is successfully parsed</li>
       <li>description - an optional user-assigned string (see below) that can be assigned 
@@ -151,7 +151,7 @@
           <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers$PackratParser.html">packrat parser</a> 
           (applicable only to a root-node)</li>
       <li>trace - the parser's use of the node will be logged at run-time</li>
-    </td></tr></table>
+    </ul>
 
     <h2 id="CreatingNewParserRule">Creating a new Parser-Rule (and Grammar-Tree)</h2>
 

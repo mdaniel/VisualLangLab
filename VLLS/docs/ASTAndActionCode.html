@@ -35,7 +35,7 @@
 
   <p>The following standard Scala types are used in constructing ASTs. </p>
 
-  <table><tr><td>
+  <ul style="list-style-type: disc;">
     <li><a href=
     "http://download.oracle.com/javase/6/docs/api/java/lang/String.html">String</a>
     - used to represent nodes of type <i>Literal</i> or <i>Regex</i></li>
@@ -57,7 +57,7 @@
     and <a href=
     "http://www.scala-lang.org/api/current/index.html#scala.Tuple2">Tuple2[Int,Any]</a>
     - used to represent <i>Choice</i> nodes</li>
-  </td></tr></table>
+  </ul>
 
   <p>The AST of a complete parser-rule (or grammar-tree) is built up by recursively nesting these
   structures as required. That is why the content-type parameter is always
@@ -70,7 +70,7 @@
   arrangement, type, and multiplicity of the nodes comprising the grammar-tree. Starting
   from the root-node, the following rules are applied recursively:</p>
 
-  <table><tr><td>
+  <ul style="list-style-type: disc;">
     <li>The <i>Root</i> node does not influence the AST structure -- its AST is the same
     as that of the contained tree</li>
 
@@ -89,12 +89,12 @@
 
     <li>A <i>RepSep</i> contributes a <code>List[Any]</code> containing all the matched
     items</li>
-  </td></tr></table>
+  </ul>
 
   <p>Additionally, certain annotations cause the structure defined above to be modified
   in the following ways:</p>
 
-  <table><tr><td>
+  <ul style="list-style-type: disc;">
     <li>A node with multiplicity <i>?</i> (0 or 1) contributes an
     <code>Option[Any]</code>. A <code>None</code> is returned if the expected item was
     not found in the input, and a <code>Some[Any]</code> is returned if the item was
@@ -114,7 +114,7 @@
     other child nodes have a <i>drop</i> annotation, or have multiplicities of <i>0</i>
     (not) or <i>=</i> (guard)) does not produce an <code>Array[Any]</code>, but just
     passes on the AST produced by its one contributing child node</li>
-  </td></tr></table>
+  </ul>
 
   <p>The examples below illustrate these principles using grammar trees from the built-in
   parser for <i>SimpleJSON</i>. Remember that the AST shown in the figures is the AST of
@@ -135,7 +135,7 @@
   child-nodes of the Sequence node). The format used for the array's elements is
   described below:</p>
 
-  <table><tr><td>
+  <ul style="list-style-type: disc;">
     <li>[stringLiteral] - this form (name of a Regex node within square brackets)
     represents the lexeme matching the regular-expression</li>
 
@@ -143,7 +143,7 @@
 
     <li>@Value - an <i>@</i> prefixed parser-clause (or grammar-tree) name represent the
     AST returned by the named grammar-tree</li>
-  </td></tr></table>
+  </ul>
 
   <p>The two TextAreas at the bottom of the GUI show the result of actually testing the
   parser. Some test input (<i>"count" : 55</i>) has been typed into the <i>Parser Test
@@ -326,7 +326,7 @@
   transforms all Scala container types into native Javascript arrays. The following
   transformations are performed:</p>
 
-  <table><tr><td>
+  <ul style="list-style-type: disc;">
     <li>Scala <a href=
     "http://www.scala-lang.org/api/current/index.html#scala.Array">Array[Any]</a>s become
     Javascript arrays</li>
@@ -347,7 +347,7 @@
     "http://www.scala-lang.org/api/current/scala/Predef$$Pair$.html">Pair</a> (or
     <a href="http://www.scala-lang.org/api/current/index.html#scala.Tuple2">Tuple2[Int,Any]</a>)
     becomes a Javascript array of 2 elements</li>
-  </td></tr></table>
+  </ul>
 
   <p>The code is interpreted by the JVM's embedded Javascript engine (<a href=
   "http://www.mozilla.org/rhino/">Rhino</a>), and can therefore <a href=

@@ -12,7 +12,7 @@
       The following description details all its features.
     </p>
 
-    <img src="images/GuiFull1.png"/><br/>
+    <img src="images/GuiFull1.png" id="Figure1"/><br/>
     <i>Figure-1. The VisualLangLab GUI</i>
 
     <h2 id="TheMenuBar">The Menu Bar</h2>
@@ -21,27 +21,52 @@
       The <i>Menu Bar</i> (across the top of the GUI) contains the following menus:
     </p>
 
-    <table><tr><td>
-      <li>File - the <i>New</i>, <i>Open</i>, <i>Save</i>, <i>SaveAs</i>, and 
+    <ul style="list-style-type: disc;">
+      <li id="MenuBarFile">File - the <i>New</i>, <i>Open</i>, <i>Save</i>, <i>SaveAs</i>, and 
           <i>Exit</i> menu-items support the usual operations. 
-          The editor-oriented items operate on <i>grammar files</i> which are 
-          XML files with a <i>vll</i> extension. </li>
-      <li>View - operations to enable or disable display of additional grammar-tree details, 
+          When you finish developing and testing a parser (or when work must be suspended 
+          temorarily) the parser can be saved to a file by invoking <i>File -> Save</i> 
+          or  <i>File -> SaveAs</i>. The saved grammar file has a <i>.vll</i> extension, 
+          and contains an XML representation of all the data entered into the GUI 
+          (but no other data, serialized Scala objects or code). 
+          A saved grammar can be opened again later for review, 
+          <a href="TestingParsers.html">testing</a>, or further 
+          <a href="EditingTheGrammarTree.html">editing</a> by invoking <i>File -> Open</i>. 
+          A saved grammar file can also be loaded by the 
+          <a href="UsingTheAPI.html">API</a> from a client program</li>
+      <li id="MenuBarView">View - operations to enable or disable display of additional grammar-tree details, 
           and choose Java look and feel</li>
-      <li>Tokens - the <i>New literal</i>, <i>New regex</i>, <i>Edit</i>, <i>Find</i>, 
-          <i>Delete</i>, menu-items perform 
-          token management operations. The <i>Import</i> and <i>Export</i> items 
-          allow token definitions to be imported from or exported to token libraries</li>
-      <li>Rules - the <i>New</i>, <i>Rename</i>, <i>Find</i>, and <i>Delete</i> menu-items 
-          support rule management operations</li>
-      <li>Globals - enables definition of the regular-expression for <i>whitespace</i> and 
-          <i>comments</i></li>
-      <li>Test - runs parser with input from <i>Parser Test Input</i> area or from 
-          user-specified file. Also enables choice of pretty-printers for AST, and 
-          enabling <i>Trace all</i> (parsers)</li>
-      <li>Log - the menu-items <i>copy</i> or <i>clear</i> operate on the Parser Log area</li>
-      <li>Help - gives access to documentation, sample grammars, and the <i>About</i> page</li>
-    </td></tr></table>
+      <li id="MenuBarTokens">Tokens - the <i>New literal</i>, <i>New regex</i>, <i>Edit</i>, <i>Find</i>, 
+          and <i>Delete</i>, menu-items perform token management operations. 
+          <i>New literal</i> and <i>New regex</i> are used to 
+          <a href="EditingTheGrammarTree.html#CreatingTokens">create new tokens</a>, while 
+          <i>Edit</i> is used for 
+          <a href="EditingTheGrammarTree.html#ModifyingTokenPatterns">editing existing tokens</a>. 
+          <i>Find</i> is used to locate parser-rules that use a particular token, and 
+          <i>Delete</i> hopefully requires no explanation! 
+          The <i>Import</i> and <i>Export</i> items allow token definitions to be 
+          imported from or exported to 
+          <a href="EditingTheGrammarTree.html#TokenLibraries">token libraries</a></li>
+      <li id="MenuBarRules">Rules - the <i>New</i>, <i>Rename</i>, <i>Find</i>, and <i>Delete</i> menu-items 
+          support parser-rule management operations.
+          <i>New rule</i> is used to 
+          <a href="EditingTheGrammarTree.html#CreatingNewParserRule">create new rules</a>, while 
+          <i>Rename rule</i> is used for renaming existing rules</a>. 
+          <i>Find</i> is used to locate parser-rules that use a particular rule, while 
+          <i>Delete</i> does the obvious </li>
+      <li id="MenuBarGlobals">Globals - enables definition of 
+          <a href="EditingTheGrammarTree.html#WhitespaceAndComments">whitespace and 
+          comments</a> for the parser</li>
+      <li id="MenuBarTest">Test - the <i>Parse input</i> and <i>Parse file</i> items 
+          <a href="TestingParsers.html">run the parser</a> with input from the 
+          <i>Parser Test Input</i> area or a user-specified file respectively. 
+          The <i>Tree handler</i> item enables a choice of pretty-printers for the AST 
+          (during testing). The <i>Trace all</i> item allows you to start 
+          <a href="TestingParsers.html#TraceAndTraceAll">tracing all parsers</a> in one stroke</li>
+      <li id="MenuBarLog">Log - the menu-items <i>copy</i> or <i>clear</i> operate on the <i>Parser Log area</i> 
+          at the bottom right of the GUI (see <a href="#Figure1">Figure-1</a> above)</li>
+      <li id="MenuBarList">Help - gives access to documentation, sample grammars, and the <i>About</i> page</li>
+    </ul>
 
     <h2 id="TheToolBar">The Tool Bar</h2>
 
@@ -50,16 +75,33 @@
       used operations:
     </p>
 
-    <table><tr><td>
-      <li>File - <i>New</i>, <i>Open</i>, <i>Save</i>, and <i>SaveAs</i> operations</li></li>
-      <li>Back button to display last viewed parser-rule (or grammar-tree)</li>
-      <li>Combo box to select parser-rule (or grammar-tree) by name</li>
-      <li>Rules - <i>New</i>, <i>Rename</i>, and <i>Find</i>  operations</li>
-      <li>Tokens - <i>New literal</i>, <i>New regex</i>, <i>Edit</i>, <i>Find</i>, 
-          <i>Import</i>, and <i>Export</i> operations</li>
-      <li>Test - run and stop parser operations</li>
-      <li>Log - <i>Copy</i>, and <i>Clear</i>  operations</li>
-    </td></tr></table>
+    <ul style="list-style-type: disc;">
+      <li id="ToolBarFile">File - <i>New</i> (<img src="images/ToolBarButtonNew.gif" align="center"/>), 
+      <i>Open</i> (<img src="images/ToolBarButtonOpen.gif" align="center"/>), 
+      <i>Save</i> (<img src="images/ToolBarButtonSave.gif" align="center"/>), 
+      and <i>SaveAs</i>  (<img src="images/ToolBarButtonSaveAs.gif" align="center"/>)operations</li></li>
+      <li id="ToolBarBack">Back button (<img src="images/ToolBarButtonBack.gif" align="center"/>) 
+      to display last viewed parser-rule (or grammar-tree)</li>
+      <li id="ToolBarCombo">Combo box to select parser-rule (or grammar-tree) by name</li>
+      <li id="ToolBarRules">Rules - <i>New</i> (<img src="images/NewReference.gif" align="center"/>), 
+      <i>Rename</i> (<img src="images/ToolBarButtonRenameRule.gif" align="center"/>), 
+      and <i>Find</i> (<img src="images/ToolBarButtonFindRule.gif" align="center"/>) operations</li>
+      <li id="ToolBarTokens">Tokens - <i>New literal</i> (<img src="images/ToolBarButtonNewLiteral.gif" align="center"/>), 
+          <i>New regex</i> (<img src="images/ToolBarButtonNewRegex.gif" align="center"/>), 
+          <i>Edit</i> (<img src="images/ToolBarButtonEditToken.gif" align="center"/>), 
+          <i>Find</i> (<img src="images/ToolBarButtonFindToken.gif" align="center"/>), 
+          <i>Import tokens</i> (<img src="images/ToolBarButtonImportTokens.gif" align="center"/>), and 
+          <i>Export tokens</i> (<img src="images/ToolBarButtonExportTokens.gif" align="center"/>) operations</li>
+      <li id="ToolBarTest">Test - <i>Parse input</i> (<img src="images/ToolBarButtonParseInput.gif" align="center"/>), 
+        <i>Parse file</i> (<img src="images/ToolBarButtonParseFile.gif" align="center"/>), and 
+        <i>Stop parsing</i> (<img src="images/ToolBarButtonStopRun.gif" align="center"/>) operations</li>
+      <li id="ToolBarLog">Log - <i>Copy log</i> (<img src="images/ToolBarButtonCopyLog.gif" align="center"/>), and 
+        <i>Clear log</i> (<img src="images/ToolBarButtonClearLog.gif" align="center"/>)  operations</li>
+    </ul>
+
+    <p>
+      All toolbar buttons have suggestive tool-tip texts to facilitate use.
+    </p>
 
     <h2 id="TheGrammarTree">The Grammar Tree</h2>
 
@@ -74,10 +116,14 @@
     <h2 id="TheAST">The AST Area</h2>
 
     <p>
-      The <i>Parse Tree (or <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a>) 
-      Area</i> is on the right of the grammar-tree (below the toolbar).
+      The <i>Parse Tree</i> (or <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a>) 
+      area is on the right of the grammar-tree (below the toolbar).
       The structure of the AST produced by the selected grammar-tree node is displayed 
-      in this area. 
+      in this area. The radio buttons (labeled <i>1</i>, <i>3</i>, <i>&#x00a7;</i>, and <i>&#x221e;</i>) 
+      along the bottom of this area determine the display depth. The values <i>1</i> and 
+      <i>3</i> are literal depths, while <i>&#x00a7;</i> (the <i>section</i> symbol) denotes rule depth, 
+      and <i>&#x221e;</i> (the <i>infinity</i> symbol) displays the complete AST.
+      The variable-depth display is useful for understanding large ASTs. 
     </p>
 
     <p>
@@ -91,12 +137,9 @@
       The action-code area is the text area at the top right (below the toolbar).
       This editable area can be used to optionally provide any action-code for 
       the selected grammar-tree node. 
-    </p>
-
-    <p>
       The action-code must be a Javascript or Scala function with one argument. 
       More details and examples can be found in 
-      <a href="ASTAndActionCode.html">AST and Action Code</a>.
+      <a href="ASTAndActionCode.html#ActionCodeDesign">Action Code Design</a>.
     </p>
 
     <h2 id="TheTestingArea">The Testing Area</h2>

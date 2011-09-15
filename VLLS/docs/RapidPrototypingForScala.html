@@ -19,7 +19,7 @@ The same code can also be found online at
 Generating Paychecks with the External DSL</a>. 
 <!-- 
 The icons and annotations are explained fully in 
-<a href="http://vll.java.net/EditingTheGrammarTree.html">Editing the Grammar Tree</a>. 
+<a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>. 
 --> 
 </p>
 
@@ -130,7 +130,7 @@ The graphical and text panels are used as described below.
 <ul style="list-style-type: disc;">
   <li>A is used for the grammar-tree as described in 
       <a href="#CreatingParserRules">Creating the Parser-Rules</a> below</li>
-  <li>B displays the <a href="#TheParseTree">AST structure</a> 
+  <li>B displays the <a href="ASTAndActionCode.html#ASTStructure">AST structure</a> 
       of the selected grammar-tree node</li>
   <li>C is where the selected node's <a href="#ActionCode">action-code</a> 
       (<i>semantic action</i>, or just <i>action</i>) is displayed and edited. 
@@ -606,33 +606,39 @@ That is why the displayed parser-rule <i>runs</i> almost immediately when the
 <i>Parse input</i> button is clicked. 
 </p>
 
-<p>
-When you finish developing and testing a parser (or when work must be suspended 
-temorarily) the parser can be saved to a file by invoking <i>File -> Save</i> 
-from the main menu. The saved grammar file has a <i>.vll</i> extension, 
-and contains only an XML representation of all the data entered into the GUI 
-(but no other data, code or serialized Scala objects). 
-A saved grammar can be opened again later for review, testing, or further modification 
-by invoking <i>File -> Open</i> from the main menu. 
-</p>
-
 <h2 id="ActionCode">Action Code</h2>
 
 <p>
 Action code is written as anonymous funtion literals in Scala or Javascript. 
-Both languages can be used freely for different parser-rules. 
-The choice of language here is based on one criterion: use of non-local references. 
-Functions with no non-local references are coded in Scala, 
-while those with non-local data or function references are coded in Javascript. 
+Both languages can be mixed freely in a parser, but each function must be written in 
+one of the forms shown below. Semantically equivalent abbreviated forms in Scala 
+(using _ to imply the argument) are not allowed. 
+The name of the argument and use of whitespace characters may, however, vary.
+</p>
+
+<table border="1" style="border: 1px solid black;">
+  <tr><th>If in Scala</th><th>If in Javascript</th></tr>
+  <tr><td><code>(arg: Any) => { ... }</code></td><td><code>function (arg) { ... }</td></tr>
+</table>
+
+<p>
+The choice of language for the examples in this article is based on one criterion: 
+presence of references to external objects. 
+completely self-contained functions with no external references are coded in Scala, 
+while those with external data or function references are coded in Javascript. 
 You can find detailed guidelines at 
 <a href="ASTAndActionCode.html#ActionCodeDesign">Action-Code Design</a>. 
 </p>
 
 <p>
+In general, action code from the original 
+<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#_generating_paychecks_with_the_external_dsl">
+parser code</a> can not be used verbatim as VisualLangLab's 
+<a href="ASTAndActionCode.html#ASTStructure">AST structure</a> differs in many cases.  
 A few examples of action-code functions in Scala and Javascript are shown below. 
 Observe that grammar-tree nodes with associated action-code have the 
 <i>action</i> attribute marked next to the node's icon. To see the 
-action-code you have to select (click) the specific node.
+action-code you have to select (click) the specific node. 
 </p>
 
 <h3 id="ExternalResources">External Resources</h3>
@@ -965,16 +971,18 @@ longer one is <i>you don't have to</i>. Here's why:
 
 <p>
 VisualLangLab never generates any parser code &mdash; not even for its own 
-internal use. It uses the methods of the 
+internal use. It uses the capabilities of 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html"> 
 Parser</a> and 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html"> 
-RegexParsers</a> classes to produce a 
+RegexParsers</a> to produce 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html"> 
-Parser</a> instance <i>directly</i> from a grammar-tree (or an equivalent XML) at run-time 
-without generating or compiling any code. The Parser produced has all the features 
-and properties assigned to it (and its constituent nodes) by VisualLangLab's grammar-tree editor. 
-So, to externalize a parser and use it in a client program (Scala or Java) proceed as follows.
+Parser</a> instances <i>directly</i> from grammar-trees at run-time 
+without generating or compiling any code. The Parsers produced have all the features 
+and properties assigned to the grammar-trees by VisualLangLab's grammar-tree editor. 
+The same Parser-generation procedure is available to host programs through the 
+<a href="UsingTheAPI.html">VisualLangLab API</a>. 
+To use a Parser from a (Scala or Java) program, proceed as follows.
 </p>
 
 <ol style="list-style-type:decimal;">

@@ -26,13 +26,13 @@
       three simple steps:
     </p>
 
-    <table><tr><td>
+    <ul style="list-style-type: disc;">
       <li>Enter test input in the <i>Parser Test Input</i> area (as at "A" 
           in Figure-1 below)</li>
       <li>Click the <i>Parse input</i> button (at "B" in Figure-1), 
           or select <i>Test -> Parse input</i> from the main menu</li>
       <li>Verify that the parser's output (at "C") is correct</li>
-    </td></tr></table>
+    </ul>
 
     <p>
       If you need help in understanding how to interpret the output go to 
@@ -66,14 +66,14 @@
       remembered from this insight:
     </p>
 
-    <table><tr><td>
+    <ul style="list-style-type: disc;">
       <li>Parsers should be divided into logically separate parts, with each 
           part being a grammar-tree (or a tree of grammar-trees)</li>
       <li>While recursion and mutual recursion can lead to elegant solutions, 
           they are often difficult to test, and should be avoided if possible</li>
       <li>When testing a complete parser, make sure that the top-level parser-rule
           (or grammar-tree) is selected</li>
-    </td></tr></table>
+    </ul>
 
     <p>
       Forgetting the last point above is a souce of much confusion during testing 
@@ -171,7 +171,7 @@
       turn triggers the following series of actions: 
     </p>
 
-    <table><tr><td>
+    <ul style="list-style-type: disc;">
       <li>the <i>before</i> (or <i>setup</i>) code block (2) is run. This causes the input for the test (3)
            to be placed in the <i>Parser Test Input</i> area (see 
            <a href="ASTAndActionCode.html#PredefinedVariables">Predefined Variables</a> 
@@ -181,7 +181,7 @@
           the preceding step</li>
       <li>finally, the <i>after</i> (or <i>test</i>) code block (4) is run. This part validates the 
           AST produced by <i>Expr</i>, and prints out a suitable message (5)</li>
-    </td></tr></table>
+    </ul>
 
     <p>
       The result of the test (<i>OK</i> in this case) can be seen at (5) in the 

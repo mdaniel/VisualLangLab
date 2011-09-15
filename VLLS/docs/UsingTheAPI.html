@@ -54,7 +54,7 @@ import vll.core.VllParsers
       them to strings.
     </p>
 
-    <table><tr><td>
+    <ul style="list-style-type: disc;">
       <li><code>VllParsers.fromFile(File)</code> - This is the entry point for IDE operations. It takes 
           a <a href="">File</a> named <i>ArithExpr.vll</i> containing the grammar-file, and returns a unique instance of 
           <code>VLLParsers</code> that has all the parser-rules defined in the grammar-file.</li>
@@ -78,14 +78,14 @@ import vll.core.VllParsers
           <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> 
           that are useful for testing the result of parsing a string. Details of these classes 
           can be found in the standard Scala documentation.</li>
-    </td></tr></table>
+    </ul>
 
     <p>
       There is not much more to say about the API. The class <code>VLLParsers</code> has two 
       more factory methods that facilitate the creation of parsers from other sources:
     </p>
 
-    <table><tr><td>
+    <ul style="list-style-type: disc;">
       <li><code>fromString(s: String): VllParsers</code> - creates a parser from a string 
           (the contents of a saved grammar-file). This can be useful for completely 
           encapsulating small grammar files within a program -- see the example under 
@@ -93,7 +93,7 @@ import vll.core.VllParsers
       <li><code>fromXml(xml: 
           <a href="http://www.scala-lang.org/api/current/scala/xml/Elem.html">Elem</a>): VllParsers</code> 
           - creates a parser from an XML structure in the program.</li>
-    </td></tr></table>
+    </ul>
 
     <p>
       Since the class <code>VLLParsers</code> extends 
