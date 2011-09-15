@@ -65,7 +65,7 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
           displayAstStruct(/* false */)
       }
     }
-    private val rbRule = new RadioButton("Rule") {
+    private val rbRule = new RadioButton("\u00a7") {
       selected = true
       tooltip = "Selected rule only"
       reactions += {
@@ -73,8 +73,8 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
           displayAstStruct(/* false */)
       }
     }
-    private val rbFull = new RadioButton("Full") {
-      tooltip = "Full"
+    private val rbFull = new RadioButton("\u221e") {
+      tooltip = "Infinite"
       reactions += {
         case ButtonClicked(_) => displayDepth = Int.MaxValue
           displayAstStruct(/* false */)
