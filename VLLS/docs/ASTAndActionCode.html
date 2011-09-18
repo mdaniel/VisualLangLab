@@ -241,51 +241,39 @@
 
   <table border="1" style="border: 1px solid black;">
     <tr>
-      <td  style="text-align: center; font-weight: bold;">Name</td>
-
-      <td  style="text-align: center; font-weight: bold;">Description</td>
+      <th style="text-align: center; font-weight: bold;">Name</td>
+      <th style="text-align: center; font-weight: bold;">Description</td>
     </tr>
-
     <tr>
-      <td align="center">VLL</td>
-
+      <td align="center"><code>VLL</code></td>
       <td>See descriptions for specific languages below</td>
     </tr>
-
     <tr>
-      <td align="center">$line</td>
-
+      <td align="center"><code>vllLine</code></td>
       <td>The line number in the input</td>
     </tr>
-
     <tr>
-      <td align="center">$col</td>
-
+      <td align="center"><code>vllCol</code></td>
       <td>The column number in the input</td>
     </tr>
-
     <tr>
-      <td align="center">ParserTestInput</td>
-
-      <td>The GUI's JTextComponent containing user-provided test input 
-        (just under the <i>Parser Test Input</i> label)</td>
-    </tr>
-
-    <tr>
-      <td align="center">ParserLog</td>
-
-      <td>The GUI's JTextComponent containing parser log text 
-        (just under the <i>Parser Log</i> label)</td>
-    </tr>
-    <tr>
-      <td align="center">InputCharSequence</td>
-
+      <td align="center"><code>vllInputCharSequence</code></td>
       <td>A <code>java.lang.CharSequence</code> containing the 
         input text matching this node</td>
     </tr>
+    <tr>
+      <td align="center"><code>vllParserTestInput</code></td>
+      <td>The GUI's <code>JTextComponent</code> containing user-provided test input 
+        (just under the <i>Parser Test Input</i> label)</td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllParserLog</code></td>
+      <td>The GUI's <code>JTextComponent</code> containing parser log text 
+        (just under the <i>Parser Log</i> label)</td>
+    </tr>
   </table>
 
-  <p>The last three variables above (<i>InputArea</i>, and <i>LogArea</i>) are useful for
+  <p>The last two variables above (<i>vllParserTestInput</i>, and <i>vllParserLog</i>) are useful for
   writing automated test scripts as described in <a  href="TestingParsers.html#WrapperWithActionCode">Wrapper with Action Code</a>.</p>
 
   <h3 id="ScalaAction">Scala</h3>

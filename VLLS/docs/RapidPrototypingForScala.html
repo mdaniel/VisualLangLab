@@ -252,7 +252,10 @@ seen in <a href="#Figure7">Figure-7</a> below), while the <i>pattern</i> is it's
 This parser-rule uses a <i>Choice</i> 
 (the <img src="images/GrammarIconChoice.gif" align="center"/> icon) as its top-level node. 
 A <i>Choice</i> is <a href="http://vll.java.net/">VisualLangLab</a>'s equivalent of the 
-<i>|</i> combinator. To create the parser, perform the following steps.
+<i>|</i> combinator. But unlike <i>|</i> it accepts an arbitrary number (&gt;= 2) of 
+child nodes, and returns an AST that remembers which child node matched the input 
+(see <a href="#ScalaActionCodeWeekDays">example below</a>). 
+To create the parser, perform the following steps.
 </p>
 
 <ul style="list-style-type: disc;">
@@ -290,7 +293,10 @@ Grammar Tree Icons and Annotations</a>
 This parser-rule uses a <i>Sequence</i> 
 (the <img src="images/GrammarIconSequence.gif" align="center"/> icon) as its top-level node. 
 A <i>Sequence</i> is <a href="http://vll.java.net/">VisualLangLab</a>'s equivalent of 
-the <i>~</i>, <i>&lt;~</i>, and <i>~&gt;</i> combinators. 
+the <i>~</i>, <i>&lt;~</i>, and <i>~&gt;</i> combinators. But unlike the <i>~</i> family, 
+it accepts an arbitrary number (&gt;= 2) of child nodes, 
+and the AST returned is just a <code>scala.Array</code> which is much simpler to handle 
+than a nested instance of <code>case class ~</code>. 
 To create this parser, perform the following steps.
 </p>
 

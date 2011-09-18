@@ -64,15 +64,15 @@ object JsEngine {
   }
 
   def compile(sName: String): VllParsers.ActionType = {
-    val cs = compilable.compile("(%s)(VLLARGS)".format(sName))
+    val cs = compilable.compile("(%s)(vllARGS)".format(sName))
     new VllParsers.ActionType {
       def apply(inputCharSeq: CharSequence, inputArea: TextComponent, log: TextComponent, line: Int, col: Int, arg: Any): Any = {
-        cs.getEngine.put("InputCharSequence", inputCharSeq)
-        cs.getEngine.put("ParserTestInput", inputArea)
-        cs.getEngine.put("ParserLog", log)
-        cs.getEngine.put("VLLARGS", objToJsArray(arg))
-        cs.getEngine.put("$line", line)
-        cs.getEngine.put("$col", col)
+        cs.getEngine.put("vllInputCharSequence", inputCharSeq)
+        cs.getEngine.put("vllParserTestInput", inputArea)
+        cs.getEngine.put("vllParserLog", log)
+        cs.getEngine.put("vllARGS", objToJsArray(arg))
+        cs.getEngine.put("vllLine", line)
+        cs.getEngine.put("vllCol", col)
         cs.eval()
       }
     }

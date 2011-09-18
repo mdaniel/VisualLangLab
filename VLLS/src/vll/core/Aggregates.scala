@@ -34,30 +34,6 @@ trait Aggregates {
     ps.zipWithIndex.map(tup => (tup._1) ^^ (res => Pair(tup._2, res))).reduceLeft(_ | _)
   }
 
-  protected class SequenceMbr(protected val parser: Parser[Any]) {
-    def commit = false
-    def toDrop = false
-    def p = parser
-  }
-  protected case class Drop(pp: Parser[_]) extends SequenceMbr(pp) {
-    override def toDrop = true
-  }
-   protected case class Not(pp: Parser[_]) extends SequenceMbr(pp) {
-    override def toDrop = true
-  }
-  protected case class Guard(pp: Parser[_]) extends SequenceMbr(pp) {
-    override def toDrop = true
-  }
-  def Commit(pp: Parser[_]) = new SequenceMbr(pp) {override def commit = true}
-  def Commit(sm: SequenceMbr) = sm match {
-    case Drop(p) =>  new Drop(p) {override def commit = true}
-    case Not(p) =>  new Not(p) {override def commit = true}
-    case Guard(p) =>  new Guard(p) {override def commit = true}
-    case sm: SequenceMbr =>  new SequenceMbr(sm.p) {override def commit = true}
-  }
-  implicit def parser2other(pr: Parser[_]) = new SequenceMbr(pr)
-  implicit def any2other2[T](t: T)(implicit vu: T=>Parser[String]) = new SequenceMbr(vu(t))
-  
   private def tilde2array(t: Any): Any = {
     def add(t: ~[_, _], buf: mutable.ArrayBuffer[Any]) {
       val a ~ b = t
@@ -75,9 +51,9 @@ trait Aggregates {
     }
   }
 
-  protected def sequence(ps: SequenceMbr*): Parser[_] = {
-    val t3 = ps.map(nz => Tuple3(nz.p, nz.toDrop, nz.commit))
-    t3.reduceLeft((p1, p2) => (p1._2, p2._2, p1._3) match {
+  protected def sequence(ps: Triple[Parser[Any], Boolean, Boolean]*): Parser[_] = {
+      // (Parser, to-drop, to-commit)
+    ps.reduceLeft((p1, p2) => (p1._2, p2._2, p1._3) match {
         case (false, false, false) => Tuple3(p1._1 ~ p2._1, (p1._2 && p2._2), (p1._3 || p2._3))
         case (false, false, true) => Tuple3(p1._1 ~ commit(p2._1), (p1._2 && p2._2), (p1._3 || p2._3))
         case (false, true, false) => Tuple3((p1._1 <~ p2._1), (p1._2 && p2._2), (p1._3 || p2._3))

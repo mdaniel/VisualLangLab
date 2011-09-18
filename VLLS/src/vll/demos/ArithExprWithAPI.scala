@@ -21,7 +21,6 @@
 package vll.demos
 
 import java.io.File
-import scala.util.parsing.input.CharSequenceReader
 import vll.core.VllParsers
 
 object ArithExprWithAPI {
@@ -53,8 +52,8 @@ object ArithExprWithAPI {
 
   def main(args: Array[String]) {
     val vll = VllParsers.fromFile(new File("ArithExpr.vll"))
-    val phraseParser = vll.phrase(vll.getParserFor("Expr"))
-    val parseResult = phraseParser(new CharSequenceReader("(3 + 5) / (8 - 4)"))
+    val parser = vll.getParserFor("Expr")
+    val parseResult = vll.parseAll(parser, "(3 + 5) / (8 - 4)")
     parseResult match {
       case vll.Success(resultAST, _) => println(evalExprAST(resultAST))
       case vll.Failure(msg, where) => printf("Error: '%s' at line %d col %d%n", msg, where.pos.line, where.pos.column)

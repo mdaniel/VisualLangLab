@@ -32,7 +32,7 @@ import scala.xml.{Elem => XMLElem}
 import vll.gui.VllGui
 import vll.gui.VllGui._
 
-class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggregates {
+class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggregates {
 
   override type Elem = Char
   
@@ -231,15 +231,9 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
             p
           }
         case sn: SequenceNode => sequence(sn.zipWithIndex.map(
-              n => {
-                val sm = if (n._1.drop) Drop(node2parser(n._1)) 
-                else if (n._1.multiplicity == Multiplicity.Not) Not(node2parser(n._1))
-                else if (n._1.multiplicity == Multiplicity.Guard) Guard(node2parser(n._1))
-                else new SequenceMbr(node2parser(n._1))
-              
-                if (sn.commitPoint != -1 && n._2 >= sn.commitPoint)
-                  Commit(sm) else sm
-              }):_*)
+                  n => {Triple(node2parser(n._1), n._1.drop || (n._1.multiplicity == Multiplicity.Not) ||
+                  (n._1.multiplicity == Multiplicity.Guard), (sn.commitPoint != -1 && n._2 >= sn.commitPoint))}
+              ):_*)
         case cn: ChoiceNode => choice(cn.map(node2parser):_*)
         case ReferenceNode(_, tokenName) => Parser(x => getParser(tokenName)(x))
         case RepSepNode(_) =>
@@ -253,7 +247,7 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
             failure("Predicate has no code")
           else {
             Parser(in => {node.actionFunction(null, VllGui.top.logTextPane.inputArea, 
-                       new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea}, 
+                       VllGui.top.logTextPane.logAreaTextComponent, 
                        in.pos.line, in.pos.column, null) match {
                   case b: java.lang.Boolean if b.booleanValue => Success("", in)
                   case errMsg: String => Failure(errMsg, in)
@@ -279,13 +273,13 @@ class VllParsers extends SimpleLexingRegexParsers2 with PackratParsers with Aggr
       else
         Parser(in => {
           node.actionFunction(null, VllGui.top.logTextPane.inputArea, 
-                              new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea},  
+                              VllGui.top.logTextPane.logAreaTextComponent,  
                               in.pos.line, in.pos.column, null)
           parser3(in) match {
             case Success(tree, next) =>
               val source = in.source.subSequence(in.offset, next.offset)
               var actionResult = node.actionFunction(source, VllGui.top.logTextPane.inputArea, 
-                                                     new TextComponent{override lazy val peer = VllGui.top.logTextPane.logArea}, 
+                                                     VllGui.top.logTextPane.logAreaTextComponent, 
                                                      next.pos.line, next.pos.column, tree)
               Success(if (actionResult == null) tree else actionResult, next)
             case other => other

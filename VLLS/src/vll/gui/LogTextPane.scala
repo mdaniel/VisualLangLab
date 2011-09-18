@@ -34,6 +34,7 @@ import scala.swing.Orientation
 import scala.swing.ScrollPane
 import scala.swing.SplitPane
 import scala.swing.TextArea
+import scala.swing.TextComponent
 
 class LogTextPane(val gui: VllGui) extends SplitPane(Orientation.Vertical) {
   def logOutput(msg: String) {
@@ -74,12 +75,13 @@ class LogTextPane(val gui: VllGui) extends SplitPane(Orientation.Vertical) {
     def getText = text
     def setText(t: String) {text = t}
   }*/
-  val logArea = new JTextPane {
+  private val logArea = new JTextPane {
     setFont(new Font(Font.MONOSPACED, getFont.getStyle, getFont.getSize))
     setEditable(false)
     //def getText already defined in parent
     //def setText(t: String) already defined in parent
   }
+  val logAreaTextComponent = new TextComponent {override lazy val peer = logArea}
   leftComponent = new BorderPanel {
     val pnl = new BorderPanel() {
       val runButton = new Button(gui.runParseInputAction) {text = ""}

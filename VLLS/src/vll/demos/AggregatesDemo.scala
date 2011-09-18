@@ -19,7 +19,6 @@
 */
 package vll.demos
 
-import scala.util.parsing.combinator.JavaTokenParsers
 import scala.util.parsing.combinator.RegexParsers
 import vll.core.Aggregates
 
@@ -29,8 +28,8 @@ object AggregatesDemo extends RegexParsers with Aggregates {
   def which2 = choice("hello", "world", "\\d+".r)
 
   def all = "hello" ~> "world" ~> "\\d+".r
-  def all2 = sequence("hello", "world", "\\d+".r)
-  def all3 = sequence(Drop("hello"), Drop("world"), "\\d+".r)
+  def all2 = sequence(Triple("hello", false, false), Triple("world", false, false), Triple("\\d+".r, false, false))
+  def all3 = sequence(Triple("hello", true, false), Triple("world", true, false), Triple("\\d+".r, false, false))
   
   def main(args: Array[String]) {
     println("|: " + parseAll(which*, "hello world 2011"))

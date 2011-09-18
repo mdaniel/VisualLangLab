@@ -23,7 +23,6 @@ package vll.core
 import scala.collection._
 import scala.util.matching.Regex
 import scala.util.parsing.combinator.RegexParsers
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 trait SimpleLexingRegexParsers2 extends RegexParsers {
@@ -53,14 +52,8 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
       setupNeeded = true
       // literals have IDs -1, -2, -3 ...
       // order of following 2 lines must not be changed
-      theLiterals += lit
-      val theLiteralsSize = theLiterals.size
-      val parser = Parser(in => {
-        val t0 = if (profileCode) System.currentTimeMillis else 0
-        val rv = parserById(-theLiteralsSize, "literal(%s)".format(lit))(in)
-        if (profileCode) literalTime += System.currentTimeMillis - t0
-        rv
-      })
+      lit +=: theLiterals
+      val parser = parserById(-theLiterals.size)
       tokenParserMap(lit) = parser
       parser
     }
@@ -78,184 +71,116 @@ trait SimpleLexingRegexParsers2 extends RegexParsers {
       setupNeeded = true
       // regexs have IDs 0, 1, 2 ...
       // order of following 2 lines must not be changed
-      val theRegexsSize = theRegexs.size
-      val parser = Parser(in => {
-        val t0 = if (profileCode) System.currentTimeMillis else 0
-        val rv = parserById(theRegexsSize, "regex(%s)".format(regAsString))(in)
-        if (profileCode) regexTime += System.currentTimeMillis - t0
-        rv
-      })
+      val parser = parserById(theRegexs.size)
       theRegexs += regAsString 
       tokenParserMap(regAsString) = parser
       parser
     }
   }
-  
-  private def parserById(id: Int, expect: String): Parser[String] = {
-    val failMsg = "Expected " + expect
+
+  private def parserById(id: Int): Parser[String] = {
+    def formatToken(tid: Int) = "%s(%s)".format((if (tid < 0) "literal" else "regex"), allTokens(tid + literalBaseIndex))
     Parser(in => {
-        val t0 = if (profileCode) System.currentTimeMillis else 0
-//        if (traceTokens)
-//          printf("Trying %s @ (%d,%d)%n", expect, in.pos.line, in.pos.column)
-        val rv = if (in.atEnd)
+        if (traceTokens)
+          printf("Trying %s @ (%d,%d)%n", formatToken(id), in.pos.line, in.pos.column)
+        if (in.atEnd)
           Failure("End-of-input found", in)
         else globalTokenLexer(in.source.toString, in.offset) match {
-          case Triple(matchString, matchId, charsConsumed) => 
-            if (matchString eq null) {
-              val next = in.drop(charsConsumed)
-              if (next.atEnd) {
-//                if (traceTokens)
-//                  printf("Failure %s @ (%d,%d)%n", "End-of-input found", in.pos.line, in.pos.column)
-                Failure("Unexpected end-of-input", in)
-              } else {
-//                if (traceTokens)
-//                  printf("Failure %s @ (%d,%d)%n", expect, in.pos.line, in.pos.column)
-                Failure(failMsg, in)
-              }
+          case Triple(null, _, charsConsumed) =>
+            val next = in.drop(charsConsumed)
+            if (next.atEnd) {
+              if (traceTokens)
+                printf("Failure %s @ (%d,%d)%n", "End-of-input found", in.pos.line, in.pos.column)
+              Failure("End-of-input found", in)
             } else {
-              if (matchId == id) {
-                val next = in.drop(charsConsumed)
-//                if (traceTokens)
-//                  printf("Success %s @ (%d,%d)%n", expect, next.pos.line, next.pos.column)
-                Success(matchString, next)
-              } else {
-//                if (traceTokens)
-//                  printf("Failure %s @ (%d,%d)%n", expect, in.pos.line, in.pos.column)
-                Failure(failMsg, in)
-              }
+              if (traceTokens)
+                printf("Failure %s @ (%d,%d)%n", formatToken(id), in.pos.line, in.pos.column)
+              Failure("Unknown-inputs found", in)
+            }
+          case Triple(matchString, matchId, charsConsumed) => 
+            if (matchId == id) {
+              val next = in.drop(charsConsumed)
+              if (traceTokens)
+                printf("Success %s @ (%d,%d)%n", formatToken(id), next.pos.line, next.pos.column)
+              Success(matchString, next)
+            } else {
+              if (traceTokens)
+                printf("Failure %s @ (%d,%d)%n", formatToken(id), in.pos.line, in.pos.column)
+              Failure("expected %s (#%d), found %s (#%d) @ (%d,%d)".format(
+                  formatToken(id), id, formatToken(matchId), matchId, in.pos.line, in.pos.column), in)
             }
         }
-        if (profileCode) parserByIdTime += System.currentTimeMillis - t0
-        rv
       })
   }
   
   private def globalTokenLexer(inStr: String, offset: Int): LexResults = {
-    val t0 = if (profileCode) System.currentTimeMillis else 0
     if (setupNeeded) {
       setupLexer()
       setupNeeded = false
     }
-    val rv = if (offset > maxOffset || !lexResultsCache.contains(offset)) {
-      val t00 = if (profileCode) System.currentTimeMillis else 0
+    if (/* offset > maxOffset ||  */!lexResultsCache.contains(offset)) {
       val postSpaces = handleWhiteSpace(inStr, offset)
-      if (profileCode) handleWhitespaceTime += System.currentTimeMillis - t00
-      val res = lex(inStr.substring(postSpaces))
+      val res = lex(inStr, postSpaces)
       val lexResult = (res._1, res._2, if (res._1 eq null) (postSpaces - offset) else (postSpaces - offset + res._1.length))
-      if (res._1 ne null) {
+      if (res._1 ne null)
         lexResultsCache(offset) = lexResult
-        maxOffset = offset
-      }
+//      maxOffset = offset
       lexResult
     } else {
       lexResultsCache(offset)
     }
-    if (profileCode) globalTokenLexerTime += System.currentTimeMillis - t0
-    rv
   }
   
   override def phrase[T](p: Parser[T]): Parser[T] = {
     lexResultsCache.clear()
-    maxOffset = -1
-    Parser(in => {val rv = super.phrase(p)(in)
-        if (profileCode) {
-          printf("literalTime: %d, regexTime: %d%n", literalTime, regexTime)
-          printf("parserByIdTime: %d, globalTokenLexerTime: %d%n", parserByIdTime, globalTokenLexerTime)
-          printf("handleWhitespaceTime: %d, lexTime: %d%n", handleWhitespaceTime, lexTime)
-          printf("literalsMatcherTime: %d, regexMatcherTime: %d%n", literalsMatcherTime, regexMatcherTime)
-        }   
-        rv 
-    })
+//    maxOffset = -1
+    super.phrase(p)
   }
 
   private def setupLexer() {
-    if (!theLiterals.isEmpty) {
-      val orderedLits = theLiterals.toArray.map(escapeRegexMetachars).zipWithIndex.map(p => Pair(p._1, -(p._2 + 1))).
-        sortWith((l, r) => l._1.length >= r._1.length)
-      literalsMatcher = Pattern.compile(orderedLits.map(_._1).mkString("(", ")|(", ")")).matcher("")
-      literalIds = orderedLits.map(_._2).toArray
-    }
-    regexMatchers = theRegexs.toArray.map(Pattern.compile(_, (Pattern.MULTILINE | Pattern.DOTALL)).matcher("")).
-      zipWithIndex.par
+    tokenIndices.clear()
+    literalBaseIndex = theLiterals.size
+    theLiterals.zipWithIndex.foreach(p => tokenIndices(p._1) = p._2 - literalBaseIndex)
+    theRegexs.zipWithIndex.foreach(p => tokenIndices(p._1) = p._2)
+    val escLits = theLiterals.map(escapeRegexMetachars)
+    allTokens = Array(escLits, theRegexs).flatMap(x => x)
+    tokenPatterns = allTokens.map(Pattern.compile(_, (Pattern.MULTILINE | Pattern.DOTALL))).
+      zipWithIndex.map(p => Pair(p._1, p._2 - literalBaseIndex)).par
     tokenParserMap(escapeRegexMetachars("\\z")) = super.regex("\\z".r)
   }
 
-  private def lex(s: String) = {
-    val t0 = if (profileCode) System.currentTimeMillis else 0
-    val matchingLiteral = {
-      val t01 = if (profileCode) System.currentTimeMillis else 0
-      val rv = if ((literalsMatcher ne null) && {literalsMatcher.reset(s); literalsMatcher.lookingAt}) {
-        var k = -1
-        for (i <- 1 to literalsMatcher.groupCount) 
-          if (literalsMatcher.end(i) != -1)
-            k = i
-        (literalsMatcher.group, literalIds(k - 1))
-      } else
-        (null, 0)
-      if (profileCode) literalsMatcherTime += System.currentTimeMillis - t01
-      rv
-    }
-    val matchingRegex = {
-      val t02 = if (profileCode) System.currentTimeMillis else 0
-      val rv = regexMatchers.map(pi => {
-        val m = (pi._1).reset(s)
+  private def lex(s: String, offset: Int) = {
+    val matchesByLength = tokenPatterns.map(pi => {
+        val m = (pi._1).matcher(s.subSequence(offset, s.length))
         if (m.lookingAt) {
           (m.group, pi._2)
         } else {
           (null, 0)
         }
-      }).seq.filter(_._1 ne null).sortWith((a, b) => {(a._1.length > b._1.length) || 
-             ((a._1.length == b._1.length) && (a._2 < b._2))});
-      if (profileCode) regexMatcherTime += System.currentTimeMillis - t02
-      rv
-    }
-    val rv = if (matchingRegex.isEmpty) {
-      matchingLiteral
+      }).seq.filter(_._1 ne null).sortWith((a, b) => {a._1.length > b._1.length});
+    if (matchesByLength.isEmpty) {
+      (null, 0)
     } else {
-      if ((matchingLiteral._1 eq null) || (matchingRegex.head._1.length > matchingLiteral._1.length))
-        matchingRegex.head else matchingLiteral
+      val maxLength = matchesByLength.head._1.length;
+      val byLengthAndPriority = matchesByLength.takeWhile(_._1.length == maxLength).sortWith((a, b) => {a._2 < b._2})
+      byLengthAndPriority.head
     }
-    if (profileCode) lexTime += System.currentTimeMillis - t0
-    rv
   }
   
-  def reset() {
-    literalsMatcher = null
-    literalIds = null
-    regexMatchers = null
-    theLiterals.clear()
-    theRegexs.clear()
-    tokenParserMap.clear()
-    lexResultsCache.clear()
-    setupNeeded = true
-    maxOffset = -1
-    
-    literalsMatcherTime = 0
-    regexMatcherTime = 0
-    lexTime = 0
-    globalTokenLexerTime = 0
-    handleWhitespaceTime = 0
-    regexTime = 0
-    literalTime = 0
-    parserByIdTime = 0
-  }
-
-  private var profileCode = false
-  private var literalsMatcher: Matcher = null
-  private var literalIds: Array[Int] = null
-  private var regexMatchers: parallel.mutable.ParArray[Tuple2[Matcher, Int]] = null
+  private var tokenPatterns: parallel.mutable.ParArray[Tuple2[Pattern, Int]] = null
   private val tokenParserMap = mutable.HashMap[String, Parser[String]]()
-//  var traceTokens = false
+  var traceTokens = false
+//  private var maxOffset = -1
   private type LexResults = Triple[String, Int, Int] // matched-string, token-id, chars-consumed
   private val lexResultsCache = mutable.HashMap[Int, LexResults]()
-  private val theLiterals, theRegexs = mutable.ArrayBuffer[String]()
+  private var allTokens: Array[String] = null
+  private val tokenIndices = mutable.HashMap[String, Int]()
+  private val theLiterals, theRegexs = mutable.Buffer[String]()
   private var setupNeeded = true
-  private var maxOffset = -1
-  private var literalsMatcherTime, regexMatcherTime, lexTime, globalTokenLexerTime, 
-      handleWhitespaceTime, regexTime, literalTime, parserByIdTime = 0L
+  private var literalBaseIndex = 0
 }
 
-object Main2 extends SimpleLexingRegexParsers2 {
+object Main extends SimpleLexingRegexParsers2 {
   def main(args: Array[String]) {
       // priming the lexer ...
     literal("begin"); literal("end"); 

@@ -48,7 +48,7 @@ object ScalaEngine {
   def compile(f: String): VllParsers.ActionType = {
     compiledFunctionHolder.value = null
     outputStream.clear()
-    val res: Result = interp.interpret("$$.value = (InputCharSequence:CharSequence,ParserTestInput:scala.swing.TextComponent,ParserLog:scala.swing.TextComponent,$line:Int,$col:Int,%s".format(f.substring(1)))
+    val res: Result = interp.interpret("$$.value = (vllInputCharSequence:CharSequence,vllParserTestInput:scala.swing.TextComponent,vllParserLog:scala.swing.TextComponent,vllLine:Int,vllCol:Int,%s".format(f.substring(1)))
     if (!outputStream.toString.trim.isEmpty) {
       val msg = outputStream.toString
       if (!msg.contains("$$.value: java.lang.Object ="))
