@@ -23,24 +23,25 @@ import scala.util.parsing.combinator.RegexParsers
 import vll.core.Aggregates
 
 object AggregatesDemo extends RegexParsers with Aggregates {
-  
-  def which = "hello" | "world" | "\\d+".r
-  def which2 = choice("hello", "world", "\\d+".r)
-
-  def all = "hello" ~> "world" ~> "\\d+".r
-  def all2 = sequence(Triple("hello", false, false), Triple("world", false, false), Triple("\\d+".r, false, false))
-  def all3 = sequence(Triple("hello", true, false), Triple("world", true, false), Triple("\\d+".r, false, false))
-  
   def main(args: Array[String]) {
-    println("|: " + parseAll(which*, "hello world 2011"))
-    println("choice: " + parseAll(which2*, "hello world 2011"))
-    println("~: " + parseAll(all, "hello world 2011"))
-    parseAll(all2, "hello world 2011").get match {
-      case a: Array[_] => println(a.mkString("sequence: ", ", ", ""))
+    def alt = "hello" | "world" | "\\d+".r
+    def alt2 = choice("hello", "world", "\\d+".r)
+    println("alt: " + parseAll(alt*, "hello world 2011"))
+    println("alt2: " + parseAll(alt2*, "hello world 2011"))
+    
+    def seq = "hello" ~ "world" ~ "\\d+".r
+    def seq2 = sequence(Triple("hello", false, false), Triple("world", false, false), Triple("\\d+".r, false, false))
+    println("seq: " + parseAll(seq, "hello world 2011"))
+    parseAll(seq2, "hello world 2011").get match {
+      case a: Array[_] => println(a.mkString("seq2: Array(", ", ", ")"))
     }
-    parseAll(all3, "hello world 2011").get match {
-      case a: Array[String] => println(a.mkString("sequence/Drop: ", ", ", ""))
-      case x => println("sequence/Drop: " + x)
+    
+    def seq3 = "hello" ~> "world" ~> "\\d+".r
+    def seq4 = sequence(Triple("hello", true, false), Triple("world", true, false), Triple("\\d+".r, false, false))
+    println("seq3: " + parseAll(seq3, "hello world 2011"))
+    parseAll(seq4, "hello world 2011").get match {
+      case a: Array[String] => println(a.mkString("seq4: ", ", ", ""))
+      case x => println("seq4: " + x)
     }
   }
 }

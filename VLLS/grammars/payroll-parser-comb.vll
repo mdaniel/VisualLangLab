@@ -5,7 +5,7 @@
     <Literal Name="IS" Pattern="is"/>
     <Literal Name="IN" Pattern="in"/>
     <Literal Name="PERCENT" Pattern="percent"/>
-    <Regex Name="floatingPointNumber" Pattern="-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)(([eE][+-]?\\d+)[fFdD]|([eE][+-]?\\d+)|[fFdD])"/>
+    <Regex Name="floatingPointNumber" Pattern="-?(\\d+(\\.\\d*)?|(\\d*\\.)?\\d+)([eE][+-]?\\d+|[fFdD]|[eE][+-]?\\d+[fFdD])"/>
     <Literal Name="FOR" Pattern="for"/>
     <Literal Name="INSURANCE" Pattern="insurance"/>
     <Literal Name="RETIREMENT" Pattern="retirement"/>
@@ -13,19 +13,20 @@
     <Literal Name="INCOME" Pattern="income"/>
     <Literal Name="CONTRIBUTIONS" Pattern="contributions"/>
     <Regex Name="stringLiteral" Pattern="\&quot;([^\&quot;\\p{Cntrl}\\\\]|\\[\\/bfnrt]|\\\\u[a-fA-F0-9]{4})*\&quot;"/>
-    <Literal Name="FUND" Pattern="fund"/>
     <Literal Name="DEDUCTIONS" Pattern="deductions"/>
     <Literal Name="SALARY" Pattern="salary"/>
+    <Literal Name="FUND" Pattern="fund"/>
     <Regex Name="DAYS" Pattern="days?"/>
-    <Regex Name="decimalNumber" Pattern="\\d+(\\.\\d*)?|\\d*\\.\\d+"/>
+    <Regex Name="decimalNumber" Pattern="\\d+\\.\\d*|\\d*\\.\\d+"/>
     <Literal Name="PAYCHECK" Pattern="paycheck"/>
     <Literal Name="ARE" Pattern="are"/>
     <Literal Name="GROSS" Pattern="gross"/>
     <Literal Name="COMMA" Pattern=","/>
     <Literal Name="STATE" Pattern="state"/>
+    <Regex Name="wholeNumber" Pattern="-?\\d+"/>
     <Literal Name="OF" Pattern="of"/>
-    <Literal Name="MINUS" Pattern="minus"/>
     <Literal Name="EMPLOYEE" Pattern="employee"/>
+    <Literal Name="MINUS" Pattern="minus"/>
     <Regex Name="WEEKS" Pattern="weeks?"/>
     <Literal Name="FEDERAL" Pattern="federal"/>
     <Literal Name="LCURLY" Pattern="{"/>
@@ -45,9 +46,6 @@
     <Parser Name="employeeName">
         <Token Ref="stringLiteral" ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt; &#xA;  case n: String =&gt; n.substring(1, n.length - 1)&#xA;}"/>
     </Parser>
-    <Parser Name="doubleNumber">
-        <Token Ref="decimalNumber" ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt;&#xA;  case d: String =&gt; d.toDouble&#xA;}"/>
-    </Parser>
     <Parser Name="empl">
         <Sequence >
           <Token Ref="PAYCHECK" Drop="true"/>
@@ -55,6 +53,9 @@
           <Token Ref="EMPLOYEE" Drop="true"/>
           <Reference Ref="employeeName" />
         </Sequence>
+    </Parser>
+    <Parser Name="doubleNumber">
+        <Token Ref="decimalNumber" ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt;&#xA;  case d: String =&gt; d.toDouble&#xA;}"/>
     </Parser>
     <Parser Name="tax">
         <Sequence >
@@ -72,8 +73,15 @@
     </Parser>
     <Parser Name="duration">
         <Sequence ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt;&#xA;  case Array(n: String, factor: Int) =&gt; n.toInt * factor&#xA;}">
-          <Token Ref="decimalNumber" />
+          <Token Ref="wholeNumber" />
           <Reference Ref="weekDays" />
+        </Sequence>
+    </Parser>
+    <Parser Name="retirement">
+        <Sequence >
+          <Token Ref="RETIREMENT" Drop="true"/>
+          <Token Ref="FUND" Drop="true"/>
+          <Token Ref="CONTRIBUTIONS" />
         </Sequence>
     </Parser>
     <Parser Name="fedState">
@@ -82,12 +90,11 @@
           <Token Ref="STATE" />
         </Choice>
     </Parser>
-    <Parser Name="retirement">
-        <Sequence >
-          <Token Ref="RETIREMENT" Drop="true"/>
-          <Token Ref="FUND" Drop="true"/>
-          <Token Ref="CONTRIBUTIONS" />
-        </Sequence>
+    <Parser Name="toBe">
+        <Choice >
+          <Token Ref="IS" />
+          <Token Ref="ARE" />
+        </Choice>
     </Parser>
     <Parser Name="amount">
         <Sequence >
@@ -97,12 +104,6 @@
           <Token Ref="GROSS" Drop="true"/>
           <Token Ref="CURRENCY" Drop="true"/>
         </Sequence>
-    </Parser>
-    <Parser Name="toBe">
-        <Choice >
-          <Token Ref="IS" />
-          <Token Ref="ARE" />
-        </Choice>
     </Parser>
     <Parser Name="deductAmount">
         <Choice ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt; &#xA;  case (_, d: Double) =&gt; d&#xA;}">

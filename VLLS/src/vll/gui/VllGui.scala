@@ -738,6 +738,10 @@ class VllGui extends MainFrame with ActionListener {
     ruleChooser.setSelectedItem(selectedName)
     ruleChooser.addActionListener(this)
   }
+  
+  def setWaitingCursor(waiting: Boolean) {
+    cursor = if (waiting) Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) else defaultCursor
+  }
 
   private val tk = java.awt.Toolkit.getDefaultToolkit
   val screenWidth = tk.getScreenSize.width
@@ -763,6 +767,7 @@ class VllGui extends MainFrame with ActionListener {
     def apply() {parsers.userRequestedStop = true}
   }
 
+  private val defaultCursor = cursor
   val stopButton = new Button(stopAction) 
   var currentRuleName = "Main"
   var customTreeHandlerClassName: Option[String] = None

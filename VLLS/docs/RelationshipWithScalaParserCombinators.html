@@ -10,217 +10,258 @@
   <body>
     <h1>VisualLangLab - Relationship with Scala Parser Combinators</h1>
 
-    <p>
-      The UML class diagram in Figure-1 below is an abstraction of 
-      VisualLangLab's relationship with Scala's 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>. 
-    </p>
-
-    <p>
-      <img src="images/RelationshipWithScalaParserCombinators.png" /><br />
-      <i>Figure-1. Class diagram relating VisualLangLab with Scala classes</i>
-    </p>
-
-    <p>
-      The GUI owns an instance of <code>vll.core.VllParsers</code>, which indirectly extends  
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> with 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>. 
-      The grammar-trees effectively become members of that instance 
-      (of <code>VllParsers</code>) as though defined as follows: 
-    </p> 
+<p>
+The class diagram in Figure-1 below is an abstraction of VisualLangLab's relationship with Scala's 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>. 
+The GUI owns an instance of <code>vll.core.VllParsers</code>, which indirectly extends  
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> with 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers.html">PackratParsers</a>. 
+The grammar-trees effectively become members of that instance 
+(of <code>VllParsers</code>) as though defined as follows: 
+</p>
 
 <pre><code>    lazy val someParser: <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">scala.util.parsing.combinator.Parser</a>[Any] = ...</code></pre>
 
-    <p>
-      However, because of the way Scala's 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a> 
-      work, it is not necessary to generate or compile any code to obtain this effect. 
-    </p> 
+<p>
+However, because of the way Scala's 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a> 
+work, it is not necessary to generate or compile any code to obtain this effect. 
+</p> 
 
-    <p>
-      In terms of the <i>Essential Jargon</i> in the 
-      <a href="UserGuide.html">User Guide</a>, the GUI 
-      (by owning an instance of <code>VllParsers</code>) is a <i>parser</i>, while 
-      objects like <code>someParser</code> are <i>parser-rule</i>s that 
-      bring <i>grammar-tree</i>s to life. The line of Scala 
-      code above shows that <code>someParser</code> is of type 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
-      which of course is different from the idea of <i>parser</i> in the <i>Essential Jargon</i>. 
-      The spelling of the two terms has a subtle difference -- the case of the inital 
-      letter. In the rest of this document we will use <i>Parser</i> (with an 
-      initial capital) consistently to mean Scala's
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>, 
-      not the <i>Essential Jargon</i>'s <i>parser</i>. 
-    </p> 
+<p>
+In terms of the <a href="RapidPrototypingForScala.html#EssentialJargon">Essential Jargon</a>, 
+the GUI is a <i>parser</i>, while objects like <code>someParser</code> are <i>parser-rule</i>s that 
+bring <i>grammar-tree</i>s to life. The line of Scala code above shows that 
+<code>someParser</code> is of type 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+which of course is different from the idea of <i>parser</i> in the <i>Essential Jargon</i>. 
+In the rest of this document we will use <i>Parser</i> (with an 
+initial capital) consistently to mean Scala's
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>, 
+not the <a href="RapidPrototypingForScala.html#EssentialJargon">Essential Jargon</a>'s <i>parser</i>. 
+</p> 
 
-    <p>
-      The following descriptions explain the function and role of the other classes 
-      in the <code>vll</code> (VisualLangLab) package. 
-    </p>
+<p>
+<img src="images/RelationshipWithScalaParserCombinators.png" /><br />
+<i>Figure-1. Class diagram relating VisualLangLab with Scala classes</i>
+</p>
 
-    <h2 id="ClassSimpleLexing">Class vll.core.SimpleLexingRegexParsers (Built-in Lexer)</h2>
+<p>
+The following descriptions explain the function and role of some classes 
+in the <code>vll</code> (VisualLangLab) package. 
+</p>
 
-    <p>
-      This class <i>is</i> the built-in simple 
-      <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexer</a>. 
-      It extends the Scala API's 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>, 
-      overriding the <code>literal(String)</code> and <code>regex(Regex)</code> methods 
-      with versions implemented on top of the lexer. The class does not add anything to 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>'s 
-      interface, but changes the behaviour of the <code>literal()</code> and 
-      <code>regex()</code> methods in two ways demonstrated by the code below.
-    </p>
+<h2 id="ClassSimpleLexingRegexParsers">core.SimpleLexingRegexParsers (The Built-in Lexer)</h2>
+
+<p>
+This class <i>is</i> the built-in simple 
+<a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexial analyzer</a>. 
+It extends the Scala API's 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>, 
+overriding the <code>literal(String)</code> and <code>regex(Regex)</code> methods 
+with versions implemented on top of the lexer. The class does not add anything to 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>'s 
+interface, but changes the <code>literal()</code> and 
+<code>regex()</code> methods in ways demonstrated by the code below.
+</p>
 
 <pre><code>object Main extends SimpleLexingRegexParsers {
   def main(args: Array[String]) {
 
-      /**** priming the built-in lexer ... ****/
+      /**** priming the built-in lexer ****/
     literal("begin"); literal("end"); 
     regex("[a-z]+".r); regex("\\d+".r)
 
-      /**** define a parser ... ****/
+      /**** define a parser ****/
     lazy val line = "begin" ~ rep("[a-z]+".r | "\\d+".r) ~ "end"
 
-      /**** test the parser ... ****/
+      /**** test the parser ****/
     println(parseAll(line, "begin hi 1984 i am 2011 end"))
     println(parseAll(line, "begin the ending of 2010 end"))
     println(parseAll(line, "begin the end of 2010 end"))
   }
 }</code></pre>
 
-    <p>
-      The first change is quite obvious: the two lines of <i>lexer-priming</i> code. 
-      The built-in lexer must be <i>setup</i> by making it aware of all 
-      literal and regex tokens before they are actually used. 
-      The second difference is behavioural, and can only be seen 
-      in the output of the code (see below). 
-    </p>
+<p>
+The first change is quite obvious: the two lines of lexer <i>priming</i> code. 
+Priming is required to make the built-in lexer aware of all known 
+literal and regex tokens before they are actually used in parser-rules. 
+The second difference is behavioral, and can be seen 
+in the output of the code (shown below). 
+</p>
 
-<pre><code>    [1.28] parsed: ((begin~List(hi, 1984, i, am, 2011))~end)
-    [1.29] parsed: ((begin~List(the, ending, of, 2010))~end)
-    [1.15] failure: string matching regex `\z' expected but `o' found
+<pre><code>[1.28] parsed: ((begin~List(hi, 1984, i, am, 2011))~end)
+[1.29] parsed: ((begin~List(the, ending, of, 2010))~end)
+[1.15] failure: string matching regex `\z' expected but `o' found
 
-    begin the end of 2010 end
-                  ^
-</code></pre>
+begin the end of 2010 end
+              ^</code></pre>
 
-    <p>
-      The failure message in the example above is quite clear: nothing more is 
-      expected after the <i>end</i> in the middle of the input line, so the parser 
-      complains about the remaining text.
-      But compare this with the output obtained when <code>object Main</code> extends 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> 
-      instead of <code>SimpleLexingRegexParsers</code> (see below). 
-    </p>
+<p>
+The built-in lexer treats tokens created with 
+<code>literal()</code> as <i>reserved keywords</i> with higher priority than tokens 
+created with <code>regex()</code>. So, although the regular-expression 
+<code>"[a-z]+".r</code> matches the word <i>end</i> in isolation, the regex token 
+<code>regex("[a-z]+".r)</code> will not match <i>end</i> in the lexer. 
+The <i>end</i> can only match the literal token created by <code>literal("end")</code>. 
+The lexer always finds the longest possible section of input that matches any known token. 
+So, the word <i>ending</i> is treated as an instance of the token 
+<code>regex("[a-z]+".r)</code>, not as an instance of <code>literal("end")</code> 
+followed by an instance of <code>regex("[a-z]+".r)</code>.
+</p>
 
-<pre><code>    [1.28] failure: `end' expected but end of source found
+<p>
+So, on the third line of the example above, the <i>end</i> in the middle of the line, 
+is interpreted as a <code>literal("end")</code>, not a <code>regex("[a-z]+".r)</code>. 
+To the parser, a <code>literal("end")</code> signals the end of the phrase, hence the error. 
+Now compare this with the output obtained when the parser extends 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> 
+instead of <code>SimpleLexingRegexParsers</code> (see below). 
+</p>
 
-    begin hi 1984 i am 2011 end
-                               ^
-    [1.29] failure: `end' expected but end of source found
+<pre><code>[1.28] failure: `end' expected but end of source found
 
-    begin the ending of 2010 end
-                                ^
-    [1.26] failure: `end' expected but end of source found
+begin hi 1984 i am 2011 end
+                           ^
+[1.29] failure: `end' expected but end of source found
 
-    begin the end of 2010 end
-                             ^
-</code></pre>
+begin the ending of 2010 end
+                            ^
+[1.26] failure: `end' expected but end of source found
 
-    <p>
-      What's happening here is that the <i>end</i> in the input text is actually 
-      matching the token <code>regex("[a-z]+".r)</code>, not the token 
-      <code>literal("end")</code>. So the parser complains about the missing 
-      <i>end</i>. 
-    </p>
+begin the end of 2010 end
+                         ^</code></pre>
 
-    <p>
-      The essential point here is that the built-in lexer treats tokens created with 
-      <code>literal()</code> as reserved keywords with higher priority than tokens 
-      created with <code>regex()</code>. So, although the regular-expression 
-      <code>[a-z]+</code> matches <i>end</i>, the literal token created 
-      (implicitly) for <i>"end"</i> takes precedence, and the 
-      <i>end</i> in the input is not allowed to match the token created (implicitly) 
-      for <i>"[a-z]+".r</i>. The lexer also uses the longest 
-      possible section of input that matches any token. So, the 
-      word <i>ending</i> is treated as an instance of the token 
-      <code>regex("[a-z]+".r)</code>, not as an instance of <code>literal("end")</code> 
-      followed by an instance of <code>regex("[a-z]+".r)</code>.
-    </p>
+<p>
+The <i>end</i> at the end of each line here matches <code>regex("[a-z]+".r)</code> 
+instead of <code>literal("end")</code> since  
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> 
+has no concept of reserved keywords. So the parser complains about a missing 
+<i>end</i> &mdash; despite having just read one! 
+</p>
 
-    <h3>Whitespace and Comments</h3>
+<h3>Whitespace and Comments</h3>
 
-    <p>
-      The lexer depends on 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>'s 
-      standard mechanism for handling whitespace (<code>handleWhiteSpace()</code>). 
-      The class <code>vll.gui.VllGui</code>, which extends this class overrides the 
-      method to provide support for comments as well. 
-    </p> 
+<p>
+The lexer depends on 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>'s 
+standard mechanism for handling whitespace (using the method <code>handleWhiteSpace()</code>). 
+The class <code>gui.VllGui</code>, which extends the lexer class overrides <code>handleWhiteSpace()</code> 
+to support comments as well. 
+</p> 
 
-    <h3>Lexer Performance</h3>
+<h3>Some Miscellany</h3>
 
-    <p>
-      The focus at this time is on functionality, so the performance of the lexer 
-      now is quite poor. However, it is hoped to improve the design of the lexer 
-      in future versions to alleviate this problem. 
-    </p> 
+<p>
+The focus at this time is on functionality, so the performance of the lexer 
+is not the best possible. Future versions will improve the design and performance 
+of the lexer. 
+</p> 
 
-    <h3>Use as Standalone Lexer</h3>
+<p>
+The builtin lexer has no dependencies on any other component of VisualLangLab, 
+and may be used separately if required. 
+</p> 
 
-    <p>
-      This class has no dependencies on any other component of VisualLangLab, and so 
-      may be used as a standalone lexer. A version of this code can be found 
-      at <a href="">simple-lexing-regex-parser</a>. 
-    </p> 
+<h2 id="TraitAggregates">core.Aggregates</h2>
 
-    <h2 id="TraitAggregates">Trait vll.core.Aggregates</h2>
+<p>
+This trait adds certain functions on top of the "~" and "|" combinators, that facilitate 
+integration with the GUI, and transform the parser's result into a more usable form. 
+Specifically, it enables the mapping of the GUI's <i>Sequence</i> and <i>Choice</i> 
+nodes onto functions of the underlying parser combinator library. 
+</p>
 
-    <p>
-      This trait adds functionality to the "~" and "|" combinators, facilitating 
-      smoother integration with a graphical user-interface, and transforming the 
-      parser's result to a more user-friendly structure. 
-    </p>
+<h3>Sequence Node</h3>
 
-    <h3>Sequence Node vs "~" Combinator</h3>
+<p>
+A <a href="EditingTheGrammarTree.html#Icons" target="_blank">Sequence</a> node is converted into a 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+constituted from a chain of <i>~</i>, <i><~</i>, and <i>~></i> combinators, 
+that returns an <code>Array[Any]</code> instead of an instance of 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$$tilde.html" target="_blank">case class ~</a>. 
+Arrays are easier to handle, and lead to simpler code in actions or application programs 
+(see examples in <a href="UsingTheAPI.html" target="_blank">Using the API</a>). A 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+produced from a Sequence node also handles the <i>drop</i> and <i>commit</i> 
+<a href="EditingTheGrammarTree.html#Annotations" target="_blank">annotations</a> on child nodes, 
+using the <i><~</i>, <i>~></i>, <i>~</i>, and <i>commit</i> functions 
+as required. 
+</p> 
 
-    <p>
-      Sequence nodes are converted into a 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
-      that returns an <code>Array[Any]</code> instead of instances of the class 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$$tilde.html">~</a>. 
-      Arrays are simpler to handle, and lead to less complex code 
-      in actions or application programs (see examples in 
-      <a href="UsingTheAPI.html">Using the API</a>). A 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
-      produced from a Sequence node also handles the <i>drop</i> annotation 
-      on child nodes, combining the child nodes with the "<~", "~>", and "~" functions 
-      as required. The generated 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
-      also handles the <i>commit</i> annotation on a child node.
-    </p> 
+<h3>Choice Node</h3>
 
-    <h3>Choice Node vs "|" Combinator</h3>
+<p>
+A <a href="EditingTheGrammarTree.html#Icons" target="_blank">Choice</a> node is converted into a 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
+constituted from a chain of <i>|</i> combinators, that returns a <a href="http://www.scala-lang.org/api/current/scala/Predef$.html">Pair</a>[Int,Any]. 
+The first member of the returned <code>Pair</code> is a 0-based index of the matching alternative. 
+This is required for producing complete and unambiguous ASTs, and to avoid being compelled 
+to embed action-code into the parser-rule (as with the <i>|</i> combinator).  
+You can see examples in <a href="UsingTheAPI.html">Using the API</a>. 
+</p> 
 
-    <p>
-      The Choice node is converted into a 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a> 
-      that returns a <a href="http://www.scala-lang.org/api/current/scala/Predef$.html">Pair</a>[Int,Any]. 
-      The first member of the <code>Pair</code> is a 
-      (0-based) index of the matching alternative. 
-      This is the key to developing the parser separately from AST handling code 
-      (see examples in <a href="UsingTheAPI.html">Using the API</a>). 
-      Developers using the Scala API's "|" combinator directly can often not separate the 
-      action-code from the parser as the identity of the matching alternative is not retained. 
-    </p> 
+<h3>Example Code</h3>
 
-    <h2>Class vll.core.VllParsers</h2>
+<p>
+The following code shows how the <code>Aggregates</code> class supports the GUI's 
+<i>Choice</i> and <i>Sequence</i> nodes, and how the information returned by these 
+parser-rules differs from that retured by Scala's <i>|</i> and <i>~</i> combinators. 
+Each pair of blue lines in the code creates two parsers for comparison, and the 
+following pair of red lines (comments inserted into the code after it was run) 
+show the result of using those parser-rules. The <code>choice()</code> method 
+supports <i>Choice</i> nodes, while the <code>sequence()</code> method supports 
+<i>Sequence</i> nodes. 
+</p> 
 
-    <p>
-      This class extends <code>vll.core.SimpleLexingRegexParsers</code>, and adds 
-      all needed finishing touches to the parser framework. 
-    </p>
+<pre><code>import scala.util.parsing.combinator.RegexParsers
+import vll.core.Aggregates
+
+object AggregatesDemo extends RegexParsers with Aggregates {
+  def main(args: Array[String]) {
+    <span style="color: blue; font-weight: bold">def alt = "hello" | "world" | "\\d+".r
+    def alt2 = choice("hello", "world", "\\d+".r)</span>
+    println("alt: " + parseAll(alt*, "hello world 2011"))
+    println("alt2: " + parseAll(alt2*, "hello world 2011"))
+<span style="color: red; font-weight: bold">//    alt: [1.17] parsed: List(hello, world, 2011)
+//    alt2: [1.17] parsed: List((0,hello), (1,world), (2,2011))</span>
+    <span style="color: blue; font-weight: bold">def seq = "hello" ~ "world" ~ "\\d+".r
+    def seq2 = sequence(Triple("hello", false, false), Triple("world", false, false), Triple("\\d+".r, false, false))</span>
+    println("seq: " + parseAll(seq, "hello world 2011"))
+    parseAll(seq2, "hello world 2011").get match {
+      case a: Array[_] => println(a.mkString("seq2: Array(", ", ", ")"))
+    }
+<span style="color: red; font-weight: bold">//    seq: [1.17] parsed: ((hello~world)~2011)
+//    seq2: Array(hello, world, 2011)</span>
+    <span style="color: blue; font-weight: bold">def seq3 = "hello" ~> "world" ~> "\\d+".r
+    def seq4 = sequence(Triple("hello", true, false), Triple("world", true, false), Triple("\\d+".r, false, false))</span>
+    println("seq3: " + parseAll(seq3, "hello world 2011"))
+    parseAll(seq4, "hello world 2011").get match {
+      case a: Array[String] => println(a.mkString("seq4: Array(", ", ", ")"))
+      case x => println("seq4: " + x)
+    }
+<span style="color: red; font-weight: bold">//    seq3: [1.17] parsed: 2011
+//    seq4: 2011</span>
+  }
+}</code></pre>
+
+<p>
+The <code>choice()</code> method takes an arbitrary number of child 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>s 
+as arguments. The <code>sequence()</code> method too, accepts an arbitrary number 
+of child 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>s, 
+but in this case each child <code>Parser</code> has to be accompanied with two boolean 
+flags indicating the status of the <i>drop</i> and <i>commit</i> 
+<a href="EditingTheGrammarTree.html#Annotations" target="_blank">annotations</a> respectively. 
+</p> 
+
+<h2>core.VllParsers</h2>
+
+<p>
+This class extends <code>vll.core.SimpleLexingRegexParsers</code>, and adds 
+all needed finishing touches to the parser framework. 
+</p>
 
     <h3 id="TraceAnnotation">Trace Annotation vs log()</h3>
 

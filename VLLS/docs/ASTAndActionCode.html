@@ -188,8 +188,14 @@
   <i>Sequence</i>.</p>
 
   <p>The parser when tested with the following input: <i>[false, 3.14, "hello"]</i>
-  produces this AST as output: <i>Array([, List(Pair(6, false), Pair(3, 3.14), Pair(2,
-  "hello")), ])</i>.</p>
+  produces this AST as output: 
+  </p>
+
+<pre><code>Array([, <span style="color: red;">List(<span style="color: blue;">Pair(6, false)</span>, <span style="color: blue;">Pair(3, 3.14)</span>, <span style="color: blue;">Pair(2, "hello")</span>)</span>, ])</code></pre>
+
+  <p>The red parts come from the <i>RepSep</i>, while the blue parts come from the <i>Value</i> rule 
+  it uses. 
+  </p>
 
   <h3 id="SequenceNodeWithOneContributingNode">Sequence Node Example with One Contributing Node</h3>
 

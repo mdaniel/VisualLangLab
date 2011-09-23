@@ -1,8 +1,8 @@
 <VLL-Grammar>
   <Tokens>
-    <Regex Name="floatingPointNumber" Pattern="-?(\\d+\\.\\d*|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?"/>
+    <Regex Name="floatingPointNumber" Pattern="-?(\\d+(\\.\\d*)?|(\\d*\\.)?\\d+)([eE][+-]?\\d+|[fFdD]|[eE][+-]?\\d+[fFdD])"/>
     <Regex Name="stringLiteral" Pattern="\&quot;([^\&quot;\\p{Cntrl}\\\\]|\\[\\/bfnrt]|\\\\u[a-fA-F0-9]{4})*\&quot;"/>
-    <Regex Name="decimalNumber" Pattern="\\d+"/>
+    <Regex Name="decimalNumber" Pattern="\\d+\\.\\d*|\\d*\\.\\d+"/>
     <Regex Name="wholeNumber" Pattern="-?\\d+"/>
     <Regex Name="ident" Pattern="[a-zA-Z_]\\w*"/>
   </Tokens>

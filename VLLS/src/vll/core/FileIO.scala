@@ -20,6 +20,7 @@
 
 package vll.core
 
+import java.awt.Cursor
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -27,8 +28,10 @@ import java.io.PrintStream
 import scala.xml.Elem
 import scala.xml.Node
 import scala.xml.NodeSeq
+import javax.swing.JComponent
 import scala.collection.mutable.Set
 import scala.xml.Text
+import vll.gui.VllGui
 
 class FileIO(hub: VllParsers) {
 
@@ -354,21 +357,28 @@ class FileIO(hub: VllParsers) {
   }
 
   def load(grammar: Elem) {
-    hub.wspace = (grammar \ "Whitespace").text
-    hub.comment = (grammar \ "Comments").text
-    hub.tokenBank.clear
-    getTokens(grammar \ "Tokens")
-    getParsers(grammar \ "Parsers")
-    if (hub.ruleBank.size > 1 && hub.ruleBank("Main").isEmpty)
-      hub.ruleBank.remove("Main")
-    missingTokens.clear()
-    missingParsers.clear()
-    refdTokens.filter(!hub.tokenBank.contains(_)).foreach(missingTokens + _)
-    refdParsers.filter(!hub.ruleBank.contains(_)).foreach(missingParsers + _)
-    refdTokens.clear()
-    refdParsers.clear()
-    if (!missingTokens.isEmpty || !missingParsers.isEmpty)
-      throw new IOException("Reference integrity errors exist")
+    try {
+      VllGui.top.setWaitingCursor(true)
+      hub.wspace = (grammar \ "Whitespace").text
+      hub.comment = (grammar \ "Comments").text
+      hub.tokenBank.clear
+      getTokens(grammar \ "Tokens")
+      getParsers(grammar \ "Parsers")
+      if (hub.ruleBank.size > 1 && hub.ruleBank("Main").isEmpty)
+        hub.ruleBank.remove("Main")
+      missingTokens.clear()
+      missingParsers.clear()
+      refdTokens.filter(!hub.tokenBank.contains(_)).foreach(missingTokens + _)
+      refdParsers.filter(!hub.ruleBank.contains(_)).foreach(missingParsers + _)
+      refdTokens.clear()
+      refdParsers.clear()
+      if (!missingTokens.isEmpty || !missingParsers.isEmpty)
+        throw new IOException("Reference integrity errors exist")
+    } catch {
+      case x => throw x
+    } finally {
+      VllGui.top.setWaitingCursor(false)
+    }
   }
 
   private val strMap = Map("0" -> Multiplicity.Not, "1" -> Multiplicity.One,
