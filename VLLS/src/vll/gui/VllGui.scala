@@ -55,6 +55,7 @@ import scala.swing.SimpleSwingApplication
 import scala.swing.SplitPane
 import scala.swing.event.ButtonClicked
 import vll.core.RootNode
+import scala.util.Properties
 import vll.core.Automata
 import vll.core.ScalaEngine
 import vll.core.Utils
@@ -62,10 +63,11 @@ import vll.gui.samples.{ArithExpr, ArithExprWithActionCode, SimpleJSON}
 
 class VllGui extends MainFrame with ActionListener {
 
-   try {
-    UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+  try {
+    if (Properties.osName.matches(".*[wW]indows.*"))
+      UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
   } catch  {
-    case e: Throwable => e.printStackTrace()
+    case e: Throwable => println(e)
   }
 
   def saveChanges() {

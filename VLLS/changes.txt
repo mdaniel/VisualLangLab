@@ -1,3 +1,5 @@
+5.03 24-SEP-2011
+    Fixed VLL-38 (Avoid dumping stack-trace when look&feel setting does not work)
 5.02 23-SEP-2011
     Updated documentation.
 5.01 18-SEP-2011
