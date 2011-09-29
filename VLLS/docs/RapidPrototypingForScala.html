@@ -171,7 +171,7 @@ For reasons explained in <a href="#JavaTokenParsers">JavaTokenParsers</a>
 below, we will modify its definition and implement it as the following rule instead.
 </p>
 
-<pre><code>    def doubleNumber = <strike>floatingPointNumber</strike><u>decimalNumber</u>
+<pre><code>def doubleNumber = <strike>floatingPointNumber</strike><u>decimalNumber</u>
 </code></pre>
 
 <p>
@@ -208,10 +208,10 @@ below. Click the <i>Save</i> button. Observe that this adds the <i>action</i> an
 to the <i>decimalNumber</i> token. 
 </p>
 
-<pre><code>    (a: Any) => a match {
-      case null =>
-      case d: String => d.toDouble
-    }</code></pre>
+<pre><code>(a: Any) => a match {
+  case null =>
+  case d: String => d.toDouble
+}</code></pre>
 
 <p>
 Action-code functions are explained further in <a href="#ActionCode">Action Code</a> below. 
@@ -347,11 +347,11 @@ Finally, add the action-code: select (click) the <i>Sequence</i> icon
 given below into the text area under <i>Action Code</i>. Then click the <i>Save</i> button. 
 </p>
 
-<pre><code>    function (arg) {
-      if (arg !== null) {
-        return VLL.grossAmount * (arg / 100);
-      }
-    }</code></pre>
+<pre><code>function (arg) {
+  if (arg !== null) {
+    return VLL.grossAmount * (arg / 100);
+  }
+}</code></pre>
 
 <p>
 Though different from the original text, this action function is actually functionally 
@@ -390,10 +390,10 @@ Finally, add the action-code by selecting he <i>DAYS</i> icon
 given below into the text area under <i>Action Code</i>. Then click the <i>Save</i> button. 
 </p>
 
-<pre><code>    (a: Any) => a match {
-      case null =>
-      case _ => 1
-    }</code></pre>
+<pre><code>(a: Any) => a match {
+  case null =>
+  case _ => 1
+}</code></pre>
 
 <p>
 Action-code function design and use is explained in <a href="#ActionCode">Action Code</a> below. 
@@ -408,7 +408,7 @@ only to note that, like rule <a href="#DefDoubleNumber">doubleNumber</a> above,
 this rule too will have to be modified to the following definition.
 </p>
 
-<pre><code>    def duration = <strike>decimalNumber</strike><u>wholeNumber</u> ~ weekDays ...</code></pre>
+<pre><code>def duration = <strike>decimalNumber</strike><u>wholeNumber</u> ~ weekDays ...</code></pre>
 
 <p>
 To understand why this is required, read <a href="#JavaTokenParsers">
@@ -574,10 +574,10 @@ given below into the text area under <i>Action Code</i> as in Figure-15 below.
 Click the <i>Save</i> button. 
 </p>
 
-<pre><code>    (a:Any) => a match {
-      case null =>
-      case ld: List[Double] => ld.foldLeft(0.0){_ + _}
-    }</code></pre>
+<pre><code>(a:Any) => a match {
+  case null =>
+  case ld: List[Double] => ld.foldLeft(0.0){_ + _}
+}</code></pre>
 
 <p>
 The action-code function is explained further in <a href="#ActionCode">Action Code</a> below. 

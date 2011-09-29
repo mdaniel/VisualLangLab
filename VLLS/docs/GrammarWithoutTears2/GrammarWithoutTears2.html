@@ -19,6 +19,8 @@
 by <a href="http://today.java.net/pub/au/251">Sanjay Dasgupta</a>
 </p>
 
+  <p style="font-size: larger;">VisualLangLab is "<a href="http://javaposse.com/java-posse-364-newscast-for-sept-24th-2011">Project of the week</a>" on Java Posse for 24th Sept!</p>
+
 <table width="100%" border="1" style="border: 1px solid black;"><tr>
 <td><a href="http://vll.java.net/GrammarWithoutTears2/GrammarWithoutTears2.html">This</a> 
 is a periodically revised version of an 
@@ -26,15 +28,6 @@ is a periodically revised version of an
 These revisions keep the contents compatible with the current version of 
 <a href="http://vll.java.net/">VisualLangLab</a>. 
 A history of the revisions can be seen <a href="#RevisionHistory">here</a>.</td>
-</tr></table>
-
-<br />
-
-<table width="100%" border="1" style="border: 1px solid red;"><tr>
-<td><b>Important:</b> In what appears to be a recent regression, the launch from 
-command line procedure described under <b>Have a Scala Installation</b> is failing. 
-Users are requested to use the procedure described under <b>No Scala Installation</b> 
-temporarily.</td>
 </tr></table>
 
 <p>
@@ -131,22 +124,15 @@ Linux or UNIX users will, of course, have to enable execution (<code>chmod +x ..
 to have it start by double-clicking. 
 </p>
 
-<h4>Have a Scala Installation</h4>
-
-<table width="100%" border="1" style="border: 1px solid red;"><tr>
-<td><b>Important:</b> This procedure is failing in recent releases, please  
-use the procedure described under <i>No Scala Installation</i> above 
-(just double-click 
-<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>) 
-temporarily.</td>
-</tr></table>
+<h4 id="HaveScalaInstallation">Have a Scala Installation</h4>
 
 <p>
 To run VisualLangLab with your installed version of Scala 
 use one of the launchers included in the zip file 
 (<i>vlls.bat</i> for Windows, <i>vlls</i> for Linux).
-Linux or UNIX users will need to enable execution (<code>chmod +x ...</code>) 
-of the launcher script. 
+Under Linux or UNIX users will need to enable execution (<code>chmod +x ...</code>) 
+of the launcher script, and the the SCALA_HOME environment variable must be 
+accessible. 
 </p>
 
 <h3 id="TheGUI">The GUI</h3>
@@ -662,6 +648,8 @@ and will hopefully be a useful addition to any developer's skills.
 </ul>
 
 <table id="RevisionHistory" width="100%" border="1" style="border: 1px solid black;"><tr><th>Revision History</th><tr><td>
+<li>25-SEP-2011 - The procedure for running VisualLangLab under <a href="#HaveScalaInstallation">
+    Have a Scala Installation</a> has been changed to note that SCALA_HOME must be accessible. </li>
 <li>15-SEP-2011 - Changed Figures 2, 4, 5, 7, and 8 to show the new infinite 
     AST depth option. </li>
 <li>02-SEP-2011 - (before publication on java.net): <a href="#Figure10">Figure-10</a> under 

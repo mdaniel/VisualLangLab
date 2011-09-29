@@ -1,3 +1,5 @@
+5.04 25-SEP-2011
+    Fixed VLL-39 (Launcher script (vll) for Linux/UNIX does not work)
 5.03 24-SEP-2011
     Fixed VLL-38 (Avoid dumping stack-trace when look&feel setting does not work)
 5.02 23-SEP-2011
