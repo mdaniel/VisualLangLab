@@ -1,3 +1,7 @@
+5.06 07-OCT-2011
+    Splash image revised
+5.05 30-SEP-2011
+    Documentation update - Revision 206
 5.04 25-SEP-2011
     Fixed VLL-39 (Launcher script (vll) for Linux/UNIX does not work)
 5.03 24-SEP-2011
