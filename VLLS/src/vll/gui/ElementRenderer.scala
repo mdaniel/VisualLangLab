@@ -55,6 +55,7 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
         case _ => guiNode.isValidMessage
       }
       displayName = guiNode.displayName(gui.viewFullNamesMenuItem.selected)
+      description = guiNode.description
       theAnnotations = guiNode.nodeAnnotations(gui.viewShowEpsOkMenuItem.selected)
       multiplicity = guiNode.multiplicity
       theIcon = new ElementIcon(guiNode.pNode, selected)
@@ -120,15 +121,17 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
       case (d, a) => if (isRoot)
         "%s [%s]".format(d, a) else "%s %s [%s]".format(multiplicity, d, a)
     }
-    msg
+    if (guiNode eq null) "" else if(description.isEmpty) msg else 
+      msg + " (%s)".format(if (description.length < 51) description else description.substring(0, 51))
   }
-  override def getForeground() = color //if (ruleValid) Color.black else Color.red
+//  override def getForeground() = color //if (ruleValid) Color.black else Color.red
   var guiNode: GuiNode = null
   var dropped = false
   var theIcon: ElementIcon = null
   var toolTipText = ""
   var theFont: Option[Font] = None
   var displayName = ""
+  var description = ""
   var theAnnotations = ""
   var multiplicity = Multiplicity.One
   var ruleValid = true

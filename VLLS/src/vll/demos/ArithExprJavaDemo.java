@@ -21,61 +21,62 @@
 package vll.demos;
 
 import java.io.File;
-import scala.Tuple2;
-import scala.collection.immutable.List;
-import scala.util.parsing.input.CharSequenceReader;
+import java.util.Iterator;
 import vll.core.VllParsers;
 
 public class ArithExprJavaDemo {
     
+  private static Integer ZERO = new Integer(0);
+  private static Integer ONE = new Integer(1);
+    
   static Float evalFactorAST(Object ast) {
-      Tuple2<Integer, Object> pair = (Tuple2<Integer, Object>) ast;
-      Float result = -1f;
-      if (pair._1 . equals(new Integer(0))) {
-          result =  Float.parseFloat((String)pair._2);
-      } else if (pair._1 . equals(new Integer(1))) {
-          result = evalExprAST(pair._2);
+      Object[] pair = (Object[]) ast;
+      Float factorResult = -1f;
+      if (pair[0].equals(ZERO)) {
+          factorResult =  Float.parseFloat((String)pair[1]);
+      } else if (pair[0].equals(ONE)) {
+          factorResult = evalExprAST(pair[1]);
       }
-      return result;
+      return factorResult;
   }
   
     static Float evalExprAST(Object ast) {
         Object[] arr = (Object[]) ast;
-        Float result = evalTermAST(arr[0]);
-        List<Object> aList = (List<Object>) arr[1];
-        for (int i = 0; i < aList.length(); ++i) {
-           Tuple2<Integer, Object> pair = (Tuple2<Integer, Object>) aList.apply(i);
-          if (pair._1 . equals(new Integer(0))) {
-              result += evalTermAST(pair._2);
-          } else if (pair._1 . equals(new Integer(1))) {
-              result -= evalTermAST(pair._2);
+        Float exprResult = evalTermAST(arr[0]);
+        Iterator<Object> theTerms = (Iterator<Object>) arr[1];
+        while (theTerms.hasNext()) {
+          Object[] pair = (Object[]) theTerms.next();
+          if (pair[0].equals(ZERO)) {
+              exprResult += evalTermAST(pair[1]);
+          } else if (pair[0].equals(ONE)) {
+              exprResult -= evalTermAST(pair[1]);
           }
         }
-      return result;
+      return exprResult;
   }
   
   static Float evalTermAST(Object ast) {
         Object[] arr = (Object[]) ast;
-        Float result = evalFactorAST(arr[0]);
-        List<Object> aList = (List<Object>) arr[1];
-        for (int i = 0; i < aList.length(); ++i) {
-           Tuple2<Integer, Object> pair = (Tuple2<Integer, Object>) aList.apply(i);
-          if (pair._1 . equals(new Integer(0))) {
-              result *= evalFactorAST(pair._2);
-          } else if (pair._1 . equals(new Integer(1))) {
-              result /= evalFactorAST(pair._2);
+        Float termResult = evalFactorAST(arr[0]);
+        Iterator<Object> theFactors = (Iterator<Object>) arr[1];
+        while (theFactors.hasNext()) {
+          Object[] pair = (Object[]) theFactors.next();
+          if (pair[0].equals(ZERO)) {
+              termResult *= evalFactorAST(pair[1]);
+          } else if (pair[0].equals(ONE)) {
+              termResult /= evalFactorAST(pair[1]);
           }
         }
-      return result;
+      return termResult;
   }
   
     public static void main(String[] args) {
         String input = "(3 + 5) * (8 - 4)";
         VllParsers vll = VllParsers.fromFile(new File("ArithExpr.vll"));
-        VllParsers.Parser phraseParser = vll.phrase(vll.getParserFor("Expr"));
-        VllParsers.ParseResult<Object> parseResult = phraseParser.apply(new CharSequenceReader(input));
+        VllParsers.Parser exprParser = vll.getParserFor("Expr");
+        VllParsers.ParseResult<Object> parseResult = vll.parseAll(exprParser, input);
         if (parseResult.successful()) {
-            Object ast = parseResult.get();
+            Object ast = vll.ast4jvm(parseResult.get());
             Float result = evalExprAST(ast);
             System.out.println(result);
         } else {

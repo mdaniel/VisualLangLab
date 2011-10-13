@@ -1,5 +1,5 @@
 /*
- Copyright 2010, Sanjay Dasgupta
+ Copyright 2011, Sanjay Dasgupta
  sanjay.dasgupta@gmail.com
 
  This file is part of VisualLangLab (http://vll.java.net/).
@@ -21,12 +21,14 @@
 package vll.core
 
 import scala.collection._
+import JavaConversions._
+import java.util.{Collection => JavaCollection, Iterator => JavaIterator}
 import scala.util.parsing.combinator.Parsers
 
 trait Aggregates {
   self: Parsers =>
 
-   protected def choice(errMsg: Option[String], ps: Parser[_]*): Parser[_] = {
+  protected def choice(errMsg: Option[String], ps: Parser[_]*): Parser[_] = {
     ps.zipWithIndex.map(tup => (tup._1) ^^ (res => Pair(tup._2, res))).reduceLeft(_ | _)
   }
 
@@ -35,18 +37,12 @@ trait Aggregates {
   }
 
   private def tilde2array(t: Any): Any = {
-    def add(t: ~[_, _], buf: mutable.ArrayBuffer[Any]) {
-      val a ~ b = t
-      a match {
-        case tt: ~[_, _] => add(tt, buf)
-        case _ => buf.append(a)
-      }
-      buf.append(b)
+    def makeArray(size: Int, obj: Any): Array[Any] = obj match {
+      case ~(a, b) => val arr = makeArray(size + 1, a); arr(arr.length - size) = b; arr
+      case _ => val arr = new Array[Any](size); arr(0) = obj; arr
     }
     t match {
-      case x: ~[_, _] => val aBuf = new mutable.ArrayBuffer[Any]()
-        add(x, aBuf)
-        aBuf.toArray
+      case ~(_, _) => makeArray(1, t)
       case _ => t
     }
   }
@@ -65,4 +61,19 @@ trait Aggregates {
       })._1 ^^ tilde2array
   }
   
+  def ast4jvm(tree: Any): Object = {
+    val rv = tree match {
+      case a: Array[_] => a.map(ast4jvm).toArray // Sequence
+      case p: Pair[Int, _] => Array[Any](p._1, ast4jvm(p._2)) // Choice
+      case None => Array[Any]() // mult = ?
+      case Some(s) => Array[Any](ast4jvm(s)) // mult = ?
+      case lst: List[_] => val iterator: JavaIterator[_] = lst.map(ast4jvm).iterator // repsep, rep1sep, and mult = *, +
+        iterator
+      case s: String => s // Literal and Regex
+      case null => null
+      case r: AnyRef => r // something produced by action-code
+    }
+    rv
+  }
+
 }

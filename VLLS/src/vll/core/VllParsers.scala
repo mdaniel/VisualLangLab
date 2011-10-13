@@ -32,13 +32,16 @@ import scala.xml.{Elem => XMLElem}
 import vll.gui.VllGui
 import vll.gui.VllGui._
 
-class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggregates {
+class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratParsers with Aggregates {
 
   override type Elem = Char
   
-  def load(f: File) {fileIo.load(XML.loadFile(f))}
-  def load(s: String) {fileIo.load(XML.loadString(s))}
-  def load(x: XMLElem) = {fileIo.load(x)}
+  def load(f: File) {load(XML.loadFile(f))}
+  private def load(s: String) {load(XML.loadString(s))}
+  def load(x: XMLElem) = {
+    try {if (gui ne null) VllGui.top.setWaitingCursor(true); fileIo.load(x)} 
+    finally {if (gui ne null) VllGui.top.setWaitingCursor(false)}
+  }
   def exportTokens(f: File) = {fileIo.exportTokens(f)}
   def importTokens(f: File) = {fileIo.importTokens(XML.loadFile(f))}
   def importTokens(s: String) = {fileIo.importTokens(XML.loadString(s))}
@@ -311,18 +314,23 @@ class VllParsers extends SimpleLexingRegexParsers with PackratParsers with Aggre
 object VllParsers {
   type Parser[T] = VllParsers#Parser[T]
   type ActionType = Function6[CharSequence,TextComponent,TextComponent,Int,Int,Any,Any]
-  def fromFile(f: File): VllParsers = {
-    val rv = new VllParsers
+  def fromFile(f: File, gui: VllGui): VllParsers = {
+    val rv = new VllParsers(gui)
     rv.load(f)
     rv
   }
-  def fromString(s: String): VllParsers = {
-    val rv = new VllParsers
+  def fromFile(f: File): VllParsers = {
+    val rv = new VllParsers(null)
+    rv.load(f)
+    rv
+  }
+  def fromString(s: String, gui: VllGui = null): VllParsers = {
+    val rv = new VllParsers(gui)
     rv.load(s)
     rv
   }
-  def fromXml(xml: XMLElem): VllParsers = {
-    val rv = new VllParsers
+  def fromXml(xml: XMLElem, gui: VllGui = null): VllParsers = {
+    val rv = new VllParsers(gui)
     rv.load(xml)
     rv
   }

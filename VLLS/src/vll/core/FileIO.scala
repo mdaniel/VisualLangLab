@@ -358,7 +358,6 @@ class FileIO(hub: VllParsers) {
 
   def load(grammar: Elem) {
     try {
-      VllGui.top.setWaitingCursor(true)
       hub.wspace = (grammar \ "Whitespace").text
       hub.comment = (grammar \ "Comments").text
       hub.tokenBank.clear
@@ -376,8 +375,6 @@ class FileIO(hub: VllParsers) {
         throw new IOException("Reference integrity errors exist")
     } catch {
       case x => throw x
-    } finally {
-      VllGui.top.setWaitingCursor(false)
     }
   }
 

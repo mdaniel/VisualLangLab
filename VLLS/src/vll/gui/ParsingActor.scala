@@ -30,7 +30,7 @@ import scala.util.parsing.input.CharSequenceReader
 import vll.core.Utils
 import vll.core.VllParsers
 
-class ParsingActor(gui: VllGui) extends VllParsers with DaemonActor {
+class ParsingActor(gui: VllGui) extends VllParsers(gui) with DaemonActor {
 //  gui.globalFlattenTilde.selected = flattenNestedTilde
   super[DaemonActor].start()
 
