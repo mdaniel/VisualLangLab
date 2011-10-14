@@ -64,7 +64,7 @@
         <Reference Ref="Expr" ActionText="function (a) {&#xA;  if (a) {&#xA;    // AFTER code - test the result&#xA;    if (a == 9) {&#xA;      println(&quot;Ok&quot;);&#xA;    } else {&#xA;      println(&quot;ERROR: &quot; + a);&#xA;    }&#xA;  } &#xA;}"/>
     </Parser>
     <Parser Name="ExprTest">
-        <Sequence ActionText="function (a) {&#xA;  if (!a) {&#xA;    ParserTestInput.setText(&quot;81 / 9\n12 -  4\n7 * 3\n3 + 4&quot;);&#xA;  }&#xA;}">
+        <Sequence ActionText="function (a) {&#xA;  if (!a) {&#xA;    vllParserTestInput.setText(&quot;81 / 9\n12 -  4\n7 * 3\n3 + 4&quot;);&#xA;  }&#xA;}">
           <Reference Ref="ExprTestDiv" />
           <Reference Ref="ExprTestMinus" />
           <Reference Ref="ExprTestMult" />

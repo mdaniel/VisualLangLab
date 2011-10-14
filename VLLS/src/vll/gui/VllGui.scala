@@ -410,14 +410,17 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   def createNewToken(isRegex: Boolean) {
-    val pattern = """([a-zA-Z_][a-zA-Z_0-9]*)\s*,\s*(\S.*)""".r
-    val msg = "Enter name, comma, " + (if (isRegex) "pattern" else "pattern")
+    val pattern = if (isRegex)
+      """([a-zA-Z_][a-zA-Z_0-9]*~\d+|[a-zA-Z_][a-zA-Z_0-9]*)\s*,\s*(\S.*)""".r
+    else
+      """([a-zA-Z_][a-zA-Z_0-9]*)\s*,\s*(\S.*)""".r
+    val msg = "Enter name, comma, " + (if (isRegex) "regex" else "literal") + " pattern"
     Dialog.showInput(splitPane, msg, "New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Question, null, Array[String](), null) match {
       case Some(tokenInfo) =>
         tokenInfo.trim match {
-          case pattern(name, value) => validateAndAssignTokenValue(true, isRegex, name, value)
+          case pattern(name, value) if isRegex => validateAndAssignTokenValue(true, isRegex, name, value)
           case _ =>
-            Dialog.showMessage(splitPane, "Bad input. Expected name, comma, regex/literal", 
+            Dialog.showMessage(splitPane, "Bad input. Expected name, comma, regex/literal pattern", 
                 "ERROR - New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Error, null)
         }
       case None =>

@@ -27,17 +27,17 @@ import scala.swing.Swing
 
 class ElementIcon(val node: RuleTreeNode, val selected: Boolean) extends javax.swing.Icon {
 
-  def image = /* swing. */Swing.Icon(getClass.getResource("images/" +
+  lazy val image = if ((node eq null) || !ElementIcon.iconImageName.contains(node.getClass.getSimpleName)) 
+    null 
+  else 
+    Swing.Icon(getClass.getResource("images/" + 
       ElementIcon.iconImageName(node.getClass.getSimpleName))).getImage
-  //def image = node.image
 
-  lazy val getIconHeight = image.getHeight(null)
-  lazy val getIconWidth = image.getWidth(null)
+  lazy val getIconHeight = if (image eq null) 0 else image.getHeight(null)
+  lazy val getIconWidth = if (image eq null) 0 else image.getWidth(null)
   
-  //printf("ElementIcon: %s, Node: %s, image: %s\n", this, node, image)
   def paintIcon(c: Component, g: Graphics, x: Int, y: Int ) {
-    g.drawImage(image, 0, 0, null)
-    //g.drawImage(image, x, y, null)
+    if (image ne null) g.drawImage(image, 0, 0, null)
   }
 }
 

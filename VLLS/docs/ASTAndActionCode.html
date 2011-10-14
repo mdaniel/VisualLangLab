@@ -64,6 +64,19 @@
   <code>Any</code> (to permit unconstrained nesting). The examples in the following
   sections illustrate this concept.</p>
 
+  <h3 id="JVMLanguageASTView">JVM Language AST View</h3>
+
+  <p>Starting with release 6.01, the <a href="UsingTheAPI.html">VisualLangLab API</a> 
+  has added features to facilitate use from JVM languages other than Scala. 
+  The API is no longer awkward to use, 
+  and is now equally usable from <i>all</i> JVM languages. 
+  Descriptions of the AST structure below have been augmented with the AST view 
+  for JVM languages - look for the <span style="color: red; font-weight: bold">New in 6.01+ API:</span> 
+  tag. </p>
+
+  <p>The AST structure seen by <a href="#ActionCodeDesign">action-code functions</a>, 
+  however, remains unchanged.</p>
+
   <h2 id="ASTStructure">AST Structure</h2>
 
   <p>The structure of an AST for any particular grammar-tree is determined by the
@@ -85,10 +98,14 @@
 
     <li>A <i>Choice</i> contributes a <code>Pair[Int,Any]</code> where the first member
     is the (0-based) index of the matching alternative, and the second member is the
-    value contributed by the matched alternative</li>
+    value contributed by the matched alternative. 
+    <span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
+    (other than Scala) see an <code>Array[Object]</code> containing the same 
+    two members (boxed as required)</li>
 
     <li>A <i>RepSep</i> contributes a <code>List[Any]</code> containing all the matched
-    items</li>
+    items. <span style="color: red; font-weight: bold">New in 6.01+ API:</span> 
+    JVM languages (other than Scala) see a <code>java.util.Iterator</code></li>
   </ul>
 
   <p>Additionally, certain annotations cause the structure defined above to be modified
@@ -98,11 +115,16 @@
     <li>A node with multiplicity <i>?</i> (0 or 1) contributes an
     <code>Option[Any]</code>. A <code>None</code> is returned if the expected item was
     not found in the input, and a <code>Some[Any]</code> is returned if the item was
-    present</li>
+    present. <span style="color: red; font-weight: bold">New in 6.01+ API:</span> 
+    JVM languages (other than Scala) see an <code>Array[Object]</code> of 
+    one element which is set to <code>null</code> if the item was not present </li>
 
     <li>A node with a multiplicity <i>*</i> (0-or-more) or <i>+</i> (1-or-more) wraps the
     underlying values into a <code>List[Any]</code>. A <code>Nil</code> is returned if
-    the multiplicity is <i>*</i>, and no matching elements were found in the input</li>
+    the multiplicity is <i>*</i>, and no matching elements were found in the input.
+    <span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
+    (other than Scala) see a <code>java.util.Iterator</code> that 
+    may be empty </li>
 
     <li>A node with multiplicity <i>0</i> (<i>not</i>) or <i>=</i> (<i>guard</i>)
     contributes nothing to the AST</li>
@@ -156,6 +178,8 @@
   clicking on the corresponding toolbar button (<img src=
   "images/ToolBarButtonParseInput.gif" align="center" />).</p>
 
+  <p>JVM languages (other than Scala) see the same view.</p>
+
   <h3 id="ChoiceNodeExample">Choice Node Example</h3>
 
   <p>The grammar-tree in Figure-2 below illustrates the AST of a <i>Choice</i> node.</p>
@@ -174,6 +198,10 @@
   <code>Pair(3, 3.14)</code> (last line under <i>Parser Log</i>). The first member of the
   <code>Pair</code> in this example (the value <i>3</i>) is the 0-based index of the
   matching alternative (the Regex node <i>floatingPointNumber</i>).</p>
+
+  <p><span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
+  (other than Scala) see an <code>Array[Object]</code> (instead of a 
+    <code>Pair[Int,Any]</code>) containing the same two members (boxed as required).</p>
 
   <h3 id="RepSepNodeExample">RepSep Node Example</h3>
 
@@ -196,6 +224,10 @@
   <p>The red parts come from the <i>RepSep</i>, while the blue parts come from the <i>Value</i> rule 
   it uses. 
   </p>
+
+  <p><span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
+    (other than Scala) see a <code>java.util.Iterator[Object]</code> instead of a 
+    <code>List[Any]</code>.</p>
 
   <h3 id="SequenceNodeWithOneContributingNode">Sequence Node Example with One Contributing Node</h3>
 

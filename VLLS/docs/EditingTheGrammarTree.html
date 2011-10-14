@@ -122,7 +122,7 @@
 
     <p>
       The second annotation is the <i>name</i> of the entity. The value displayed depends on the 
-      type of the node as described below.
+      type of the node as described below. (The remaining icon types do not have a <i>name</i>)
     </p>
 
     <ul style="list-style-type: disc;">
@@ -130,14 +130,16 @@
       <li>Literal - the name of the literal token</li>
       <li>Regexp - the name of the regular-expression token</li>
       <li>Reference - the name of referred-to parser-rule</li>
+<!--
       <li>Choice - the description (see below) if defined, null otherwise</li>
       <li>Sequence - the description (see below) if defined, null otherwise</li>
       <li>RepSep - the description (see below) if defined, null otherwise</li>
       <li>Semantic predicate - the description (see below) if defined, null otherwise</li>
+-->
     </ul>
 
     <p>
-      All icons have at least the two annotations described above. All other annotations, 
+      All other annotations, 
       described below, are optional. If any of the optional annotations are present, they are 
       enclosed within square brackets.
     </p>
@@ -155,6 +157,10 @@
           (applicable only to a root-node)</li>
       <li>trace - the parser's use of the node will be logged at run-time</li>
     </ul>
+
+    <p>
+      Finally, if the node has a <i>description</i>, it is displayed last within parenthesis.
+    </p>
 
     <h2 id="CreatingNewParserRule">Creating a new Parser-Rule (and Grammar-Tree)</h2>
 
@@ -379,6 +385,27 @@
       either globally scoped or privately scoped (see below).
     </p>
 
+    <h3 id="RegexTokenDisambiguation">Regex Token Disambiguation</h3>
+
+    <p>
+      Two or more <i>Regex</i> tokens will sometimes match the same bit of input. 
+      You can assign a <i>priority</i> value to enable disambiguation of such tokens. 
+      To assign a priority to a <i>Regex</i> token append a tilde (~) and a number 
+      to the token's name as in Figure-9 below.
+    </p>
+
+    <p>
+      <img src="images\RegexPriority.png"/><br/>
+      <i>Figure-9. Regex token with priority</i>
+    </p>
+
+    <p>
+      When two or more tokens match the same input, the lexer favors the token with 
+      the numerically highest priority. A token without an explicitly 
+      defined priority has a priority of 0. Only <i>Regex</i> tokens can have 
+      a priority value. 
+    </p>
+
     <h3 id="ModifyingTokenPatterns">Modifying Token Patterns</h3>
 
     <p>
@@ -432,17 +459,14 @@
     </p>
 
     <p>
-      All <i>Literal</i> nodes effectively define reserved symbols (or <i>keywords</i>), 
-      and take precedence over tokens defined using <i>Regex</i> nodes. The precedence of 
-      a conflicting reserved symbol can be temporirily suspended (to allow a keyword 
-      to be used as a normal name in a limited context, for example) by using the escaping 
-      mechanism described in the following paragraph. 
+      All <i>Literal</i> tokens are effectively <i>reserved symbols</i> (or <i>keywords</i>), 
+      and take precedence over <i>Regex</i> tokens.  
     </p>
 
     <p>
       All tokens exist in a single global scope, and VisualLangLab does not support scoped 
       tokens. However most scoping needs can be served by a rudimentary, 
-      sledgehammer-strength  mechanism as follows: Ending a token's name with an underscore 
+      sledgehammer-strength  mechanism: Ending a token's name with an underscore 
       (_) places it in its own private scope. When the parser tests for such a token, the 
       lexer does not come into play, so other token definitions (in the global scope) are 
       not considered.

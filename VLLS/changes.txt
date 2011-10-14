@@ -1,3 +1,13 @@
+6.02 14-OCT-2011 
+    Fixed VLL-44 (Provide 'priority' for regex-tokens to enable disambiguation)
+    - Documentation updated accordingly 
+    Fixed VLL-45 (De-iconify exception)
+6.01 11-OCT-2011 
+    VLL-40 (API should be usable from all JVM-Languages) addressed:
+    - Added API function to produce AST with only JVM types
+    - Changed documentation for AST-Structure and API-Usage. 
+    - Added examples for Java and Clojure
+    Fixed VLL-41 (JTree selection color should be lighter)
 5.06 07-OCT-2011
     Splash image revised
 5.05 30-SEP-2011

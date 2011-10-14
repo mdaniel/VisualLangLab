@@ -77,11 +77,15 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
   }
   
   def getParserFor(parserName: String): Parser[_] = {
+    def tsc(a: String, b: String): Boolean = {
+      def prio(i: String) = if (i contains '~') i.reverse.takeWhile(_.isDigit).reverse.toInt else 0
+      prio(a) > prio(b)
+    }
     super.reset()
     globalTokenParserTime = 0
     val (lits, regs) = tokenBank.toArray.filterNot(_._1.endsWith("_")).partition(_._2.isInstanceOf[Left[_,_]])
     lits.foreach(p => literal(Utils.unEscape(p._2.left.get)))
-    regs.foreach(p => regex(Utils.unEscape(p._2.right.get).r))
+    regs.sortWith((a, b) => tsc(a._1, b._1)).foreach(p => regex(Utils.unEscape(p._2.right.get).r))
     tokenParserCache.clear()
     var theParser: Parser[_] = null
     try {
