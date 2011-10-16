@@ -418,7 +418,7 @@ class VllGui extends MainFrame with ActionListener {
     Dialog.showInput(splitPane, msg, "New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Question, null, Array[String](), null) match {
       case Some(tokenInfo) =>
         tokenInfo.trim match {
-          case pattern(name, value) if isRegex => validateAndAssignTokenValue(true, isRegex, name, value)
+          case pattern(name, value) => validateAndAssignTokenValue(true, isRegex, name, value)
           case _ =>
             Dialog.showMessage(splitPane, "Bad input. Expected name, comma, regex/literal pattern", 
                 "ERROR - New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Error, null)

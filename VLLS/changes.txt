@@ -1,3 +1,7 @@
+6.03 16-OCT-2011 
+    Fixed VLL-47 (Literal token creation fails with "Bad input. 
+      Expected name, comma, regex/literal pattern")
+    Also fixed corrupted Linux/UNIX launcher script (vlls). 
 6.02 14-OCT-2011 
     Fixed VLL-44 (Provide 'priority' for regex-tokens to enable disambiguation)
     - Documentation updated accordingly 
