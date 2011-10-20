@@ -5,32 +5,33 @@
     <Literal Name="IS" Pattern="is"/>
     <Literal Name="IN" Pattern="in"/>
     <Literal Name="PERCENT" Pattern="percent"/>
-    <Regex Name="floatingPointNumber" Pattern="-?(\\d+(\\.\\d*)?|(\\d*\\.)?\\d+)([eE][+-]?\\d+|[fFdD]|[eE][+-]?\\d+[fFdD])"/>
+    <Regex Name="stringLiteral_" Pattern="\&quot;([^\&quot;\\p{Cntrl}\\\\]|\\[\\/bfnrt]|\\\\u[a-fA-F0-9]{4})*\&quot;"/>
+    <Regex Name="floatingPointNumber_" Pattern="-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?"/>
     <Literal Name="FOR" Pattern="for"/>
     <Literal Name="INSURANCE" Pattern="insurance"/>
     <Literal Name="RETIREMENT" Pattern="retirement"/>
     <Literal Name="TAX" Pattern="tax"/>
     <Literal Name="INCOME" Pattern="income"/>
     <Literal Name="CONTRIBUTIONS" Pattern="contributions"/>
-    <Regex Name="stringLiteral" Pattern="\&quot;([^\&quot;\\p{Cntrl}\\\\]|\\[\\/bfnrt]|\\\\u[a-fA-F0-9]{4})*\&quot;"/>
-    <Literal Name="DEDUCTIONS" Pattern="deductions"/>
     <Literal Name="SALARY" Pattern="salary"/>
     <Literal Name="FUND" Pattern="fund"/>
+    <Literal Name="DEDUCTIONS" Pattern="deductions"/>
     <Regex Name="DAYS" Pattern="days?"/>
-    <Regex Name="decimalNumber" Pattern="\\d+\\.\\d*|\\d*\\.\\d+"/>
     <Literal Name="PAYCHECK" Pattern="paycheck"/>
     <Literal Name="ARE" Pattern="are"/>
     <Literal Name="GROSS" Pattern="gross"/>
     <Literal Name="COMMA" Pattern=","/>
     <Literal Name="STATE" Pattern="state"/>
-    <Regex Name="wholeNumber" Pattern="-?\\d+"/>
     <Literal Name="OF" Pattern="of"/>
     <Literal Name="EMPLOYEE" Pattern="employee"/>
     <Literal Name="MINUS" Pattern="minus"/>
     <Regex Name="WEEKS" Pattern="weeks?"/>
+    <Regex Name="wholeNumber_" Pattern="-?\\d+"/>
     <Literal Name="FEDERAL" Pattern="federal"/>
     <Literal Name="LCURLY" Pattern="{"/>
     <Literal Name="RCURLY" Pattern="}"/>
+    <Regex Name="decimalNumber_" Pattern="(\\d+(\\.\\d*)?|\\d*\\.\\d+)"/>
+    <Regex Name="ident_" Pattern="[a-zA-Z_]\\w*"/>
     <Literal Name="CURRENCY" Pattern="currency"/>
     <Literal Name="PREMIUMS" Pattern="premiums"/>
   </Tokens>
@@ -44,7 +45,7 @@
         </Sequence>
     </Parser>
     <Parser Name="employeeName">
-        <Token Ref="stringLiteral" ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt; &#xA;  case n: String =&gt; n.substring(1, n.length - 1)&#xA;}"/>
+        <Token Ref="stringLiteral_" ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt; &#xA;  case n: String =&gt; n.substring(1, n.length - 1)&#xA;}"/>
     </Parser>
     <Parser Name="empl">
         <Sequence >
@@ -55,7 +56,7 @@
         </Sequence>
     </Parser>
     <Parser Name="doubleNumber">
-        <Token Ref="decimalNumber" ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt;&#xA;  case d: String =&gt; d.toDouble&#xA;}"/>
+        <Token Ref="floatingPointNumber_" ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt;&#xA;  case d: String =&gt; d.toDouble&#xA;}"/>
     </Parser>
     <Parser Name="tax">
         <Sequence >
@@ -73,7 +74,7 @@
     </Parser>
     <Parser Name="duration">
         <Sequence ActionText="(a: Any) =&gt; a match {&#xA;  case null =&gt;&#xA;  case Array(n: String, factor: Int) =&gt; n.toInt * factor&#xA;}">
-          <Token Ref="wholeNumber" />
+          <Token Ref="decimalNumber_" />
           <Reference Ref="weekDays" />
         </Sequence>
     </Parser>

@@ -94,8 +94,8 @@ VisualLangLab - Grammar without Tears</a>.
 <p>
 To run <a href="http://vll.java.net/">VisualLangLab</a>, just download 
 <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar" target="_blank">VLLS-All.jar</a> 
-and double-click it in a file-browser. Linux and UNIX users will have to enable execution 
-(<i>chmod +x ...</i>) first. 
+and double-click it in a file-browser. Linux, Mac OS, and UNIX users will have to enable execution first 
+(<i>chmod +x VisualLangLab.jar</i>). 
 Another file, <a href="http://java.net/projects/vll/downloads/download/VLLS.jar" target="_blank">VLLS.zip</a>, 
 which contains the documentation files, sample grammars, etc. should also be downloaded.
 </p>
@@ -159,22 +159,15 @@ by importing the corresponding <i>token library</i>.
 Select <i>Tokens -> Import tokens</i> from the main menu, or click the <i>Import tokens</i> 
 (<img src="images/Import16.gif" align="center"/>) button, and choose the file 
 <i>TL-JavaTokenParsers.vll</i> from the the <i>grammars</i> directory of the zip distribution. 
-This token-library contains <i>regex</i> and <i>literal</i> tokens with the same 
-names and functionality as the parsers in <code>JavaTokenParsers</code>. 
+This token-library contains <i>regex</i> tokens with the same names and functionality. 
+However, for reasons explained in <a href="#JavaTokenParsers">JavaTokenParsers</a> 
+below, all the names have an underscore (_) suffix. 
 </p>
 
 <h3 id="DefDoubleNumber">def doubleNumber = floatingPointNumber ...</h3>
 
 <p>
 This is a very simple parser-rule, and just matches one token unconditionally. 
-For reasons explained in <a href="#JavaTokenParsers">JavaTokenParsers</a> 
-below, we will modify its definition and implement it as the following rule instead.
-</p>
-
-<pre><code>def doubleNumber = <strike>floatingPointNumber</strike><u>decimalNumber</u>
-</code></pre>
-
-<p>
 To create the new rule click the <i>New rule</i> button 
 (<img src="images/NewReference.gif" align="center"/>), 
 and enter <i>doubleNumber</i> into the dialog box presented as in Figure-3 below. 
@@ -191,7 +184,7 @@ Clicking the dialog's <i>OK</i> button creates a new rule with just a
 Now right-click the Root node, and select <i>Add -> Token</i> from the popup 
 context-menu. Another dialog with the names of available tokens is presented 
 as shown on the left side of Figure-4 below. 
-Select <i>decimalNumber</i> and click the <i>OK</i> button. Your almost-complete 
+Select <i>decimalNumber_</i> and click the <i>OK</i> button. Your almost-complete 
 parser-rule should look like the right side of Figure-4 below. 
 </p>
 
@@ -398,21 +391,6 @@ given below into the text area under <i>Action Code</i>. Then click the <i>Save<
 <p>
 Action-code function design and use is explained in <a href="#ActionCode">Action Code</a> below. 
 Your finished parser-rule should look like the one on the right side of Figure-9 above. 
-</p>
-
-<h3 id="DefDuration">def duration = decimalNumber ~ weekDays ...</h3>
-
-<p>
-There is nothing new to describe in the structure of this rule, but it is included here 
-only to note that, like rule <a href="#DefDoubleNumber">doubleNumber</a> above, 
-this rule too will have to be modified to the following definition.
-</p>
-
-<pre><code>def duration = <strike>decimalNumber</strike><u>wholeNumber</u> ~ weekDays ...</code></pre>
-
-<p>
-To understand why this is required, read <a href="#JavaTokenParsers">
-JavaTokenParsers</a> below.
 </p>
 
 <h2 id="AdHocTesting">Ad Hoc Testing - A Short Detour</h2>
@@ -1127,29 +1105,19 @@ Many example parsers in tutorials and other resources extend
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" target="_blank">
 JavaTokenParsers</a>, so VisualLangLab provides a token library in it's place. 
 Those planning to use this token library should, however, note that the tokens defined in 
-it have somewhat different properties from the parsers in 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" target="_blank">
-JavaTokenParsers</a>. The differences are noted below:
+it have names ending in an underscore (_). Ending the name of a token in an underscore causes 
+VisualLangLab's built-in lexer to be bypassed, in favor of the 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" target="_blank">RegexParsers</a> 
+capability. 
 </p>
 
-<ul style="list-style-type: disc;">
-  <li><code>wholeNumber</code> - matches a string consisting of one or more decimal digits 
-      ('0' through '9') optionally prefixed with a minus sign ('-').</li>
-  <li><code>decimalNumber</code> - matches a string of one or more decimal digits also containing 
-      a single decimal point ('.')</li>
-  <li><code>floatingPointNumber</code> - matches a string of decimal digits optionally containing 
-      a decimal point, and mandatorily followed by either an exponent part or a float/double indicator 
-      or both. An optional minus sign ('-') may also be prefixed to the whole string.</li>
-</ul>
-
 <p>
-These changes are required because this version of the lexer works best when the regex 
+This change is required because the builtin lexer works best when the regex 
 definitions are distinct, and multiple regex tokens will not match the same lexeme. 
-The regular expressions used in 
+But the regular expressions used in 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" target="_blank">
 JavaTokenParsers</a> are such that <code>floatingPointNumber</code> subsumes both <code>decimalNumber</code> 
 and <code>wholeNumber</code>, and <code>decimalNumber</code> itself subsumes <code>wholeNumber</code>. 
-This lexer limitation is expected to be removed in verion 6.xx. 
 </p>
 
 <h2 id="ProsAndCons">Pros and Cons</h2>
@@ -1216,11 +1184,15 @@ a hand-written parser based on Scala parser combinators.
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr bgcolor="#dddddd">
-    <td style="padding: 2px">The AST is defined using common types from the Scala API, so no specialized knowledge is needed</td>
+    <td style="padding: 2px">The AST is defined using common types from the Scala API, so no specialized 
+        knowledge is needed when using AST from Scala. Programs in other JVM languages can obtain a 
+        version of the AST constructed from JVM types only (release 6.01+). </td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr bgcolor="#dddddd">
-    <td style="padding: 2px">All elements in the AST are amenable to Scala pattern matching, so AST processing is simple</td>
+    <td style="padding: 2px">All elements in the AST are amenable to Scala pattern matching, 
+        so AST processing is simple. Programs in other JVM languages have to deal with a mutually 
+        nested structure of arrays and lists. </td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
 
@@ -1242,7 +1214,9 @@ a hand-written parser based on Scala parser combinators.
   </tr>
   <tr>
     <td style="text-align: center; padding: 2px">-</td>
-    <td style="padding: 2px">Lexical context of the parser is not available to action code</td>
+    <td style="padding: 2px">Lexical context of the parser is not available to action code. 
+        However, since this restricts the action-code to its own <i>sand-box</i> it can be 
+        seen as an an advantage too. </td>
   </tr>
 
   <tr bgcolor="#dddddd">
@@ -1271,14 +1245,12 @@ a hand-written parser based on Scala parser combinators.
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
-    <td style="padding: 2px">API usable from any JVM language. However lack of 
-        Scala's pattern-matching capability may make the code 
-        awkward</td>
+    <td style="padding: 2px">API usable from any JVM language (release 6.01+)</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
     <td style="padding: 2px">Parser does not have to be compiled or linked into host program.
-        The parser can even be modified without affecting the host program 
+        The parser can even be modified separately without affecting the host program 
         (provided the AST structure is not changed)</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
@@ -1294,7 +1266,8 @@ a hand-written parser based on Scala parser combinators.
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr bgcolor="#dddddd">
-    <td style="padding: 2px">Test drivers for black-box testing are easily created and run withing the IDE</td>
+    <td style="padding: 2px">Test drivers for black-box testing are easily created and run within 
+        the IDE</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr bgcolor="#dddddd">

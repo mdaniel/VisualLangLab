@@ -67,24 +67,32 @@
 
     <table border="1" style="border: 1px solid black;">
       <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Non-terminals</b></td></tr>
-      <tr><td><img src="images/GrammarIconRoot.gif"/></td><td>Root - this icon is used for the root 
-          node of every grammar tree (as in Figure-1 above)</td></tr>
-      <tr><td><img src="images/GrammarIconChoice.gif"/></td><td>Choice - used as the parent of a group 
-          of alternative items (any one of which should occur in the input)</td></tr>
-      <tr><td><img src="images/GrammarIconSequence.gif"/></td><td>Sequence - used as the parent of a 
-          sequence of items all of which should occur in the order specified</td></tr>
-      <tr><td><img src="images/GrammarIconRepSep.gif"/></td><td>RepSep - placeholder for a sequence 
-          of items (first child node) separated by the designated separator (second child node)</td></tr>
       <tr><td><img src="images/GrammarIconReference.gif"/></td><td>Reference - invokes another 
           named parser</td></tr>
-      <tr><td><img src="images/GrammarIconSemPred.gif"/></td><td>Semantic predicate - 
-          makes a parser-rule succeed or fail depending on the run-time value of a 
-          user-provided expression</td></tr>
+      <tr><td colspan="2"  style="text-align: center; font-weight: bold;">
+          <b>Internal Nodes (Combinator Functions)</b></td></tr>
+      <tr><td><img src="images/GrammarIconChoice.gif"/></td><td>Choice (or <i>Alternation</i>) - 
+          parent node of 2 or more alternatives of which any one occurs in the input</td></tr>
+      <tr><td><img src="images/GrammarIconSequence.gif"/></td><td>Sequence (or <i>Concatenation</i>) - 
+          parent node of 2 or more items which should occur in the order specified</td></tr>
+      <tr><td><img src="images/GrammarIconRepSep.gif"/></td><td>RepSep - placeholder for a sequence 
+          of items (specified by first child) alternating with instances of a separator 
+          (specified by second child). For details, see descriptions of the 
+          <code>repsep()</code> and <code>rep1sep()</code> combinators in the Scala API's 
+          <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> class. 
+          Depending on the multiplicity setting (either "*" or "+"), a <i>RepSep</i> behaves like a 
+          <code>repsep()</code> or a <code>rep1sep()</code> respectively. </td></tr>
       <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Terminals</b></td></tr>
-      <tr><td><img src="images/GrammarIconLiteral.gif"/></td><td>Literal - a token that matches a 
-          specified pattern literally</td></tr>
-      <tr><td><img src="images/GrammarIconRegex.gif"/></td><td>Regexp - a token that matches a 
-          specified regular-expression</td></tr>
+      <tr><td><img src="images/GrammarIconLiteral.gif"/></td><td>Literal (or <i>keyword</i> / 
+          <i>reserved word</i>) - a token that matches a specified pattern literally</td></tr>
+      <tr><td><img src="images/GrammarIconRegex.gif"/></td><td>Regexp (vanilla <i>token</i>) - 
+          a token that matches a specified regular-expression</td></tr>
+      <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Others</b></td></tr>
+      <tr><td><img src="images/GrammarIconRoot.gif"/></td><td>Root - this icon is used for the root 
+          node of every grammar tree (as in Figure-1 above)</td></tr>
+      <tr><td><img src="images/GrammarIconSemPred.gif"/></td><td>Semantic predicate - 
+          used as a child of a <i>Sequence</i>, succeeds or fails depending on the run-time value of a 
+          user-provided expression</td></tr>
       <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Icon overlays</b></td></tr>
       <tr><td><img src="images/GrammarIconCommitMark.gif"/></td><td>Commit - displayed on top 
           of a parser-rule node that has the <i>commit</i> annotation</td></tr>

@@ -328,8 +328,13 @@ object VllParsers {
     rv.load(f)
     rv
   }
-  def fromString(s: String, gui: VllGui = null): VllParsers = {
+  def fromString(s: String, gui: VllGui): VllParsers = {
     val rv = new VllParsers(gui)
+    rv.load(s)
+    rv
+  }
+  def fromString(s: String): VllParsers = {
+    val rv = new VllParsers(null)
     rv.load(s)
     rv
   }
