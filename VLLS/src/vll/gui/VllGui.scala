@@ -858,6 +858,8 @@ class VllGui extends MainFrame with ActionListener {
 }
 
 object VllGui extends SimpleSwingApplication {
+  // Required to prevent: java.lang.IllegalArgumentException: Comparison method violates its general contract!
+  System.setProperty("java.util.Arrays.useLegacyMergeSort", "true")
   ScalaEngine.compile("(x:Any) => x")
   var top = new VllGui()
 }
