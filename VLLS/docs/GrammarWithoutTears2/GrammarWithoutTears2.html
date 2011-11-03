@@ -46,7 +46,7 @@ without code or scripts of any kind.
 </p>
 
 <p id="Figure1">
-<img src="images/grammar-tree-examples.png" /><br/>
+<img src="images/grammar-tree-examples.png" alt="VisualLangLab's grammar-trees" /><br/>
 <em>Figure 1. VisualLangLab's grammar-trees</em>
 </p>
 
@@ -146,7 +146,7 @@ All toolbar buttons have tool-tip texts that explain their use.
 </p>
 
 <p id="Figure2">
-<img src="images/GuiFull3.png" /><br/>
+<img src="images/GuiFull3.png" alt="The VisualLangLab GUI" /><br/>
 <em>Figure 2. The VisualLangLab GUI</em>
 </p>
 
@@ -201,7 +201,7 @@ in Figure-3).
 </p>
 
 <p>
-<img src="images/literal-creation.png" /><br/>
+<img src="images/literal-creation.png" alt="Creating a literal token" /><br/>
 <em>Figure 3. Creating a literal token</em>
 </p>
 
@@ -218,7 +218,7 @@ that matches numbers.
 </p>
 
 <p>
-<img src="images/regex-creation.png" /><br/>
+<img src="images/regex-creation.png" alt="Creating a regex token" /><br/>
 <em>Figure 4. Creating a regex token</em>
 </p>
 
@@ -283,27 +283,27 @@ The table below lists the icons from which grammar-trees are constructed.
 
 <table border="1" style="border: 1px solid black;">
   <tr><td colspan="2" align="center"><b>Non-terminals</b></td></tr>
-  <tr><td><img src="images/GrammarIconRoot.gif"/></td><td>Root - used for the root 
+  <tr><td><img src="images/GrammarIconRoot.gif" alt="The Root icon" /></td><td>Root - used for the root 
       node of every grammar tree</td></tr>
-  <tr><td><img src="images/GrammarIconChoice.gif"/></td><td>Choice - used as the parent of a group 
+  <tr><td><img src="images/GrammarIconChoice.gif" alt="The Choice icon" /></td><td>Choice - used as the parent of a group 
       of alternative items (any one of which occurs in the input)</td></tr>
-  <tr><td><img src="images/GrammarIconSequence.gif"/></td><td>Sequence - used as the parent of a 
+  <tr><td><img src="images/GrammarIconSequence.gif" alt="The Sequence icon" /></td><td>Sequence - used as the parent of a 
       sequence of items which occur in the order specified</td></tr>
-  <tr><td><img src="images/GrammarIconRepSep.gif"/></td><td>RepSep - parent of a sequence 
+  <tr><td><img src="images/GrammarIconRepSep.gif" alt="The RepSep icon" /></td><td>RepSep - parent of a sequence 
       of similar items that also uses a specified separator</td></tr>
-  <tr><td><img src="images/GrammarIconReference.gif"/></td><td>Reference - invokes another 
+  <tr><td><img src="images/GrammarIconReference.gif" alt="The Reference icon" /></td><td>Reference - invokes another 
       named parser</td></tr>
-  <tr><td><img src="images/GrammarIconSemPred.gif"/></td><td>Semantic predicate - 
+  <tr><td><img src="images/GrammarIconSemPred.gif" alt="The SemPred icon" /></td><td>Semantic predicate - 
       succeeds or fails depending on the run-time value of an expression</td></tr>
   <tr><td colspan="2" align="center"><b>Terminals</b></td></tr>
-  <tr><td><img src="images/GrammarIconLiteral.gif"/></td><td>Literal - matches a 
+  <tr><td><img src="images/GrammarIconLiteral.gif" alt="The Literal icon" /></td><td>Literal - matches a 
       specified literal token</td></tr>
-  <tr><td><img src="images/GrammarIconRegex.gif"/></td><td>Regexp - matches a 
+  <tr><td><img src="images/GrammarIconRegex.gif" alt="The Regex icon" /></td><td>Regexp - matches a 
       specified regex token</td></tr>
   <tr><td colspan="2" align="center"><b>Icon overlays</b></td></tr>
-  <tr><td><img src="images/GrammarIconCommitMark.gif"/></td><td>Commit - displayed on top 
+  <tr><td><img src="images/GrammarIconCommitMark.gif" alt="The Commit-mark icon" /></td><td>Commit - displayed on top 
       of a node that has the <i>commit</i> annotation</td></tr>
-  <tr><td><img src="images/GrammarIconErrorMark.gif"/></td><td>Error: indicates an error 
+  <tr><td><img src="images/GrammarIconErrorMark.gif" alt="The Error-mark icon" /></td><td>Error: indicates an error 
       in the associated node or rule</td></tr>
 </table>
 
@@ -318,7 +318,7 @@ from the context-menu as in Figure-5 below.
 </p>
 
 <p>
-<img src="images/setting-annotations.png" /><br/>
+<img src="images/setting-annotations.png" alt="Setting node annotations" /><br/>
 <em>Figure 5. Setting node annotations</em>
 </p>
 
@@ -401,15 +401,15 @@ with the <a href="#ManagingTokens">tokens we created above</a>.
 
 <p>
 First, add a <i>Sequence</i> node to the grammar-tree by right-clicking the root node 
-(<img src="images/GrammarIconRoot.gif" align="center" />) and selecting 
+(<img src="images/GrammarIconRoot.gif" align="center" alt="The Root icon" />) and selecting 
 <i>Add -> Sequence</i> from the popup menu as shown on the left side of Figure-6 below. 
 A sequence icon 
-(<img src="images/GrammarIconSequence.gif" align="center" />) is added to the root, 
+(<img src="images/GrammarIconSequence.gif" align="center" alt="The Sequence icon" />) is added to the root, 
 as on the right of the figure.
 </p>
 
 <p>
-<img src="images/add-sequence.png" /><br/>
+<img src="images/add-sequence.png" alt="Adding a sequence node" /><br/>
 <em>Figure 6. Adding a sequence node</em>
 </p>
 
@@ -419,19 +419,19 @@ Then perform the following steps:
 
 <ul style="list-style-type: disc;">
 <li>right-click the newly added sequence node 
-    (<img src="images/GrammarIconSequence.gif" align="center" />) and select <i>Add -> Token</i>. 
+    (<img src="images/GrammarIconSequence.gif" align="center" alt="The Sequence icon" />) and select <i>Add -> Token</i>. 
     This will bring up a dialog containing a list of token names. 
     Select <i>NUMBER</i> and click the dialog's <i>OK</i> button. 
-    A regex icon (<img src="images/GrammarIconRegex.gif" align="center" />) is added 
+    A regex icon (<img src="images/GrammarIconRegex.gif" align="center" alt="The Regex icon" />) is added 
     to the sequence node</li> 
 <li>right-click the sequence node again and select <i>Add -> Choice</i> from the popup menu. 
     This should add a <i>Choice</i> node icon 
-    (<img src="images/GrammarIconChoice.gif" align="center" />) 
+    (<img src="images/GrammarIconChoice.gif" align="center" alt="The Choice icon" />) 
     to the sequence node</li>
-<li>right-click the newly created choice node (<img src="images/GrammarIconChoice.gif" align="center" />) 
+<li>right-click the newly created choice node (<img src="images/GrammarIconChoice.gif" align="center" alt="The Choice icon" />) 
     and select <i>Add -> Token</i>. 
     Select <i>PLUS</i> in the dialog box and click <i>OK</i>. 
-    A literal icon (<img src="images/GrammarIconLiteral.gif" align="center" />) 
+    A literal icon (<img src="images/GrammarIconLiteral.gif" align="center" alt="The Literal icon" />) 
     is added to the choice node. 
     Repeat this action once more, and add the <i>MUNUS</i> token to the choice node</li> 
 <li>repeat the first step above to add another <i>NUMBER</i> to the sequence node</li>
@@ -443,7 +443,7 @@ use <i>Edit</i> from the grammar-tree's context menu to make the required change
 </p>
 
 <p>
-<img src="images/first-parser.png" /><br/>
+<img src="images/first-parser.png" alt="Your first visual parser" /><br/>
 <em>Figure 7. Your first visual parser</em>
 </p>
 
@@ -492,7 +492,7 @@ You don't have to write any code, use any other tools, or do anything else.
 </p>
 
 <p>
-<img src="images/testing-parser.png" /><br/>
+<img src="images/testing-parser.png" alt="Testing your parser" /><br/>
 <em>Figure 8. Testing your parser</em>
 </p>
 
@@ -587,7 +587,7 @@ menu, and choose one of the samples shown as in Figure-9 below.
 </p>
 
 <p>
-<img src="images/SampleGrammar1.png" /><br/>
+<img src="images/SampleGrammar1.png" alt="Sample grammars available" /><br/>
 <em>Figure 9. Sample grammars available</em>
 </p>
 
@@ -605,7 +605,7 @@ in Figure-10 below shows VisualLangLab's relationship with Scala's parser combin
 </p>
 
 <p id="Figure10">
-<img src="images/RelationshipWithScalaParserCombinators.png" /><br/>
+<img src="images/RelationshipWithScalaParserCombinators.png" alt="Relationship With Scala parser combinators" /><br/>
 <em>Figure 10. Relationship With Scala parser combinators</em>
 </p>
 
