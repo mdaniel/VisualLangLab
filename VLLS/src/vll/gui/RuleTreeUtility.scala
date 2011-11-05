@@ -152,7 +152,7 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
   }
 //  private var displayedNode: ParserTreeNode = null
   private var displayedNode = gui.ruleTreePanel.selectedNode.pNode
-  private val spacer = "\u00a6  "
+  private val spacer = "|  "
   add(new SplitPane(Orientation.Vertical, astStructurePanel, actionTextPanel), 
       BorderPanel.Position.Center)
 
