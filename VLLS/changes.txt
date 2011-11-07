@@ -1,3 +1,8 @@
+6.07 07-N0V-2011 
+    Updated docs with new examples, and "Examples.html" file
+6.06 05-N0V-2011 
+    Revisions 215, 217, 217 (Updated JTree selected-node text-color in graphics)
+    Changed AST vertical alignment character to '|'
 6.05 24-OCT-2011 
     Fix for VLL-48 (JDK 7 Issue: java.lang.IllegalArgumentException ...)
 6.04 16-OCT-2011 
