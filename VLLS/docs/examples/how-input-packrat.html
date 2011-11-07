@@ -170,8 +170,8 @@ under <i>Parser Log</i>).
 </p>
 
 <p>
-  <img src="images/Testing-01.png" alt="Testing Part-1" /><br />
-  <i>Figure-8. Testing Part-1</i>
+  <img src="images/Testing-01.png" alt="Ad hoc testing in 3 simple steps" /><br />
+  <i>Figure-8. Ad hoc testing in 3 simple steps</i>
 </p>
 
 <p>
@@ -189,8 +189,8 @@ below.
 </p>
 
 <p>
-  <img src="images/Testing-02.png" alt="Testing Part-2" /><br />
-  <i>Figure-9. Testing Part-2</i>
+  <img src="images/Testing-02.png" alt="Parsing error with two 1s in input" /><br />
+  <i>Figure-9. Parsing error with two "1"s in input</i>
 </p>
 
 <p>
@@ -207,40 +207,40 @@ Structure</i>, to the right of the grammar-tree).
 </p>
 
 <p>
-  <img src="images/Testing-03.png" alt="Testing Part-3" /><br />
-  <i>Figure-9. Testing Part-3</i>
+  <img src="images/Testing-03.png" alt="Rearranged choice element" /><br />
+  <i>Figure-10. Rearranged choice element</i>
 </p>
 
 <p>
 But clicking the <i>Parse input</i> button again (with two "1"s still in the <i>Parser Test Input</i> box) 
-precipitates the catastrophe in Figure-10 below. 
+precipitates the catastrophe in Figure-11 below. 
 </p>
 
 <p>
-  <img src="images/Testing-04.png" alt="Testing Part-4" /><br />
-  <i>Figure-10. Testing Part-4</i>
+  <img src="images/Testing-04.png" alt="StackOverflowError due to left-recursion" /><br />
+  <i>Figure-11. StackOverflowError due to left-recursion</i>
 </p>
 
 <p>
 A careful review of the structure of the parser-rule (or grammar-tree) quickly reveals that the 
 parser includes a left-recursive reference. This calls for the use of packrat parsing, and 
 you can endow <i>ones</i> appropriately by right-clicking the root-node and selecting 
-<i>Packrat</i> from the popup menu as in Figure-11 below. 
-The grammar-tree should now look like the one on the right of Figure-11. 
+<i>Packrat</i> from the popup menu as in Figure-12 below. 
+The grammar-tree should now look like the one on the right of Figure-12. 
 </p>
 
 <p>
   <img src="images/Setting-Packrat-Flag.png" alt="Setting the Packrat flag" /><br />
-  <i>Figure-11. Setting the Packrat flag</i>
+  <i>Figure-12. Setting the Packrat flag</i>
 </p>
 
 <p>
-Clicking the <i>Parse input</i> button again now produces the happy result in Figure-12 below. 
+Clicking the <i>Parse input</i> button again now produces the happy result in Figure-13 below. 
 </p>
 
 <p>
   <img src="images/Packrat-Parser-Result.png" alt="Result with Packrat flag set" /><br />
-  <i>Figure-12. Result with Packrat flag set</i>
+  <i>Figure-13. Result with Packrat flag set</i>
 </p>
 
 <p>
