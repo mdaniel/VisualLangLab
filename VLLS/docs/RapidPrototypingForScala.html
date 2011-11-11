@@ -152,6 +152,10 @@ included as the file <i>payroll-parser-comb.vll</i> in the <i>grammars</i> direc
 <h3>Import Required Tokens</h3>
 
 <p>
+<a href="http://www.youtube.com/watch?v=QwazlFmD_5o">See it on YouTube</a>
+</p>
+
+<p>
 The book's code starts by importing 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" target="_blank">JavaTokenParsers</a> 
 and you can obtain the same effect in <a href="http://vll.java.net/">VisualLangLab</a> 
@@ -165,6 +169,10 @@ below, all the names have an underscore (_) suffix.
 </p>
 
 <h3 id="DefDoubleNumber">def doubleNumber = floatingPointNumber ...</h3>
+
+<p>
+<a href="http://www.youtube.com/watch?v=UCbbvJDoIpI">See it on YouTube</a>
+</p>
 
 <p>
 This is a very simple parser-rule, and just matches one token unconditionally. 
@@ -216,6 +224,10 @@ Action-code functions are explained further in <a href="#ActionCode">Action Code
 </p>
 
 <h3>def toBe = "is" | "are"</h3>
+
+<p>
+<a href="http://www.youtube.com/watch?v=2aIodvLeCVw">See it on YouTube</a>
+</p>
 
 <p>
 This parser-rule uses two custom literal tokens (<i>is</i> and <i>are</i>) which must be defined 
@@ -283,6 +295,10 @@ Grammar Tree Icons and Annotations</a>
 </p>
 
 <h3>def percentage = toBe ~> doubleNumber <~ "percent" <~ "of" <~ "gross" ...</h3>
+
+<p>
+<a href="http://www.youtube.com/watch?v=43SUBPL_kF0">See it on YouTube</a>
+</p>
 
 <p>
 This parser-rule uses a <i>Sequence</i> 
@@ -355,6 +371,10 @@ Your finished parser-rule should look like the one in Figure-8 above.
 <h3>def days = "days?".r ...</h3>
 
 <p>
+<a href="http://www.youtube.com/watch?v=WFrv9UFcFWY">See it on YouTube</a>
+</p>
+
+<p>
 This parser-rule uses a custom regex token (<i>days?</i>) which must be defined 
 first. Proceed as follows.
 </p>
@@ -406,6 +426,10 @@ any other skills or tools.
 <h3>Validating doubleNumber</h3>
 
 <p>
+<a href="http://www.youtube.com/watch?v=UqhnQImB-jY">See it on YouTube</a>
+</p>
+
+<p>
 To manually test <i>doubleNumber</i> proceed as follows. Use the toolbar's combo box 
 to select <i>doubleNumber</i> as in Figure-10 below.
 </p>
@@ -439,6 +463,10 @@ result.
 </p>
 
 <h3>Validating toBe</h3>
+
+<p>
+<a href="http://www.youtube.com/watch?v=89MQBpXKNlE">See it on YouTube</a>
+</p>
 
 <p>
 Before you start to enter test data for <i>toBe</i> take a moment to understand 
@@ -485,6 +513,10 @@ You can verify your creation by comparing it with the saved-grammar file
 <h3>def deductItems = repsep(deductItem, ",")</h3>
 
 <p>
+<a href="http://www.youtube.com/watch?v=hyTeuBskfIo">See it on YouTube</a>
+</p>
+
+<p>
 This parser-rule uses a <i>RepSep</i> 
 (the <img src="images/GrammarIconRepSep.gif" align="center" alt="The RepSep icon" /> icon) as its top-level node. 
 To create this rule proceed as follows.
@@ -528,6 +560,16 @@ as it is possible to create very obscure and difficult-to-diagnose errors
 with them. The solution, in this case, is quite simple &mdash; implant 
 the contents of  <i>deductItems</i> directly into it's client rule 
 (<i>deduct</i>). Figure-14 below shows the required modification of <i>deduct</i>. 
+</p>
+
+<h3>def deduct = ...</h3>
+
+<p>
+<a href="http://www.youtube.com/watch?v=8G4OSe6gSR4">See it on YouTube</a>
+</p>
+
+<p>
+The <i>deduct</i> rule modified as described above is shown in Figure-14 below. 
 </p>
 
 <p>
