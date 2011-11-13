@@ -18,12 +18,12 @@
       Project of the week</a>! (Java Posse Episode 364)</p>
 
   <p><a href="http://vll.java.net/">VisualLangLab</a> is a visual parser-generator IDE for
-  development of parsers without code, script, or textual 
-  <a href="http://en.wikipedia.org/wiki/Backus%E2%80%93Naur_Form">BNF</a>/<a href="http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_Form">EBNF</a>/<a href="http://en.wikipedia.org/wiki/Parsing_expression_grammar">PEG</a> 
-  specification of any kind. It is simple in use, and easy to learn.
+  developing parsers without any textual grammar specification 
+  (<a href="http://en.wikipedia.org/wiki/Backus%E2%80%93Naur_Form">BNF</a>/<a href="http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_Form">EBNF</a>/<a href="http://en.wikipedia.org/wiki/Parsing_expression_grammar">PEG</a>), 
+  script or code. It is simple in use, and easy to learn.
   Unlike other parser-generators, VisualLangLab represents 
   <a href="http://en.wikipedia.org/wiki/Formal_grammar">parser rules</a> as visual 
-  <i>grammar-trees</i> with distinct icons for the grammar-tree nodes. 
+  <i>grammar-trees</i> (see examples below) with distinct icons for the grammar-tree nodes. 
   The following figures show how it represents the rules of the
   arithmetic expression parser in <a href=
   "http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf">section
@@ -49,19 +49,33 @@
     </tr>
   </tbody></table>
 
-  <p>The grammar-trees are <i>executable</i>, and can be run at any time at the 
-  click of a button. No other skills or tools are needed. 
-  Input for the parser can be entered into the IDE or obtained from user-nominated files. 
-  This simplifies <a href="TestingParsers.html">testing</a>, 
-  promotes an iterative-incremental development process, and speeds up development manyfold.
-  VisualLangLab's grammar-trees are equivalent to 
+  <p>VisualLangLab's grammar-trees are equivalent to 
   <a href="http://en.wikipedia.org/wiki/Parsing_expression_grammar">PEG</a>s, 
   and can handle <a href="http://en.wikipedia.org/wiki/LL_parser">LL(*)</a> grammars with 
   optional <a href="http://en.wikipedia.org/wiki/Left_recursion">left recursion</a>. 
   Optional <a href="http://en.wikipedia.org/wiki/Semantic_action_routine">semantic actions</a> 
   written as <a href="http://en.wikipedia.org/wiki/JavaScript">Javascript</a> or 
   <a href="http://en.wikipedia.org/wiki/Scala_(programming_language)">Scala</a> functions 
-  can also be embedded in the grammar.</p>
+  can also be associated with the grammar-tree's nodes. The grammar-trees are <i>executable</i>, and can be run at any time at the 
+  click of a button. No other skills or tools are needed. 
+  Input for the parser can be entered into the IDE or obtained from user-nominated files. 
+  This simplifies <a href="TestingParsers.html">testing</a>, and promotes an 
+  <a href="http://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative-incremental</a> 
+  development process that accelerates development.
+  </p>
+
+  <h2 id="SeeVisualLangLabInAction">See VisualLangLab in Action</h2>
+
+  <p>The YouTube video embedded below shows the <i>expr</i> parser-rule (see above) being created. 
+  More videos showing VisualLangLab being used to create and test parsers 
+  can be seen in <a href="SeeVisualLangLabInAction.html">See VisualLangLab in Action</a></p>
+
+  <table border="1" style="border: 1px solid black;"><tr><td>
+    <iframe width="590" height="430" src="http://www.youtube.com/embed/4BkriQZBQ9A" 
+      frameborder="0" allowfullscreen></iframe>
+  </td></tr></table>
+
+  <h2 id="ParserDevelopmentAndUse">Parser Development and Use</h2>
 
   <p>The parser development process is reduced to creating the equivalent grammar-tree(s) 
   <a href="EditingTheGrammarTree.html">using menu-bar and context-menu</a> operations 
@@ -70,25 +84,27 @@
   for naming the parser rules and tokens, and for specifying regular expression patterns for
   tokens.</p>
 
+  <p>The grammar is saved as a XML file that can be reloaded for review, further 
+  <a href="EditingTheGrammarTree.html">editing</a> or <a href="TestingParsers.html">testing</a>.</p>
+ 
+  <p>An <a href="UsingTheAPI.html">API</a> enables client programs in any JVM language 
+  to load the XML file and regenerate the parser. Scala's parser combinators 
+  are used to turn tree (or XML) data directly into a 
+  <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">
+  Parser</a> at run-time without code-generation, so parser regeneration is very fast. 
+  </p>
+
   <p id="ParserType"><a href="http://vll.java.net/">VisualLangLab</a> is written in 
   <a href="http://www.scala-lang.org/">Scala</a>, and leverages its 
   <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">
   parser combinators</a> to produce 
   <a href="http://en.wikipedia.org/wiki/Backtracking">backtracking</a>, 
   <a href="http://en.wikipedia.org/wiki/Recursive_descent_parser">recursive-descent</a> parsers. 
-  But a Scala installation is not required for running it.
+  But the user does not have to know Scala, and a Scala installation is not required for running it.
   VisualLangLab's dependence on Scala is described 
   <a href="RelationshipWithScalaParserCombinators.html">here</a>.</p>
 
-  <p>The grammar is saved as a XML file that can be reloaded for review, further 
-  <a href="EditingTheGrammarTree.html">editing</a> or <a href="TestingParsers.html">testing</a>.</p>
- 
-  <p>An <a href="UsingTheAPI.html">API</a> enables client programs (Scala or Java) 
-  to load the XML file and regenerate the parser. Scala's parser combinators 
-  are used to turn tree (or XML) data directly into a 
-  <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">
-  Parser</a> at run-time without code-generation, so parser regeneration is very fast. 
-  </p>
+  <h2 id="FAQDocumentsAndForum">FAQ, Documents and Forum</h2>
 
   <p><b>Check out the <a href="FAQ.html">FAQ</a></b>. 
   Depending on your perspective, you may also find some of the following pages interesting:</p>
@@ -126,8 +142,6 @@
       </td>
     </tr>
   </table>
-
-  <h2 id="HELPForum">HELP Forum</h2>
 
   <p>If you want to report an issue, request help, or just show off a new parser, 
   post a message at the <a href="http://java.net/projects/vll/forums/vll-forum">VisualLangLab HELP</a> forum. </p>
