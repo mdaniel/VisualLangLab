@@ -33,7 +33,6 @@ import scala.swing.Label
 import scala.swing.Orientation
 import scala.swing.ScrollPane
 import scala.swing.SplitPane
-import scala.swing.TextArea
 import scala.swing.TextComponent
 
 class LogTextPane(val gui: VllGui) extends SplitPane(Orientation.Vertical) {
@@ -83,12 +82,6 @@ class LogTextPane(val gui: VllGui) extends SplitPane(Orientation.Vertical) {
   }
   val logAreaTextComponent = new TextComponent {override lazy val peer = logArea}
   leftComponent = new BorderPanel {
-    val pnl = new BorderPanel() {
-      val runButton = new Button(gui.runParseInputAction) {text = ""}
-      val stopButton = new Button(gui.stopAction) 
-      add(runButton, BorderPanel.Position.West)
-      add(stopButton, BorderPanel.Position.East)
-    }
     add(new Label("Parser Test Input"), BorderPanel.Position.North)
 //    add(pnl, BorderPanel.Position.South)
     add(new ScrollPane(inputArea), BorderPanel.Position.Center)

@@ -39,8 +39,8 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
   def load(f: File) {load(XML.loadFile(f))}
   private def load(s: String) {load(XML.loadString(s))}
   def load(x: XMLElem) = {
-    try {if (gui ne null) VllGui.top.setWaitingCursor(true); fileIo.load(x)} 
-    finally {if (gui ne null) VllGui.top.setWaitingCursor(false)}
+    try {if (gui ne null) gui.setWaitingCursor(true); fileIo.load(x)} 
+    finally {if (gui ne null) gui.setWaitingCursor(false)}
   }
   def exportTokens(f: File) = {fileIo.exportTokens(f)}
   def importTokens(f: File) = {fileIo.importTokens(XML.loadFile(f))}
@@ -253,9 +253,9 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
         case pn: PredicateNode => if (node.actionText.isEmpty) 
             failure("Predicate has no code")
           else {
-            Parser(in => {node.actionFunction(null, VllGui.top.logTextPane.inputArea, 
-                       VllGui.top.logTextPane.logAreaTextComponent, 
-                       in.pos.line, in.pos.column, null) match {
+            Parser(in => {node.actionFunction(in.source, gui.logTextPane.inputArea, 
+                       gui.logTextPane.logAreaTextComponent, 
+                       in.pos.line, in.pos.column, in.offset, null) match {
                   case b: java.lang.Boolean if b.booleanValue => Success("", in)
                   case errMsg: String => Failure(errMsg, in)
                   case _ => Failure("Predicate error", in)
@@ -279,15 +279,15 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
         failure("Action code has syntax error")
       else
         Parser(in => {
-          node.actionFunction(null, VllGui.top.logTextPane.inputArea, 
-                              VllGui.top.logTextPane.logAreaTextComponent,  
-                              in.pos.line, in.pos.column, null)
+          node.actionFunction(null, gui.logTextPane.inputArea, 
+                              gui.logTextPane.logAreaTextComponent,  
+                              in.pos.line, in.pos.column, in.offset, null)
           parser3(in) match {
             case Success(tree, next) =>
               val source = in.source.subSequence(in.offset, next.offset)
-              var actionResult = node.actionFunction(source, VllGui.top.logTextPane.inputArea, 
-                                                     VllGui.top.logTextPane.logAreaTextComponent, 
-                                                     next.pos.line, next.pos.column, tree)
+              var actionResult = node.actionFunction(source, gui.logTextPane.inputArea, 
+                                                     gui.logTextPane.logAreaTextComponent, 
+                                                     next.pos.line, next.pos.column, next.offset, tree)
               Success(if (actionResult == null) tree else actionResult, next)
             case other => other
           }
@@ -317,7 +317,7 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
 
 object VllParsers {
   type Parser[T] = VllParsers#Parser[T]
-  type ActionType = Function6[CharSequence,TextComponent,TextComponent,Int,Int,Any,Any]
+  type ActionType = Function7[CharSequence,TextComponent,TextComponent,Int,Int,Int,Any,Any]
   def fromFile(f: File, gui: VllGui): VllParsers = {
     val rv = new VllParsers(gui)
     rv.load(f)

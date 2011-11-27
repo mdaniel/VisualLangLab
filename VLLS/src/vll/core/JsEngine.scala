@@ -66,13 +66,15 @@ object JsEngine {
   def compile(sName: String): VllParsers.ActionType = {
     val cs = compilable.compile("(%s)(vllARGS)".format(sName))
     new VllParsers.ActionType {
-      def apply(inputCharSeq: CharSequence, inputArea: TextComponent, log: TextComponent, line: Int, col: Int, arg: Any): Any = {
+      def apply(inputCharSeq: CharSequence, inputArea: TextComponent, log: TextComponent, line: Int, col: Int, offset: Int, arg: Any): Any = {
         cs.getEngine.put("vllInputCharSequence", inputCharSeq)
+        cs.getEngine.put("vllInput", inputCharSeq)
         cs.getEngine.put("vllParserTestInput", inputArea)
         cs.getEngine.put("vllParserLog", log)
         cs.getEngine.put("vllARGS", objToJsArray(arg))
         cs.getEngine.put("vllLine", line)
         cs.getEngine.put("vllCol", col)
+        cs.getEngine.put("vllOffset", offset)
         cs.eval()
       }
     }

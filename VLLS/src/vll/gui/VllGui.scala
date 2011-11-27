@@ -21,11 +21,14 @@
 package vll.gui
 
 //import dk.brics.automaton.RegExp
+import java.awt.AlphaComposite
+import java.awt.Color
 import java.awt.Cursor
 import java.awt.Dimension
 import scala.swing.Dialog
 import scala.swing.FileChooser
 import java.awt.Point
+import java.awt.SplashScreen
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.io.File
@@ -53,6 +56,7 @@ import scala.swing.RadioMenuItem
 import scala.swing.Separator
 import scala.swing.SimpleSwingApplication
 import scala.swing.SplitPane
+import scala.swing.Swing
 import scala.swing.event.ButtonClicked
 import vll.core.RootNode
 import scala.util.Properties
@@ -62,6 +66,7 @@ import vll.core.Utils
 import vll.gui.samples.{ArithExpr, ArithExprWithActionCode, SimpleJSON}
 
 class VllGui extends MainFrame with ActionListener {
+  VllGui.splash("0")
 
   try {
     if (Properties.osName.matches(".*[wW]indows.*"))
@@ -858,8 +863,26 @@ class VllGui extends MainFrame with ActionListener {
 }
 
 object VllGui extends SimpleSwingApplication {
+  def splash(msg: String) {
+      try {
+        val t0 = System.currentTimeMillis
+        val splashScreen = SplashScreen.getSplashScreen
+        val width = splashScreen.getSize.width 
+        val height = splashScreen.getSize.height
+        val gc = splashScreen.createGraphics
+        gc.setComposite(AlphaComposite.Clear)
+        gc.setPaintMode()
+        gc.setColor(Color.red)
+        gc.drawLine(0, 0, width, height)
+        gc.drawLine(0, height, width, 0)
+        gc.fillRect(10, height - 30, width - 20, 10)
+//        Dialog.showMessage(null, "%d (%d,%d) %s".format(System.currentTimeMillis - t0, width, height, gc), "DONE", Dialog.Message.Info, null)
+      } catch {
+        case e: Exception => Dialog.showMessage(null, e.getMessage, "FAIL", Dialog.Message.Info, null)
+      }
+  }
   // Required to prevent: java.lang.IllegalArgumentException: Comparison method violates its general contract!
   System.setProperty("java.util.Arrays.useLegacyMergeSort", "true")
-  ScalaEngine.compile("(x:Any) => x")
-  var top = new VllGui()
+  var top: VllGui = null
+  Swing.onEDT {top = new VllGui()}
 }

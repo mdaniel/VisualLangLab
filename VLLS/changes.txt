@@ -1,3 +1,6 @@
+6.08 27-N0V-2011 
+    Added "vllOffset" predefined variable for action-code. 
+    Added "vllInput" predefined variable as synonym for "vllInputCharSequence". 
 6.07 07-N0V-2011 
     Updated docs with new examples, and "Examples.html" file
 6.06 05-N0V-2011 
