@@ -66,7 +66,7 @@ import vll.core.Utils
 import vll.gui.samples.{ArithExpr, ArithExprWithActionCode, SimpleJSON}
 
 class VllGui extends MainFrame with ActionListener {
-  VllGui.splash("0")
+//  VllGui.splash("0")
 
   try {
     if (Properties.osName.matches(".*[wW]indows.*"))

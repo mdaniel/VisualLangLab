@@ -1,3 +1,5 @@
+6.09 27-N0V-2011 
+    Fixed minor regression in 6.08
 6.08 27-N0V-2011 
     Added "vllOffset" predefined variable for action-code. 
     Added "vllInput" predefined variable as synonym for "vllInputCharSequence". 
