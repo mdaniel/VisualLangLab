@@ -1,3 +1,5 @@
+6.11 29-N0V-2011 
+    Fine-tuned changes in 6.10
 6.10 29-N0V-2011 
     Fixed another minor regression in 6.08 that affected performance
 6.09 27-N0V-2011 
