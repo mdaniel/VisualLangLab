@@ -884,5 +884,6 @@ object VllGui extends SimpleSwingApplication {
   // Required to prevent: java.lang.IllegalArgumentException: Comparison method violates its general contract!
   System.setProperty("java.util.Arrays.useLegacyMergeSort", "true")
   var top: VllGui = null
+  ScalaEngine.compile("(x: Any) => x")
   Swing.onEDT {top = new VllGui()}
 }
