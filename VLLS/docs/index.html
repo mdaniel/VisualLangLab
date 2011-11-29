@@ -23,13 +23,13 @@
   script or code. It is simple in use, and easy to learn.
   Unlike other parser-generators, VisualLangLab represents 
   <a href="http://en.wikipedia.org/wiki/Formal_grammar">parser rules</a> as visual 
-  <i>grammar-trees</i> (see examples below) with distinct icons for the grammar-tree nodes. 
-  The following figures show how it represents the rules of the
-  arithmetic expression parser in <a href=
-  "http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf">section
+  <i>grammar-trees</i> with distinct icons for the grammar-tree nodes. 
+  The figures below show the arithmetic expression parser in 
+  <a href="http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf">section
   31.1</a> of <a href="http://www.artima.com/shop/programming_in_scala">Programming in
   Scala</a>. The icons and annotations are explained fully in <a href=
-  "EditingTheGrammarTree.html">Editing the Grammar Tree</a>.</p>
+  "EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
+</p>
 
   <table border="1" style="border: 1px solid black;"><tbody>
     <tr>
@@ -49,20 +49,20 @@
     </tr>
   </tbody></table>
 
-  <p>VisualLangLab's grammar-trees are equivalent to 
+  <p>The grammar-trees are equivalent to 
   <a href="http://en.wikipedia.org/wiki/Parsing_expression_grammar">PEG</a>s, 
   and can handle <a href="http://en.wikipedia.org/wiki/LL_parser">LL(*)</a> grammars with 
-  optional <a href="http://en.wikipedia.org/wiki/Left_recursion">left recursion</a>. 
-  Optional <a href="http://en.wikipedia.org/wiki/Semantic_action_routine">semantic actions</a> 
-  written as <a href="http://en.wikipedia.org/wiki/JavaScript">Javascript</a> or 
-  <a href="http://en.wikipedia.org/wiki/Scala_(programming_language)">Scala</a> functions 
-  can also be associated with the grammar-tree's nodes. The grammar-trees are <i>executable</i>, and can be run at any time at the 
-  click of a button. No other skills or tools are needed. 
+  <a href="http://en.wikipedia.org/wiki/Left_recursion">left recursion</a>. 
+  They are also <i>executable</i>, and can be run at any time at the 
+  click of a button. No additional code, skills, or tools are needed. 
   Input for the parser can be entered into the IDE or obtained from user-nominated files. 
   This simplifies <a href="TestingParsers.html">testing</a>, and promotes an 
   <a href="http://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative-incremental</a> 
   development process that accelerates development.
-  </p>
+  Optional <a href="http://en.wikipedia.org/wiki/Semantic_action_routine">semantic actions</a> 
+  written as <a href="http://en.wikipedia.org/wiki/JavaScript">Javascript</a> or 
+  <a href="http://en.wikipedia.org/wiki/Scala_(programming_language)">Scala</a> functions 
+  can also be associated with the grammar-tree's nodes.   </p>
 
   <h2 id="SeeVisualLangLabInAction">See VisualLangLab in Action</h2>
 
@@ -82,9 +82,7 @@
   of <a href="TheGUI.html">the GUI</a>. 
   Textual input from the keyboard is required only
   for naming the parser rules and tokens, and for specifying regular expression patterns for
-  tokens.</p>
-
-  <p>The grammar is saved as a XML file that can be reloaded for review, further 
+  tokens. The grammar is saved as a XML file that can be reloaded for review, further 
   <a href="EditingTheGrammarTree.html">editing</a> or <a href="TestingParsers.html">testing</a>.</p>
  
   <p>An <a href="UsingTheAPI.html">API</a> enables client programs in any JVM language 
@@ -155,12 +153,6 @@
   <p><u>If you do not have a Scala installation</u>, you should also download 
   <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>. 
   Double-clicking this file starts the VisualLangLab GUI (requires a 6.0+ JRE).</p> 
-
-  <p><u>Note:</u> Version 4.xx grammars that use action-code with 
-  <a href="ASTAndActionCode.html#PredefinedVariables" target="_NEW">predefined variables</a> 
-  will not run under version-5.xx as the names of these variables have been changed 
-  as described in the table under <a href="ASTAndActionCode.html#PredefinedVariables" target="_NEW">Predefined Variables</a>. 
-  Changing the names of these variables will make these 4.xx grammars usable again. </p>
 
   <h2 id="Prerequisites">Prerequisites</h2>
 
