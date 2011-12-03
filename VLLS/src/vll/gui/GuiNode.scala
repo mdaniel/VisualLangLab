@@ -36,6 +36,7 @@ import vll.core.RootNode
 import vll.core.SequenceNode
 import vll.core.PredicateNode
 import scala.collection.JavaConversions._
+import vll.core.WildCardNode
 
 class GuiNode private (val pNode: RuleTreeNode) extends MutableTreeNode
     with Traversable[GuiNode] {
@@ -85,6 +86,7 @@ class GuiNode private (val pNode: RuleTreeNode) extends MutableTreeNode
         case choice: ChoiceNode => if (full) (choice.nodeName) else ""
         case rs: RepSepNode => if (full) (rs.nodeName) else ""
         case pn: PredicateNode => if (full) (pn.nodeName) else ""
+        case w: WildCardNode => if (full) (w.nodeName) else ""
       }}
   def nodeAnnotations(showEpsOk: Boolean): String = {
     val commit = (pNode.parent ne null) && pNode.parent.isInstanceOf[SequenceNode] &&

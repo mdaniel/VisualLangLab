@@ -91,6 +91,8 @@ trait SimpleLexingRegexParsers extends RegexParsers {
     }
   }
   
+  val wildCardParser = parserById(Int.MaxValue, "*")
+  
   private def parserById(id: Int, expect: String): Parser[String] = {
     val failMsg = "Expected " + expect
     Parser(in => {
@@ -113,7 +115,7 @@ trait SimpleLexingRegexParsers extends RegexParsers {
                 Failure(failMsg, in)
               }
             } else {
-              if (matchId == id) {
+              if ((matchId == id) || (id == Int.MaxValue)) {
                 val next = in.drop(charsConsumed)
 //                if (traceTokens)
 //                  printf("Success %s @ (%d,%d)%n", expect, next.pos.line, next.pos.column)

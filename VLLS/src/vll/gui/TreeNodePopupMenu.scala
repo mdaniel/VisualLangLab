@@ -20,7 +20,6 @@
 
 package vll.gui
 
-import java.awt.Color
 import javax.swing.{JPopupMenu, JMenuItem, JMenu, JRadioButtonMenuItem, JCheckBoxMenuItem, ButtonGroup}
 import vll.core.ChoiceNode
 import vll.core.LiteralNode
@@ -30,6 +29,7 @@ import vll.core.RepSepNode
 import vll.core.RootNode
 import vll.core.SequenceNode
 import vll.core.PredicateNode
+import vll.core.WildCardNode
 
 class TreeNodePopupMenu(val ruleTreePanel: RuleTreePanel) extends JPopupMenu {
 
@@ -88,6 +88,8 @@ class TreeNodePopupMenu(val ruleTreePanel: RuleTreePanel) extends JPopupMenu {
         pasteNode.setEnabled((clipboard ne null) && root.isEmpty)
       case root: PredicateNode => addMenu.setEnabled(false)
         pasteNode.setEnabled(false)
+      case w: WildCardNode => addMenu.setEnabled(false)
+        pasteNode.setEnabled(false)
     }
     commitPoint.setEnabled(!isRootNode && parentNode.pNode.isInstanceOf[SequenceNode])
     commitPoint.setSelected(commitPoint.isEnabled &&
@@ -119,6 +121,9 @@ class TreeNodePopupMenu(val ruleTreePanel: RuleTreePanel) extends JPopupMenu {
   val newPredicate = new JMenuItem("Predicate")
   addMenu.add(newPredicate)
   newPredicate.addActionListener(ruleTreePanel)
+  val newWildCard = new JMenuItem("WildCard")
+  addMenu.add(newWildCard)
+  newWildCard.addActionListener(ruleTreePanel)
   add(addMenu)
   //addSeparator()
 

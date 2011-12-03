@@ -50,6 +50,7 @@ object ElementIcon {
     "RootNode" -> "Root.gif",
     "ReferenceNode" -> "Reference.gif",
     "SequenceNode" -> "Sequence.gif",
-    "PredicateNode" -> "SemPred.gif"
+    "PredicateNode" -> "SemPred.gif",
+    "WildCardNode" -> "WildCard.gif"
   )
 }

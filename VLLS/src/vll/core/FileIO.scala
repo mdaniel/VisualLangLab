@@ -20,7 +20,6 @@
 
 package vll.core
 
-import java.awt.Cursor
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -28,10 +27,8 @@ import java.io.PrintStream
 import scala.xml.Elem
 import scala.xml.Node
 import scala.xml.NodeSeq
-import javax.swing.JComponent
 import scala.collection.mutable.Set
 import scala.xml.Text
-import vll.gui.VllGui
 
 class FileIO(hub: VllParsers) {
 
@@ -97,6 +94,7 @@ class FileIO(hub: VllParsers) {
     val margin = "  " * (2 + level)
     t match {
       case lit: LiteralNode => out.printf("%s<Token Ref=\"%s\" %s/>%n", margin, encode(lit.literalName), details)
+      case w: WildCardNode => out.printf("%s<WildCard/>%n", margin, details)
       case reg: RegexNode => out.printf("%s<Token Ref=\"%s\" %s/>%n", margin, encode(reg.regexName), details)
       case ref: ReferenceNode => out.printf("%s<Reference Ref=\"%s\" %s/>%n", margin, encode(ref.ruleName), details)
       case rn: RootNode/*(/* _,  */name, isPackrat)*/ =>
@@ -269,6 +267,15 @@ class FileIO(hub: VllParsers) {
         aNode.parent = parent
         parent.append(aNode)
         refdTokens + ref
+      case <WildCard></WildCard> => 
+        aNode = WildCardNode()
+        aNode.errorMessage = errMsg
+        aNode.description = description
+        try {aNode.actionText = actionText} catch {case _ =>}
+        aNode.drop = drop
+        //aNode = new TokenTreeNode(ref, strMap(mult))
+        aNode.parent = parent
+        parent.append(aNode)
       case <Sequence>{contents @ _*}</Sequence> => 
         //val errMsg = (node \ "@ErrMsg").toString
         //printf("  Sequence: %s%n", mult)

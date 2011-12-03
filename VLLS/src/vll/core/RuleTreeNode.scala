@@ -22,9 +22,8 @@ package vll.core
 
 import scala.collection._
 
-abstract sealed class RuleTreeNode (
-  var multiplicity: Multiplicity.Value
-) extends mutable.ArrayBuffer[RuleTreeNode] {
+abstract sealed class RuleTreeNode (var multiplicity: Multiplicity.Value) 
+    extends mutable.ArrayBuffer[RuleTreeNode] {
   val seqNbr = RuleTreeNode.getSeqNbr
   var errorMessage = ""
   var description = ""
@@ -188,3 +187,14 @@ case class ReferenceNode(multi: Multiplicity.Value, var ruleName: String) extend
     clone
   }
 }
+
+case class WildCardNode(multi: Multiplicity.Value = Multiplicity.One) extends RuleTreeNode(multi) {
+  override def equals(other: Any) = other match {case r: AnyRef => this eq r; case _ => false}
+  def epsilonOk = multiplicity == Multiplicity.ZeroOrMore || multiplicity == Multiplicity.ZeroOrOne
+  def cloneTree() = {
+    val clone = WildCardNode(multiplicity)
+    clone.copyFieldsFrom(this)
+    clone
+  }
+}
+

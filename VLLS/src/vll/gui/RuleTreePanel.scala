@@ -41,6 +41,7 @@ import vll.core.RepSepNode
 import vll.core.SequenceNode
 import vll.core.PredicateNode
 import vll.core.VllParsers
+import vll.core.WildCardNode
 
 class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel with ActionListener with TreeSelectionListener {
 
@@ -167,6 +168,12 @@ class RuleTreePanel(val guiTop: VllGui, val hub: VllParsers) extends BorderPanel
           case None =>
         }
       case treeNodePopupMenu.newPredicate => val newNode = GuiNode(PredicateNode());
+        theModel.insertNodeInto(newNode, selectedNode, selectedNode.getChildCount)
+        theModel.nodeChanged(selectedNode)
+        theTree.expandPath(new TreePath(selectedNode.getPath.asInstanceOf[Array[Object]]))
+        theTree.scrollPathToVisible(new TreePath(newNode))
+        guiTop.isDirty = true
+      case treeNodePopupMenu.newWildCard => val newNode = GuiNode(WildCardNode());
         theModel.insertNodeInto(newNode, selectedNode, selectedNode.getChildCount)
         theModel.nodeChanged(selectedNode)
         theTree.expandPath(new TreePath(selectedNode.getPath.asInstanceOf[Array[Object]]))

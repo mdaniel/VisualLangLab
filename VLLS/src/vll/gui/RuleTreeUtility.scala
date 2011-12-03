@@ -46,6 +46,7 @@ import scala.swing.event.ButtonClicked
 import scala.swing.SplitPane
 import scala.swing.Swing._
 import vll.core.ChoiceNode
+import vll.core.WildCardNode
 
 class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
   private val astStructurePanel = new BorderPanel {
@@ -226,6 +227,7 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
         case LiteralNode(_, name) => margin + "\"%s\"".format(gui.parsers.tokenBank(name).left.get)
         case RegexNode(_, name) => margin + "[%s]".format(name)
         case root: RootNode => retType(root.head, depth, limit) 
+        case WildCardNode(_) => margin + "*"
         case seq: SequenceNode => 
           def dropped(n: RuleTreeNode) = n.drop || n.multiplicity == Multiplicity.Not || n.multiplicity == Multiplicity.Guard || n.isInstanceOf[PredicateNode]
           val effectiveLength = seq.filter(!dropped(_)).size

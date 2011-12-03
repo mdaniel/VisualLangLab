@@ -25,7 +25,7 @@ import javax.swing.tree.{DefaultTreeCellRenderer}
 import java.awt.event.MouseEvent
 import java.awt.{Component, Font, Color, Graphics}
 import scala.swing.Swing
-import vll.core.{ LiteralNode, SequenceNode, Multiplicity, RegexNode, VllParsers, RootNode , ChoiceNode, RepSepNode, PredicateNode, ReferenceNode}
+import vll.core.{ LiteralNode, SequenceNode, Multiplicity, RegexNode, VllParsers, RootNode , ChoiceNode, RepSepNode, PredicateNode, ReferenceNode, WildCardNode}
 
 class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeCellRenderer {
   override def getTreeCellRendererComponent(tree: JTree, value: Object, selected: Boolean, 
@@ -52,6 +52,7 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
           "Reference(%s)".format(name) else guiNode.isValidMessage
         case RootNode(name, _) => if (guiNode.isValidMessage eq null)
           "Root(%s)".format(name) else guiNode.isValidMessage
+        case WildCardNode(_) => "WildCard"
         case _ => guiNode.isValidMessage
       }
       displayName = guiNode.displayName(gui.viewFullNamesMenuItem.selected)

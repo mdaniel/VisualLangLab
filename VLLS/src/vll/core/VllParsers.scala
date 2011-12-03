@@ -221,6 +221,7 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
         case RootNode(_, packrat) =>
           val theParser = node2parser(node.head)
           if (packrat) parser2packrat(theParser) else theParser
+        case WildCardNode(_) => wildCardParser
         case RegexNode(_, tokenName) =>
           if (tokenParserCache.contains(tokenName))
             tokenParserCache(tokenName)
