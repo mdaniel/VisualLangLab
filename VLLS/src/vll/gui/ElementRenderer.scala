@@ -139,6 +139,6 @@ class ElementRenderer(val gui: VllGui, val hub: VllParsers) extends DefaultTreeC
   var isCommitPoint = false
   var color = Color.black
   var isRoot = false
-  val errorImage = Swing.Icon(getClass.getResource("images/ErrorMark.gif")).getImage
-  val commitImage = Swing.Icon(getClass.getResource("images/CommitMark.gif")).getImage
+  val errorImage = Images.errorMark.getImage
+  val commitImage = Images.commitMark.getImage
 }

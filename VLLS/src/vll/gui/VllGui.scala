@@ -100,7 +100,7 @@ class VllGui extends MainFrame with ActionListener {
   }
   
   val fileNewAction = new Action("New") {
-    icon = swing.Swing.Icon(getClass.getResource("images/New16.gif")) 
+    icon = Images.new16 
     toolTip = title
     def apply {
       saveChanges()
@@ -119,7 +119,7 @@ class VllGui extends MainFrame with ActionListener {
   }
   
   val fileOpenAction = new Action("Open") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Open16.gif"))
+    icon = Images.open16 //swing.Swing.Icon(getClass.getResource("images/Open16.gif"))
     toolTip = title
     def apply {
       saveChanges()
@@ -147,7 +147,7 @@ class VllGui extends MainFrame with ActionListener {
   }
   
   val fileSaveAction = new Action("Save") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Save16.gif"))
+    icon = Images.save16 //swing.Swing.Icon(getClass.getResource("images/Save16.gif"))
     toolTip = title
     def apply {
         grammarFile match {
@@ -165,7 +165,7 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   val fileSaveAsAction = new Action("Save As") {
-    icon = swing.Swing.Icon(getClass.getResource("images/SaveAs16.gif"))
+    icon = Images.saveAs16 //swing.Swing.Icon(getClass.getResource("images/SaveAs16.gif"))
     toolTip = title
     def apply {
         grammarFileChooser.title = "Save as"
@@ -239,7 +239,7 @@ class VllGui extends MainFrame with ActionListener {
   }
   
   val ruleNewAction = new Action("New rule") {
-    icon = swing.Swing.Icon(getClass.getResource("images/NewReference.gif"))
+    icon = Images.newReference //swing.Swing.Icon(getClass.getResource("images/NewReference.gif"))
     toolTip = title
     def apply {
     val pattern = """\s*([a-zA-Z_]\w*)\s*""".r
@@ -266,7 +266,7 @@ class VllGui extends MainFrame with ActionListener {
   }
   
   val ruleRenameAction = new Action("Rename rule") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Refresh16.gif"))
+    icon = Images.refresh16 //swing.Swing.Icon(getClass.getResource("images/Refresh16.gif"))
     toolTip = title
     def apply {
     val currentName = ruleChooser.getSelectedItem.asInstanceOf[String]
@@ -294,7 +294,7 @@ class VllGui extends MainFrame with ActionListener {
   
   val ruleDeleteAction = new Action("Delete rule") {
     toolTip = title
-    icon = swing.Swing.Icon(getClass.getResource("images/Delete16.gif"))
+    icon = Images.delete16 //swing.Swing.Icon(getClass.getResource("images/Delete16.gif"))
     def apply {
       def purgeStack(p: String) {
         var lst = List[String]()
@@ -332,7 +332,7 @@ class VllGui extends MainFrame with ActionListener {
   
   val ruleReferencesAction = new Action("Find rule") {
     toolTip = title
-    icon = swing.Swing.Icon(getClass.getResource("images/Search16.gif"))
+    icon = Images.search16 //swing.Swing.Icon(getClass.getResource("images/Search16.gif"))
     def apply {
     val defaultCursor = /* VllGui.top. */cursor
     cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)
@@ -416,16 +416,17 @@ class VllGui extends MainFrame with ActionListener {
 
   def createNewToken(isRegex: Boolean) {
     val pattern = if (isRegex)
-      """([a-zA-Z_][a-zA-Z_0-9]*~\d+|[a-zA-Z_][a-zA-Z_0-9]*)\s*,\s*(\S.*)""".r
+      """([a-zA-Z_][a-zA-Z_0-9]*(?:~\d+)?)\s+(\S.*)""".r
     else
-      """([a-zA-Z_][a-zA-Z_0-9]*)\s*,\s*(\S.*)""".r
-    val msg = "Enter name, comma, " + (if (isRegex) "regex" else "literal") + " pattern"
+      """([a-zA-Z_][a-zA-Z_0-9]*)\s+(\S.*)""".r
+    val inputDescription = "name, space(s), %s-pattern".format(if (isRegex) "regex" else "literal")
+    val msg = "Enter " + inputDescription
     Dialog.showInput(splitPane, msg, "New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Question, null, Array[String](), null) match {
       case Some(tokenInfo) =>
         tokenInfo.trim match {
           case pattern(name, value) => validateAndAssignTokenValue(true, isRegex, name, value)
           case _ =>
-            Dialog.showMessage(splitPane, "Bad input. Expected name, comma, regex/literal pattern", 
+            Dialog.showMessage(splitPane, "Bad input. Expected " + inputDescription, 
                 "ERROR - New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Error, null)
         }
       case None =>
@@ -433,7 +434,7 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   val tokenNewLiteralAction = new Action("New literal") {
-    icon = swing.Swing.Icon(getClass.getResource("images/NewLiteral.gif"))
+    icon = Images.newLiteral //swing.Swing.Icon(getClass.getResource("images/NewLiteral.gif"))
     toolTip = title
     def apply {
       createNewToken(false)
@@ -441,7 +442,7 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   val tokenNewRegexAction = new Action("New regex") {
-    icon = swing.Swing.Icon(getClass.getResource("images/NewRegex.gif"))
+    icon = Images.newRegex //swing.Swing.Icon(getClass.getResource("images/NewRegex.gif"))
     toolTip = title
     def apply {
       createNewToken(true)
@@ -449,7 +450,7 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   val tokenEditAction = new Action("Edit token") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Edit16.gif"))
+    icon = Images.edit16 //swing.Swing.Icon(getClass.getResource("images/Edit16.gif"))
     toolTip = title
     def apply {
       selectToken("Edit token") match {
@@ -470,7 +471,7 @@ class VllGui extends MainFrame with ActionListener {
   }
   
   val tokenReferencesAction = new Action("Find token") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Replace16.gif"))
+    icon = Images.replace16 //swing.Swing.Icon(getClass.getResource("images/Replace16.gif"))
     toolTip = title
     def apply {
     val defaultCursor = cursor
@@ -495,7 +496,7 @@ class VllGui extends MainFrame with ActionListener {
   }
   
   val tokenDeleteAction = new Action("Delete token") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Delete16.gif"))
+    icon = Images.delete16 //swing.Swing.Icon(getClass.getResource("images/Delete16.gif"))
     toolTip = title
     def apply {
     selectToken("Delete token") match {
@@ -513,7 +514,7 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   val tokenImportAction = new Action("Import tokens") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Import16.gif"))
+    icon = Images.import16 //swing.Swing.Icon(getClass.getResource("images/Import16.gif"))
     toolTip = title
     def apply {
       tokenLibraryChooser.title = "Import tokens"
@@ -533,7 +534,7 @@ class VllGui extends MainFrame with ActionListener {
   }
 
   val tokenExportAction = new Action("Export tokens") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Export16.gif"))
+    icon = Images.export16 //swing.Swing.Icon(getClass.getResource("images/Export16.gif"))
     toolTip = title
     def apply {
         tokenLibraryChooser.title = "Export tokens"
@@ -587,13 +588,13 @@ class VllGui extends MainFrame with ActionListener {
   
   val runParseInputAction = new Action("Parse input") {
     toolTip = title
-    icon = swing.Swing.Icon(getClass.getResource("images/AlignLeft16.gif"))
+    icon = Images.alignLeft16 //swing.Swing.Icon(getClass.getResource("images/AlignLeft16.gif"))
     def apply { parsers ! null; }
   }
   
   val runParseFileAction = new Action("Parse file") {
     toolTip = title
-    icon = swing.Swing.Icon(getClass.getResource("images/Host16.gif"))
+    icon = Images.host16 //swing.Swing.Icon(getClass.getResource("images/Host16.gif"))
     def apply {
       inFileChooser.showOpenDialog(splitPane) match {
         case FileChooser.Result.Approve =>
@@ -655,7 +656,7 @@ class VllGui extends MainFrame with ActionListener {
 
   val runClearLogAction = new Action("Clear log") {
     toolTip = title
-    icon = swing.Swing.Icon(getClass.getResource("images/Clear16.gif"))
+    icon = Images.clear16 //swing.Swing.Icon(getClass.getResource("images/Clear16.gif"))
     def apply {
       logTextPane.clearLogText()
     }
@@ -663,7 +664,7 @@ class VllGui extends MainFrame with ActionListener {
 
   val runCopyLogAction = new Action("Copy log") {
     toolTip = title
-    icon = swing.Swing.Icon(getClass.getResource("images/Copy16.gif"))
+    icon = Images.copy16 //swing.Swing.Icon(getClass.getResource("images/Copy16.gif"))
     def apply {
       logTextPane.copyLog()
     }
@@ -771,7 +772,7 @@ class VllGui extends MainFrame with ActionListener {
   val parsers = new ParsingActor(this)
   
   val stopAction = new Action("") {
-    icon = swing.Swing.Icon(getClass.getResource("images/Stop16.gif"))
+    icon = Images.stop16 //swing.Swing.Icon(getClass.getResource("images/Stop16.gif"))
     toolTip = "Stop parsing"
     enabled = false
     def apply() {parsers.userRequestedStop = true}
