@@ -416,17 +416,23 @@ class VllGui extends MainFrame with ActionListener {
 
   def createNewToken(isRegex: Boolean) {
     val pattern = if (isRegex)
-      """([a-zA-Z_][a-zA-Z_0-9]*(?:~\d+)?)\s+(\S.*)""".r
+      """([a-zA-Z_][a-zA-Z_0-9]*(?:~\d+)?)(\s*,\s*|\s+)(\S.*)""".r
     else
-      """([a-zA-Z_][a-zA-Z_0-9]*)\s+(\S.*)""".r
+      """([a-zA-Z_][a-zA-Z_0-9]*)(\s*,\s*|\s+)(\S.*)""".r
     val inputDescription = "name, space(s), %s-pattern".format(if (isRegex) "regex" else "literal")
     val msg = "Enter " + inputDescription
     Dialog.showInput(splitPane, msg, "New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Question, null, Array[String](), null) match {
       case Some(tokenInfo) =>
         tokenInfo.trim match {
-          case pattern(name, value) => validateAndAssignTokenValue(true, isRegex, name, value)
+          case pattern(name, sep, value) => 
+            if (sep.trim.length == 0)
+              validateAndAssignTokenValue(true, isRegex, name, value)
+            else
+              Dialog.showMessage(splitPane, "Bad input. Need: " + inputDescription +  
+                  ".\nFrom Version-7.01 a comma separator is not accepted",
+                  "ERROR - New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Error, null)
           case _ =>
-            Dialog.showMessage(splitPane, "Bad input. Expected " + inputDescription, 
+            Dialog.showMessage(splitPane, "Bad input. Need: " + inputDescription + ".",
                 "ERROR - New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Error, null)
         }
       case None =>

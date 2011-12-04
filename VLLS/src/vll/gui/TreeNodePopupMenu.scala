@@ -103,7 +103,7 @@ class TreeNodePopupMenu(val ruleTreePanel: RuleTreePanel) extends JPopupMenu {
   addSeparator()
 
   val addMenu = new JMenu("Add")
-  val newToken = new JMenuItem("Literal/Regex", Images.token)
+  val newToken = new JMenuItem("Token", Images.token)
   addMenu.add(newToken)
   newToken.addActionListener(ruleTreePanel)
   val newReference = new JMenuItem("Reference", Images.reference)
