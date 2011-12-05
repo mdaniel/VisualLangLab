@@ -416,24 +416,29 @@ class VllGui extends MainFrame with ActionListener {
 
   def createNewToken(isRegex: Boolean) {
     val pattern = if (isRegex)
-      """([a-zA-Z_][a-zA-Z_0-9]*(?:~\d+)?)(\s*,\s*|\s+)(\S.*)""".r
+      """([a-zA-Z_$][a-zA-Z_$0-9-]*(?:-\d+)?)\s+(\S.*)""".r
     else
-      """([a-zA-Z_][a-zA-Z_0-9]*)(\s*,\s*|\s+)(\S.*)""".r
-    val inputDescription = "name, space(s), %s-pattern".format(if (isRegex) "regex" else "literal")
-    val msg = "Enter " + inputDescription
-    Dialog.showInput(splitPane, msg, "New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Question, null, Array[String](), null) match {
+      """([a-zA-Z_$][a-zA-Z_$0-9-]*)\s+(\S.*)""".r
+    val regOrLit = if (isRegex) "regex" else "literal"
+    val inputDescription = "name, space(s), %s-pattern".format(regOrLit)
+    val msg = "Enter " + inputDescription + ".\n(Comma separator dropped in ver-7.01+)"
+    Dialog.showInput(splitPane, msg, ("New " + regOrLit), Dialog.Message.Question, null, Array[String](), null) match {
       case Some(tokenInfo) =>
         tokenInfo.trim match {
-          case pattern(name, sep, value) => 
-            if (sep.trim.length == 0)
-              validateAndAssignTokenValue(true, isRegex, name, value)
-            else
-              Dialog.showMessage(splitPane, "Bad input. Need: " + inputDescription +  
-                  ".\nFrom Version-7.01 a comma separator is not accepted",
-                  "ERROR - New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Error, null)
+          case pattern(name, value) => 
+            if (value.startsWith(",")) {
+              if (Dialog.showConfirmation(splitPane, "Create %s with pattern \'%s\' ?"
+                  .format(regOrLit, value) + "\n(Comma separator dropped in ver-7.01+)", 
+                  "CONFIRM - New %s".format(regOrLit), 
+                  Dialog.Options.OkCancel, Dialog.Message.Question, null) == Dialog.Result.Ok)
+                validateAndAssignTokenValue(true, isRegex, name, value)
+            } else {
+                validateAndAssignTokenValue(true, isRegex, name, value)
+            }
           case _ =>
-            Dialog.showMessage(splitPane, "Bad input. Need: " + inputDescription + ".",
-                "ERROR - New " + (if (isRegex) "regex" else "literal"), Dialog.Message.Error, null)
+            Dialog.showMessage(splitPane, "Bad input. Need: " + inputDescription + 
+                ".\n(Comma separator dropped in ver-7.01+)",
+                "ERROR - New " + (regOrLit), Dialog.Message.Error, null)
         }
       case None =>
     }
