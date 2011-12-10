@@ -63,7 +63,7 @@ import scala.util.Properties
 import vll.core.Automata
 import vll.core.ScalaEngine
 import vll.core.Utils
-import vll.gui.samples.{ArithExpr, ArithExprWithActionCode, SimpleJSON}
+import vll.gui.samples.{TDARExpr, PS2EArithExpr, P2SEArithExprAction, PS2ESimpleJSON, TDARExprAST, TDARExprActions}
 
 class VllGui extends MainFrame with ActionListener {
 //  VllGui.splash("0")
@@ -416,24 +416,30 @@ class VllGui extends MainFrame with ActionListener {
 
   def createNewToken(isRegex: Boolean) {
     val pattern = if (isRegex)
-      """([a-zA-Z_$][a-zA-Z_$0-9-]*(?:-\d+)?)\s+(\S.*)""".r
+      "([a-zA-Z_$][a-zA-Z_$0-9-]*(?:~\\d+)?)(\\s*,\\s*|\\s+)(\\S.*)?".r
     else
-      """([a-zA-Z_$][a-zA-Z_$0-9-]*)\s+(\S.*)""".r
+      "([a-zA-Z_$][a-zA-Z_$0-9-]*)(\\s*,\\s*|\\s+)(\\S.*)?".r
     val regOrLit = if (isRegex) "regex" else "literal"
     val inputDescription = "name, space(s), %s-pattern".format(regOrLit)
-    val msg = "Enter " + inputDescription + ".\n(Comma separator dropped in ver-7.01+)"
+    val msg = "Enter " + inputDescription
     Dialog.showInput(splitPane, msg, ("New " + regOrLit), Dialog.Message.Question, null, Array[String](), null) match {
       case Some(tokenInfo) =>
         tokenInfo.trim match {
-          case pattern(name, value) => 
-            if (value.startsWith(",")) {
+          case pattern(name, space, value) => 
+            if (space.trim.length == 0)
+                validateAndAssignTokenValue(true, isRegex, name, value)
+            else if (space.startsWith(",")) {
+              Dialog.showMessage(splitPane, "Bad input. Need: " + inputDescription + 
+                ".\nComma separator dropped in ver-7.01+",
+                "ERROR - New " + (regOrLit), Dialog.Message.Error, null)
+            } else {
+              val pat = if (value eq null) "," else (space + value).trim
               if (Dialog.showConfirmation(splitPane, "Create %s with pattern \'%s\' ?"
-                  .format(regOrLit, value) + "\n(Comma separator dropped in ver-7.01+)", 
+                  .format(regOrLit, pat) + 
+                  (if (value eq null) "" else "\n(Comma separator dropped in ver-7.01+)"), 
                   "CONFIRM - New %s".format(regOrLit), 
                   Dialog.Options.OkCancel, Dialog.Message.Question, null) == Dialog.Result.Ok)
-                validateAndAssignTokenValue(true, isRegex, name, value)
-            } else {
-                validateAndAssignTokenValue(true, isRegex, name, value)
+                validateAndAssignTokenValue(true, isRegex, name, pat)
             }
           case _ =>
             Dialog.showMessage(splitPane, "Bad input. Need: " + inputDescription + 
@@ -695,23 +701,39 @@ class VllGui extends MainFrame with ActionListener {
         new ScalaLicenseHelper(mainFrame).presentAboutDialog()
     }
   }
-  val helpSampleItem1 = new MenuItem("ArithExpr") {
+  val helpSampleTdarExpr = new MenuItem("TDAR-Expr") {
     reactions += {
-      case ButtonClicked(_) => new ArithExpr(mainFrame).load()
+      case ButtonClicked(_) => new TDARExpr(mainFrame).load()
     }
   }
-  val helpSampleItem2 = new MenuItem("SimpleJSON") {
+  val helpSampleTdarExprWithActions = new MenuItem("TDAR-Expr-Actions") {
     reactions += {
-      case ButtonClicked(_) => new SimpleJSON(mainFrame).load()
+      case ButtonClicked(_) => new TDARExprActions(mainFrame).load()
     }
   }
-  val helpSampleItem3 = new MenuItem("ArithExpr with action-code") {
+  val helpSampleTdarExprAST = new MenuItem("TDAR-Expr-AST") {
     reactions += {
-      case ButtonClicked(_) => new ArithExprWithActionCode(mainFrame).load()
+      case ButtonClicked(_) => new TDARExprAST(mainFrame).load()
+    }
+  }
+  val helpSamplePS2EArithExpr = new MenuItem("PS2E-ArithExpr") {
+    reactions += {
+      case ButtonClicked(_) => new PS2EArithExpr(mainFrame).load()
+    }
+  }
+  val helpSamplePS2ESimpleJSON = new MenuItem("PS2E-SimpleJSON") {
+    reactions += {
+      case ButtonClicked(_) => new PS2ESimpleJSON(mainFrame).load()
+    }
+  }
+  val helpSamplePS2EArithExprAction = new MenuItem("PS2E-ArithExpr with action-code") {
+    reactions += {
+      case ButtonClicked(_) => new P2SEArithExprAction(mainFrame).load()
     }
   }
   val helpSamples = new Menu("Sample grammars") {
-    contents.append(helpSampleItem1, helpSampleItem2, helpSampleItem3)
+    contents.append(helpSampleTdarExpr, helpSampleTdarExprWithActions, helpSampleTdarExprAST, 
+                    new Separator, helpSamplePS2EArithExpr, helpSamplePS2ESimpleJSON, helpSamplePS2EArithExprAction)
   }
   val helpMenuItem = new MenuItem("Help") {
     val msg = "Check for documentation at http://vll.java.net"
@@ -805,10 +827,10 @@ class VllGui extends MainFrame with ActionListener {
   val outerSplitPane = new SplitPane(Orientation.Horizontal, splitPane, logTextPane) {
   }
 
-  val vllIconImage = swing.Swing.Icon(getClass.getResource("images/Icon.gif"))
-  iconImage = vllIconImage.getImage
+  iconImage = Images.icon.getImage
   title = "VisualLangLab/S"
-  val grammarFileChooser = new FileChooser(new File(System.getProperty("user.dir"))) {
+  
+  lazy val grammarFileChooser = new FileChooser(new File(System.getProperty("user.dir"))) {
     fileSelectionMode = FileChooser.SelectionMode.FilesOnly
     multiSelectionEnabled = false
     fileFilter = new FileFilter() {
@@ -816,7 +838,7 @@ class VllGui extends MainFrame with ActionListener {
       def getDescription = "VisualLangLab grammar (vll) file"
     }
   }
-  val tokenLibraryChooser = new FileChooser(new File(System.getProperty("user.dir"))) {
+  lazy val tokenLibraryChooser = new FileChooser(new File(System.getProperty("user.dir"))) {
     fileSelectionMode = FileChooser.SelectionMode.FilesOnly
     multiSelectionEnabled = false
     fileFilter = new FileFilter() {
@@ -824,8 +846,7 @@ class VllGui extends MainFrame with ActionListener {
       def getDescription = "Token library (vll) file"
     }
   }
-
-  val inFileChooser = new FileChooser(new File(System.getProperty("user.dir"))) {
+  lazy val inFileChooser = new FileChooser(new File(System.getProperty("user.dir"))) {
     fileSelectionMode = FileChooser.SelectionMode.FilesAndDirectories
     multiSelectionEnabled = false
     fileFilter = new FileFilter() {

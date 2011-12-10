@@ -244,6 +244,7 @@ class FileIO(hub: VllParsers) {
         //printf("  Reference: %s, %s%n", ref, mult)
         aNode = /* new  */ReferenceNode(strMap(mult), ref)
         aNode.errorMessage = errMsg
+        aNode.description = description
         try {aNode.actionText = actionText} catch {case _ =>}
         aNode.drop = drop
         aNode.parent = parent
@@ -261,6 +262,7 @@ class FileIO(hub: VllParsers) {
             sys.exit()
         }
         aNode.errorMessage = errMsg
+        aNode.description = description
         try {aNode.actionText = actionText} catch {case _ =>}
         aNode.drop = drop
         //aNode = new TokenTreeNode(ref, strMap(mult))

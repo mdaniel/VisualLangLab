@@ -24,11 +24,11 @@ import scala.swing.{Dialog, Label, Swing}
 import scala.concurrent.ops
 import vll.gui.VllGui
 
-class ArithExprWithActionCode(val gui: VllGui) {
+class P2SEArithExprAction(val gui: VllGui) {
 
   def load() {
     val msg = """<html><body><pre>
-ArithExprWithActionCode augments the parser described at page 760 of 
+This example augments the parser described at page 760 of 
 "Programming in Scala, Second Edition" (http://www.artima.com/shop/programming_in_scala_2ed) 
 with action-code that actually evaluates the expression.
 A description of the same parser can also be found here:
@@ -50,10 +50,10 @@ Output: 20
         gui.ruleTreePanel.setRule(firstRule)
       }
     }
-    gui.title = "VisualLangLab/S - ArithExprWithActionCode"
+    gui.title = "VisualLangLab/S - P2SE-ArithExprAction"
 //    gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
-        "VisualLangLab sample - ArithExprWithActionCode", Dialog.Message.Info, null)
+        "VisualLangLab sample - P2SE-ArithExprAction", Dialog.Message.Info, null)
   }
 
   val grammar = <VLL-Grammar>

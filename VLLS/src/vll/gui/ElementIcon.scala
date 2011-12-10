@@ -23,15 +23,20 @@ package vll.gui
 import java.awt.{Component, Graphics}
 import javax.swing.{Icon}
 import vll.core.RuleTreeNode
-import scala.swing.Swing
 
 class ElementIcon(val node: RuleTreeNode, val selected: Boolean) extends javax.swing.Icon {
 
-  lazy val image = if ((node eq null) || !ElementIcon.iconImageName.contains(node.getClass.getSimpleName)) 
-    null 
-  else 
-    Swing.Icon(getClass.getResource("images/" + 
-      ElementIcon.iconImageName(node.getClass.getSimpleName))).getImage
+  lazy val image = (node.getClass.getSimpleName match {
+    case "ChoiceNode" => Images.choice
+    case "LiteralNode" => Images.literal
+    case "PredicateNode" => Images.predicate
+    case "ReferenceNode" => Images.reference
+    case "RegexNode" => Images.regex
+    case "RepSepNode" => Images.repSep
+    case "RootNode" => Images.root
+    case "SequenceNode" => Images.sequence
+    case "WildCardNode" => Images.wildCard
+  }) getImage
 
   lazy val getIconHeight = if (image eq null) 0 else image.getHeight(null)
   lazy val getIconWidth = if (image eq null) 0 else image.getWidth(null)
@@ -41,16 +46,3 @@ class ElementIcon(val node: RuleTreeNode, val selected: Boolean) extends javax.s
   }
 }
 
-object ElementIcon {
-  val iconImageName = Map(
-    "ChoiceNode" -> "Choice.gif",
-    "LiteralNode" -> "Literal.gif",
-    "RegexNode" -> "Regex.gif",
-    "RepSepNode" -> "RepSep.gif",
-    "RootNode" -> "Root.gif",
-    "ReferenceNode" -> "Reference.gif",
-    "SequenceNode" -> "Sequence.gif",
-    "PredicateNode" -> "SemPred.gif",
-    "WildCardNode" -> "WildCard.gif"
-  )
-}

@@ -259,7 +259,8 @@ class RuleTreeUtility(private val gui: VllGui) extends BorderPanel {
       }
       if (astStructurePanel.isGlobal)
         stack.pop()
-      applyMultiplicity(basicType, node, margin)
+      val multType = applyMultiplicity(basicType, node, margin)
+      if (node.description.isEmpty) multType else "%s (%s)".format(multType, node.description)
     }
   }
   displayAstStruct()

@@ -24,12 +24,12 @@ import scala.swing.Dialog
 import scala.swing.Label
 import vll.gui.VllGui
 
-class ArithExpr(val gui: VllGui) {
+class PS2EArithExpr(val gui: VllGui) {
 
   def load() {
     val msg = """<html><body><pre>
-ArithExpr implements the parser described at page 760 of "Programming in Scala, 
-Second Edition" (http://www.artima.com/shop/programming_in_scala_2ed)
+This example is based on the parser described at page 760 of 
+"Programming in Scala" (http://www.artima.com/shop/programming_in_scala_2ed)
 A description of the same parser can also be found here:
 http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf
 
@@ -50,11 +50,11 @@ Output: Array(Array(Pair(1, Array(Array(Pair(0, 2), List()),
     gui.parsers.load(grammar)
     val firstRule = gui.parsers.ruleBank.ruleNames(0)
     gui.updateRuleChooser(firstRule)
-    gui.title = "VisualLangLab/S - ArithExpr"
+    gui.title = "VisualLangLab/S - PS2E-ArithExpr"
     gui.ruleTreePanel.setRule(firstRule)
 //    gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
-        "VisualLangLab sample - ArithExpr", Dialog.Message.Info, null)
+        "VisualLangLab sample - PS2E-ArithExpr", Dialog.Message.Info, null)
   }
 
   val grammar = <VLL-Grammar>

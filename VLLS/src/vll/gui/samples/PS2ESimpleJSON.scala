@@ -24,11 +24,11 @@ import scala.swing.Dialog
 import scala.swing.Label
 import vll.gui.VllGui
 
-class SimpleJSON(gui: VllGui) {
+class PS2ESimpleJSON(gui: VllGui) {
 
   def load() {
     val msg = """<html><body><pre>
-SimpleJSON is based on the parser described at page 764 of
+This example is based on the parser described at page 764 of
 "Programming in Scala" (http://www.artima.com/shop/programming_in_scala_2ed)
 A description of the same parser can also be found here:
 http://lamp.epfl.ch/teaching/foundations_of_software/docs/combinator_parsing.pdf
@@ -43,11 +43,11 @@ You can find sample input in the book or PDF document referred above.
     gui.parsers.load(grammar)
     val firstRule = gui.parsers.ruleBank.ruleNames(0)
     gui.updateRuleChooser(firstRule)
-    gui.title = "VisualLangLab/S - SimpleJSON"
+    gui.title = "VisualLangLab/S - PS2E-SimpleJSON"
     gui.ruleTreePanel.setRule(firstRule)
 //    gui.logTextPane.clearLogText()
     Dialog.showMessage(gui.contents(0), new Label(msg).peer,
-        "VisualLangLab sample - SimpleJSON", Dialog.Message.Info, null)
+        "VisualLangLab sample - PS2E-SimpleJSON", Dialog.Message.Info, null)
   }
 
   val grammar = <VLL-Grammar>
