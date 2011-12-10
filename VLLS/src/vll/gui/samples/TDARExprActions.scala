@@ -109,14 +109,14 @@ The top-level parser-rule has been renamed to "Prog"
         <Reference Ref="stat" Mult="+" ActionText="function (arg) {&#xA;  if (!arg) {&#xA;    VLL.memory = {};&#xA;  } else {&#xA;    return &quot;Ok&quot;;&#xA;  }&#xA;}"/>
     </Parser>
     <Parser Name="stat">
-        <Choice ActionText="function (arg) {&#xA;  if (arg) {&#xA;    switch (arg[0]) {&#xA;      case 0: &#xA;        println(arg[1][0]); break;&#xA;      case 1:&#xA;        VLL.memory[arg[1][0]] = arg[1][2]; &#xA;        break;&#xA;      case 2: &#xA;        return arg; &#xA;    }&#xA;  }&#xA;}">
+        <Choice ActionText="function (arg) {&#xA;  if (arg) {&#xA;    switch (arg[0]) {&#xA;      case 0: &#xA;        VLL.memory[arg[1][0]] = arg[1][2]; &#xA;        break;&#xA;      case 1:&#xA;        println(arg[1][0]); break;&#xA;      case 2: &#xA;        return arg; &#xA;    }&#xA;  }&#xA;}">
           <Sequence >
+            <Token Ref="ID" />
+            <Token Ref="EQUALS" />
             <Reference Ref="expr" />
             <Token Ref="NEWLINE" />
           </Sequence>
           <Sequence >
-            <Token Ref="ID" />
-            <Token Ref="EQUALS" />
             <Reference Ref="expr" />
             <Token Ref="NEWLINE" />
           </Sequence>
