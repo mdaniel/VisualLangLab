@@ -17,9 +17,8 @@ This tutorial uses <a href="http://vll.java.net/">VisualLangLab</a> to create a 
 like the one discussed in chapter 3 (<i>A Quick Tour for the Impatient</i>) of the book 
 <a href="http://pragprog.com/book/tpantlr/the-definitive-antlr-reference">
 The Definitive ANTLR Reference</a>. 
-The titles in this document are designed 
-to facilitate correlation with sections in the book. The grammars used 
-can be found online at this link: <a href="http://pragprog.com/titles/tpantlr/source_code">
+The grammars used can be found online at this link: 
+<a href="http://pragprog.com/titles/tpantlr/source_code">
 http://pragprog.com/titles/tpantlr/source_code</a>
 </p>
 
@@ -52,7 +51,7 @@ If you have a 6.0+ JRE installed, VisualLangLab is started by double-clicking <i
 No other software, tool, or skill is required. 
 </p>
 
-<h2 id="RecognizingLanguageSyntax">Recognizing Language Syntax</h2>
+<h2 id="RecognizerForLanguageSyntax">Recognizer for Language Syntax</h2>
 
 <p>
 This part of the tutorial describes VisualLangLab equivalents of section 3.1 
@@ -354,7 +353,7 @@ language (existing or yet-to-be-invented) that runs on the
 <a href="http://en.wikipedia.org/wiki/JVM">JVM</a>. 
 </p>
 
-<h3 id="TestingTheRecognizer">Testing the Recognizer</h3>
+<h3 id="TestingTheParser">Testing the Parser</h3>
 
 <p>
 VisualLangLab brings new meaning to the terms 
@@ -429,7 +428,7 @@ parser-rule, and that is the structure seen in Figure-12 (the selected text unde
 <i>Parser Log</i>). 
 </p>
 
-<h2 id="UsingSyntaxToDriveActionExecution">Using Syntax to Drive Action Execution</h2>
+<h2 id="SyntaxDrivenActionExecution">Syntax Driven Action Execution</h2>
 
 <p>
 This part of the tutorial describes VisualLangLab equivalents of section 3.2 
@@ -731,7 +730,7 @@ opened again ("File" -> "Open") with VisualLangLab's main menu operations
 just like any other grammar. The code is saved as text (source code) within the XML file. 
 </p>
 
-<h2 id="EvaluatingExpressionsUsingAnASTIntermediate Form">Evaluating Expressions Using an AST Intermediate Form</h2>
+<h2 id="EvaluatingExpressionsUsingAnAST">Evaluating Expressions Using an AST</h2>
 
 <p>
 This part of the tutorial describes VisualLangLab equivalents of section 3.3 
@@ -757,7 +756,7 @@ via the <a href="../UsingTheAPI.html">VisualLangLab API</a> that enables a clien
 to regenerate a parser from a saved grammar. 
 </p>
 
-<h3 id="BuildingASTsWithAGrammar">Building ASTs with a Grammar</h3>
+<h3 id="AGrammarForBuildingASTs">A Grammar for Building ASTs</h3>
 
 <p>
 As described above, a VisualLangLab parser always produces an AST, so you do not 
@@ -788,7 +787,7 @@ To inspect a version of this grammar with all disposable parts dropped, select
 "Help" -> "Sample grammars" -> "TDAR-Expr-AST" from the main menu. 
 </p>
 
-<h3 id="EvaluatingExpressionsEncodedInASTs">Evaluating Expressions Encoded in ASTs</h3>
+<h3 id="EvaluatingASTEncodedExpressions">Evaluating AST-Encoded Expressions</h3>
 
 <p>
 This section shows you how to embed and use a VisualLangLab parser in an 
@@ -953,7 +952,7 @@ The action code to be used for this exercise (see Figure-21 above) is shown belo
   }
 }</pre>
 
-<h2 id="SimpleTreeBasedInterpreter">Simple Tree-Based Interpreter</h2>
+<h2 id="ASimpleTreeBasedInterpreter">A Simple Tree-Based Interpreter</h2>
 
 <p>
 The content of this section is a parser described on the 
