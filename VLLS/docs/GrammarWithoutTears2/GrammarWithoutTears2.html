@@ -25,7 +25,7 @@ by <a href="http://today.java.net/pub/au/251">Sanjay Dasgupta</a>
 <td><a href="http://vll.java.net/GrammarWithoutTears2/GrammarWithoutTears2.html">This</a> 
 is a periodically revised version of an 
 <a href="http://today.java.net/article/2011/09/14/visuallanglab-grammar-without-tears">article published on java.net</a> on 14th September 2011. 
-These revisions keep the contents compatible with the current version of 
+These revisions (last on 04-DEC-2011 for Version-7.01) keep the contents compatible with the current version of 
 <a href="http://vll.java.net/">VisualLangLab</a>. 
 A history of the revisions can be seen <a href="#RevisionHistory">here</a>.</td>
 </tr></table>
@@ -181,7 +181,7 @@ We create 2 literals and 1 regex that are
 <a href="#ManagingRules">used in a rule</a> later.
 </p>
 
-<h4>Literal Token Creation</h4>
+<h4 id="LiteralTokenCreation">Literal Token Creation</h4>
 
 <p>
 To create a literal token select <i>Tokens -> New literal</i> from the main 
@@ -201,11 +201,17 @@ in Figure-3).
 </p>
 
 <p>
+<font color="red"><u>Change in Version 7.01</u>: The dialogs in Figure-3 below 
+do not accept the comma. The name and pattern are just separated by one or more 
+space (and/or tab) characters</font>
+</p>
+
+<p>
 <img src="images/literal-creation.png" alt="Creating a literal token" /><br/>
 <em>Figure 3. Creating a literal token</em>
 </p>
 
-<h4>Regex Token Creation</h4>
+<h4 id="RegexTokenCreation">Regex Token Creation</h4>
 
 <p>
 Figure-4 below shows how you can create a <i>regex</i> token. 
@@ -215,6 +221,12 @@ pattern (<i>\\d+</i>) into the dialog box and click <i>OK</i>.
 You probably recognize the pattern as a Java  
 <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">regular-expression</a> 
 that matches numbers.
+</p>
+
+<p>
+<font color="red"><u>Change in Version 7.01</u>: The dialog in Figure-4 below 
+does not accept the comma. The name and pattern are just separated by one or more 
+space (and/or tab) characters</font>
 </p>
 
 <p>
@@ -275,7 +287,7 @@ This graphical depiction makes grammars comprehensible to a wider range of users
 The icons and textual annotations used in the grammar-trees are described below.
 </p>
 
-<h4>Node Icons</h4>
+<h4 id="NodeIcons">Node Icons</h4>
 
 <p>
 The table below lists the icons from which grammar-trees are constructed.
@@ -293,6 +305,9 @@ The table below lists the icons from which grammar-trees are constructed.
       of similar items that also uses a specified separator</td></tr>
   <tr><td><img src="images/GrammarIconReference.gif" alt="The Reference icon" /></td><td>Reference - invokes another 
       named parser</td></tr>
+  <tr><td><img src="images/GrammarIconWildCard.gif" alt="The WildCard icon" /></td><td>Token wildcard - 
+      a pseudo-token that matches any other defined token, and is useful for implementing  
+      syntax-error handling strategies</td></tr>
   <tr><td><img src="images/GrammarIconSemPred.gif" alt="The SemPred icon" /></td><td>Semantic predicate - 
       succeeds or fails depending on the run-time value of an expression</td></tr>
   <tr><td colspan="2" align="center"><b>Terminals</b></td></tr>
@@ -340,54 +355,54 @@ Multiplicity has one of the following values:
 </ul>
 
 <p>
-<u>Note</u>: Observe that the last two values ("0" and "=") are actually commonly required 
-<a href="http://en.wikipedia.org/wiki/Syntactic_predicate">syntactic predicates</a> 
-and have no influence on the structure of the 
-<a href="#TheParseTree">AST</a>. The names <i>not</i> and <i>guard</i> are inspired 
-by functions of the same name and function in Scala's 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>.
+<u>Note</u>: The last two values ("0" and "=") are used to implement 
+<a href="http://en.wikipedia.org/wiki/Syntactic_predicate">syntactic predictes</a> 
+and have no influence on the information gathered by the parser (into to 
+<a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a> or parse-tree). 
+The names <i>not</i> and <i>guard</i> are inspired by functions of the same name in 
+the Scala <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">
+Parsers</a> class.
 </p>
+
+    <p>
+      The second annotation is the <i>name</i> of the entity. The value displayed depends on the 
+      type of the node as described below. (The remaining icon types do not have a <i>name</i>)
+    </p>
+
+    <ul style="list-style-type: disc;">
+      <li>Root - the name of the parser-rule itself</li>
+      <li>Literal - the name of the literal token</li>
+      <li>Regexp - the name of the regular-expression token</li>
+      <li>Reference - the name of referred-to parser-rule</li>
+    </ul>
+
+    <p>
+      All other annotations, 
+      described below, are optional. If any of the optional annotations are present, they are 
+      enclosed within square brackets.
+    </p>
+
+    <ul style="list-style-type: disc;">
+      <li>commit - backtracking to optional parser clauses (at an upper level) will be 
+          prevented if this node is successfully parsed</li>
+      <li>description - an optional user-assigned string (see below) that can be assigned 
+          to certain types of node</li>
+      <li>drop - the node will not be entered into the AST. You can see examples of 
+          its use in the built-in <i>ArithExpr</i> <a href="SampleGrammars.html">Sample Grammars</a></li>
+      <li>message - the node has an associated error-message</li>
+      <li>packrat - the parser-rule is a 
+          <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers$PackratParser.html">packrat parser</a> 
+          (applicable only to a root-node)</li>
+      <li>trace - the parser's use of the node will be logged at run-time</li>
+    </ul>
 
 <p>
-The second annotation is the <i>name</i> of the entity. The value displayed depends on the 
-type of the node as described below.
+All node attributes can be changed via the context menu shown in Figure-5 above.
 </p>
 
-<ul style="list-style-type: disc;">
-  <li>Root - the name of the parser-rule itself</li>
-  <li>Literal - the name of the literal token</li>
-  <li>Regexp - the name of the regular-expression token</li>
-  <li>Reference - the name of referred-to parser-rule</li>
-  <li>Choice - the description (see below) if defined</li>
-  <li>Sequence - the description (see below) if defined</li>
-  <li>RepSep - the description (see below) if defined</li>
-  <li>Semantic predicate - the description (see below) if defined</li>
-</ul>
-
-<p>
-All icons have at least the two annotations described above. All other annotations, 
-described below, are optional. If any of the optional annotations are present, they are 
-enclosed within square brackets.
-</p>
-
-<ul style="list-style-type: disc;">
-  <li>commit - backtracking to optional parser clauses (at an upper level) will be 
-      prevented if this node is successfully parsed</li>
-  <li>description - an optional user-assigned string (see below) that can be assigned 
-      to certain types of node</li>
-  <li>drop - the node will not be entered into the AST. You can see examples of 
-      its use in the built-in <i>ArithExpr</i> <a href="http://vll.java.net/SampleGrammars.html">Sample Grammars</a></li>
-  <li>message - the node's associated error-message</li>
-  <li>packrat - the parser-rule is a 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers$PackratParser.html">packrat parser</a> 
-      (applicable only to a root-node)</li>
-  <li>trace - the parser's use of the node will be logged at run-time</li>
-</ul>
-
-<p>
-All node attributes can be reviewed and changed via the context-menu as shown in 
-Figure-5 above. 
-</p>
+    <p>
+      Finally, if the node has a <i>description</i>, it is displayed last within parenthesis.
+    </p>
 
 <h4>Creating Rules</h4>
 
@@ -648,6 +663,9 @@ and will hopefully be a useful addition to any developer's skills.
 </ul>
 
 <table id="RevisionHistory" width="100%" border="1" style="border: 1px solid black;"><tr><th>Revision History</th><tr><td>
+<li>04-DEC-2011 - Version 7.01 change warnings added under <a href="#RegexTokenCreation">
+    Regex Token Creation</a> and <a href="#LiteralTokenCreation">Literal Token Creation</a>. 
+    The new (from 7.01) WildCard pseudo-token is described in the table under <a href="#NodeIcons">Node Icons</a>.</li>
 <li>25-SEP-2011 - The procedure for running VisualLangLab under <a href="#HaveScalaInstallation">
     Have a Scala Installation</a> has been changed to note that SCALA_HOME must be accessible. </li>
 <li>15-SEP-2011 - Changed Figures 2, 4, 5, 7, and 8 to show the new infinite 

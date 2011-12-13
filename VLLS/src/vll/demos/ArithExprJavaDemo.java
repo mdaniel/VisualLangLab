@@ -21,7 +21,7 @@
 package vll.demos;
 
 import java.io.File;
-import java.util.Iterator;
+import java.util.List;
 import vll.core.VllParsers;
 
 public class ArithExprJavaDemo {
@@ -43,9 +43,10 @@ public class ArithExprJavaDemo {
     static Float evalExprAST(Object ast) {
         Object[] arr = (Object[]) ast;
         Float exprResult = evalTermAST(arr[0]);
-        Iterator<Object> theTerms = (Iterator<Object>) arr[1];
-        while (theTerms.hasNext()) {
-          Object[] pair = (Object[]) theTerms.next();
+//        Iterator<Object> theTerms = (Iterator<Object>) arr[1];
+//        while (theTerms.hasNext()) {
+//          Object[] pair = (Object[]) theTerms.next();
+        for (Object[] pair: (List<Object[]>) arr[1]) {
           if (pair[0].equals(ZERO)) {
               exprResult += evalTermAST(pair[1]);
           } else if (pair[0].equals(ONE)) {
@@ -58,9 +59,10 @@ public class ArithExprJavaDemo {
   static Float evalTermAST(Object ast) {
         Object[] arr = (Object[]) ast;
         Float termResult = evalFactorAST(arr[0]);
-        Iterator<Object> theFactors = (Iterator<Object>) arr[1];
-        while (theFactors.hasNext()) {
-          Object[] pair = (Object[]) theFactors.next();
+//        Iterator<Object> theFactors = (Iterator<Object>) arr[1];
+//        while (theFactors.hasNext()) {
+//          Object[] pair = (Object[]) theFactors.next();
+        for (Object[] pair: (List<Object[]>) arr[1]) {
           if (pair[0].equals(ZERO)) {
               termResult *= evalFactorAST(pair[1]);
           } else if (pair[0].equals(ONE)) {

@@ -63,7 +63,7 @@ import scala.util.Properties
 import vll.core.Automata
 import vll.core.ScalaEngine
 import vll.core.Utils
-import vll.gui.samples.{TDARExpr, PS2EArithExpr, P2SEArithExprAction, PS2ESimpleJSON, TDARExprAST, TDARExprActions}
+import vll.gui.samples.{TDARExpr, PS2EArithExpr, P2SEArithExprAction, PS2ESimpleJSON, TDARExprAST, TDARExprActions, TDARSimpleTreeBasedInterpreter}
 
 class VllGui extends MainFrame with ActionListener {
 //  VllGui.splash("0")
@@ -716,6 +716,11 @@ class VllGui extends MainFrame with ActionListener {
       case ButtonClicked(_) => new TDARExprAST(mainFrame).load()
     }
   }
+  val helpSimpleTreeBasedInterpreter = new MenuItem("TDAR-Simple-Tree-Based-Interpreter") {
+    reactions += {
+      case ButtonClicked(_) => new TDARSimpleTreeBasedInterpreter(mainFrame).load()
+    }
+  }
   val helpSamplePS2EArithExpr = new MenuItem("PS2E-ArithExpr") {
     reactions += {
       case ButtonClicked(_) => new PS2EArithExpr(mainFrame).load()
@@ -732,7 +737,7 @@ class VllGui extends MainFrame with ActionListener {
     }
   }
   val helpSamples = new Menu("Sample grammars") {
-    contents.append(helpSampleTdarExpr, helpSampleTdarExprWithActions, helpSampleTdarExprAST, 
+    contents.append(helpSampleTdarExpr, helpSampleTdarExprWithActions, helpSampleTdarExprAST, helpSimpleTreeBasedInterpreter, 
                     new Separator, helpSamplePS2EArithExpr, helpSamplePS2ESimpleJSON, helpSamplePS2EArithExprAction)
   }
   val helpMenuItem = new MenuItem("Help") {

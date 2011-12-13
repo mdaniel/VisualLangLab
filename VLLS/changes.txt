@@ -1,7 +1,13 @@
 7.01 02-DEC-2011 
-    WildCard entity introduced to match any token. Used for syntax error handling.
+    INCOMPATIBLE API CHANGE: The JVM version of API uses a java.util.List 
+        in place of a scala.collection.List. The previous version used a
+        java.util.Iterator
+    All parser-tree nodes now accept a description. 
+    AST is tagged with the owning element's description. 
+    Sample-grammars from ANTLR book added
+    WildCard pseudo-token introduced to match any token. Used for syntax error handling.
     New regex/literal creation dialog does not need comma between name and pattern
-    Added some menu icons
+    Added icons in "Add" item of context menu
 6.11 29-N0V-2011 
     Fine-tuned changes in 6.10
 6.10 29-N0V-2011 

@@ -22,7 +22,7 @@ package vll.core
 
 import scala.collection._
 import JavaConversions._
-import java.util.{Collection => JavaCollection, Iterator => JavaIterator}
+import java.util.{List => JavaList, Collection => JavaCollection}
 import scala.util.parsing.combinator.Parsers
 
 trait Aggregates {
@@ -67,8 +67,8 @@ trait Aggregates {
       case p: Pair[Int, _] => Array[Any](p._1, ast4jvm(p._2)) // Choice
       case None => Array[Any]() // mult = ?
       case Some(s) => Array[Any](ast4jvm(s)) // mult = ?
-      case lst: List[_] => val iterator: JavaIterator[_] = lst.map(ast4jvm).iterator // repsep, rep1sep, and mult = *, +
-        iterator
+      case lst: List[_] => val list: JavaList[_] = lst.map(ast4jvm) // repsep, rep1sep, and mult = *, +
+        list
       case s: String => s // Literal and Regex
       case null => null
       case r: AnyRef => r // something produced by action-code
@@ -76,4 +76,4 @@ trait Aggregates {
     rv
   }
 
-}
+    }

@@ -105,7 +105,8 @@
 
     <li>A <i>RepSep</i> contributes a <code>List[Any]</code> containing all the matched
     items. <span style="color: red; font-weight: bold">New in 6.01+ API:</span> 
-    JVM languages (other than Scala) see a <code>java.util.Iterator</code></li>
+    JVM languages (other than Scala) see a <code>java.util.List<strike>Iterator</strike></code>
+    (changed to <code>List</code> in <span style="color: red; font-weight: bold">7.01+</span>)</li>
   </ul>
 
   <p>Additionally, certain annotations cause the structure defined above to be modified
@@ -123,8 +124,10 @@
     underlying values into a <code>List[Any]</code>. A <code>Nil</code> is returned if
     the multiplicity is <i>*</i>, and no matching elements were found in the input.
     <span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
-    (other than Scala) see a <code>java.util.Iterator</code> that 
-    may be empty </li>
+    (other than Scala) see a <code>java.util.List<strike>Iterator</strike></code> that 
+    may be empty. (changed to <code>List</code> in 
+    <span style="color: red; font-weight: bold">7.01+</span>)</li>
+
 
     <li>A node with multiplicity <i>0</i> (<i>not</i>) or <i>=</i> (<i>guard</i>)
     contributes nothing to the AST</li>
@@ -142,6 +145,16 @@
   parser for <i>SimpleJSON</i>. Remember that the AST shown in the figures is the AST of
   the <i>selected</i> node. Also, remember that the root-node of a grammar-tree merely
   reflects the AST of the contained tree.</p>
+
+<h3 id="AssociatingRuleTreeNodeAndASTSegment">Associating Rule-Tree Node and AST Segment</h3>
+
+<p>
+<span style="color: red; font-weight: bold">New in 7.01+:</span>
+When working with large ASTs, it is sometimes difficult to determine which rule-tree node 
+contributed to a segment of the AST. To help with these situations, VisualLangLab 
+adds the <i>description</i> field of a rule-tree node (if provided) to the AST segment 
+produced for it. 
+</p>
 
   <h3 id="SequenceNodeExample">Sequence Node Example</h3>
 
@@ -226,8 +239,10 @@
   </p>
 
   <p><span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
-    (other than Scala) see a <code>java.util.Iterator[Object]</code> instead of a 
-    <code>List[Any]</code>.</p>
+    (other than Scala) see a <code>java.util.List<strike>Iterator</strike>[Object]</code> instead of a 
+    <code>List[Any]</code>. (changed to <code>List</code> in 
+<span style="color: red; font-weight: bold">7.01+</span>)</li>
+</p>
 
   <h3 id="SequenceNodeWithOneContributingNode">Sequence Node Example with One Contributing Node</h3>
 

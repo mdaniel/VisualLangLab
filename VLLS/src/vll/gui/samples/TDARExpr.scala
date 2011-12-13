@@ -29,16 +29,15 @@ class TDARExpr(gui: VllGui) {
   def load() {
     val msg = """<html><body><pre>
 This example is based on the parser described in 
-section 3.1 "<i>Recognizing Language Syntax</i>" 
-of the book "<i>The Definitive ANTLR Reference</i>" 
+section 3.1, <i>Recognizing Language Syntax</i>, 
+of the book <i>The Definitive ANTLR Reference</i> 
 (http://pragprog.com/book/tpantlr/the-definitive-antlr-reference)
     
 You can find sample test input in the book.
 
-IMPORTANT: All test-input must end with an ENTER or RETURN 
-as the parser expects a NEWLINE token at the end.
+IMPORTANT: The parser needs a NEWLINE token at the end of input.
 
-Read more at http://vll.java.net/Examples.html
+Read more at http://vll.java.net/examples/a-quick-tour.html
     
 The top-level parser-rule has been renamed to "Prog" 
 (initial capital) so that it is presented first. 

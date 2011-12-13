@@ -29,8 +29,8 @@ class TDARExprActions(gui: VllGui) {
   def load() {
     val msg = """<html><body><pre>
 This example is based on the parser described in 
-section 3.2 "<i>Using Syntax to Drive Action Execution</i>" 
-of the book "<i>The Definitive ANTLR Reference</i>" 
+section 3.2, <i>Using Syntax to Drive Action Execution</i>, 
+of the book <i>The Definitive ANTLR Reference</i> 
 (http://pragprog.com/book/tpantlr/the-definitive-antlr-reference)
 
 Actions (written as JavaScript and Scala functions) are associated  
@@ -39,10 +39,9 @@ attribute near the icon).
     
 You can find sample test input in the book.
 
-Read more at http://vll.java.net/Examples.html
+Read more at http://vll.java.net/examples/a-quick-tour.html
     
-IMPORTANT: All test-input must end with an ENTER or RETURN 
-as the parser expects a NEWLINE token at the end.
+IMPORTANT: The parser needs a NEWLINE token at the end of input.
     
 The top-level parser-rule has been renamed to "Prog" 
 (initial capital) so that it is presented first. 

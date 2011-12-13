@@ -87,6 +87,9 @@
           <i>reserved word</i>) - a token that matches a specified pattern literally</td></tr>
       <tr><td><img src="images/GrammarIconRegex.gif" alt="The Regex icon" /></td><td>Regexp (vanilla <i>token</i>) - 
           a token that matches a specified regular-expression</td></tr>
+      <tr><td><img src="images/GrammarIconWildCard.gif" alt="The WildCard icon" /></td><td>WildCard - 
+          a pseudo-token that matches any other defined token (literal or regex). A WildCard 
+          is useful in implementing strategies for recovering from syntax errors</td></tr>
       <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Others</b></td></tr>
       <tr><td><img src="images/GrammarIconRoot.gif" alt="The Root icon" /></td><td>Root - this icon is used for the root 
           node of every grammar tree (as in Figure-1 above)</td></tr>
@@ -119,14 +122,15 @@
       <li>= - the associated entity <i>must</i> occur in the input (but see note below)</li>
     </ul>
 
-    <p>
-      <u>Note</u>: Observe that the last two values ("0" and "=") are actually commonly required 
-      <a href="http://en.wikipedia.org/wiki/Syntactic_predicate">syntactic predictes</a> 
-      and have no influence on the information gathered by the parser (into to 
-      <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a> or parse-tree). 
-      The names <i>not</i> and <i>guard</i> are inspired by functions of the same name in 
-      the Scala class called <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>.
-    </p>
+<p>
+<u>Note</u>: The last two values ("0" and "=") are used to implement 
+<a href="http://en.wikipedia.org/wiki/Syntactic_predicate">syntactic predictes</a> 
+and have no influence on the information gathered by the parser (into to 
+<a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a> or parse-tree). 
+The names <i>not</i> and <i>guard</i> are inspired by functions of the same name in 
+the Scala <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">
+Parsers</a> class.
+</p>
 
     <p>
       The second annotation is the <i>name</i> of the entity. The value displayed depends on the 
@@ -138,12 +142,6 @@
       <li>Literal - the name of the literal token</li>
       <li>Regexp - the name of the regular-expression token</li>
       <li>Reference - the name of referred-to parser-rule</li>
-<!--
-      <li>Choice - the description (see below) if defined, null otherwise</li>
-      <li>Sequence - the description (see below) if defined, null otherwise</li>
-      <li>RepSep - the description (see below) if defined, null otherwise</li>
-      <li>Semantic predicate - the description (see below) if defined, null otherwise</li>
--->
     </ul>
 
     <p>
@@ -367,6 +365,12 @@
       or click the buttons.
     </p>
 
+<p>
+<font color="red"><u>Change in Version 7.01</u>: The dialogs in Figure-8 below 
+do not accept the comma. The name and pattern are just separated by one or more 
+space (and/or tab) characters</font>
+</p>
+
     <p>
       <img src="images\GrammarNewLiteralDialog.png" alt="The New-literal dialog" /> 
       <img src="images\GrammarNewRegexDialog.png" alt="The New-regex dialog" /><br/>
@@ -402,6 +406,12 @@
       To assign a priority to a <i>Regex</i> token append a tilde (~) and a number 
       to the token's name as in Figure-9 below.
     </p>
+
+<p>
+<font color="red"><u>Change in Version 7.01</u>: The dialog in Figure-9 below 
+does not accept the comma. The name and pattern are just separated by one or more 
+space (and/or tab) characters</font>
+</p>
 
     <p>
       <img src="images\RegexPriority.png" alt="Regex token with priority" /><br/>
