@@ -10,59 +10,67 @@
   <body>
     <h1>VisualLangLab - Download, Install, and Run</h1>
 
-    <p>
-      The latest binary release can be found in the 
-      <a href="http://java.net/projects/vll/downloads">Downloads area</a> of the project page.
-      Download the latest ZIP release 
-      <a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>, 
-      and extract the contents to a directory. You should 
-      have the following files and directories:
-    </p>
+<p>
+There are two files available for download. To get started quickly just 
+download the <i>all-inclusive jar file</i> (immediately below here). 
+</p> 
 
-    <ul style="list-style-type: disc;">
-      <li><i>VLLS.jar</i> - the run-time class-library</li>
-      <li><i>vlls.bat</i> - a launcher for Windows. It assumes that <i>VLLS.jar</i> is also in 
+<h2>All-Inclusive JAR File (Quick-Start)</h2>
+
+<p>
+For all practical purposes, you only need 
+<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
+to run VisualLangLab. Double-clicking this file starts the VisualLangLab GUI. 
+The only pre-requisite is a 6.0+ JRE. Users with Unix-like systems will first need to 
+perform a "<code>chmod +x VLLS-All.jar</code>". 
+</p> 
+
+<p>
+This jar file includes all libraries required, so you do not have to install Scala or 
+any other software. It includes the <a href="SampleGrammars.html">Sample Grammars</a>, 
+but not the HTML documentation (which are in the <i>VLLS.zip</i> file described below). 
+It also includes the <i>readme.txt</i>, <i>copying.txt</i>, <i>changes.txt</i>, and 
+<i>licenses</i> files described below. 
+</p> 
+
+<ul style="list-style-type: disc;">
+  <li><i>readme.txt</i> - Summary information about VisualLangLab</li>
+  <li><i>copying.txt</i> - Copyright information</li>
+  <li><i>changes.txt</i> - Changes from previous version</li>
+  <li><i>licenses</i> - Directory containing copyright files</li>
+</ul>
+
+<h2>Latest Binary-Release ZIP File</h2>
+
+<p>
+The <i>latest-release</i> file 
+(<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>) contains 
+all the VisualLangLab class files and the HTML documentation, but not the Scala libraries. 
+You can use this file to run VisualLangLab only if you have a Scala installation. 
+This zip file contains the following files/directories:
+</p>
+
+<ul style="list-style-type: disc;">
+  <li><i>VLLS.jar</i> - the run-time class-library</li>
+  <li><i>vlls.bat</i> - a launcher for Windows. It assumes that <i>VLLS.jar</i> is also in 
           the same directory</li>
-      <li><i>vlls</i> - a launcher for UNIX-like environments. It assumes that <i>VLLS.jar</i> is 
-          also in the same directory</li>
-      <li><i>readme.txt</i> - Summary information about VisualLangLab</li>
-      <li><i>copying.txt</i> - Copyright information</li>
-      <li><i>changes.txt</i> - Changes from previous version</li>
-      <li><i>index.html</i> - Documentation in HTML</li>
-      <li><i>docs</i> - Directory containing documentation files</li>
-      <li><i>licenses</i> - Directory containing copyright files</li>
-    </ul>
+  <li><i>vlls</i> - a launcher for UNIX-like environments. It assumes that <i>VLLS.jar</i> is 
+      also in the same directory</li>
+  <li><i>readme.txt</i> - Summary information about VisualLangLab</li>
+  <li><i>copying.txt</i> - Copyright information</li>
+  <li><i>changes.txt</i> - Changes from previous version</li>
+  <li><i>index.html</i> - Documentation in HTML</li>
+  <li><i>docs</i> - Directory containing documentation files</li>
+  <li><i>licenses</i> - Directory containing copyright files</li>
+</ul>
 
-    <p>
-      <u>If you do not have <a href="http://www.scala-lang.org/">Scala</a>, you should also download</u> 
-      <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>. 
-      Double-clicking this file starts the VisualLangLab GUI (only requires a 6.0+ JRE).
-    </p>
-
-    <p>
-      There is no particular installation action required. After <i>VLLS.jar</i> is added to 
-      your classpath, <a href="http://vll.java.net/">VisualLangLab</a> can be started 
-      by entering the following command:
-    </p>
-
-<code>
-<pre>    scala vll.gui.VllGui
-</pre></code>
-
-    <p>
-      Alternatively the launcher scripts -- <i>vlls.bat</i> for Windows, 
-      and <i>vlls</i> for UNIX-like systems -- can also be used. 
-      Both launchers assume that <i>VLLS.jar</i> is also in the same directory.
-    </p>
-
-    <p>
-      Scala is recommended for writing application programs that 
-      <a href="http://vll.java.net/UsingTheAPI.html">use the API</a>. 
-       (Java <i>can</i> be used, though with some awkwardness). 
-      If required, you can download 
-      Scala from <a href="http://www.scala-lang.org/downloads">here</a>.
-    </p>
-
+<p>
+There is no particular installation action required. After unzipping the fle to a directory, 
+<a href="http://vll.java.net/">VisualLangLab</a> can be started 
+by invoking one of the launcher scripts -- <i>vlls.bat</i> for Windows, 
+or <i>vlls</i> for UNIX-like systems. 
+Both launchers assume that <i>VLLS.jar</i> is also in the same directory.
+</p>
 
   </body>
 </html>

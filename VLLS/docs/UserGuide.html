@@ -11,7 +11,7 @@
     <h1>VisualLangLab - User Guide</h1>
 
     <p>
-      The following sections describe the two distinct roles (and skills)
+      The following sections describe the two main roles (and distinct skills)
       of VisualLangLab users and the workflow that connects their activities. 
       The same individual could (and perhaps typically will) of course perform 
       both roles. 
@@ -30,7 +30,7 @@
           CS theory). The function is executed when 
           <a href="http://vll.java.net/">VisualLangLab</a> matches parser input to the node. 
           more details can be found in <a href="ASTAndActionCode.html">AST and Action Code.html</a></li>
-      <li><u>grammar-file</u>: a XML file containing parsers developed with the VisualLangLab 
+      <li><u>saved-grammar file</u>: a XML file containing parsers developed with the VisualLangLab 
           GUI. These files do not contain any code -- just a description of all the 
           parser-specific information available to the GUI. The format of a grammar-file is very 
           intuitive, and it should be easy to use <i>XSLT</i> or something similar to translate 
@@ -45,7 +45,7 @@
           a parser because it can parse text when <a href="TestingParsers.html">Testing Parsers</a>. 
           An application program that loads a grammar-file by <a href="UsingTheAPI.html">Using the API</a> is also a parser.</li>
       <li><u>parser-rule</u>: non-trivial parsers are simplified by breaking them down 
-          into a number of simpler parser-rules (sometimes also called parser-predicates), 
+          into a number of simpler parser-rules (often called just <i>rule</i>), 
           <u>but see note below</u>. 
           Each parser-rule is known by a unique name, and one of the parser-rules must be  
           distinguished as the top-level (entry-point) entity</li>
@@ -80,15 +80,15 @@
 
     <h3 id="GrammarDomainExpert">Grammar/Domain Expert</h3>
 
-    <p>
-      The grammar expert is responsible for developing and testing a parser. 
-      From the grammar expert's point of view, a <i>parser</i> is not an 
-      application or piece of code, 
-      but an XML file containing a specification from which code may be produced. 
-      This parser is saved as an XML file (with suffix <i>vll</i>) that can 
-      be published for use by application developers. The grammar files can 
-      also be reopened in the IDE for reviewing, testing, or modification. 
-    </p>
+<p>
+The grammar expert is responsible for developing and testing a parser. 
+From the grammar expert's point of view, a <i>parser</i> is not an 
+application or piece of code, but a set of visual gramamar-trees 
+that may be further processed as described below. 
+This parser may be saved as an XML file (with suffix <i>vll</i>) that can 
+be reopened in the IDE for reviewing, testing, or modification. 
+These saved-grammar files can also be published for use by application developers. 
+</p>
 
     <p>
       Anyone with a knowledge of parsing concepts (and an understanding of the 
@@ -115,20 +115,22 @@
 
     <h3 id="ApplicationDeveloper">Application Developer</h3>
 
-    <p>
-      An application developer uses already available grammar files to create 
-      applications for specific requirements. While an applicaion developer 
-      may use <a href="TheGUI.html">The GUI</a> to understand and review the grammar, 
-      his primary focus is <a href="UsingTheAPI.html">Using the API</a> and the 
-      description of the <a href="ASTAndActionCode.html">AST and Action Code</a>. 
-    </p>
+<p>
+An application developer uses pre-existing saved-grammar files to create 
+applications for specific requirements. While an applicaion developer 
+may use <a href="TheGUI.html">The GUI</a> to understand and review the grammar, 
+his primary focus is <a href="UsingTheAPI.html">Using the API</a> and the 
+description of the <a href="ASTAndActionCode.html">AST and Action Code</a>. 
+The <a href="Examples.html">Examples</a> are also expected to be helpful. 
+</p>
 
-    <p>
-      An application developer also needs to be an expert in the use of programming 
-      tools, have a good understanding of <a href="http://www.scala-lang.org/">Scala</a>, 
-      and have access to a domain expert 
-      who understands the application's requirements well.
-    </p>
+<p>
+An application developer also needs to be an expert in the use of programming 
+tools, have a good understanding of at least one 
+<a href="http://en.wikipedia.org/wiki/List_of_JVM_languages">JVM language</a> 
+(including Java or Scala), 
+and have access to a domain expert who understands the application's requirements well.
+</p>
 
     <h3 id="ApplicationUser">Application User</h3>
 
@@ -144,9 +146,10 @@
     <h2 id="QuickStart">Quick Start</h2>
 
     <p>
-      The good way to quickly get an understand of VisualLangLab is to 
-      start up the IDE, review and modify the <a href="SampleGrammars.html">Sample Grammars</a> 
-      and <a href="TestingParsers.html">test the parsers</a>.
+      The good way to quickly understand VisualLangLab is to 
+      start up the IDE, review the <a href="SampleGrammars.html">Sample Grammars</a> 
+      and the <a href="Examples.html">Examples</a>, and try to 
+      <a href="TestingParsers.html">test the parsers</a>.
     </p>
 
   </body>

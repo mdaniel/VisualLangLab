@@ -1,4 +1,7 @@
-7.01 02-DEC-2011 
+7.02 14-DEC-2011 
+    Documentation update
+    Corrected date on version 7.01 release
+7.01 13-DEC-2011 
     INCOMPATIBLE API CHANGE: The JVM version of API uses a java.util.List 
         in place of a scala.collection.List. The previous version used a
         java.util.Iterator

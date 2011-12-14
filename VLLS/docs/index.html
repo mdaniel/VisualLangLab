@@ -25,10 +25,8 @@ script or code. It is simple in use, and easy to learn.
 Unlike other parser-generators, VisualLangLab represents 
 <a href="http://en.wikipedia.org/wiki/Formal_grammar">parser rules</a> as visual 
 <i>grammar-trees</i> with distinct icons for the grammar-tree nodes as in 
-the figures below. These examples are bundled with the VisualLangLab GUI, and are 
-explained in <a href="SampleGrammars.html">Sample Grammars</a>. 
-The icons and annotations are explained fully in <a href=
-"EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
+the figures below. These example grammars are included with the 
+(<a href="#DownloadInstallationAndRunning">VisualLangLab download</a>). 
 </p>
 
 <table border="1" style="border: 1px solid black;"><tbody>
@@ -152,15 +150,23 @@ The icons and annotations are explained fully in <a href=
   <p>If you want to report an issue, request help, or just show off a new parser, 
   post a message at the <a href="http://java.net/projects/vll/forums/vll-forum">VisualLangLab HELP</a> forum. </p>
 
-  <h2>Download, Installation, and Running</h2>
+  <h2 id="DownloadInstallationAndRunning">Download, Installation, and Running</h2>
 
-  <p>The latest binary relase is 
-  <a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>. 
-  The contents of the zip and their use is described <a href="DownloadInstallAndRun.html">here</a>.</p>
+<p>
+You only need the <i>all-inclusive</i> binary release 
+<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
+to run VisualLangLab. Double-clicking this file starts the VisualLangLab GUI. 
+This jar file includes all libraries required, so you do not have to install Scala or 
+any other software. It also includes the <a href="SampleGrammars.html">Sample Grammars</a>, 
+but not the HTML documentation (which are in the <i>VLLS.zip</i> file described below. 
+</p> 
 
-  <p><u>If you do not have a Scala installation</u>, you should also download 
-  <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>. 
-  Double-clicking this file starts the VisualLangLab GUI (requires a 6.0+ JRE).</p> 
+<p>
+The <i>latest-release</i> file 
+(<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>) contains 
+all the VisualLangLab class files and the HTML documentation, but not the Scala libraries. 
+You can use this file to run VisualLangLab only if you have a Scala installation. 
+</p>
 
   <h2 id="Prerequisites">Prerequisites</h2>
 
@@ -168,15 +174,17 @@ The icons and annotations are explained fully in <a href=
   You can create, test, and run parsers within the IDE without having to install 
   Scala&mdash;not even if the grammars contain Scala functions in their action-code</p> 
 
-  <p>Scala 2.9.0+ is required only for developing and/or running 
+  <p>Scala 2.9.0+ is required only for separately developing and/or running 
   application programs that <a href="UsingTheAPI.html">use the API</a>. 
   You can download Scala from <a href="http://www.scala-lang.org/downloads">here</a>. 
   </p>
 
   <h2 id="License">License</h2>
 
-  <p>VisualLangLab is distributed under the GNU General Public License, Version-3. 
-  Anything you create using VisualLangLab (grammar, token-library, etc.) is of course your own. </p> 
+<p>
+VisualLangLab is distributed under the GNU General Public License, Version-3. 
+Any grammars and token-libraries you create using VisualLangLab are of course your own. 
+</p> 
 
   <h2 id="History">History</h2>
 
