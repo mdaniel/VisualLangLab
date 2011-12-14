@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
    <url> 
-      <loc>http://vll.java.net/</loc> 
-      <changefreq>weekly</changefreq> 
-      <priority>0.8</priority> 
-   </url> 
-   <url> 
-      <loc>http://vll.java.net/index.html</loc> 
-      <changefreq>weekly</changefreq> 
-      <priority>0.8</priority> 
-   </url> 
-   <url> 
       <loc>http://vll.java.net/ASTAndActionCode.html</loc> 
       <changefreq>weekly</changefreq> 
    </url> 
@@ -23,7 +13,19 @@
       <changefreq>weekly</changefreq> 
    </url> 
    <url> 
+      <loc>http://vll.java.net/Examples.html</loc> 
+      <changefreq>weekly</changefreq> 
+   </url> 
+   <url> 
       <loc>http://vll.java.net/FAQ.html</loc> 
+      <changefreq>weekly</changefreq> 
+   </url> 
+   <url> 
+      <loc>http://vll.java.net/index.html</loc> 
+      <changefreq>weekly</changefreq> 
+   </url> 
+   <url> 
+      <loc>http://vll.java.net/RapidPrototypingForScala.html</loc> 
       <changefreq>weekly</changefreq> 
    </url> 
    <url> 
@@ -32,6 +34,10 @@
    </url> 
    <url> 
       <loc>http://vll.java.net/SampleGrammars.html</loc> 
+      <changefreq>weekly</changefreq> 
+   </url> 
+   <url> 
+      <loc>http://vll.java.net/SeeVisualLangLabInAction.html</loc> 
       <changefreq>weekly</changefreq> 
    </url> 
    <url> 
@@ -47,11 +53,15 @@
       <changefreq>weekly</changefreq> 
    </url> 
    <url> 
-      <loc>http://vll.java.net/RapidPrototypingForScala.html</loc> 
+      <loc>http://vll.java.net/UsingTheAPI.html</loc> 
       <changefreq>weekly</changefreq> 
    </url> 
    <url> 
-      <loc>http://vll.java.net/UsingTheAPI.html</loc> 
+      <loc>http://vll.java.net/examples/how-input-packrat.html</loc> 
+      <changefreq>weekly</changefreq> 
+   </url> 
+   <url> 
+      <loc>http://vll.java.net/examples/a-quick-tour.html</loc> 
       <changefreq>weekly</changefreq> 
    </url> 
 </urlset>
