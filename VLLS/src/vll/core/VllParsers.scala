@@ -135,10 +135,10 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
   
   private def withMessage[T](p: Parser[T], node: RuleTreeNode): Parser[T] = {
     Parser(in => p(in) match {
-        case Error(_, nxt) => Error("%s %s at (%d,%d)".format(
-                 node.nodeName, node.errorMessage, in.pos.line, in.pos.column), nxt)
-        case Failure(_, nxt) => Failure("%s %s at (%d,%d)".format(
-                 node.nodeName, node.errorMessage, in.pos.line, in.pos.column), nxt)
+        case Error(_, nxt) => Error("%s at (%d,%d)".format(
+                 node.errorMessage, in.pos.line, in.pos.column), nxt)
+        case Failure(_, nxt) => Failure("%s at (%d,%d)".format(
+                 node.errorMessage, in.pos.line, in.pos.column), nxt)
         case success => success
       }
     )
