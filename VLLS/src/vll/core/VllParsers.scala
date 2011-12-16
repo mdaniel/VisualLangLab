@@ -78,7 +78,7 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
   
   def getParserFor(parserName: String): Parser[_] = {
     def tsc(a: String, b: String): Boolean = {
-      def prio(i: String) = if (i contains '~') i.reverse.takeWhile(_.isDigit).reverse.toInt else 0
+      def prio(i: String) = if (i contains ':') i.substring(i.indexOf(':') + 1).toInt else 0
       prio(a) > prio(b)
     }
     super.reset()

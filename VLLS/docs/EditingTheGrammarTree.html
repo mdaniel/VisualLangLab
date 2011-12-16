@@ -398,14 +398,15 @@ space (and/or tab) characters</font>
       either globally scoped or privately scoped (see below).
     </p>
 
-    <h3 id="RegexTokenDisambiguation">Regex Token Disambiguation</h3>
+<h3 id="RegexTokenDisambiguation">Regex Token Disambiguation</h3>
 
-    <p>
-      Two or more <i>Regex</i> tokens will sometimes match the same bit of input. 
-      You can assign a <i>priority</i> value to enable disambiguation of such tokens. 
-      To assign a priority to a <i>Regex</i> token append a tilde (~) and a number 
-      to the token's name as in Figure-9 below.
-    </p>
+<p>
+Two or more <i>Regex</i> tokens will sometimes match the same bit of input. 
+You can assign a <i>priority</i> value to enable disambiguation of such tokens. 
+To assign a priority to a <i>Regex</i> token append a <strike>tilde (~) and a number</strike> 
+<u>colon, an optional minus sign, and an integer</u> (<font color="red">Version 7.02 onwards</font>)
+to the token's name as in Figure-9 below.
+</p>
 
 <p>
 <font color="red"><u>Change in Version 7.01</u>: The dialog in Figure-9 below 
@@ -418,12 +419,13 @@ space (and/or tab) characters</font>
       <i>Figure-9. Regex token with priority</i>
     </p>
 
-    <p>
-      When two or more tokens match the same input, the lexer favors the token with 
-      the numerically highest priority. A token without an explicitly 
-      defined priority has a priority of 0. Only <i>Regex</i> tokens can have 
-      a priority value. 
-    </p>
+<p>
+When two or more tokens match the same input, the lexer selects the token with 
+the numerically highest priority. A token without an explicitly 
+defined priority has a priority of 0. So explicitly assigned priority values can be 
+higher or lower than the default value (positive or negative priority values). 
+Only <i>Regex</i> tokens can have a priority value. 
+</p>
 
     <h3 id="ModifyingTokenPatterns">Modifying Token Patterns</h3>
 

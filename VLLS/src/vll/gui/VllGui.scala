@@ -416,7 +416,7 @@ class VllGui extends MainFrame with ActionListener {
 
   def createNewToken(isRegex: Boolean) {
     val pattern = if (isRegex)
-      "([a-zA-Z_$][a-zA-Z_$0-9-]*(?:~\\d+)?)(\\s*,\\s*|\\s+)(\\S.*)?".r
+      "([a-zA-Z_$][a-zA-Z_$0-9-]*(?::-?\\d+)?)(\\s*,\\s*|\\s+)(\\S.*)?".r
     else
       "([a-zA-Z_$][a-zA-Z_$0-9-]*)(\\s*,\\s*|\\s+)(\\S.*)?".r
     val regOrLit = if (isRegex) "regex" else "literal"
