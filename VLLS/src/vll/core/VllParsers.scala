@@ -252,9 +252,13 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
         case pn: PredicateNode => if (node.actionText.isEmpty) 
             failure("Predicate has no code")
           else {
+            val lastMsg = if (lastNoSuccess eq null) null else lastNoSuccess.msg
+            val lastLine = if (lastNoSuccess eq null) 0 else lastNoSuccess.next.pos.line
+            val lastCol = if (lastNoSuccess eq null) 0 else lastNoSuccess.next.pos.column
             Parser(in => {node.actionFunction(in.source, gui.logTextPane.inputArea, 
                        gui.logTextPane.logAreaTextComponent, 
-                       in.pos.line, in.pos.column, in.offset, null) match {
+                       in.pos.line, in.pos.column, in.offset, lastMsg, 
+                              lastLine, lastCol, null) match {
                   case b: java.lang.Boolean if b.booleanValue => Success("", in)
                   case errMsg: String => Failure(errMsg, in)
                   case _ => Failure("Predicate error", in)
@@ -278,15 +282,23 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
         failure("Action code has syntax error")
       else
         Parser(in => {
+            val lastMsg = if (lastNoSuccess eq null) null else lastNoSuccess.msg
+            val lastLine = if (lastNoSuccess eq null) 0 else lastNoSuccess.next.pos.line
+            val lastCol = if (lastNoSuccess eq null) 0 else lastNoSuccess.next.pos.column
           node.actionFunction(null, gui.logTextPane.inputArea, 
                               gui.logTextPane.logAreaTextComponent,  
-                              in.pos.line, in.pos.column, in.offset, null)
+                              in.pos.line, in.pos.column, in.offset, lastMsg, 
+                              lastLine, lastCol, null)
           parser3(in) match {
             case Success(tree, next) =>
               val source = in.source.subSequence(in.offset, next.offset)
+            val lastMsg = if (lastNoSuccess eq null) null else lastNoSuccess.msg
+            val lastLine = if (lastNoSuccess eq null) 0 else lastNoSuccess.next.pos.line
+            val lastCol = if (lastNoSuccess eq null) 0 else lastNoSuccess.next.pos.column
               var actionResult = node.actionFunction(source, gui.logTextPane.inputArea, 
                                                      gui.logTextPane.logAreaTextComponent, 
-                                                     next.pos.line, next.pos.column, next.offset, tree)
+                                                     next.pos.line, next.pos.column, next.offset, lastMsg, 
+                              lastLine, lastCol, tree)
               Success(if (actionResult == null) tree else actionResult, next)
             case other => other
           }
@@ -316,7 +328,8 @@ class VllParsers(val gui: VllGui) extends SimpleLexingRegexParsers with PackratP
 
 object VllParsers {
   type Parser[T] = VllParsers#Parser[T]
-  type ActionType = Function7[CharSequence,TextComponent,TextComponent,Int,Int,Int,Any,Any]
+  type ActionType = Function10[CharSequence,TextComponent,TextComponent,Int,Int,Int,
+       String, Int, Int, Any,Any]
   def fromFile(f: File, gui: VllGui): VllParsers = {
     val rv = new VllParsers(gui)
     rv.load(f)

@@ -296,62 +296,56 @@ produced for it.
     <tr>
       <th style="text-align: center; font-weight: bold;">Name</th>
       <th style="text-align: center; font-weight: bold;">Description</th>
-      <th style="text-align: center; font-weight: bold;">Old (4.xx) Name</th>
     </tr>
     <tr>
       <td align="center"><code>VLL</code></td>
       <td>See descriptions for specific languages below</td>
-      <td align="center"><code>VLL</code></td>
     </tr>
     <tr>
       <td align="center"><code>vllLine</code></td>
       <td>The line number of the input position at which the action-code 
           function is called</td>
-      <td align="center"><code>$line</code></td>
     </tr>
     <tr>
       <td align="center"><code>vllCol</code></td>
       <td>The column number of the input position at which the action-code 
           function is called</td>
-      <td align="center"><code>$col</code></td>
     </tr>
     <tr>
       <td align="center"><code>vllOffset</code></td>
       <td>The offset of the input position at which the action-code 
           function is called</td>
-      <td align="center"><code>-</code></td>
     </tr>
     <tr>
       <td align="center"><code>vllInput</code></td>
       <td>A <code>java.lang.CharSequence</code> containing the 
         input text matching this node</td>
-      <td align="center"><code>InputCharSequence</code></td>
+    </tr>
+
+    <tr>
+      <td align="center"><code>vllLastMsg</code></td>
+      <td>The Last error message issued by the parser</td>
     </tr>
     <tr>
-      <td align="center"><code>vllInputCharSequence</code></td>
-      <td>Deprecated - use <code>vllInput</code> instead. 
-        Will be removed in version 7.01.
-        <strike>A <code>java.lang.CharSequence</code> containing the 
-        input text matching this node</strike></td>
-      <td align="center"><code>-</code></td>
+      <td align="center"><code>vllLastLine</code></td>
+      <td>The line number at which the last error message was issued</td>
     </tr>
+    <tr>
+      <td align="center"><code>vllLastCol</code></td>
+      <td>The column number at which the last error message was issued</td>
+    </tr>
+
     <tr>
       <td align="center"><code>vllParserTestInput</code></td>
       <td>The GUI's <code>JTextComponent</code> containing user-provided test input 
         (just under the <i>Parser Test Input</i> label)</td>
-      <td align="center"><code>ParserTestInput</code></td>
     </tr>
     <tr>
       <td align="center"><code>vllParserLog</code></td>
       <td>The GUI's <code>JTextComponent</code> containing parser log text 
         (just under the <i>Parser Log</i> label)</td>
-      <td align="center"><code>ParserLog</code></td>
     </tr>
   </table>
-
-  <p>If you have grammars that use predefined variables created under version 4.xx, 
-  the variable names will have to be updated (to the names in the first column) to 
-  enable them to run under version 5.xx.</p>
 
   <p>The last two variables above (<i>vllParserTestInput</i>, and <i>vllParserLog</i>) are useful for
   writing automated test scripts as described in <a  href="TestingParsers.html#WrapperWithActionCode">Wrapper with Action Code</a>.</p>

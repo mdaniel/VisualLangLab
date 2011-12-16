@@ -49,7 +49,7 @@ object ScalaEngine {
     compiledFunctionHolder.value = null
     outputStream.clear()
     val idx = f.indexOf("=>") + 2
-    val res: Result = interp.interpret("$$.value = (vllInputCharSequence:CharSequence,vllParserTestInput:scala.swing.TextComponent,vllParserLog:scala.swing.TextComponent,vllLine:Int,vllCol:Int,vllOffset:Int,%s{val vllInput=vllInputCharSequence;%s}".format(f.substring(1, idx), f.substring(idx)))
+    val res: Result = interp.interpret("$$.value = (vllInputCharSequence:CharSequence,vllParserTestInput:scala.swing.TextComponent,vllParserLog:scala.swing.TextComponent,vllLine:Int,vllCol:Int,vllOffset:Int,vllLastMsg:String,vllLastLine:Int,vllLastCol:Int,%s{val vllInput=vllInputCharSequence;%s}".format(f.substring(1, idx), f.substring(idx)))
     if (!outputStream.toString.trim.isEmpty) {
       val msg = outputStream.toString
       if (!msg.contains("$$.value: java.lang.Object ="))
