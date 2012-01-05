@@ -9,6 +9,7 @@
         <jar destfile="VLL4J.jar" compress="true" manifest="manifest.mf">
             <fileset dir="build/classes" includes="**/*.*" />
             <fileset dir="." includes="changes.txt"/>
+            <fileset dir="." includes="licenses/*.*" />
         </jar>
         <zip zipfile="VLL4J-${DSTAMP}-${TSTAMP}.zip" compress="true">
             <fileset dir="src" includes="**/*.*"/>
