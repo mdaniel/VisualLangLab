@@ -1,0 +1,2 @@
+SplashScreen-Image: vll4j/gui/resources/SplashImage.png
+Main-Class: vll4j.gui.Vll4jGui
