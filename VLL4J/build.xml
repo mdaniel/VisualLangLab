@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<project name="VLL4J" default="default" basedir=".">
+    <description>Builds, tests, and runs VLL4J</description>
+    <import file="nbproject/build-impl.xml"/>
+    <property environment="env"/>
+    <target name="-post-compile">
+        <tstamp/>
+        <jar destfile="VLL4J.jar" compress="true" manifest="manifest.mf">
+            <fileset dir="build/classes" includes="**/*.*" />
+            <fileset dir="." includes="changes.txt"/>
+        </jar>
+        <zip zipfile="VLL4J-${DSTAMP}-${TSTAMP}.zip" compress="true">
+            <fileset dir="src" includes="**/*.*"/>
+            <fileset dir="." includes="manifest.mf, build.xml, todo.txt, changes.txt"/>
+        </zip>
+    </target>
+</project>
