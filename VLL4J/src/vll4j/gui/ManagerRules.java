@@ -59,7 +59,7 @@ public class ManagerRules {
                     theComboBox.insertItemAt(ruleName, i + 1);
                     break;
                 } else if (ruleName.compareTo(item) == 0) {
-                    JOptionPane.showMessageDialog(gui, "A rule with this name already exists", "ERROR - New rule", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(gui, "A rule with this name already exists", "WARNING - New rule", JOptionPane.WARNING_MESSAGE);
                     break;
                 } else if (i == 0) {
                     theComboBox.insertItemAt(ruleName, 0);
@@ -91,11 +91,11 @@ public class ManagerRules {
                 return;
             ruleName = ruleName.trim();
             if (gui.theForest.ruleBank.containsKey(ruleName)) {
-                JOptionPane.showMessageDialog(gui, "Rule name already used", "ERROR - New rule", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, "Rule name already used", "WARNING - New rule", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (!ruleName.matches("[a-zA-Z$_][a-zA-Z$_0-9-]*")) {
-                JOptionPane.showMessageDialog(gui, "Illegal rule name", "ERROR - New rule", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, "Illegal rule name", "WARNING - New rule", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             ruleStack.add((String)theComboBox.getSelectedItem());
@@ -119,10 +119,11 @@ public class ManagerRules {
             String ruleName = (String)theComboBox.getSelectedItem();
             String rules[] = findRuleInRules(ruleName);
             if (rules.length == 0) {
-                JOptionPane.showMessageDialog(gui, String.format("Not in use: '%s'", ruleName), "Find rule", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, String.format("Rule '%s' isn't referred in any other rule", ruleName), "WARNING - Find rule", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            String selectedRule = (String)JOptionPane.showInputDialog(gui, "Select rule to visit", "Find rule", JOptionPane.QUESTION_MESSAGE, 
+            String selectedRule = (String)JOptionPane.showInputDialog(gui, 
+                    String.format("Rule '%s' is referred in rules listed below\nClick OK to display selected rule", ruleName), "Find rule", JOptionPane.QUESTION_MESSAGE, 
                 null, rules, rules[0]);
             if (selectedRule != null) {
                 theComboBox.setSelectedItem(selectedRule);
@@ -140,11 +141,11 @@ public class ManagerRules {
                 return;
             newName = newName.trim();
             if (!newName.matches("[a-zA-Z$_][a-zA-Z$_0-9-]*")) {
-                JOptionPane.showMessageDialog(gui, "Illegal rule name", "ERROR - Rename rule", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, "Illegal rule name", "WARNING - Rename rule", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (gui.theForest.ruleBank.containsKey(newName)) {
-                JOptionPane.showMessageDialog(gui, "Rule name already used", "ERROR - Rename rule", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, "Rule name already used", "WARNING - Rename rule", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             VisitorRuleRenaming v = new VisitorRuleRenaming(currentName, newName);
@@ -167,7 +168,7 @@ public class ManagerRules {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (theComboBox.getItemCount() == 1) {
-                JOptionPane.showMessageDialog(gui, "Cant delete only rule - rename instead", "ERROR - Delete rule", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, "Cant delete only rule - rename instead", "WARNING - Delete rule", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             String ruleToDelete = (String)theComboBox.getSelectedItem();
@@ -176,8 +177,9 @@ public class ManagerRules {
             String refdRules[] = findRuleInRules(ruleToDelete);
             if (refdRules.length != 0) {
                 String selectedRule = (String)JOptionPane.showInputDialog(gui, 
-                        String.format("Cant delete rule '%s'\nIs used in listed rules", ruleToDelete), "ERROR - Delete rule", 
-                        JOptionPane.ERROR_MESSAGE, null, refdRules, refdRules[0]);
+                        String.format("Cant delete rule '%s'\nused in rules listed below\nClick OK to display a rule", 
+                        ruleToDelete), "WARNING - Delete rule", 
+                        JOptionPane.WARNING_MESSAGE, null, refdRules, refdRules[0]);
                 if (selectedRule != null)
                     theComboBox.setSelectedItem(selectedRule);
                 return;

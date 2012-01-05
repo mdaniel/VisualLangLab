@@ -45,13 +45,13 @@ public class ManagerTokens {
         Matcher m = inPattern.matcher(input);
         if (!m.matches()) {
             JOptionPane.showMessageDialog(gui, "Bad format\nExpected name, space(s), pattern", 
-                    "ERROR - " + title, JOptionPane.ERROR_MESSAGE);
+                    "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
         String name = m.group(1);
         if (gui.theForest.tokenBank.containsKey(name)) {
             JOptionPane.showMessageDialog(gui, "Name conflict\nA token with this name already exists", 
-                    "ERROR - " + title, JOptionPane.ERROR_MESSAGE);
+                    "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
         // ToDo: need to check if regular expression is valid and matches empry string
@@ -59,7 +59,7 @@ public class ManagerTokens {
         boolean ok = true;
         for (Map.Entry<String,String> e: gui.theForest.tokenBank.entrySet()) {
             if (e.getValue().substring(1).equals(m.group(2))) {
-                JOptionPane.showMessageDialog(gui, String.format("Pattern conflict\nToken '%s' uses the same pattern", e.getKey()), "ERROR - " + title, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, String.format("Pattern conflict\nToken '%s' uses the same pattern", e.getKey()), "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
                 ok = false;
             }
         }
@@ -84,7 +84,7 @@ public class ManagerTokens {
             try {
                 Utils.unEscape(info[1]);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(gui, ex.toString(), "ERROR - New literal", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, ex.toString(), "WARNING - New literal", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             gui.theForest.tokenBank.put(info[0], info[1]);
@@ -101,7 +101,7 @@ public class ManagerTokens {
                 String reg = Utils.unEscape(info[1]);
                 Pattern.compile(reg);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(gui, ex.toString(), "ERROR - New regex", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, ex.toString(), "WARNING - New regex", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             gui.theForest.tokenBank.put(info[0], info[1]);
@@ -122,14 +122,14 @@ public class ManagerTokens {
             try {
                 Pattern.compile(Utils.unEscape(newValue));
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(gui, ex.getMessage(), title, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, ex.getMessage(), title, JOptionPane.WARNING_MESSAGE);
                 return;
             }
         }
         String pattern = (isRegex ? "R" : "L") + newValue;
         for (Map.Entry<String, String> me : gui.theForest.tokenBank.entrySet()) {
             if (me.getValue().equals(pattern)) {
-                JOptionPane.showMessageDialog(gui, String.format("Token %s has the same pattern", me.getKey()), title, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, String.format("Token %s has the same pattern", me.getKey()), title, JOptionPane.WARNING_MESSAGE);
                 return;
             }
         }
@@ -141,7 +141,7 @@ public class ManagerTokens {
         public void actionPerformed(ActionEvent e) {
             Object names[] = gui.theForest.tokenBank.keySet().toArray();
             if (names.length == 0) {
-                JOptionPane.showMessageDialog(gui, "No tokens defined yet", "ERROR - Edit token", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, "No tokens defined yet", "WARNING - Edit token", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             String token = (String)JOptionPane.showInputDialog(gui, "Select token to edit", "Edit token", JOptionPane.QUESTION_MESSAGE, 
@@ -157,19 +157,20 @@ public class ManagerTokens {
         public void actionPerformed(ActionEvent e) {
             Object names[] = gui.theForest.tokenBank.keySet().toArray();
             if (names.length == 0) {
-                JOptionPane.showMessageDialog(gui, "No tokens defined yet", "ERROR - Find token", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, "No tokens defined yet", "WARNING - Find token", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            String token = (String)JOptionPane.showInputDialog(gui, "Select token to find", "Find token", JOptionPane.QUESTION_MESSAGE, 
+            String tokenName = (String)JOptionPane.showInputDialog(gui, "Select token to find", "Find token", JOptionPane.QUESTION_MESSAGE, 
                 null, names, names[0]);
-            if (token == null)
+            if (tokenName == null)
                 return;
-            String rules[] = findTokenInRules(token);
+            String rules[] = findTokenInRules(tokenName);
             if (rules.length == 0) {
-                JOptionPane.showMessageDialog(gui, String.format("Not in use: '%s'", token), "Find token", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, String.format("Token '%s' is not referred in any rule", tokenName), "WARNING - Find token", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            String rule = (String)JOptionPane.showInputDialog(gui, "Select rule to visit", "Find token", JOptionPane.QUESTION_MESSAGE, 
+            String rule = (String)JOptionPane.showInputDialog(gui, 
+                    String.format("Token '%s' is referred in rules listed below\nClick OK to display selected rule", tokenName), "Find token", JOptionPane.QUESTION_MESSAGE, 
                 null, rules, rules[0]);
             if (rule != null)
                 gui.theRuleManager.theComboBox.setSelectedItem(rule);
@@ -181,7 +182,7 @@ public class ManagerTokens {
         public void actionPerformed(ActionEvent e) {
             Object names[] = gui.theForest.tokenBank.keySet().toArray();
             if (names.length == 0) {
-                JOptionPane.showMessageDialog(gui, "No tokens defined yet", "ERROR - Delete token", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(gui, "No tokens defined yet", "WARNING - Delete token", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             String tokenToDelete = (String)JOptionPane.showInputDialog(gui, "Select token to delete", "Delete token", JOptionPane.QUESTION_MESSAGE, 
@@ -191,7 +192,8 @@ public class ManagerTokens {
             String rules[] = findTokenInRules(tokenToDelete);
             if (rules.length != 0) {
                 String rule = (String)JOptionPane.showInputDialog(gui, 
-                        String.format("Can't delete token '%s'\nIs used in listed rules", tokenToDelete), "ERROR - Delete token", JOptionPane.ERROR_MESSAGE, 
+                        String.format("Can't delete token '%s'\nUsed in rules listed below\nClick OK to display a rule", 
+                        tokenToDelete), "WARNING - Delete token", JOptionPane.WARNING_MESSAGE, 
                     null, rules, rules[0]);
                 if (rule != null)
                     gui.theRuleManager.theComboBox.setSelectedItem(rule);

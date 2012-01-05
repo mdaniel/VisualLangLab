@@ -206,17 +206,18 @@ public class Vll4jGui extends JFrame {
     private void warnPreview() {
         String msg = "<html>This preview of Version-10.01 has the following limitations:<br/><br/>" +
                 "1) Packrat parsing not yet implemented<br/>" +
-                "2) No API for application programs<br/><br/>" +
+                "2) No API for application programs<br/>" +
+                "3) Some GUI controls are not implemented<br/><br/>" +
                 "It has all other capabilities planned for 10.01, specifically:<br/><br/>" +
                 "a) Is written in Java, and uses no other APIs<br/>" +
                 "b) Same GUI and other characteristics as previous versions<br/>" +
-                "c) Much smaller download compared with previous versions<br/><br/>" +
+                "c) Much smaller download than previous executable JAR<br/><br/>" +
                 "Check back at http://vll.java.net/ for full release version" ;
         JOptionPane.showMessageDialog(rootPane, msg, "Version 10.01 Preview", JOptionPane.WARNING_MESSAGE);
     }
 
     public static void main(String[] args) {
-        long t0 = System.currentTimeMillis();
+//        long t0 = System.currentTimeMillis();
         if (System.getProperty("os.name").contains("Windows")) {
             try {
                 UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -225,11 +226,11 @@ public class Vll4jGui extends JFrame {
         Vll4jGui me = new Vll4jGui();
         System.setOut(me.theTestingPanel.getOutStream());
         System.setErr(me.theTestingPanel.getErrStream());
-        while ((System.currentTimeMillis() - t0) <= 2000) {
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException ex) {}
-        }
+//        while ((System.currentTimeMillis() - t0) <= 1000) {
+//            try {
+//                Thread.sleep(200);
+//            } catch (InterruptedException ex) {}
+//        }
         me.setVisible(true);
         me.warnPreview();
     }

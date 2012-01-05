@@ -20,12 +20,10 @@
 
 package vll4j.gui;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.InputStream;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -124,14 +122,29 @@ public class ManagerHelp {
             "&nbsp;&nbsp;&nbsp;&nbsp;http://vll.java.net/examples/a-quick-tour.html";
     };
 
-    Action sampleTdarSimpleTreeInterpreter = new AbstractAction("TDAR-Expr-Simple-Tree-Based-Interpreter") {
+    Action sampleTdarSimpleTreeInterpreter = new AbstractAction("TDAR-Simple-Tree-Based-Interpreter") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(gui, msg, "TDAR-Expr-Simple-Tree-Based-Interpreter", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(gui, msg, "TDAR-Simple-Tree-Based-Interpreter", JOptionPane.INFORMATION_MESSAGE);
+            InputStream is = ClassLoader.getSystemClassLoader().
+                    getResourceAsStream("vll4j/gui/resources/TDAR-Simple-Tree-Based-Interpreter.vll");
+            gui.theFileManager.openInputStream(is);
+            gui.setGrammarName("TDAR-Simple-Tree-Based-Interpreter");
             gui.theRuleManager.reset();
         }
-        String msg = "";
-    };
+        String msg = "<html>" + 
+            "This example is based on the parser described at the very end of <br/>" + 
+            "section 3.3, <i>Evaluating Expressions Using an AST Intermediate Form</i>, <br/>" + 
+            "of the book <i>The Definitive ANTLR Reference</i> <br/>" + 
+            "(http://pragprog.com/book/tpantlr/the-definitive-antlr-reference)<br/><br/>" +
+            "Complete details can be found here: <br/> " +
+            "http://www.antlr.org/wiki/display/ANTLR3/Simple+tree-based+interpeter<br/><br/>" +
+            "You can find sample test input at the web-page above. <br/><br/>" +
+            "NOTE: Each 'statement' in the test input <br/>" +
+            "(including the last) must end with a NEWLINE<br/><br/>" +
+            "Read more about this parser at the following url:<br/>" + 
+            "&nbsp;&nbsp;&nbsp;&nbsp;http://vll.java.net/examples/a-quick-tour.html";
+   };
 
     Action sampleP2SEArithExpr = new AbstractAction("PS2E-ArithExpr") {
         @Override
