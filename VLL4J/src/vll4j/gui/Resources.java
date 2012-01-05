@@ -63,6 +63,7 @@ public class Resources {
     static ImageIcon semPred = getIcon("SemPred.gif");
     static ImageIcon sequence = getIcon("Sequence.gif");
     static ImageIcon server16 = getIcon("Server16.gif");
+    static ImageIcon splashImage = getIcon("SplashImage.png");
     static ImageIcon stop16 = getIcon("Stop16.gif");
     static ImageIcon token = getIcon("Token.gif");
     static ImageIcon wildCard = getIcon("WildCard.gif"); 

@@ -20,11 +20,15 @@
 
 package vll4j.gui;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.InputStream;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 
 public class ManagerHelp {
 
@@ -44,11 +48,14 @@ public class ManagerHelp {
     Action aboutAction = new AbstractAction("About VisualLangLab") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(gui, msg, title, JOptionPane.INFORMATION_MESSAGE, Resources.icon);
+            JTabbedPane tp = new JTabbedPane();
+            tp.add("VisualLangLab", new JLabel(Resources.splashImage));
+            tp.add("Copyright", new JLabel(copyright));
+            tp.add("Licenses", new JLabel(licenses));
+            JOptionPane.showMessageDialog(gui, tp, "VisualLangLab 10.01", JOptionPane.INFORMATION_MESSAGE, Resources.icon);
         }
-        String msg = "<html>" +
-            "<b>VisualLangLab</b><br/>" +
-            "A Visual Parser-Generator (http://vll.java.net/)<br/>" +
+        String copyright = "<html>" +
+            "<b>VisualLangLab (http://vll.java.net/)</b><br/>" +
             "Copyright 2004, 2010, 2012, Sanjay Dasgupta <br/>(sanjay.dasgupta@gmail.com)<br/><br/>" +
             "VisualLangLab is free software: you can redistribute it and/or <br/>" +
             "modify it under the terms of the GNU General Public License as <br/>" +
@@ -59,12 +66,12 @@ public class ManagerHelp {
             "of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.<br/>" +
             "See the GNU General Public License for more details.<br/><br/>" +
             "You should have received a copy of the GNU General Public License<br/>" +
-            "along with VisualLangLab. If not, see http://www.gnu.org/licenses/<br/><br/>" +
-            "<hr/>" +
+            "along with VisualLangLab. If not, see http://www.gnu.org/licenses/</html>";
+        String licenses = "<html>" +
             "VisualLangLab uses the following public resources:<br/><br/>" +
-            "Icon images from the Java look and feel Graphics Repository<br/>" +
+            "1) Icon images from the Java look and feel Graphics Repository<br/>" +
             "(http://java.sun.com/developer/techDocs/hi/repository/)<br/><br/>" +
-            "Some elements, rewritten in Java, of the <br/>" +
+            "2) Some elements, rewritten in Java, of the <br/>" +
             "<i>scala.util.parsing.combinator</i> package of the Scala API. <br/>" +
             "(http://www.scala-lang.org/api/current/index.html#package)<br/><br/>" +
             "Copyright notices for the use and/or redistribution of these <br/>" +
@@ -72,7 +79,7 @@ public class ManagerHelp {
             "files of the distribution.<br/>" +
             "</html>";
     };
-
+            
     Action sampleTDARExpr = new AbstractAction("TDAR-Expr") {
         @Override
         public void actionPerformed(ActionEvent e) {
