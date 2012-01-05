@@ -1,0 +1,67 @@
+<VLL-Grammar>
+  <Whitespace>[ \\t]+</Whitespace>
+  <Comments></Comments>
+  <Tokens>
+    <Literal Name="RPAREN" Pattern=")"/>
+    <Regex Name="INT" Pattern="\\d+"/>
+    <Literal Name="MULT" Pattern="*"/>
+    <Literal Name="LPAREN" Pattern="("/>
+    <Regex Name="NEWLINE" Pattern="\\r?\\n"/>
+    <Regex Name="ID" Pattern="[a-zA-Z]+"/>
+    <Literal Name="MINUS" Pattern="-"/>
+    <Literal Name="EQUALS" Pattern="="/>
+    <Literal Name="PLUS" Pattern="+"/>
+  </Tokens>
+  <Parsers>
+    <Parser Name="expr">
+        <Sequence >
+          <Reference Ref="multExpr" />
+          <Sequence Mult="*">
+            <Choice >
+              <Token Ref="PLUS" />
+              <Token Ref="MINUS" />
+            </Choice>
+            <Reference Ref="multExpr" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="multExpr">
+        <Sequence >
+          <Reference Ref="atom" />
+          <Sequence Mult="*">
+            <Token Ref="MULT" />
+            <Reference Ref="atom" />
+          </Sequence>
+        </Sequence>
+    </Parser>
+    <Parser Name="atom">
+        <Choice >
+          <Token Ref="INT" />
+          <Token Ref="ID" />
+          <Sequence >
+            <Token Ref="LPAREN" />
+            <Reference Ref="expr" />
+            <Token Ref="RPAREN" />
+          </Sequence>
+        </Choice>
+    </Parser>
+    <Parser Name="Prog">
+        <Reference Ref="stat" Mult="+"/>
+    </Parser>
+    <Parser Name="stat">
+        <Choice >
+          <Sequence >
+            <Token Ref="ID" />
+            <Token Ref="EQUALS" />
+            <Reference Ref="expr" />
+            <Token Ref="NEWLINE" />
+          </Sequence>
+          <Sequence >
+            <Reference Ref="expr" />
+            <Token Ref="NEWLINE" />
+          </Sequence>
+          <Token Ref="NEWLINE" />
+        </Choice>
+    </Parser>
+  </Parsers>
+</VLL-Grammar>
