@@ -20,12 +20,7 @@
 
 package vll4j.core;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -81,6 +76,7 @@ public class SimpleLexingRegexParsers extends RegexParsers {
     
     private Parser<String> parserById(final String errMsg, final int id) {
         return new Parser<String>() {
+            @Override
             public ParseResult<String> parse(Reader input) {
                 if (!setupDone) {
                     setupLexer();
@@ -180,6 +176,7 @@ public class SimpleLexingRegexParsers extends RegexParsers {
 //System.out.printf("setupLexerLiterals(): lit=%s id=%d%n", sortedLiterals[i][0], sortedLiterals[i][1]);
         }
         Comparator c = new Comparator() {
+            @Override
             public int compare(Object a, Object b) {
                 String aa = ((String)(((Object[])a)[0]));
                 String bb = ((String)(((Object[])b)[0]));
