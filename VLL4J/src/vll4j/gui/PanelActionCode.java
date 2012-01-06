@@ -29,7 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.script.*;
 import javax.swing.*;
-import vll4j.core.Reader;
+import vll4j.core.Parsers.Reader;
 import vll4j.core.SimpleLexingRegexParsers;
 import vll4j.tree.NodeBase;
 import vll4j.tree.NodeRoot;

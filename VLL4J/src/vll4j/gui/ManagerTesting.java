@@ -20,8 +20,6 @@
 
 package vll4j.gui;
 
-import vll4j.tree.VisitorParserGeneration;
-import vll4j.tree.NodeBase;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,8 +30,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
-import vll4j.core.Reader;
+import vll4j.core.Parsers.Reader;
 import vll4j.core.ReaderTextArea;
+import vll4j.tree.NodeBase;
+import vll4j.tree.VisitorParserGeneration;
 
 public class ManagerTesting {
 
@@ -167,7 +167,7 @@ public class ManagerTesting {
             t3 = System.currentTimeMillis();
         } else {
             t2 = System.currentTimeMillis();
-            pr = gui.regexParsers.parseAll(parser, (Reader)new ReaderTextArea(gui.theTestingPanel.inputArea));
+            pr = gui.regexParsers.parseAll(parser, new ReaderTextArea(gui.theTestingPanel.inputArea));
             t3 = System.currentTimeMillis();
         }
         if (pr.successful()) {

@@ -25,6 +25,53 @@ import java.util.regex.Pattern;
 
 public class RegexParsers extends Parsers {
     
+    public static class ReaderCharSequence implements Reader {
+        public ReaderCharSequence(CharSequence source) {
+            this.source = source;
+        }
+/*        public ReaderCharSequence(Reader r) {
+            this.source = r.source();
+            this.offset = r.offset();
+            this.line = r.line();
+            this.column = r.column();
+        }*/
+        @Override
+        public CharSequence source() {return source;}
+        @Override
+        public int offset() {return offset;}
+        @Override
+        public boolean atEnd() {return offset >= source.length();}
+        @Override
+        public char first() {return source.charAt(offset);}
+        @Override
+        public Reader rest() {
+            return drop(1);
+        }
+        @Override
+        public int line() {return line;}
+        @Override
+        public int column() {return column;}
+        @Override
+        public ReaderCharSequence drop(int nbrToDrop) {
+            if (offset + nbrToDrop > source.length())
+                throw new IllegalArgumentException();
+            ReaderCharSequence csr = new ReaderCharSequence(source);
+            csr.line = line; csr.column = column; csr.offset = offset + nbrToDrop;
+            for (int i = 0; i < nbrToDrop; ++i) {
+                if (source.charAt(offset + i) == '\n') {
+                    ++csr.line;
+                    csr.column = 1;
+                } else {
+                    ++csr.column;
+                }
+            }
+            return csr;
+        }
+        private CharSequence source;
+        private int offset = 0;
+        private int line = 1, column = 1;
+    }
+
     protected Pattern whiteSpace = Pattern.compile("\\s+");
     
     public boolean skipWhitespace() {
@@ -49,6 +96,7 @@ public class RegexParsers extends Parsers {
     
     public Parser<String> literal(final String errMsg, final String lit) {
         return new Parser<String>() {
+            @Override
             public ParseResult<String> parse(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
                 Reader newInput = input.drop(offset2 - input.offset());
@@ -67,6 +115,7 @@ public class RegexParsers extends Parsers {
     
     public Parser<String> regex(final String errMsg, final Pattern p) {
         return new Parser<String>() {
+            @Override
             public ParseResult<String> parse(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
                 Reader newInput = input.drop(offset2 - input.offset());
@@ -91,6 +140,7 @@ public class RegexParsers extends Parsers {
     @Override
     public <T>Parser<T> phrase(final Parser<T> p) {
         return new Parser<T>() {
+            @Override
             public ParseResult<T> parse(Reader input) {
                 ParseResult<T> pr = p.parse(input);
 //System.out.printf("%s: %s%n", p, pr);

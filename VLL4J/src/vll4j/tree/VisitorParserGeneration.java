@@ -20,16 +20,16 @@
 
 package vll4j.tree;
 
-import javax.script.ScriptException;
-import vll4j.core.Utils;
 import java.util.HashMap;
 import java.util.Map;
+import javax.script.ScriptException;
 import vll4j.core.Parsers.Failure;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
+import vll4j.core.Parsers.Reader;
 import vll4j.core.Parsers.Success;
-import vll4j.core.Reader;
 import vll4j.core.SimpleLexingRegexParsers;
+import vll4j.core.Utils;
 
 public class VisitorParserGeneration extends VisitorBase {
     
@@ -59,6 +59,7 @@ public class VisitorParserGeneration extends VisitorBase {
         Parser<? extends Object> pm = p;
         if (!(node instanceof NodeSemPred) && node.actionFunction != null) {
             pm = new Parser() {
+                @Override
                 public ParseResult<? extends Object> parse(Reader input) {
                     try {
                         node.actionFunction.run(null, input);
@@ -81,15 +82,16 @@ public class VisitorParserGeneration extends VisitorBase {
         Parser<? extends Object> pm = p;
         if (node.isTraced || ((node instanceof NodeRoot) && traceAll)) {
             pm = new Parser() {
+                @Override
                 public ParseResult<? extends Object> parse(Reader input) {
                     traceIndent();
-                    System.out.print(String.format("%s (ENTRY): %d%n", node.nodeName(), input.offset()));
+                    System.out.print(String.format(">> %s (%d, %d)%n", node.nodeName(), input.line(), input.column()));
                     ++traceLevel;
                     ParseResult<? extends Object> res = p.parse(input);
                     --traceLevel;
                     traceIndent();
-                    System.out.print(String.format("%s (EXIT): %s (%d)%n", node.nodeName(), res.getClass().getSimpleName(),
-                            res.next().offset()));
+                    System.out.print(String.format("<< %s : %s (%d, %d)%n", node.nodeName(), res.getClass().getSimpleName(),
+                            res.next().line(), res.next().column()));
                     return res;
                 }
             };
@@ -133,8 +135,9 @@ public class VisitorParserGeneration extends VisitorBase {
     public Parser<? extends Object> visitLiteral(NodeLiteral n) {
         if (n.accept(visitorNodeValidation) == null) {
             String litString = Utils.unEscape(theForest.tokenBank.get(n.literalName).substring(1));
-            return withMultiplicity(regexParsers.literal(n.errorMessage.isEmpty() ? 
-                    String.format("literal:%s(%s)", n.literalName, n.nodeName()) : n.errorMessage, litString), n);
+            String errMsg = n.errorMessage.isEmpty() ? 
+                    String.format("literal:%s(%s)", n.literalName, n.nodeName()) : n.errorMessage;
+            return withMultiplicity(n.literalName.endsWith("_") ? regexParsers.literal$(errMsg, litString) : regexParsers.literal(errMsg, litString), n);
         } else {
             parserGeneratedOk = false;
             return null;
@@ -151,6 +154,7 @@ public class VisitorParserGeneration extends VisitorBase {
             }
             final Parser<? extends Object> holder[] = parserCache.get(referredRule);
             Parser<? extends Object> p = new Parser() {
+                @Override
                 public ParseResult<? extends Object> parse(Reader input) {
                     return holder[0].parse(input);
                 }
@@ -166,8 +170,9 @@ public class VisitorParserGeneration extends VisitorBase {
     public Parser<? extends Object> visitRegex(NodeRegex n) {
         if (n.accept(visitorNodeValidation) == null) {
             String regString = Utils.unEscape(theForest.tokenBank.get(n.regexName).substring(1));
-            return withMultiplicity(regexParsers.regex(n.errorMessage.isEmpty() ?
-                    String.format("regex:%s(%s)", n.regexName, n.nodeName()) : n.errorMessage, regString), n);
+            String errMsg = n.errorMessage.isEmpty() ? 
+                    String.format("regex:%s(%s)", n.regexName, n.nodeName()) : n.errorMessage;
+            return withMultiplicity(n.regexName.endsWith("_") ? regexParsers.regex$(errMsg, regString) : regexParsers.regex(errMsg, regString), n);
         } else {
             parserGeneratedOk = false;
             return null;
@@ -213,6 +218,7 @@ public class VisitorParserGeneration extends VisitorBase {
     public Parser<? extends Object> visitSemPred(final NodeSemPred n) {
         if (n.accept(visitorNodeValidation) == null) {
             Parser<? extends Object> parser = new Parser() {
+                @Override
                 public ParseResult<? extends Object> parse(Reader input) {
                     Object result = null;
                     try {

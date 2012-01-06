@@ -110,8 +110,10 @@ System.out.println(sb.toString());
                         case 'r' : sb.append('\r'); break;
                         case 't' : sb.append('\t'); break;
                         case '\\' : sb.append('\\'); break;
+                        case '\'' : sb.append('\''); break;
+                        case '\"' : sb.append('\"'); break;
                         default: throw new IllegalArgumentException(
-                                String.format("Bad escape %s", s));
+                                String.format("Bad escape at offset %d -> %s", i, s));
                     }
                 } else {
                     if (ch == '\\')

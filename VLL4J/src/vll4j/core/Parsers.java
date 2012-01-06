@@ -25,6 +25,17 @@ import java.util.List;
 
 public class Parsers {
     
+    public static interface Reader {
+        public CharSequence source();
+        public boolean atEnd();
+        public char first();
+        public Reader rest();
+        public int offset();
+        public int line();
+        public int column();
+        public Reader drop(int n);
+    }
+    
     public static abstract class Parser<T> {
         public abstract ParseResult<T> parse(Reader input);
         public String name;
@@ -136,7 +147,7 @@ public class Parsers {
             public ParseResult<T> parse(Reader input) {
                 ParseResult<T> pr = p.parse(input);
                 if (pr.successful()) 
-                    return new Failure("??guard??", input);
+                    return new Failure("??not??", input);
                 else
                     return new Success<T>(pr.get(), input);
             }
@@ -291,12 +302,12 @@ public class Parsers {
     public String dumpResult(ParseResult pr) {
         if (pr instanceof Success) {
             Success s = (Success)pr;
-            return String.format("Success (%d): %s", s.next().offset(), s.get());
+            return String.format("Success(%d, %d): %s", s.next().line(), s.next().column(), s.get());
         } else if (pr instanceof NoSuccess) {
             StringBuilder sb = new StringBuilder();
             NoSuccess f = (NoSuccess)pr;
             while (f != null) {
-                sb.append(String.format("%s (%d): %s%n", f.getClass().getSimpleName(), f.next().offset(), f.msg));
+                sb.append(String.format("%s(%d, %d): %s%n", f.getClass().getSimpleName(), f.next().line(), f.next().column(), f.msg));
                 f = f.reason;
             }
             return sb.toString();

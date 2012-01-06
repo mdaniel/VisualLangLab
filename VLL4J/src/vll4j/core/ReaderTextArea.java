@@ -21,43 +21,38 @@
 package vll4j.core;
 
 import javax.swing.JTextArea;
+import vll4j.core.Parsers.Reader;
 
 public class ReaderTextArea implements Reader {
-    public ReaderTextArea(JTextArea textArea, int offset) {
-        this.textArea = textArea;
-        this.offset = offset;
-    }
     public ReaderTextArea(JTextArea textArea) {
-        this(textArea, 0);
+        this.textArea = textArea;
     }
     public CharSequence source() {return textArea.getText();}
     public int offset() {return offset;}
     public boolean atEnd() {return offset >= textArea.getText().length();}
     public char first() {return textArea.getText().charAt(offset);}
     public ReaderTextArea rest() {
-        ReaderTextArea csr = new ReaderTextArea(textArea, offset + 1);
-        csr.line = line; csr.column = column;
-        return csr;
+        return drop(1);
     }
     public int line() {return line;}
     public int column() {return column;}
-    public ReaderTextArea drop(int n) {
-        if (offset + n > textArea.getText().length())
+    public ReaderTextArea drop(int nbrToDrop) {
+        if (offset + nbrToDrop > textArea.getText().length())
             throw new IllegalArgumentException();
-        for (int i = 0; i < n; ++i) {
-            String src = textArea.getText();
+        ReaderTextArea csr = new ReaderTextArea(textArea);
+        csr.offset = offset + nbrToDrop; csr.line = line; csr.column = column;
+        String src = textArea.getText();
+        for (int i = 0; i < nbrToDrop; ++i) {
             if (src.charAt(offset + i) == '\n') {
-                ++line;
-                column = 1;
+                ++csr.line;
+                csr.column = 1;
             } else {
-                ++column;
+                ++csr.column;
             }
         }
-        ReaderTextArea csr = new ReaderTextArea(textArea, offset + n);
-        csr.line = line; csr.column = column;
         return csr;
     }
     private JTextArea textArea;
-    private int offset;
+    private int offset = 0;
     private int line = 1, column = 1;
 }

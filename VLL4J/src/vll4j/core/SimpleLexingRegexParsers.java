@@ -218,11 +218,11 @@ public class SimpleLexingRegexParsers extends RegexParsers {
         return super.literal(lit);
     }
     
-    public Parser<String> regex$(String errMsg, Pattern p) {
+    public Parser<String> regex$(String errMsg, String p) {
         return super.regex(errMsg, p);
     }
     
-    public Parser<String> regex$(Pattern p) {
+    public Parser<String> regex$(String p) {
         return super.regex(p);
     }
     

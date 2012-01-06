@@ -21,7 +21,7 @@
 package vll4j.gui;
 
 import javax.script.ScriptException;
-import vll4j.core.Reader;
+import vll4j.core.Parsers.Reader;
 
 public interface ActionFunction {
     public Object run(Object o, Reader r) throws ScriptException;
