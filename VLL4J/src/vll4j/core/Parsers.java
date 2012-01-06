@@ -44,7 +44,7 @@ public class Parsers {
             this.msg = msg;
             this.next = next;
             this.reason = reason; // ++SPC (not in Scala parser combinators)
-//            lastNoSuccess = this;
+            lastNoSuccess = this;
         }
         public T get() {return null;}
         public boolean successful() {return false;}
@@ -150,7 +150,7 @@ public class Parsers {
                 if (pr.successful())
                     return new Success(new Object[]{pr.get()}, pr.next());
                 else
-                    return new Success(new Object[]{}, input);
+                    return new Success(new Object[]{null}, input);
             }
         };
     }
@@ -286,7 +286,7 @@ public class Parsers {
         };
     }
     
-    NoSuccess lastNoSuccess = null;
+    public static NoSuccess lastNoSuccess = null;
     
     public String dumpResult(ParseResult pr) {
         if (pr instanceof Success) {
