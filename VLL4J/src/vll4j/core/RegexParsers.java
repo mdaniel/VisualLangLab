@@ -102,7 +102,8 @@ public class RegexParsers extends Parsers {
                 if (pr.next().drop(step - pr.next().offset()).atEnd())
                     return pr;
                 else
-                    return new Failure(String.format("expected end of input at %d", pr.next().offset()), input);
+                    return new Failure(String.format("expected end of input at [%d, %d]", 
+                            pr.next().line(), pr.next().column()), input);
             }
         };
     }
