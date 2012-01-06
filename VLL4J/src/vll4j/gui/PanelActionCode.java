@@ -20,7 +20,6 @@
 
 package vll4j.gui;
 
-import vll4j.tree.NodeBase;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -28,20 +27,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import javax.script.*;
+import javax.swing.*;
 import vll4j.core.Reader;
+import vll4j.core.SimpleLexingRegexParsers;
+import vll4j.tree.NodeBase;
 import vll4j.tree.NodeRoot;
 
 public class PanelActionCode extends JPanel {
@@ -79,12 +69,11 @@ public class PanelActionCode extends JPanel {
         script = script.substring(script.indexOf('('));
         final CompiledScript cs = compilable.compile(String.format("(function %s)(vllARG)", script));
         return new ActionFunction() {
+            @Override
             public Object run(Object arg, Reader r) throws ScriptException {
                 cs.getEngine().put("vllARG", arg);
-                cs.getEngine().put("vllLine", r.line());
-                cs.getEngine().put("vllCol", r.column());
-                cs.getEngine().put("vllOffset", r.offset());
-                cs.getEngine().put("vllInput", r.source().subSequence(r.offset(), r.source().length()));
+                cs.getEngine().put("vllReader", r);
+                cs.getEngine().put("vllLastNoSuccess", SimpleLexingRegexParsers.lastNoSuccess);
                 cs.getEngine().put("vllParserTestInput", gui.theTestingPanel.inputArea);
                 cs.getEngine().put("vllParserLog", gui.theTestingPanel.logArea);
                 return cs.eval();
@@ -115,6 +104,7 @@ public class PanelActionCode extends JPanel {
     }
     
     private Action saveAction = new AbstractAction("Save") {
+        @Override
         public void actionPerformed(ActionEvent o) {
             gui.theTreePanel.selectedNode.actionText = codeArea.getText();
             saveButton.setEnabled(false);
@@ -130,6 +120,7 @@ public class PanelActionCode extends JPanel {
     };
     
     KeyAdapter keyAdapter = new KeyAdapter() {
+        @Override
         public void keyTyped(KeyEvent e) {
             saveButton.setEnabled(true);
         }
