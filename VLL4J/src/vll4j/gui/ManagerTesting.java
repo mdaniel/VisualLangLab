@@ -30,8 +30,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
-import vll4j.core.Parsers.Reader;
-import vll4j.core.ReaderTextArea;
 import vll4j.tree.NodeBase;
 import vll4j.tree.VisitorParserGeneration;
 
