@@ -29,12 +29,6 @@ public class RegexParsers extends Parsers {
         public ReaderCharSequence(CharSequence source) {
             this.source = source;
         }
-/*        public ReaderCharSequence(Reader r) {
-            this.source = r.source();
-            this.offset = r.offset();
-            this.line = r.line();
-            this.column = r.column();
-        }*/
         @Override
         public CharSequence source() {return source;}
         @Override
@@ -122,18 +116,11 @@ public class RegexParsers extends Parsers {
                 Matcher m = p.matcher(cs.subSequence(offset2, cs.length()));
                 if (m.lookingAt()) {
                     return new Success(m.group(), input.drop(offset2 - input.offset() + m.group().length()));
-                } else
+                } else {
                     return new Failure(errMsg, input);
+                }
             }
         };
-    }
-    
-    public Parser<String> regex(String errMsg, String pat) {
-        return regex(errMsg, Pattern.compile(pat));
-    }
-    
-    public Parser<String> regex(String pat) {
-        return regex(Pattern.compile(pat));
     }
     
     @Override

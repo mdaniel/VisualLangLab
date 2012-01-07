@@ -219,11 +219,12 @@ public class SimpleLexingRegexParsers extends RegexParsers {
     }
     
     public Parser<String> regex$(String errMsg, String p) {
-        return super.regex(errMsg, p);
+//System.out.printf("SimpleLexingRegexParsers.regex$(%s, $s)%n", errMsg, p);
+        return super.regex(errMsg, Pattern.compile(p));
     }
     
     public Parser<String> regex$(String p) {
-        return super.regex(p);
+        return super.regex(Pattern.compile(p));
     }
     
     private Map<String, Parser<String>> tokenParserMap = new HashMap<String, Parser<String>>();
@@ -252,8 +253,8 @@ public class SimpleLexingRegexParsers extends RegexParsers {
         System.out.println("Testing Regexs");
         SimpleLexingRegexParsers me = new SimpleLexingRegexParsers();
         String regPats[] = new String[] {"[0-9]+", "[a-z]+"};
-        Parser<String> numPat = me.regex(regPats[0], regPats[0]);
-        Parser<String> wordPat = me.regex(regPats[1], regPats[1]);
+        Parser<String> numPat = me.regex(regPats[0], Pattern.compile(regPats[0]));
+        Parser<String> wordPat = me.regex(regPats[1], Pattern.compile(regPats[1]));
         Parser nums = me.rep1(me.choice("choice", numPat, wordPat));
         ParseResult res2 = me.parseAll(nums, "123  hello 2011 this is 1984");
         System.out.println(me.dumpResult(res2));
@@ -265,8 +266,8 @@ public class SimpleLexingRegexParsers extends RegexParsers {
         SimpleLexingRegexParsers me = new SimpleLexingRegexParsers();
         
         String regPats[] = new String[] {"[0-9]+", "[a-z]+"};
-        Parser<String> numPat = me.regex(regPats[0], regPats[0]);
-        Parser<String> wordPat = me.regex(regPats[1], regPats[1]);
+        Parser<String> numPat = me.regex(regPats[0], Pattern.compile(regPats[0]));
+        Parser<String> wordPat = me.regex(regPats[1], Pattern.compile(regPats[1]));
         
         String pats[] = new String[] {"hello", "this"};
         Parser<String> hello = me.literal(pats[0], pats[0]);
