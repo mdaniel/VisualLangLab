@@ -213,12 +213,15 @@ public class ManagerRules {
     Action comboBoxAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String ruleName = (String)theComboBox.getSelectedItem();
-            if (!ruleName.equals(lastRulePopped)) {
+            String selectedRuleName = (String)theComboBox.getSelectedItem();
+            String currentRuleName = gui.theTreePanel.rootNode.ruleName;
+            if (selectedRuleName.equals(currentRuleName))
+                return;
+            if (!selectedRuleName.equals(lastRulePopped)) {
                 ruleStack.add(gui.theTreePanel.rootNode.ruleName);
                 ruleBackAction.setEnabled(!ruleStack.isEmpty());
             }
-            gui.theTreePanel.setRuleName(ruleName);
+            gui.theTreePanel.setRuleName(selectedRuleName);
             gui.theActionCodePanel.resetView();
         }
     };
