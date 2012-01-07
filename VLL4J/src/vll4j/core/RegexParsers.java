@@ -99,10 +99,9 @@ public class RegexParsers extends Parsers {
             @Override
             public ParseResult<String> parse(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
-                Reader newInput = input.drop(offset2 - input.offset());
-                CharSequence cs = newInput.source();
+                CharSequence cs = input.source();
                 if (cs.subSequence(offset2, cs.length()).toString().startsWith(lit))
-                    return new Success(lit, newInput.drop(lit.length()));
+                    return new Success(lit, input.drop(offset2 - input.offset() + lit.length()));
                 else
                     return new Failure(errMsg, input);
             }
@@ -118,11 +117,11 @@ public class RegexParsers extends Parsers {
             @Override
             public ParseResult<String> parse(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
-                Reader newInput = input.drop(offset2 - input.offset());
-                CharSequence cs = newInput.source();
-                Matcher m = p.matcher(cs.subSequence(newInput.offset(), cs.length()));
+//                Reader newInput = input.drop(offset2 - input.offset());
+                CharSequence cs = input.source();
+                Matcher m = p.matcher(cs.subSequence(offset2, cs.length()));
                 if (m.lookingAt()) {
-                    return new Success(m.group(), newInput.drop(m.group().length()));
+                    return new Success(m.group(), input.drop(offset2 - input.offset() + m.group().length()));
                 } else
                     return new Failure(errMsg, input);
             }
