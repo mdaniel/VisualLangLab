@@ -20,14 +20,14 @@
 
 package vll4j.gui;
 
-import vll4j.tree.NodeBase;
-import vll4j.tree.NodeRoot;
 import java.awt.event.ActionEvent;
 import java.util.Stack;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import vll4j.tree.NodeBase;
+import vll4j.tree.NodeRoot;
 
 public class ManagerRules {
     
@@ -51,36 +51,43 @@ public class ManagerRules {
     };
     
     void addRuleToComboBox(String ruleName) {
-            theComboBox.setAction(null);
-            int oldLength = theComboBox.getItemCount();
-            for (int i = theComboBox.getItemCount() - 1; i >= 0; --i) {
-                String item = theComboBox.getItemAt(i);
-                if (ruleName.compareTo(item) > 0) {
-                    theComboBox.insertItemAt(ruleName, i + 1);
-                    break;
-                } else if (ruleName.compareTo(item) == 0) {
-                    JOptionPane.showMessageDialog(gui, "A rule with this name already exists", "WARNING - New rule", JOptionPane.WARNING_MESSAGE);
-                    break;
-                } else if (i == 0) {
-                    theComboBox.insertItemAt(ruleName, 0);
-                }
+        theComboBox.setAction(null);
+        int oldLength = theComboBox.getItemCount();
+        for (int i = theComboBox.getItemCount() - 1; i >= 0; --i) {
+            String item = theComboBox.getItemAt(i);
+            if (ruleName.compareTo(item) > 0) {
+                theComboBox.insertItemAt(ruleName, i + 1);
+                break;
+            } else if (ruleName.compareTo(item) == 0) {
+                JOptionPane.showMessageDialog(gui, "A rule with this name already exists", 
+                        "WARNING - New rule", JOptionPane.WARNING_MESSAGE);
+                break;
+            } else if (i == 0) {
+                theComboBox.insertItemAt(ruleName, 0);
             }
-            if (oldLength != theComboBox.getItemCount()) {
-                theComboBox.setMaximumSize(theComboBox.getPreferredSize());
-                theComboBox.setSelectedItem(ruleName);
-                gui.theTreePanel.setRuleName(ruleName);
-            }
-            theComboBox.setAction(comboBoxAction);
+        }
+        if (oldLength != theComboBox.getItemCount()) {
+            theComboBox.setMaximumSize(theComboBox.getPreferredSize());
+            theComboBox.setSelectedItem(ruleName);
+            gui.theTreePanel.setRuleName(ruleName);
+        }
+        theComboBox.setAction(comboBoxAction);
     }
     
     void removeRuleFromComboBox(String ruleName) {
+//for (int i = 0; i < theComboBox.getItemCount(); ++i) 
+//    System.out.printf("%d %s%n", i, theComboBox.getItemAt(i));
         int idx = theComboBox.getSelectedIndex();
-        String nextItem = (idx == theComboBox.getItemCount() - 1) ?
-                 theComboBox.getItemAt(idx - 1) : theComboBox.getItemAt(idx + 1);
+//System.out.printf("getSelectedIndex() %d%n", idx);
+//System.out.printf("getItemAt(idx) %s%n", theComboBox.getItemAt(idx));
+//        String nextItem = (idx == theComboBox.getItemCount() - 1) ?
+//                 theComboBox.getItemAt(idx - 1) : theComboBox.getItemAt(idx + 1);
+//System.out.println(idx == theComboBox.getItemCount() - 1);
+//System.out.printf("nextItem %s%n", nextItem);
         theComboBox.setAction(null);
         theComboBox.removeItemAt(idx);
         theComboBox.setAction(comboBoxAction);
-        gui.theTreePanel.setRuleName(nextItem);
+//        gui.theTreePanel.setRuleName(nextItem);
     }
     
     Action ruleNewAction = new AbstractAction("New rule", Resources.newReference) {
@@ -152,14 +159,23 @@ public class ManagerRules {
             for (NodeBase n: gui.theForest.ruleBank.values()) {
                 n.accept(v);
             }
+//System.out.println("Visitor done");
             NodeBase n = gui.theForest.ruleBank.get(currentName);
             gui.theForest.ruleBank.put(newName, n);
             gui.theForest.ruleBank.remove(currentName);
-            removeRuleFromComboBox(currentName);
-            addRuleToComboBox(newName);
-            for (int i = 0; i < ruleStack.size(); ++i) {
-                if (ruleStack.elementAt(i).equals(currentName))
-                    ruleStack.setElementAt(newName, i);
+            if (theComboBox.getItemCount() == 1) {
+                theComboBox.setAction(null);
+                theComboBox.removeAllItems();
+                theComboBox.addItem(newName);
+                theComboBox.setAction(comboBoxAction);
+                theComboBox.setMaximumSize(theComboBox.getPreferredSize());
+            } else {
+                removeRuleFromComboBox(currentName);
+                addRuleToComboBox(newName);
+                for (int i = 0; i < ruleStack.size(); ++i) {
+                    if (ruleStack.elementAt(i).equals(currentName))
+                        ruleStack.setElementAt(newName, i);
+                }
             }
         }
     };
