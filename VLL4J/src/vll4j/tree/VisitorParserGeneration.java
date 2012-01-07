@@ -22,6 +22,7 @@ package vll4j.tree;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import javax.script.ScriptException;
 import vll4j.core.Parsers.Failure;
 import vll4j.core.Parsers.ParseResult;
@@ -172,7 +173,9 @@ public class VisitorParserGeneration extends VisitorBase {
             String regString = Utils.unEscape(theForest.tokenBank.get(n.regexName).substring(1));
             String errMsg = n.errorMessage.isEmpty() ? 
                     String.format("regex:%s(%s)", n.regexName, n.nodeName()) : n.errorMessage;
-            return withMultiplicity(n.regexName.endsWith("_") ? regexParsers.regex$(errMsg, regString) : regexParsers.regex(errMsg, regString), n);
+            return withMultiplicity(n.regexName.endsWith("_") ? 
+                    regexParsers.regex$(errMsg, regString) : 
+                    regexParsers.regex(errMsg, Pattern.compile(regString)), n);
         } else {
             parserGeneratedOk = false;
             return null;
