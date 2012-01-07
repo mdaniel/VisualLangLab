@@ -71,13 +71,13 @@ public class PanelAstDisplay extends JPanel {
             public void run() {
                 NodeBase node = gui.theTreePanel.selectedNode;
                 if (btnOne.isSelected()) {
-                    visitorAstGeneration.theDepth = 1;
+                    visitorAstGeneration.maxDepth = 1;
                 } else if (btnThree.isSelected()) {
-                    visitorAstGeneration.theDepth = 3;
+                    visitorAstGeneration.maxDepth = 3;
                 } else  if (btnRule.isSelected()) {
-                    visitorAstGeneration.theDepth = Integer.MAX_VALUE - 1;
+                    visitorAstGeneration.maxDepth = Integer.MAX_VALUE - 1;
                 } else {
-                    visitorAstGeneration.theDepth = Integer.MAX_VALUE;
+                    visitorAstGeneration.maxDepth = Integer.MAX_VALUE;
                 }
                 try {
                     String ast = (String)node.accept(visitorAstGeneration);
