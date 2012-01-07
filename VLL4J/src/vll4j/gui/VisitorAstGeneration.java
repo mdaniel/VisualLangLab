@@ -20,23 +20,8 @@
 
 package vll4j.gui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import vll4j.tree.Multiplicity;
-import vll4j.tree.NodeBase;
-import vll4j.tree.NodeChoice;
-import vll4j.tree.NodeLiteral;
-import vll4j.tree.NodeReference;
-import vll4j.tree.NodeRegex;
-import vll4j.tree.NodeRepSep;
-import vll4j.tree.NodeRoot;
-import vll4j.tree.NodeSemPred;
-import vll4j.tree.NodeSequence;
-import vll4j.tree.VisitorBase;
-import vll4j.tree.VisitorValidation;
+import java.util.*;
+import vll4j.tree.*;
 
 public class VisitorAstGeneration extends VisitorBase {
     
@@ -46,20 +31,24 @@ public class VisitorAstGeneration extends VisitorBase {
     
     @Override
     public Object visitChoice(NodeChoice n) {
-        if (level > theDepth)
-            return getSpaces() + "_";
+        if (level > maxDepth)
+            return getSpaces(n) + "_";
+        if (level > 0 && !n.actionText.trim().isEmpty())
+            return String.format("%saction@%s", getSpaces(n), n.nodeName());
+        if (n.getChildCount() == 0)
+            return getSpaces(n) + "?";
         StringBuilder sb = new StringBuilder();
-        sb.append(getSpaces()).append("Choice(\n");
+        sb.append(getSpaces(n)).append("Choice(\n");
         ++level;
         int cc = n.getChildCount();
         for (int i = 0; i < cc; ++i) {
-            sb.append(getSpaces()).append("Array(").append(i);
+            sb.append(getSpaces(n)).append("Array(").append(i);
             ++level;
             String childAst = (String)((NodeBase)n.getChildAt(i)).accept(this);
             if (childAst.contains("\n")) {
                 sb.append(",\n").append(childAst).append("\n");
                 --level;
-                sb.append(getSpaces()).append(")");
+                sb.append(getSpaces(n)).append(")");
             } else {
                 sb.append(", ").append(stripSpaces(childAst)).append(")");
                 --level;
@@ -70,96 +59,103 @@ public class VisitorAstGeneration extends VisitorBase {
                 sb.append(",\n");
         }
         --level;
-        sb.append(getSpaces()).append(")");
+        sb.append(getSpaces(n)).append(")");
         return withMultiplicity(sb.toString(), n);
     }
     
     @Override
     public Object visitLiteral(NodeLiteral n) {
-        if (level > theDepth)
-            return getSpaces() + "_";
+        if (level > maxDepth)
+            return getSpaces(n) + "_";
+        if (level > 0 && !n.actionText.trim().isEmpty())
+            return String.format("%saction@%s", getSpaces(n), n.nodeName());
         StringBuilder sb = new StringBuilder();
-        sb.append(getSpaces()).append("\"").
+        sb.append(getSpaces(n)).append("\"").
                 append((String)gui.theForest.tokenBank.get(n.literalName).substring(1)).append("\"");
         return withMultiplicity(sb.toString(), n);
     }
     
     @Override
     public Object visitReference(NodeReference n) {
-        if (level > theDepth)
-            return getSpaces() + "_";
-        if (theDepth == Integer.MAX_VALUE) {
+        if (level > maxDepth)
+            return getSpaces(n) + "_";
+        if (level > 0 && !n.actionText.trim().isEmpty())
+            return String.format("%saction@%s", getSpaces(n), n.nodeName());
+        if (maxDepth == Integer.MAX_VALUE) {
 //            ++level;
             String ast = withMultiplicity((String)gui.theForest.ruleBank.get(n.refRuleName).accept(this), n);
 //            --level;
             return ast;
         } else {
             StringBuilder sb = new StringBuilder();
-            sb.append(getSpaces()).append("@").append(n.refRuleName);
+            sb.append(getSpaces(n)).append("@").append(n.refRuleName);
             return withMultiplicity(sb.toString(), n);
         }
     }
     
     @Override
     public Object visitRegex(NodeRegex n) {
-        if (level > theDepth)
-            return getSpaces() + "_";
+        if (level > maxDepth)
+            return getSpaces(n) + "_";
+        if (level > 0 && !n.actionText.trim().isEmpty())
+            return String.format("%saction@%s", getSpaces(n), n.nodeName());
         StringBuilder sb = new StringBuilder();
-        sb.append(getSpaces()).append("[").append(n.regexName).append("]");
+        sb.append(getSpaces(n)).append("[").append(n.regexName).append("]");
         return withMultiplicity(sb.toString(), n);
     }
     
     @Override
     public Object visitRepSep(NodeRepSep n) {
-        if (level > theDepth)
-            return getSpaces() + "_";
-        if (n.getChildCount() == 2) {
-            return withMultiplicity((String)((NodeBase)n.getChildAt(0)).accept(this), n);
-        } else {
-            return "ERROR: " + (String)n.accept(visitorNodeValidation);
-        }
+        if (level > maxDepth)
+            return getSpaces(n) + "_";
+        if (n.getChildCount() == 0)
+            return getSpaces(n) + "?";
+        if (level > 0 && !n.actionText.trim().isEmpty())
+            return String.format("%saction@%s", getSpaces(n), n.nodeName());
+        return withMultiplicity((String)((NodeBase)n.getChildAt(0)).accept(this), n);
     }
     
     @Override
     public Object visitRoot(NodeRoot n) {
-        if (level > theDepth)
-            return getSpaces() + "_";
+        if (n.getChildCount() == 0)
+            return "?";
         if (activeNodes.contains(n)) {
-            return getSpaces() + "_";
+            return getSpaces(n) + "_";
         } else {
             activeNodes.add(n);
         }
-        if (n.getChildCount() == 1) {
-            String ast = (String)((NodeBase)n.getChildAt(0)).accept(this);
-            activeNodes.remove(n);
-            return ast;
-        } else {
-            activeNodes.remove(n);
-            return "ERROR: " + (String)n.accept(visitorNodeValidation);
-        }
+        ++level;
+        String ast = (String)((NodeBase)n.getChildAt(0)).accept(this);
+        --level;
+        activeNodes.remove(n);
+        return ast;
     }
     
     @Override
     public Object visitSemPred(NodeSemPred n) {
         // Never called! Exists only to keep the compiler happy
-        return getSpaces() + "_";
+        return getSpaces(n) + "_";
     }
     
     @Override
     public Object visitSequence(NodeSequence n) {
-        if (level > theDepth)
-            return getSpaces() + "_";
+        if (level > maxDepth)
+            return getSpaces(n) + "_";
+        if (level > 0 && !n.actionText.trim().isEmpty())
+            return String.format("%saction@%s", getSpaces(n), n.nodeName());
+        if (n.getChildCount() == 0)
+            return getSpaces(n) + "?";
         ArrayList<NodeBase> childNodes = childNodesInAST(n);
         int cc = childNodes.size();
         StringBuilder sb = new StringBuilder();
         if (cc == 0) {
-            sb.append(getSpaces()).append("Array()");
+            sb.append(getSpaces(n)).append("Array()");
             return sb.toString();
         } else if (cc == 1) {
             sb.append(childNodes.get(0).accept(this));
             return withMultiplicity(sb.toString(), n);
         } else {
-            sb.append(getSpaces()).append("Array(\n");
+            sb.append(getSpaces(n)).append("Array(\n");
             ++level;
             for (int i = 0; i < cc; ++i) {
                 sb.append(childNodes.get(i).accept(this));
@@ -169,7 +165,7 @@ public class VisitorAstGeneration extends VisitorBase {
                     sb.append(",\n");
             }
             --level;
-            sb.append(getSpaces()).append(")");
+            sb.append(getSpaces(n)).append(")");
             return withMultiplicity(sb.toString(), n);
         }
     }
@@ -190,20 +186,20 @@ public class VisitorAstGeneration extends VisitorBase {
         StringBuilder sb = new StringBuilder();
         if (n.multiplicity == Multiplicity.ZeroOrOne) {
             if (ast.contains("\n")) {
-                sb.append(getSpaces()).append("ArOpt(\n");
+                sb.append(getSpaces(n)).append("ArOpt(\n");
                 sb.append(pad(ast)).append("\n");
-                sb.append(getSpaces()).append(")");
+                sb.append(getSpaces(n)).append(")");
             } else {
-                sb.append(getSpaces()).append("ArOpt(").append(stripSpaces(ast)).append(")");
+                sb.append(getSpaces(n)).append("ArOpt(").append(stripSpaces(ast)).append(")");
             }
         } else if (n.multiplicity == Multiplicity.OneOrMore || 
                 n.multiplicity == Multiplicity.ZeroOrMore) {
             if (ast.contains("\n")) {
-                sb.append(getSpaces()).append("List(\n");
+                sb.append(getSpaces(n)).append("List(\n");
                 sb.append(pad(ast)).append("\n");
-                sb.append(getSpaces()).append(")");
+                sb.append(getSpaces(n)).append(")");
             } else {
-                sb.append(getSpaces()).append("List(").append(stripSpaces(ast)).append(")");
+                sb.append(getSpaces(n)).append("List(").append(stripSpaces(ast)).append(")");
             }
         } else {
             sb.append(ast);
@@ -213,8 +209,8 @@ public class VisitorAstGeneration extends VisitorBase {
         return sb.toString();
     }
     
-    private String getSpaces() {
-        if (level == 0)
+    private String getSpaces(NodeBase n) {
+        if (level == 0 || n.getParent() instanceof NodeRoot)
             return "";
         else if (level == 1)
             return spacer;
@@ -256,6 +252,6 @@ public class VisitorAstGeneration extends VisitorBase {
     private Map<Integer, String> spacers = new HashMap<Integer, String>();
     int level = 0;
     private VisitorValidation visitorNodeValidation = new VisitorValidation();
-    int theDepth = 0;
+    int maxDepth = 0;
     private Set<NodeBase> activeNodes = new HashSet<NodeBase>();
 }
