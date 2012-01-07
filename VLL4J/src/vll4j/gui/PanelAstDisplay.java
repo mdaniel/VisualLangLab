@@ -20,21 +20,13 @@
 
 package vll4j.gui;
 
-import vll4j.tree.NodeBase;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+import vll4j.tree.NodeBase;
 
 public class PanelAstDisplay extends JPanel {
     
@@ -46,20 +38,23 @@ public class PanelAstDisplay extends JPanel {
         astArea.setEditable(false);
         astArea.setFont(new Font(Font.MONOSPACED, astArea.getFont().getStyle(), astArea.getFont().getSize()));
         add(new JScrollPane(astArea), BorderLayout.CENTER);
-        JPanel sp = new JPanel();
-        sp.setLayout(new GridLayout(1, 4));
-        sp.add(new JLabel(" Depth: "));
+        JPanel btnPanel = new JPanel();
+        btnPanel.setLayout(new GridLayout(1, 6));
         ButtonGroup bg = new ButtonGroup();
-        sp.add(btnOne);
+        btnPanel.add(btnOne);
         bg.add(btnOne);
-        sp.add(btnThree);
+        btnPanel.add(btnThree);
         bg.add(btnThree);
-        sp.add(btnRule);
+        btnPanel.add(btnRule);
         bg.add(btnRule);
         btnRule.setSelected(true);
-        sp.add(btnFull);
+        btnPanel.add(btnFull);
         bg.add(btnFull);
-        add(sp, BorderLayout.SOUTH);
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new BorderLayout());
+        southPanel.add(helpButton, BorderLayout.EAST);
+        southPanel.add(btnPanel, BorderLayout.CENTER);
+        add(southPanel, BorderLayout.SOUTH);
         setButtonsActive(true);
     }
     
@@ -135,6 +130,7 @@ public class PanelAstDisplay extends JPanel {
     private JRadioButton btnThree = new JRadioButton("3");
     private JRadioButton btnRule = new JRadioButton("Rule");
     private JRadioButton btnFull = new JRadioButton("Full");
+    private JButton helpButton = new JButton(Resources.help16);
     private VisitorAstGeneration visitorAstGeneration;
     private Vll4jGui gui;
     private Thread myThread = null;

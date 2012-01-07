@@ -20,13 +20,14 @@
 
 package vll4j.tree;
 
-import javax.swing.ImageIcon;
-import vll4j.gui.Resources;
-
 public class NodeRepSep extends NodeBase {
     
     public NodeRepSep() {
         multiplicity = Multiplicity.ZeroOrMore;
+    }
+    
+    public String nodeType() {
+        return "RepSep";
     }
     
     @Override

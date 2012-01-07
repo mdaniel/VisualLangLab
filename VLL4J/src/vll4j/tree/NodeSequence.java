@@ -20,10 +20,11 @@
 
 package vll4j.tree;
 
-import javax.swing.ImageIcon;
-import vll4j.gui.Resources;
-
 public class NodeSequence extends NodeBase {
+    
+    public String nodeType() {
+        return "Sequence";
+    }
     
     @Override
     public Object accept(VisitorBase v) {

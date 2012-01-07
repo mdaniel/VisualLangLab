@@ -20,13 +20,14 @@
 
 package vll4j.tree;
 
-import javax.swing.ImageIcon;
-import vll4j.gui.Resources;
-
 public class NodeReference extends NodeBase {
     
     public NodeReference(String name) {
         this.refRuleName = name;
+    }
+    
+    public String nodeType() {
+        return "Reference";
     }
     
     @Override

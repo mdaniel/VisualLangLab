@@ -27,6 +27,7 @@ public abstract class NodeBase extends DefaultMutableTreeNode {
 
     public abstract Object accept(VisitorBase vb);
     public abstract String getName();
+    public abstract String nodeType();
     
     protected void copyFrom(NodeBase src) {
         multiplicity = src.multiplicity;

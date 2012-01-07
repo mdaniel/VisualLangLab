@@ -20,10 +20,11 @@
 
 package vll4j.tree;
 
-import javax.swing.ImageIcon;
-import vll4j.gui.Resources;
-
 public class NodeChoice extends NodeBase {
+    
+    public String nodeType() {
+        return "Choice";
+    }
     
     @Override
     public NodeChoice clone() {

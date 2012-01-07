@@ -26,13 +26,7 @@ import java.awt.Font;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -54,12 +48,22 @@ public class PanelTesting extends JPanel {
         StyleConstants.setFontFamily(redFont, "monospaced");
         StyleConstants.setFontSize(redFont, 12);
         StyleConstants.setForeground(redFont, Color.red);
+        JPanel logBtnPanel = new JPanel();
+        logBtnPanel.setLayout(new BorderLayout());
+        logBtnPanel.add(logStatus, BorderLayout.CENTER);
+        logBtnPanel.add(helpButton2, BorderLayout.EAST);
         eastPanel.add(new JScrollPane(logArea), BorderLayout.CENTER);
+        eastPanel.add(logBtnPanel, BorderLayout.SOUTH);
         JPanel westPanel = new JPanel();
         westPanel.setLayout(new BorderLayout());
         westPanel.add(new JLabel("Parser Test Input", SwingConstants.CENTER), BorderLayout.NORTH);
         inputArea.setLineWrap(true);
+        JPanel inputBtnPanel = new JPanel();
+        inputBtnPanel.setLayout(new BorderLayout());
+        inputBtnPanel.add(inputStatus, BorderLayout.CENTER);
+        inputBtnPanel.add(helpButton1, BorderLayout.EAST);
         westPanel.add(new JScrollPane(inputArea), BorderLayout.CENTER);
+        westPanel.add(inputBtnPanel, BorderLayout.SOUTH);
         JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
                 westPanel, eastPanel);
         sp.setDividerLocation(theGui.frameWidth / 5);
@@ -138,4 +142,8 @@ public class PanelTesting extends JPanel {
     JTextPane logArea = new JTextPane();
     private SimpleAttributeSet blackFont = new SimpleAttributeSet();
     private SimpleAttributeSet redFont = new SimpleAttributeSet();
+    private JButton helpButton1 = new JButton(Resources.help16);
+    private JButton helpButton2 = new JButton(Resources.help16);
+    private JLabel inputStatus = new JLabel();
+    private JLabel logStatus = new JLabel();
 }

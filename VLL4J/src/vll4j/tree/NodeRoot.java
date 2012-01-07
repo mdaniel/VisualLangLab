@@ -26,6 +26,10 @@ public class NodeRoot extends NodeBase {
         this.ruleName = ruleName;
     }
         
+    public String nodeType() {
+        return "Root";
+    }
+    
     @Override
     public NodeRoot clone() {
         NodeRoot n = new NodeRoot(ruleName);

@@ -20,33 +20,16 @@
 
 package vll4j.gui;
 
-import vll4j.tree.Multiplicity;
-import vll4j.tree.NodeBase;
-import vll4j.tree.NodeSequence;
-import vll4j.tree.NodeChoice;
-import vll4j.tree.NodeRepSep;
-import vll4j.tree.NodeSemPred;
-import vll4j.tree.NodeReference;
-import vll4j.tree.NodeLiteral;
-import vll4j.tree.NodeRegex;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.DropMode;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import vll4j.tree.NodeRoot;
+import vll4j.tree.*;
 
 public class PanelRuleTree extends JPanel implements TreeSelectionListener {
 
@@ -70,6 +53,11 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         theTree.setCellRenderer(new RendererRuleNode());
         add(new JScrollPane(theTree), BorderLayout.CENTER);
         treePopupMenu = new PopupMenuTree(this);
+        JPanel btnPanel = new JPanel();
+        btnPanel.setLayout(new BorderLayout());
+        btnPanel.add(statusLabel, BorderLayout.CENTER);
+        btnPanel.add(helpButton, BorderLayout.EAST);
+        add(btnPanel, BorderLayout.SOUTH);
     }
     
     void setRuleName(String ruleName) {
@@ -88,6 +76,7 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         }
         gui.theAstPanel.resetView();
         gui.theActionCodePanel.resetView();
+        statusLabel.setText(String.format(" %s %s", selectedNode.nodeType(), selectedNode.nodeName()));
     }
 
     void resetNodeDisplay(NodeBase node) {
@@ -326,14 +315,17 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         selectedNode = (NodeBase) e.getPath().getLastPathComponent();
         gui.theActionCodePanel.resetView();
         gui.theAstPanel.resetView();
+        statusLabel.setText(String.format(" %s %s", selectedNode.nodeType(), selectedNode.nodeName()));
     }
     
     PopupMenuTree treePopupMenu;
     NodeRoot rootNode;
-    DefaultTreeModel theModel;
+    private DefaultTreeModel theModel;
     Vll4jGui gui;
     JTree theTree;
     NodeBase selectedNode = null;
     PopupListenerTree treePopupListener = new PopupListenerTree(this);
     NodeBase theClipBoard = null;
+    private JButton helpButton = new JButton(Resources.help16);
+    private JLabel statusLabel = new JLabel("  ");
 }

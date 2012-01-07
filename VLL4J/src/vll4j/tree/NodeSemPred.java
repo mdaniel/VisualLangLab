@@ -20,14 +20,15 @@
 
 package vll4j.tree;
 
-import javax.swing.ImageIcon;
-import vll4j.gui.Resources;
-
 public class NodeSemPred extends NodeBase {
 
     public NodeSemPred() {
     }
 
+    public String nodeType() {
+        return "SemPred";
+    }
+    
     @Override
     public NodeSemPred clone() {
         NodeSemPred n = new NodeSemPred();

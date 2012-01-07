@@ -20,15 +20,16 @@
 
 package vll4j.tree;
 
-import javax.swing.ImageIcon;
-import vll4j.gui.Resources;
-
 public class NodeLiteral extends NodeBase {
 
     public NodeLiteral(String name) {
         this.literalName = name;
     }
 
+    public String nodeType() {
+        return "Literal";
+    }
+    
     @Override
     public NodeLiteral clone() {
         NodeLiteral n = new NodeLiteral(literalName);

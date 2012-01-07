@@ -20,15 +20,16 @@
 
 package vll4j.tree;
 
-import javax.swing.ImageIcon;
-import vll4j.gui.Resources;
-
 public class NodeRegex extends NodeBase {
 
     public NodeRegex(String name) {
         this.regexName = name;
     }
 
+    public String nodeType() {
+        return "Regex";
+    }
+    
     @Override
     public NodeRegex clone() {
         NodeRegex n = new NodeRegex(regexName);
