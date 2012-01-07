@@ -22,11 +22,7 @@ package vll4j.gui;
 
 import java.awt.event.ActionEvent;
 import java.io.InputStream;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 
 public class ManagerHelp {
 
@@ -50,7 +46,7 @@ public class ManagerHelp {
             tp.add("VisualLangLab", new JLabel(Resources.splashImage));
             tp.add("Copyright", new JLabel(copyright));
             tp.add("Licenses", new JLabel(licenses));
-            JOptionPane.showMessageDialog(gui, tp, "VisualLangLab 10.01", JOptionPane.INFORMATION_MESSAGE, Resources.icon);
+            JOptionPane.showMessageDialog(gui, tp, title, JOptionPane.INFORMATION_MESSAGE, Resources.icon);
         }
         String copyright = "<html>" +
             "<b>VisualLangLab (http://vll.java.net/)</b><br/>" +

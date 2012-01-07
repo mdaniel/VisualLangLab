@@ -20,27 +20,13 @@
 
 package vll4j.gui;
 
-import vll4j.tree.NodeRoot;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import javax.swing.Action;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSeparator;
-import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import vll4j.core.SimpleLexingRegexParsers;
 import vll4j.tree.Forest;
+import vll4j.tree.NodeRoot;
 
 public class Vll4jGui extends JFrame {
 
@@ -204,16 +190,17 @@ public class Vll4jGui extends JFrame {
     }
     
     private void warnPreview() {
-        String msg = "<html>This preview of Version-10.01 has the following limitations:<br/><br/>" +
-                "1) Packrat parsing not yet implemented<br/>" +
-                "2) No API for application programs<br/>" +
-                "3) Some GUI controls are not implemented<br/><br/>" +
-                "It has all other capabilities planned for 10.01, specifically:<br/><br/>" +
-                "a) Is written in Java, and uses no other APIs<br/>" +
-                "b) Same GUI and other characteristics as previous versions<br/>" +
-                "c) Much smaller download than previous executable JAR<br/><br/>" +
+        String msg = "<html>This preview of the pure Java version has the following limitations:<br/><br/>" +
+                "\t1) Packrat parsing not yet implemented<br/>" +
+                "\t2) No API for application programs<br/>" +
+                "\t3) Non-essential GUI controls not implemented<br/><br/>" +
+                "It has all other planned capabilities, specifically:<br/><br/>" +
+                "\ta) Written in Java, with no other dependencies<br/>" +
+                "\tb) Same GUI, grammar-file format, as previous version<br/>" +
+                "\tc) Much smaller download than previous executable JAR<br/><br/>" +
+                "\td) Same AST structure as seen by JVM languages<br/><br/>" +
                 "Check back at http://vll.java.net/ for full release version" ;
-        JOptionPane.showMessageDialog(rootPane, msg, "Version 10.01 Preview", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(rootPane, msg, "Version 10 (Pure Java) Preview", JOptionPane.WARNING_MESSAGE);
     }
 
     public static void main(String[] args) {
