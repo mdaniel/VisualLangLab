@@ -18,7 +18,7 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vll4j.core;
+package vll4j.gui;
 
 import javax.swing.JTextArea;
 import vll4j.core.Parsers.Reader;
@@ -27,15 +27,23 @@ public class ReaderTextArea implements Reader {
     public ReaderTextArea(JTextArea textArea) {
         this.textArea = textArea;
     }
+    @Override
     public CharSequence source() {return textArea.getText();}
+    @Override
     public int offset() {return offset;}
+    @Override
     public boolean atEnd() {return offset >= textArea.getText().length();}
+    @Override
     public char first() {return textArea.getText().charAt(offset);}
+    @Override
     public ReaderTextArea rest() {
         return drop(1);
     }
+    @Override
     public int line() {return line;}
+    @Override
     public int column() {return column;}
+    @Override
     public ReaderTextArea drop(int nbrToDrop) {
         if (offset + nbrToDrop > textArea.getText().length())
             throw new IllegalArgumentException();
