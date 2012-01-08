@@ -33,7 +33,7 @@ public class VisitorAstGeneration extends VisitorBase {
     public Object visitChoice(NodeChoice n) {
         if (level > maxDepth)
             return getSpaces(n) + "_";
-        if (level > 0 && !n.actionText.trim().isEmpty())
+        if (n != gui.theTreePanel.selectedNode && !n.actionText.trim().isEmpty())
             return String.format("%saction@%s", getSpaces(n), n.nodeName());
         if (n.getChildCount() == 0)
             return getSpaces(n) + "?";
@@ -67,7 +67,7 @@ public class VisitorAstGeneration extends VisitorBase {
     public Object visitLiteral(NodeLiteral n) {
         if (level > maxDepth)
             return getSpaces(n) + "_";
-        if (level > 0 && !n.actionText.trim().isEmpty())
+        if (n != gui.theTreePanel.selectedNode && !n.actionText.trim().isEmpty())
             return String.format("%saction@%s", getSpaces(n), n.nodeName());
         StringBuilder sb = new StringBuilder();
         sb.append(getSpaces(n)).append("\"").
@@ -79,7 +79,7 @@ public class VisitorAstGeneration extends VisitorBase {
     public Object visitReference(NodeReference n) {
         if (level > maxDepth)
             return getSpaces(n) + "_";
-        if (level > 0 && !n.actionText.trim().isEmpty())
+        if (n != gui.theTreePanel.selectedNode && !n.actionText.trim().isEmpty())
             return String.format("%saction@%s", getSpaces(n), n.nodeName());
         if (maxDepth == Integer.MAX_VALUE) {
 //            ++level;
@@ -97,7 +97,7 @@ public class VisitorAstGeneration extends VisitorBase {
     public Object visitRegex(NodeRegex n) {
         if (level > maxDepth)
             return getSpaces(n) + "_";
-        if (level > 0 && !n.actionText.trim().isEmpty())
+        if (n != gui.theTreePanel.selectedNode && !n.actionText.trim().isEmpty())
             return String.format("%saction@%s", getSpaces(n), n.nodeName());
         StringBuilder sb = new StringBuilder();
         sb.append(getSpaces(n)).append("[").append(n.regexName).append("]");
@@ -110,7 +110,7 @@ public class VisitorAstGeneration extends VisitorBase {
             return getSpaces(n) + "_";
         if (n.getChildCount() == 0)
             return getSpaces(n) + "?";
-        if (level > 0 && !n.actionText.trim().isEmpty())
+        if (n != gui.theTreePanel.selectedNode && !n.actionText.trim().isEmpty())
             return String.format("%saction@%s", getSpaces(n), n.nodeName());
         return withMultiplicity((String)((NodeBase)n.getChildAt(0)).accept(this), n);
     }
@@ -118,15 +118,17 @@ public class VisitorAstGeneration extends VisitorBase {
     @Override
     public Object visitRoot(NodeRoot n) {
         if (n.getChildCount() == 0)
-            return "?";
+            return getSpaces(n) + "?";
+        if (n != gui.theTreePanel.selectedNode && !n.actionText.trim().isEmpty())
+            return String.format("%saction@%s", getSpaces(n), n.nodeName());
         if (activeNodes.contains(n)) {
             return getSpaces(n) + "_";
         } else {
             activeNodes.add(n);
         }
-        ++level;
+//        ++level;
         String ast = (String)((NodeBase)n.getChildAt(0)).accept(this);
-        --level;
+//        --level;
         activeNodes.remove(n);
         return ast;
     }
@@ -141,7 +143,7 @@ public class VisitorAstGeneration extends VisitorBase {
     public Object visitSequence(NodeSequence n) {
         if (level > maxDepth)
             return getSpaces(n) + "_";
-        if (level > 0 && !n.actionText.trim().isEmpty())
+        if (n != gui.theTreePanel.selectedNode && !n.actionText.trim().isEmpty())
             return String.format("%saction@%s", getSpaces(n), n.nodeName());
         if (n.getChildCount() == 0)
             return getSpaces(n) + "?";
@@ -210,7 +212,7 @@ public class VisitorAstGeneration extends VisitorBase {
     }
     
     private String getSpaces(NodeBase n) {
-        if (level == 0 || n.getParent() instanceof NodeRoot)
+        if (level == 0)
             return "";
         else if (level == 1)
             return spacer;
