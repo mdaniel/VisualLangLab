@@ -37,7 +37,7 @@ public class ReaderFile implements Reader {
             br = new BufferedReader(fr);
             StringBuilder sb = new StringBuilder();
             while ((buffer = br.readLine()) != null)
-                sb.append(buffer);
+                sb.append(buffer).append('\n');
             buffer = sb.toString();
         } catch (Exception ex) {
         } finally {

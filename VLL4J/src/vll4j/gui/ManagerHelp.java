@@ -20,9 +20,7 @@
 
 package vll4j.gui;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import javax.swing.*;

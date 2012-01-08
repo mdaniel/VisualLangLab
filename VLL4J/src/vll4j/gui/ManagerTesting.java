@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
@@ -68,6 +70,7 @@ public class ManagerTesting {
                     if (fileChooser == null) {
                         fileChooser = new JFileChooser();
                         fileChooser.setDialogTitle("Open");
+                        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                     }
                     if (fileChooser.showOpenDialog(gui) == JFileChooser.APPROVE_OPTION) {
                         try {
@@ -139,10 +142,30 @@ public class ManagerTesting {
                         gui.theTestingPanel.logStatus.getText() + status);
         }});
     }
+    
+    private File[] mineFiles(File f) {
+        if (f.isDirectory()) {
+            List<File> lf = new ArrayList<File>();
+            mineFiles(f, lf);
+            return lf.toArray(new File[lf.size()]);
+        } else 
+            return new File[] {f};
+    }
+    
+    private void mineFiles(File root, List<File>lf) {
+        File files[] = root.listFiles();
+        for (File f: files) {
+            if (f.isDirectory()) {
+                mineFiles(f, lf);
+            } else {
+                lf.add(f);
+            }
+        }
+    }
 
     private void runner(boolean fromFile) {
         NodeBase apex = gui.theTreePanel.rootNode;
-        long t0 = System.currentTimeMillis(), t1;
+        long t0 = System.currentTimeMillis(), t1, t2;
         visitorParserGenerator = new VisitorParserGeneration(gui.theForest, gui.regexParsers, traceAll);
         Parser<? extends Object> parser = (Parser<? extends Object>) apex.accept(visitorParserGenerator);
         if (!visitorParserGenerator.parserGeneratedOk) {
@@ -154,46 +177,41 @@ public class ManagerTesting {
             t1 = System.currentTimeMillis();
             appendStatus(String.format(" Combinators: %d ms", t1 - t0), true);
         }
-        ParseResult pr;
         if (fromFile) {
-            String input = "";
             File inFile = fileChooser.getSelectedFile();
-            try {
-                BufferedReader r = new BufferedReader(new FileReader(inFile));
-                StringBuilder sb = new StringBuilder();
-                for (String line = r.readLine(); line != null; line = r.readLine()) {
-                    sb.append(line).append('\n');
+            t0 = System.currentTimeMillis();
+            int countOk = 0, countNotOk = 0;
+            for (File f: mineFiles(inFile)) {
+                t1 = System.currentTimeMillis();
+                ParseResult pr = gui.regexParsers.parseAll(parser, new ReaderFile(f));
+                t2 = System.currentTimeMillis();
+                if (pr.successful()) {
+                    ++countOk;
+                    System.out.printf("%s: %d% msn", f.getAbsolutePath(), t2 - t1);
+                } else {
+                    ++countNotOk;
+                    System.err.printf("%s: %d% msn", f.getAbsolutePath(), t2 - t1);
                 }
-                input = sb.toString();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(gui, ex.getMessage(), 
-                        "ERROR - Parse file", JOptionPane.ERROR_MESSAGE);
-                return;
+                appendStatus(String.format(" %d Ok, %d NOk in %d ms", countOk, countNotOk, t1 - t0), true);
             }
-            t0 = System.currentTimeMillis();
-            pr = gui.regexParsers.parseAll(parser, input);
-            t1 = System.currentTimeMillis();
         } else {
             t0 = System.currentTimeMillis();
-            pr = gui.regexParsers.parseAll(parser, new ReaderTextArea(gui.theTestingPanel.inputArea));
+            ParseResult pr = gui.regexParsers.parseAll(parser, new ReaderTextArea(gui.theTestingPanel.inputArea));
             t1 = System.currentTimeMillis();
-        }
-        appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
-        if (pr.successful()) {
-//            System.out.printf("Combinators: %d ms", t1 - t0);
-//            System.out.printf(", Parser: %d ms", t3 - t2);
-            t0 = System.currentTimeMillis();
-            String ast = gui.regexParsers.dumpValue(pr.get());
-            t1 = System.currentTimeMillis();
-            appendStatus(String.format(", AST.toString: %d ms", t1 - t0), false);
-//            System.out.printf(", AST.toString: %d ms%n", t5 - t4);
-            t0 = System.currentTimeMillis();
-            System.out.println(ast);
-            System.out.println();
-            t1 = System.currentTimeMillis();
-            appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
-        } else {
-            System.err.printf("%s%n", gui.regexParsers.dumpResult(pr));
+            appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
+            if (pr.successful()) {
+                t0 = System.currentTimeMillis();
+                String ast = gui.regexParsers.dumpValue(pr.get());
+                t1 = System.currentTimeMillis();
+                appendStatus(String.format(", AST.toString: %d ms", t1 - t0), false);
+                t0 = System.currentTimeMillis();
+                System.out.println(ast);
+                System.out.println();
+                t1 = System.currentTimeMillis();
+                appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
+            } else {
+                System.err.printf("%s%n", gui.regexParsers.dumpResult(pr));
+            }
         }
     }
 
