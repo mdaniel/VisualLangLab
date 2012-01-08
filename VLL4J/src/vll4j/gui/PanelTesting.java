@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -42,7 +44,6 @@ public class PanelTesting extends JPanel {
         logArea.setFont(new Font(Font.MONOSPACED, logArea.getFont().getStyle(), 
                 logArea.getFont().getSize()));
         logArea.setEditable(false);
-//        logArea.setLineWrap(true);
         StyleConstants.setFontFamily(blackFont, "monospaced");
         StyleConstants.setFontSize(blackFont, 12);
         StyleConstants.setForeground(blackFont, Color.black);
@@ -70,6 +71,20 @@ public class PanelTesting extends JPanel {
         westPanel.setLayout(new BorderLayout());
         westPanel.add(new JLabel("Parser Test Input", SwingConstants.CENTER), BorderLayout.NORTH);
         inputArea.setLineWrap(true);
+        inputArea.addCaretListener(new CaretListener() {
+            public void caretUpdate(CaretEvent e) {
+                int dot = e.getDot();
+                int line = 1, col = 1;
+                for (char ch: inputArea.getText().substring(0, dot).toCharArray()) {
+                    if (ch == '\n') {
+                        ++line; col = 1;
+                    } else {
+                        ++col;
+                    }
+                }
+                inputStatus.setText(String.format(" Line %d, Column %d", line, col));
+            }
+        });
         JPanel inputBtnPanel = new JPanel();
         inputBtnPanel.setLayout(new BorderLayout());
         inputBtnPanel.add(inputStatus, BorderLayout.CENTER);
@@ -145,8 +160,8 @@ public class PanelTesting extends JPanel {
             public void write(int b) {
                 sb.append((char)b);
                 if (b == '\n' || sb.length() >= 1024) {
-                    logArea.setSelectionStart(logArea.getDocument().getLength());
-                    logArea.setSelectionEnd(logArea.getDocument().getLength());
+//                    logArea.setSelectionStart(logArea.getDocument().getLength());
+//                    logArea.setSelectionEnd(logArea.getDocument().getLength());
                     try {
                         logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), redFont);
                     } catch (BadLocationException ex) {}
