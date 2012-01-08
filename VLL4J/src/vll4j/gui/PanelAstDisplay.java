@@ -21,6 +21,7 @@
 package vll4j.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -52,7 +53,17 @@ public class PanelAstDisplay extends JPanel {
         bg.add(btnFull);
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BorderLayout());
-        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpAST);
+        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpAST) {
+            @Override
+            public Dimension getPreferredSize() {
+                int h = super.getPreferredSize().height;
+                return new Dimension(h, h);
+            }
+            @Override
+            public Dimension getMinimumSize() {
+                return getPreferredSize();
+            }
+        };
         southPanel.add(helpButton, BorderLayout.EAST);
         southPanel.add(btnPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);

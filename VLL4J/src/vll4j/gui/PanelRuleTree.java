@@ -21,6 +21,7 @@
 package vll4j.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -56,7 +57,17 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new BorderLayout());
         btnPanel.add(statusLabel, BorderLayout.CENTER);
-        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpRuleTree);
+        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpRuleTree) {
+            @Override
+            public Dimension getPreferredSize() {
+                int h = super.getPreferredSize().height;
+                return new Dimension(h, h);
+            }
+            @Override
+            public Dimension getMinimumSize() {
+                return getPreferredSize();
+            }
+        };
         btnPanel.add(helpButton, BorderLayout.EAST);
         add(btnPanel, BorderLayout.SOUTH);
     }

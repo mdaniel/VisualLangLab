@@ -22,6 +22,7 @@ package vll4j.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -46,7 +47,17 @@ public class PanelActionCode extends JPanel {
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new BorderLayout());
         btnPanel.add(saveButton, BorderLayout.CENTER);
-        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpActionCode);
+        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpActionCode) {
+            @Override
+            public Dimension getPreferredSize() {
+                int h = super.getPreferredSize().height;
+                return new Dimension(h, h);
+            }
+            @Override
+            public Dimension getMinimumSize() {
+                return getPreferredSize();
+            }
+        };
         btnPanel.add(helpButton, BorderLayout.EAST);
         add(btnPanel, BorderLayout.SOUTH);
         normalTextColor = codeArea.getForeground();

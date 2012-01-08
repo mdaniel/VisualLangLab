@@ -20,8 +20,11 @@
 
 package vll4j.gui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import javax.swing.*;
 
 public class ManagerHelp {
@@ -38,7 +41,7 @@ public class ManagerHelp {
             tp.add("VisualLangLab", new JLabel(Resources.splashImage));
             tp.add("Copyright", new JLabel(copyright));
             tp.add("Licenses", new JLabel(licenses));
-            JOptionPane.showMessageDialog(gui, tp, title, JOptionPane.INFORMATION_MESSAGE, Resources.icon);
+            JOptionPane.showMessageDialog(gui, tp, title, JOptionPane.PLAIN_MESSAGE);
         }
         String copyright = "<html>" +
             "<b>VisualLangLab (http://vll.java.net/)</b><br/>" +
@@ -176,7 +179,7 @@ public class ManagerHelp {
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
-            helpPane.setSelectedIndex(0);
+            helpPane.setSelectedIndex(5);
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };
@@ -186,7 +189,7 @@ public class ManagerHelp {
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
-            helpPane.setSelectedIndex(1);
+            helpPane.setSelectedIndex(2);
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };
@@ -196,7 +199,10 @@ public class ManagerHelp {
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
-            helpPane.setSelectedIndex(2);
+            helpPane.setSelectedIndex(0);
+            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
+            if (lbl.getText().isEmpty())
+                lbl.setText(getHtml("PanelAST.html"));
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };
@@ -206,7 +212,10 @@ public class ManagerHelp {
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
-            helpPane.setSelectedIndex(3);
+            helpPane.setSelectedIndex(1);
+            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
+            if (lbl.getText().isEmpty())
+                lbl.setText(getHtml("PanelActionCode.html"));
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };
@@ -216,7 +225,7 @@ public class ManagerHelp {
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
-            helpPane.setSelectedIndex(4);
+            helpPane.setSelectedIndex(3);
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };
@@ -226,19 +235,32 @@ public class ManagerHelp {
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
-            helpPane.setSelectedIndex(5);
+            helpPane.setSelectedIndex(4);
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };
 
     private void createHelpPane() {
         helpPane = new JTabbedPane();
-        helpPane.add("VisualLangLab", new JPanel());
-        helpPane.add("Rule-Tree", new JPanel());
-        helpPane.add("AST", new JPanel());
-        helpPane.add("Action-Code", new JPanel());
-        helpPane.add("Test-Input", new JPanel());
-        helpPane.add("Test-Log", new JPanel());
+        helpPane.add("AST", new JLabel());
+        helpPane.add("Action-Code", new JLabel());
+        helpPane.add("Rule-Tree", new JLabel());
+        helpPane.add("Test-Input", new JLabel());
+        helpPane.add("Test-Log", new JLabel());
+        helpPane.add("VisualLangLab", new JLabel());
+    }
+    
+    private String getHtml(String name) {
+        ClassLoader cl = ClassLoader.getSystemClassLoader();
+        URL res = cl.getResource("vll4j/gui/resources/" + name);
+        try {
+            InputStream hs = res.openStream();
+            byte buf[] = new byte[hs.available()];
+            hs.read(buf);
+            return new String(buf);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     private Vll4jGui gui;

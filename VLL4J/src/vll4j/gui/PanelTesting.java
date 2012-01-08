@@ -22,6 +22,7 @@ package vll4j.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -51,7 +52,17 @@ public class PanelTesting extends JPanel {
         JPanel logBtnPanel = new JPanel();
         logBtnPanel.setLayout(new BorderLayout());
         logBtnPanel.add(logStatus, BorderLayout.CENTER);
-        helpButton2 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestLog);
+        helpButton2 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestLog) {
+            @Override
+            public Dimension getPreferredSize() {
+                int h = super.getPreferredSize().height;
+                return new Dimension(h, h);
+            }
+            @Override
+            public Dimension getMinimumSize() {
+                return getPreferredSize();
+            }
+        };
         logBtnPanel.add(helpButton2, BorderLayout.EAST);
         eastPanel.add(new JScrollPane(logArea), BorderLayout.CENTER);
         eastPanel.add(logBtnPanel, BorderLayout.SOUTH);
@@ -62,7 +73,17 @@ public class PanelTesting extends JPanel {
         JPanel inputBtnPanel = new JPanel();
         inputBtnPanel.setLayout(new BorderLayout());
         inputBtnPanel.add(inputStatus, BorderLayout.CENTER);
-        helpButton1 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestInput);
+        helpButton1 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestInput) {
+            @Override
+            public Dimension getPreferredSize() {
+                int h = super.getPreferredSize().height;
+                return new Dimension(h, h);
+            }
+            @Override
+            public Dimension getMinimumSize() {
+                return getPreferredSize();
+            }
+        };
         inputBtnPanel.add(helpButton1, BorderLayout.EAST);
         westPanel.add(new JScrollPane(inputArea), BorderLayout.CENTER);
         westPanel.add(inputBtnPanel, BorderLayout.SOUTH);

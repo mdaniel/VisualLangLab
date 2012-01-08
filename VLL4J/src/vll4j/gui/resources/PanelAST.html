@@ -1,0 +1,16 @@
+<html>
+    The Abstract Syntax Tree (AST) is the data-structure produced by a parser. <br/>
+    A specific, predictable AST structure exists for any rule-tree, and is <br/>
+    defined using the following principles recursively to each node in the <br/>
+    rule-tree:<br/>
+    <ul>
+        <li>A <i>Sequence</i> yields an array of the ASTs of its child nodes.</li>
+        <li>A <i>Choice</i> yields a 2-element array. The first element is a 0-based <br/>
+        index of the matching alternative (child node), and the second element <br/>
+        is the AST returned by the matching branch</li>
+        <li>A <i>RepSep</i> yields a List containing the ASTs from repeated <br/>
+        applications of the parser represented by the first child node. <br/>
+        A <i>RepSep</i> with multiplicity * (0 or more) may return an empty List</li>
+    </ul>
+    The basic structure described above is further modified as follows:
+</html>
