@@ -237,10 +237,12 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         public void actionPerformed(ActionEvent e) {
             NodeBase parent = (NodeBase)selectedNode.getParent();
             TreePath parentPath = theTree.getSelectionPath().getParentPath();
-            theClipBoard = selectedNode;
+            NodeBase nodeToCut = selectedNode;
+            theClipBoard = nodeToCut;
             theClipBoard.isDropped = false;
-            theModel.removeNodeFromParent(selectedNode);
+            theClipBoard.isTraced = false;
             theTree.setSelectionPath(parentPath);
+            theModel.removeNodeFromParent(nodeToCut);
             resetNodeDisplay(parent);
         }
     };
@@ -250,6 +252,7 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         public void actionPerformed(ActionEvent e) {
             theClipBoard = (NodeBase)selectedNode.clone();
             theClipBoard.isDropped = false;
+            theClipBoard.isTraced = false;
         }
     };
     
