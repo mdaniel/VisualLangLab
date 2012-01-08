@@ -56,6 +56,7 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new BorderLayout());
         btnPanel.add(statusLabel, BorderLayout.CENTER);
+        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpRuleTree);
         btnPanel.add(helpButton, BorderLayout.EAST);
         add(btnPanel, BorderLayout.SOUTH);
     }
@@ -326,6 +327,6 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
     NodeBase selectedNode = null;
     PopupListenerTree treePopupListener = new PopupListenerTree(this);
     NodeBase theClipBoard = null;
-    private JButton helpButton = new JButton(Resources.help16);
+    private JButton helpButton = null;
     private JLabel statusLabel = new JLabel("  ");
 }

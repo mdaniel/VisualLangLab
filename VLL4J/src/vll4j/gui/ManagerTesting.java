@@ -24,10 +24,7 @@ import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
 import vll4j.tree.NodeBase;
@@ -131,18 +128,31 @@ public class ManagerTesting {
             gui.theTestingPanel.logCopy();
         }
     };
+    
+    private void appendStatus(final String status, final boolean reset) {
+        SwingUtilities.invokeLater(new Thread() {
+        public void run() {
+            if (reset)
+                gui.theTestingPanel.logStatus.setText(status);
+            else 
+                gui.theTestingPanel.logStatus.setText(
+                        gui.theTestingPanel.logStatus.getText() + status);
+        }});
+    }
 
     private void runner(boolean fromFile) {
         NodeBase apex = gui.theTreePanel.rootNode;
-        long t0 = System.currentTimeMillis(), t1, t2, t3, t4, t5;
+        long t0 = System.currentTimeMillis(), t1;
         visitorParserGenerator = new VisitorParserGeneration(gui.theForest, gui.regexParsers, traceAll);
         Parser<? extends Object> parser = (Parser<? extends Object>) apex.accept(visitorParserGenerator);
         if (!visitorParserGenerator.parserGeneratedOk) {
             JOptionPane.showMessageDialog(gui, "Can't generate parser\nReview rule definitions", 
                     fromFile ? "ERROR - Parse file" : "ERROR - Parse input", JOptionPane.ERROR_MESSAGE);
+        appendStatus("Can't generate parser - Review rule definitions", true);
             return;
         } else {
             t1 = System.currentTimeMillis();
+            appendStatus(String.format(" Combinators: %d ms", t1 - t0), true);
         }
         ParseResult pr;
         if (fromFile) {
@@ -160,23 +170,28 @@ public class ManagerTesting {
                         "ERROR - Parse file", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            t2 = System.currentTimeMillis();
+            t0 = System.currentTimeMillis();
             pr = gui.regexParsers.parseAll(parser, input);
-            t3 = System.currentTimeMillis();
+            t1 = System.currentTimeMillis();
         } else {
-            t2 = System.currentTimeMillis();
+            t0 = System.currentTimeMillis();
             pr = gui.regexParsers.parseAll(parser, new ReaderTextArea(gui.theTestingPanel.inputArea));
-            t3 = System.currentTimeMillis();
+            t1 = System.currentTimeMillis();
         }
+        appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
         if (pr.successful()) {
-            System.out.printf("Combinators: %d ms", t1 - t0);
-            System.out.printf(", Parser: %d ms", t3 - t2);
-            t4 = System.currentTimeMillis();
+//            System.out.printf("Combinators: %d ms", t1 - t0);
+//            System.out.printf(", Parser: %d ms", t3 - t2);
+            t0 = System.currentTimeMillis();
             String ast = gui.regexParsers.dumpValue(pr.get());
-            t5 = System.currentTimeMillis();
-            System.out.printf(", AST.toString: %d ms%n", t5 - t4);
+            t1 = System.currentTimeMillis();
+            appendStatus(String.format(", AST.toString: %d ms", t1 - t0), false);
+//            System.out.printf(", AST.toString: %d ms%n", t5 - t4);
+            t0 = System.currentTimeMillis();
             System.out.println(ast);
             System.out.println();
+            t1 = System.currentTimeMillis();
+            appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
         } else {
             System.err.printf("%s%n", gui.regexParsers.dumpResult(pr));
         }

@@ -31,14 +31,6 @@ public class ManagerHelp {
         title = String.format("VisualLangLab %s", gui.version);
     }
     
-    Action helpAction = new AbstractAction("Help") {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String msg = String.format("Get help at http://vll.java.net/", gui.version);
-            JOptionPane.showMessageDialog(gui, msg, title, JOptionPane.INFORMATION_MESSAGE);
-        }
-    };
-
     Action aboutAction = new AbstractAction("About VisualLangLab") {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -178,7 +170,78 @@ public class ManagerHelp {
             "IMPORTANT: Select the top-level parser (Expr) when running it.<br/>" +
             "Sample input (remove quotes): \"(2 + 3) * (7 - 3)\"</html>";
     };
+    
+    Action displayHelpMain = new AbstractAction("Help", Resources.help16) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (helpPane == null)
+                createHelpPane();
+            helpPane.setSelectedIndex(0);
+            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+        }
+    };
+
+    Action displayHelpRuleTree = new AbstractAction("", Resources.help16) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (helpPane == null)
+                createHelpPane();
+            helpPane.setSelectedIndex(1);
+            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+        }
+    };
+
+    Action displayHelpAST = new AbstractAction("", Resources.help16) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (helpPane == null)
+                createHelpPane();
+            helpPane.setSelectedIndex(2);
+            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+        }
+    };
+
+    Action displayHelpActionCode = new AbstractAction("", Resources.help16) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (helpPane == null)
+                createHelpPane();
+            helpPane.setSelectedIndex(3);
+            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+        }
+    };
+
+    Action displayHelpTestInput = new AbstractAction("", Resources.help16) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (helpPane == null)
+                createHelpPane();
+            helpPane.setSelectedIndex(4);
+            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+        }
+    };
+
+    Action displayHelpTestLog = new AbstractAction("", Resources.help16) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (helpPane == null)
+                createHelpPane();
+            helpPane.setSelectedIndex(5);
+            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+        }
+    };
+
+    private void createHelpPane() {
+        helpPane = new JTabbedPane();
+        helpPane.add("VisualLangLab", new JPanel());
+        helpPane.add("Rule-Tree", new JPanel());
+        helpPane.add("AST", new JPanel());
+        helpPane.add("Action-Code", new JPanel());
+        helpPane.add("Test-Input", new JPanel());
+        helpPane.add("Test-Log", new JPanel());
+    }
 
     private Vll4jGui gui;
     String title;
+    private JTabbedPane helpPane = null;
 }

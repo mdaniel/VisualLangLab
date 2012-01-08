@@ -39,6 +39,7 @@ public class Vll4jGui extends JFrame {
     }
 
     private void initializeAllData() {
+        theHelpFunctionsManager = new ManagerHelp(this);
         theTestManager = new ManagerTesting(this);
         theTokenManager = new ManagerTokens(this);
         theFileManager = new ManagerFileOps(this);
@@ -46,7 +47,6 @@ public class Vll4jGui extends JFrame {
         theRuleManager.theComboBox = new JComboBox<String>();
         theRuleManager.theComboBox.setToolTipText("Select rule");
         theMiscFunctionsManager = new ManagerMiscOps(this);
-        theHelpFunctionsManager = new ManagerHelp(this);
         reset(true);
     }
     
@@ -136,7 +136,7 @@ public class Vll4jGui extends JFrame {
         testTraceAllItem = new JCheckBoxMenuItem(theTestManager.traceAllAction);
         testMenu.add(testTraceAllItem);
         menuBar.add(helpMenu);
-        helpMenu.add(theHelpFunctionsManager.helpAction);
+        helpMenu.add(theHelpFunctionsManager.displayHelpMain);
 //        helpMenu.addSeparator();
         helpMenu.add(helpSamplesMenu);
         helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.sampleTDARExpr));
@@ -183,6 +183,8 @@ public class Vll4jGui extends JFrame {
         toolBar.add(tip(theTestManager.logCopyAction));
         toolBar.add(tip(theTestManager.logClearAction));
         theTestManager.parseStopAction.setEnabled(false);
+        toolBar.addSeparator();
+        toolBar.add(tip(theHelpFunctionsManager.displayHelpMain));
     }
 
     void setGrammarName(String grammarName) {

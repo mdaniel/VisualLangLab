@@ -51,6 +51,7 @@ public class PanelTesting extends JPanel {
         JPanel logBtnPanel = new JPanel();
         logBtnPanel.setLayout(new BorderLayout());
         logBtnPanel.add(logStatus, BorderLayout.CENTER);
+        helpButton2 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestLog);
         logBtnPanel.add(helpButton2, BorderLayout.EAST);
         eastPanel.add(new JScrollPane(logArea), BorderLayout.CENTER);
         eastPanel.add(logBtnPanel, BorderLayout.SOUTH);
@@ -61,6 +62,7 @@ public class PanelTesting extends JPanel {
         JPanel inputBtnPanel = new JPanel();
         inputBtnPanel.setLayout(new BorderLayout());
         inputBtnPanel.add(inputStatus, BorderLayout.CENTER);
+        helpButton1 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestInput);
         inputBtnPanel.add(helpButton1, BorderLayout.EAST);
         westPanel.add(new JScrollPane(inputArea), BorderLayout.CENTER);
         westPanel.add(inputBtnPanel, BorderLayout.SOUTH);
@@ -142,8 +144,8 @@ public class PanelTesting extends JPanel {
     JTextPane logArea = new JTextPane();
     private SimpleAttributeSet blackFont = new SimpleAttributeSet();
     private SimpleAttributeSet redFont = new SimpleAttributeSet();
-    private JButton helpButton1 = new JButton(Resources.help16);
-    private JButton helpButton2 = new JButton(Resources.help16);
+    private JButton helpButton1 = null;
+    private JButton helpButton2 = null;
     private JLabel inputStatus = new JLabel();
-    private JLabel logStatus = new JLabel();
+    JLabel logStatus = new JLabel();
 }

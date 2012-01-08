@@ -52,6 +52,7 @@ public class PanelAstDisplay extends JPanel {
         bg.add(btnFull);
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BorderLayout());
+        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpAST);
         southPanel.add(helpButton, BorderLayout.EAST);
         southPanel.add(btnPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
@@ -130,7 +131,7 @@ public class PanelAstDisplay extends JPanel {
     private JRadioButton btnThree = new JRadioButton("3");
     private JRadioButton btnRule = new JRadioButton("Rule");
     private JRadioButton btnFull = new JRadioButton("Full");
-    private JButton helpButton = new JButton(Resources.help16);
+    private JButton helpButton = null;
     private VisitorAstGeneration visitorAstGeneration;
     private Vll4jGui gui;
     private Thread myThread = null;

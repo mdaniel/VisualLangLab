@@ -46,6 +46,7 @@ public class PanelActionCode extends JPanel {
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new BorderLayout());
         btnPanel.add(saveButton, BorderLayout.CENTER);
+        helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpActionCode);
         btnPanel.add(helpButton, BorderLayout.EAST);
         add(btnPanel, BorderLayout.SOUTH);
         normalTextColor = codeArea.getForeground();
@@ -133,7 +134,7 @@ public class PanelActionCode extends JPanel {
     TextAreaCustom codeArea = new TextAreaCustom();
     private Color normalTextColor;
     private JButton saveButton = new JButton(saveAction);
-    private JButton helpButton = new JButton(Resources.help16);
+    private JButton helpButton = null;
     private Compilable compilable = null;
     Vll4jGui gui;
     private Matcher functionMatcher = Pattern.compile(
