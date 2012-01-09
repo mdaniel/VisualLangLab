@@ -18,8 +18,12 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vll4j.api;
+package vll4j.tree;
 
-public class VLL4J {
-    
+import javax.script.ScriptException;
+import vll4j.core.Parsers.Reader;
+
+public interface ActionFunction {
+    public Object run(Object o, Reader r) throws ScriptException;
 }
+    

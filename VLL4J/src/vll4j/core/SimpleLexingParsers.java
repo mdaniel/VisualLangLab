@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SimpleLexingRegexParsers extends RegexParsers {
+public class SimpleLexingParsers extends RegexParsers {
     
     public void reset() {
         tokenParserMap.clear();
@@ -36,14 +36,21 @@ public class SimpleLexingRegexParsers extends RegexParsers {
         regexMatchers = null;
     }
     
-    public void setWhitespace(Pattern p) {
-        whiteSpace = p;
+    public void resetWhitespace() {
+        String ws = Utils.unEscape(whiteSpaceRegex);
+        String cmts = Utils.unEscape(commentSpecRegex);
+        if (ws.isEmpty() && cmts.isEmpty()) {
+            whiteSpace = Pattern.compile("");
+        } else if (cmts.isEmpty()) {
+            whiteSpace = Pattern.compile(ws);
+        } else if (ws.isEmpty()) {
+            whiteSpace = Pattern.compile(cmts);
+        } else {
+            String wsp = String.format("(?:(?:%s)|(?:%s))+", ws, cmts);
+            whiteSpace = Pattern.compile(wsp);
+        }
     }
-    
-    public String getWhitespace() {
-        return whiteSpace.toString();
-    }
-    
+
     @Override
     public Parser<String> literal(String errMsg, String lit) {
         if (setupDone)
@@ -227,6 +234,8 @@ public class SimpleLexingRegexParsers extends RegexParsers {
         return super.regex(Pattern.compile(p));
     }
     
+    public String whiteSpaceRegex = "";
+    public String commentSpecRegex = "";
     private Map<String, Parser<String>> tokenParserMap = new HashMap<String, Parser<String>>();
     private boolean setupDone = false;
     private List<String> theLiterals = new ArrayList<String>();
@@ -237,7 +246,7 @@ public class SimpleLexingRegexParsers extends RegexParsers {
 
     private static void testOnlyLiterals() {
         System.out.println("Testing Literals");
-        SimpleLexingRegexParsers me = new SimpleLexingRegexParsers();
+        SimpleLexingParsers me = new SimpleLexingParsers();
         String pats[] = new String[] {"hello", "hello\tWorld", "i*s", "into"};
         Parser<String> hello = me.literal(pats[0], pats[0]);
         Parser<String> helloWorld = me.literal(pats[1], pats[1]);
@@ -251,7 +260,7 @@ public class SimpleLexingRegexParsers extends RegexParsers {
 
     private static void testOnlyRegexs() {
         System.out.println("Testing Regexs");
-        SimpleLexingRegexParsers me = new SimpleLexingRegexParsers();
+        SimpleLexingParsers me = new SimpleLexingParsers();
         String regPats[] = new String[] {"[0-9]+", "[a-z]+"};
         Parser<String> numPat = me.regex(regPats[0], Pattern.compile(regPats[0]));
         Parser<String> wordPat = me.regex(regPats[1], Pattern.compile(regPats[1]));
@@ -263,7 +272,7 @@ public class SimpleLexingRegexParsers extends RegexParsers {
 
     private static void testBoth() {
         System.out.println("Testing Both");
-        SimpleLexingRegexParsers me = new SimpleLexingRegexParsers();
+        SimpleLexingParsers me = new SimpleLexingParsers();
         
         String regPats[] = new String[] {"[0-9]+", "[a-z]+"};
         Parser<String> numPat = me.regex(regPats[0], Pattern.compile(regPats[0]));

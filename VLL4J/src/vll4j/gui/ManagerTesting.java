@@ -20,6 +20,7 @@
 
 package vll4j.gui;
 
+import vll4j.core.ReaderFile;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -134,6 +135,7 @@ public class ManagerTesting {
     
     private void appendStatus(final String status, final boolean reset) {
         SwingUtilities.invokeLater(new Thread() {
+            @Override
         public void run() {
             if (reset)
                 gui.theTestingPanel.logStatus.setText(status);

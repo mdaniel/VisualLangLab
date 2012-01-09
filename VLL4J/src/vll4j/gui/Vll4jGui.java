@@ -24,7 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
-import vll4j.core.SimpleLexingRegexParsers;
+import vll4j.core.SimpleLexingParsers;
 import vll4j.tree.Forest;
 import vll4j.tree.NodeRoot;
 
@@ -36,7 +36,7 @@ public class Vll4jGui extends JFrame {
         initializeAllData();
         theRuleManager.theComboBox.setMaximumSize(theRuleManager.theComboBox.getPreferredSize());
         createGui();
-    }
+  }
 
     private void initializeAllData() {
         theHelpFunctionsManager = new ManagerHelp(this);
@@ -81,6 +81,8 @@ public class Vll4jGui extends JFrame {
         sp2.setDividerLocation(screenSize.width / 4);
         JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sp2, theTestingPanel);
         add(sp, BorderLayout.CENTER);
+        theForest.bindings.put("vllParserTestInput", theTestingPanel.inputArea);
+        theForest.bindings.put("vllParserLog", theTestingPanel.logArea);
     }
 
     private void addMenuBar() {
@@ -208,7 +210,6 @@ public class Vll4jGui extends JFrame {
     }
 
     public static void main(String[] args) {
-//        long t0 = System.currentTimeMillis();
         if (System.getProperty("os.name").contains("Windows")) {
             try {
                 UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -217,11 +218,6 @@ public class Vll4jGui extends JFrame {
         Vll4jGui me = new Vll4jGui();
         System.setOut(me.theTestingPanel.getOutStream());
         System.setErr(me.theTestingPanel.getErrStream());
-//        while ((System.currentTimeMillis() - t0) <= 1000) {
-//            try {
-//                Thread.sleep(200);
-//            } catch (InterruptedException ex) {}
-//        }
         me.setVisible(true);
         me.warnPreview();
     }
@@ -237,7 +233,7 @@ public class Vll4jGui extends JFrame {
     ManagerMiscOps theMiscFunctionsManager = null;
     ManagerHelp theHelpFunctionsManager = null;
     
-    SimpleLexingRegexParsers regexParsers = new SimpleLexingRegexParsers();
+    SimpleLexingParsers regexParsers = new SimpleLexingParsers();
     Forest theForest = new Forest();
     
     JMenu fileMenu = new JMenu("File");

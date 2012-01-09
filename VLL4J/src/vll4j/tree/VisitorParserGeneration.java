@@ -29,12 +29,12 @@ import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
 import vll4j.core.Parsers.Reader;
 import vll4j.core.Parsers.Success;
-import vll4j.core.SimpleLexingRegexParsers;
+import vll4j.core.SimpleLexingParsers;
 import vll4j.core.Utils;
 
 public class VisitorParserGeneration extends VisitorBase {
     
-    public VisitorParserGeneration(Forest theForest, SimpleLexingRegexParsers regexParsers, boolean traceAll) {
+    public VisitorParserGeneration(Forest theForest, SimpleLexingParsers regexParsers, boolean traceAll) {
         regexParsers.reset();
         this.theForest = theForest;
         this.regexParsers = regexParsers;
@@ -264,7 +264,7 @@ public class VisitorParserGeneration extends VisitorBase {
         }
     }
     
-    private SimpleLexingRegexParsers regexParsers;
+    private SimpleLexingParsers regexParsers;
     private boolean traceAll;
     private Map<NodeBase, Parser<? extends Object>[]> parserCache = new HashMap<NodeBase, Parser<? extends Object>[]>();
     public boolean parserGeneratedOk;

@@ -21,7 +21,6 @@
 package vll4j.tree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import vll4j.gui.ActionFunction;
 
 public abstract class NodeBase extends DefaultMutableTreeNode {
 

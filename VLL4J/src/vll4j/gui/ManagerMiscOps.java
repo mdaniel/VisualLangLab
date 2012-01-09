@@ -31,29 +31,13 @@ public class ManagerMiscOps {
 
     ManagerMiscOps(Vll4jGui gui) {
         this.gui = gui;
-        whiteSpace = Utils.reEscape(gui.regexParsers.getWhitespace());
     }
     
-    public void setWhitespace() {
-        String ws = Utils.unEscape(whiteSpace);
-        String cmts = Utils.unEscape(commentSpec);
-        if (ws.isEmpty() && cmts.isEmpty()) {
-            gui.regexParsers.setWhitespace(Pattern.compile(""));
-        } else if (cmts.isEmpty()) {
-            gui.regexParsers.setWhitespace(Pattern.compile(ws));
-        } else if (ws.isEmpty()) {
-            gui.regexParsers.setWhitespace(Pattern.compile(cmts));
-        } else {
-            String wsp = String.format("(?:(?:%s)|(?:%s))+", ws, cmts);
-            gui.regexParsers.setWhitespace(Pattern.compile(wsp));
-        }
-    }
-
     Action globalsWhitespaceAction = new AbstractAction("Whitespace") {
         public void actionPerformed(ActionEvent e) {
             String ws = (String)JOptionPane.showInputDialog(gui, "Enter whitespace pattern", "WhiteSpace", 
-                    JOptionPane.QUESTION_MESSAGE, null, null, whiteSpace);
-            if (ws == null || ws.equals(whiteSpace))
+                    JOptionPane.QUESTION_MESSAGE, null, null, gui.regexParsers.whiteSpaceRegex);
+            if (ws == null || ws.equals(gui.regexParsers.whiteSpaceRegex))
                 return;
             try {
                 Pattern.compile(Utils.unEscape(ws));
@@ -61,16 +45,16 @@ public class ManagerMiscOps {
                 JOptionPane.showMessageDialog(gui, ex.toString(), "ERROR - WhiteSpace", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            whiteSpace = ws;
-            setWhitespace();
+            gui.regexParsers.whiteSpaceRegex = ws;
+            gui.regexParsers.resetWhitespace();
         }
     };
 
     Action globalsCommentAction = new AbstractAction("Comment") {
         public void actionPerformed(ActionEvent e) {
             String cmts = (String)JOptionPane.showInputDialog(gui, "Enter comment pattern", "Comments", 
-                    JOptionPane.QUESTION_MESSAGE, null, null, commentSpec);
-            if (cmts == null || cmts.equals(commentSpec))
+                    JOptionPane.QUESTION_MESSAGE, null, null, gui.regexParsers.commentSpecRegex);
+            if (cmts == null || cmts.equals(gui.regexParsers.commentSpecRegex))
                 return;
             try {
                 Pattern.compile(Utils.unEscape(cmts));
@@ -78,12 +62,10 @@ public class ManagerMiscOps {
                 JOptionPane.showMessageDialog(gui, ex.toString(), "ERROR - WhiteSpace", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            commentSpec = cmts;
-            setWhitespace();
+            gui.regexParsers.commentSpecRegex = cmts;
+            gui.regexParsers.resetWhitespace();
         }
     };
 
     private Vll4jGui gui;
-    public String whiteSpace = "";
-    public String commentSpec = "";
 }
