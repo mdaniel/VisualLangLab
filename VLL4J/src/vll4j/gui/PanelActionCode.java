@@ -88,7 +88,10 @@ public class PanelActionCode extends JPanel {
             @Override
             public Object run(Object arg, Reader r) throws ScriptException {
                 cs.getEngine().put("vllARG", arg);
-                cs.getEngine().put("vllReader", r);
+                cs.getEngine().put("vllLine", r.line());
+                cs.getEngine().put("vllCol", r.column());
+                cs.getEngine().put("vllOffset", r.offset());
+                cs.getEngine().put("vllInput", r.source().subSequence(r.offset(), r.source().length()));
                 cs.getEngine().put("vllLastNoSuccess", SimpleLexingRegexParsers.lastNoSuccess);
                 cs.getEngine().put("vllParserTestInput", gui.theTestingPanel.inputArea);
                 cs.getEngine().put("vllParserLog", gui.theTestingPanel.logArea);
