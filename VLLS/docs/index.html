@@ -17,12 +17,6 @@
        (<a href="http://javaposse.com/java-posse-364-newscast-for-sept-24th-2011">Episode 364</a>)
       </p>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td style="text-align: center; font-size: larger;">
-Lightweight pure-Java version coming soon! <br/>
-Get the <a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">
-preview version</a> (nearly full-featured) now
-</td></tr></table>
-
 <p>
 <a href="http://vll.java.net/">VisualLangLab</a> is a visual parser-generator IDE for
 developing parsers without any textual grammar specification 
@@ -68,6 +62,25 @@ the figures below. These example grammars are included with the
   written as <a href="http://en.wikipedia.org/wiki/JavaScript">Javascript</a> or 
   <a href="http://en.wikipedia.org/wiki/Scala_(programming_language)">Scala</a> functions 
   can also be associated with the grammar-tree's nodes.   </p>
+
+<table border="1" style="border: 1px solid red;" width="100%"><tr><td style="text-align: center;">
+<span  style="font-size: larger;">Lightweight pure-Java version coming soon! Preview
+<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">
+VLL4J.jar</a> available.</span><br/>
+
+A light-weight, pure Java version is being developed. This new version, more convenient for some 
+users, will include Java translations 
+of some elements of the Scala API's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">combinator</a> 
+package, and thus avoid the need to embed the jar files of the Scala API. Everything else 
+(specifically GUI and grammar-file format) will remain the same. The major difference from the 
+previous version will be the lack of support for Scala in action-code functions (support 
+via the API will remain available in a somewhat changed form). The AST-structure will change 
+to use JVM types only, and there will be corresponding API changes. 
+The documentation will also change in a small way.
+A preview (without API and packrat capability) is available here: 
+<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">
+VLL4J.jar</a>
+</td></tr></table>
 
   <h2 id="SeeVisualLangLabInAction">See VisualLangLab in Action</h2>
 
