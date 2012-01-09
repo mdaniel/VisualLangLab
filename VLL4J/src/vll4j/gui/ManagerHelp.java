@@ -67,7 +67,7 @@ public class ManagerHelp {
             "</html>";
     };
             
-    Action sampleTDARExpr = new AbstractAction("TDAR-Expr") {
+    Action sampleTdarExpr = new AbstractAction("TDAR-Expr") {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(gui, msg, "TDAR-Expr", JOptionPane.INFORMATION_MESSAGE);
@@ -135,7 +135,7 @@ public class ManagerHelp {
             "&nbsp;&nbsp;&nbsp;&nbsp;http://vll.java.net/examples/a-quick-tour.html";
    };
 
-    Action sampleP2SEArithExpr = new AbstractAction("PS2E-ArithExpr") {
+    Action samplePs2eArithExpr = new AbstractAction("PS2E-ArithExpr") {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(gui, msg, "P2SE-ArithExpr", JOptionPane.INFORMATION_MESSAGE);
@@ -154,7 +154,7 @@ public class ManagerHelp {
             "Sample input (remove quotes): \"(2 + 3) * (7 - 3)\"</html>";
     };
 
-    Action sampleP2SEArithExprAction = new AbstractAction("PS2E-ArithExpr-Action") {
+    Action samplePs2eArithExprAction = new AbstractAction("PS2E-ArithExpr-Action") {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(gui, msg, "PS2E-ArithExpr-Action", JOptionPane.INFORMATION_MESSAGE);
@@ -172,6 +172,30 @@ public class ManagerHelp {
             "Sample input (remove quotes): \"(2 + 3) * (7 - 3)\"</html>";
     };
     
+    Action samplePswpPayrollParserCombinators = new AbstractAction("PSWP-Payroll-Parser-Combinators") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(gui, msg, "PSWP-Payroll-Parser-Combinators", JOptionPane.INFORMATION_MESSAGE);
+            InputStream is = ClassLoader.getSystemClassLoader().
+                    getResourceAsStream("vll4j/gui/resources/PSWP-Payroll-Parser-Combinators.vll");
+            gui.theFileManager.openInputStream(is);
+            gui.setGrammarName("PSWP-Payroll-Parser-Combinators");
+            gui.theRuleManager.reset();
+        }
+        String msg = "<html>" + 
+            "This example is based on the parser described around page-240 <br/>" + 
+            "of the book <i>Programming Scala</i> (http://programmingscala.com/)<br/><br/>" +
+            "An online version of the parser code can be found here: <br/> " +
+            "http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;#_generating_paychecks_with_the_external_dsl<br/><br/>" +
+            "This parser also includes a special rule that serves as a <i>test-harness</i> <br/>" +
+            "by using an action-function to wrap the main rule in a <br/>" +
+            "test-data setup part and a output-checker part. <br/>" +
+            "The rule called <i>PaycheckTester</i> is the test-harness. <br/><br/>" +
+            "Read more about this parser at the following url:<br/>" + 
+            "&nbsp;&nbsp;&nbsp;&nbsp;http://vll.java.net/RapidPrototypingForScala.html";
+   };
+
     Action displayHelpMain = new AbstractAction("Help", Resources.help16) {
         @Override
         public void actionPerformed(ActionEvent e) {

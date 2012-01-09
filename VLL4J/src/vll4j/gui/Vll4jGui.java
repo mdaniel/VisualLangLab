@@ -139,13 +139,14 @@ public class Vll4jGui extends JFrame {
         helpMenu.add(theHelpFunctionsManager.displayHelpMain);
 //        helpMenu.addSeparator();
         helpMenu.add(helpSamplesMenu);
-        helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.sampleTDARExpr));
+        helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.sampleTdarExpr));
         helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.sampleTdarExprActions));
         helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.sampleTdarSimpleTreeInterpreter));
         helpSamplesMenu.add(new JSeparator());
-        helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.sampleP2SEArithExpr));
-        helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.sampleP2SEArithExprAction));
-//        helpMenu.addSeparator();
+        helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.samplePs2eArithExpr));
+        helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.samplePs2eArithExprAction));
+        helpSamplesMenu.addSeparator();
+        helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.samplePswpPayrollParserCombinators));
         helpMenu.add(theHelpFunctionsManager.aboutAction);
     }
     
@@ -261,5 +262,5 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    String version = "10.04";
+    String version = "10.05";
 }
