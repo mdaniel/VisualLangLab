@@ -11,6 +11,11 @@
             <fileset dir="." includes="changes.txt"/>
             <fileset dir="." includes="licenses/*.*" />
         </jar>
+        <jar destfile="VLL4J-API.jar" compress="true">
+            <fileset dir="build/classes" includes="vll4j/core/*.*, vll4j/tree/*.*, vll4j/*.class" />
+            <fileset dir="." includes="changes.txt"/>
+            <fileset dir="." includes="licenses/*.*" />
+        </jar>
         <zip zipfile="VLL4J-${DSTAMP}-${TSTAMP}.zip" compress="true">
             <fileset dir="src" includes="**/*.*"/>
             <fileset dir="." includes="manifest.mf, build.xml, todo.txt, changes.txt"/>

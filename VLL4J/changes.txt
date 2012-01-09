@@ -1,0 +1,5 @@
+10.02 2012-JAN-06 
+  Parsers.opt(): return Array(null) instead of Array() when item is not found.
+  vllInput, vllLine, vllCol, vllOffset: predefined variables removed, but a new 
+      variable vllReader is added. Variable vllLastNoSuccess also added.
+10.01 2012-JAN-05 Uploaded to Subversion (trunk/VLL4J)
