@@ -188,10 +188,10 @@ public class VisitorParserGeneration extends VisitorBase {
             Parser<Object> rep = (Parser<Object>)((NodeBase) n.getChildAt(0)).accept(this);
             Parser<Object> sep = (Parser<Object>)((NodeBase) n.getChildAt(1)).accept(this);
             if (n.multiplicity == Multiplicity.ZeroOrMore)
-                return regexParsers.repSep(rep, sep);
+                return withTrace(regexParsers.repSep(rep, sep), n);
             else if (n.multiplicity == Multiplicity.OneOrMore)
-                return regexParsers.rep1Sep(n.errorMessage.isEmpty() ?
-                        String.format("rep1sep(%s) error", n.nodeName()) : n.errorMessage, rep, sep);
+                return withTrace(regexParsers.rep1Sep(n.errorMessage.isEmpty() ?
+                        String.format("rep1sep(%s) error", n.nodeName()) : n.errorMessage, rep, sep), n);
             else {
                 parserGeneratedOk = false;
                 return null;
