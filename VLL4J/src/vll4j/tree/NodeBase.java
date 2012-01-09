@@ -41,6 +41,8 @@ public abstract class NodeBase extends DefaultMutableTreeNode {
 
     public String nodeName() {
         NodeBase parentNode = (NodeBase)getParent();
+        if (parentNode == null)
+            return "";
         int idx = parentNode.getIndex(this);
         return String.format("%s.%d", parentNode.nodeName(), idx);
     }

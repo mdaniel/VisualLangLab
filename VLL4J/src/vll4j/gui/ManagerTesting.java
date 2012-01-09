@@ -21,9 +21,7 @@
 package vll4j.gui;
 
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -65,6 +63,7 @@ public class ManagerTesting {
             myThread = new Thread() {
                 @Override
                 public void run() {
+                    stopRequested = false;
                     parseStopAction.setEnabled(true);
                     setEnabled(false);
                     if (fileChooser == null) {
@@ -90,6 +89,7 @@ public class ManagerTesting {
     Action parseStopAction = new AbstractAction("Stop parsing", Resources.stop16) {
         @Override
         public void actionPerformed(ActionEvent e) {
+            stopRequested = true;
         }
     };
 
@@ -177,8 +177,12 @@ public class ManagerTesting {
             t1 = System.currentTimeMillis();
             appendStatus(String.format(" Combinators: %d ms", t1 - t0), true);
         }
+        File inFile = null;
         if (fromFile) {
-            File inFile = fileChooser.getSelectedFile();
+            inFile = fileChooser.getSelectedFile();
+        }
+        if (fromFile && inFile.isDirectory()) {
+            inFile = fileChooser.getSelectedFile();
             t0 = System.currentTimeMillis();
             int countOk = 0, countNotOk = 0;
             for (File f: mineFiles(inFile)) {
@@ -187,16 +191,22 @@ public class ManagerTesting {
                 t2 = System.currentTimeMillis();
                 if (pr.successful()) {
                     ++countOk;
-                    System.out.printf("%s: %d% msn", f.getAbsolutePath(), t2 - t1);
+                    System.out.printf("%s: %d ms%n", f.getAbsolutePath(), t2 - t1);
                 } else {
                     ++countNotOk;
-                    System.err.printf("%s: %d% msn", f.getAbsolutePath(), t2 - t1);
+                    System.err.printf("%s: (%d,%d) %d: ms%n", f.getAbsolutePath(), 
+                            pr.next().line(), pr.next().column(), t2 - t1);
                 }
                 appendStatus(String.format(" %d Ok, %d NOk in %d ms", countOk, countNotOk, t1 - t0), true);
+                if (stopRequested) {
+                    System.err.println("User-Requested STOP");
+                    break;
+                }
             }
         } else {
             t0 = System.currentTimeMillis();
-            ParseResult pr = gui.regexParsers.parseAll(parser, new ReaderTextArea(gui.theTestingPanel.inputArea));
+            ParseResult pr = gui.regexParsers.parseAll(parser, fromFile ? new ReaderFile(inFile) : 
+                    new ReaderTextArea(gui.theTestingPanel.inputArea));
             t1 = System.currentTimeMillis();
             appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
             if (pr.successful()) {
@@ -220,4 +230,5 @@ public class ManagerTesting {
     private Thread myThread = null;
     private JFileChooser fileChooser = null;
     private boolean traceAll = false;
+    private boolean stopRequested = false;
 }
