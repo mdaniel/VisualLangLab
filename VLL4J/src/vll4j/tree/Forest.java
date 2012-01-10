@@ -17,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package vll4j.tree;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import vll4j.core.Parsers;
-import vll4j.core.SimpleLexingParsers;
+import vll4j.core.LexingRegexParsers;
 
 public class Forest {
 
@@ -115,7 +116,8 @@ public class Forest {
         }
     }
 
-    public void openInputStream(InputStream is) throws ParserConfigurationException, SAXException, IOException {
+    public void openInputStream(InputStream is) throws ParserConfigurationException, 
+            SAXException, IOException {
         Element docElmt = null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -162,7 +164,7 @@ public class Forest {
                 cs.getEngine().put("vllCol", r.column());
                 cs.getEngine().put("vllOffset", r.offset());
                 cs.getEngine().put("vllInput", r.source().subSequence(r.offset(), r.source().length()));
-                cs.getEngine().put("vllLastNoSuccess", SimpleLexingParsers.lastNoSuccess);
+                cs.getEngine().put("vllLastNoSuccess", LexingRegexParsers.lastNoSuccess);
                 for (String k : bindings.keySet()) {
                     cs.getEngine().put(k, bindings.get(k));
                 }

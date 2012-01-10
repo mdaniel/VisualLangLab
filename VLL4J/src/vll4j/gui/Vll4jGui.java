@@ -24,7 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
-import vll4j.core.SimpleLexingParsers;
+import vll4j.core.LexingRegexParsers;
 import vll4j.tree.Forest;
 import vll4j.tree.NodeRoot;
 
@@ -233,7 +233,7 @@ public class Vll4jGui extends JFrame {
     ManagerMiscOps theMiscFunctionsManager = null;
     ManagerHelp theHelpFunctionsManager = null;
     
-    SimpleLexingParsers regexParsers = new SimpleLexingParsers();
+    LexingRegexParsers regexParsers = new LexingRegexParsers();
     Forest theForest = new Forest();
     
     JMenu fileMenu = new JMenu("File");

@@ -29,12 +29,12 @@ import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
 import vll4j.core.Parsers.Reader;
 import vll4j.core.Parsers.Success;
-import vll4j.core.SimpleLexingParsers;
+import vll4j.core.LexingRegexParsers;
 import vll4j.core.Utils;
 
 public class VisitorParserGeneration extends VisitorBase {
     
-    public VisitorParserGeneration(Forest theForest, SimpleLexingParsers regexParsers, boolean traceAll) {
+    public VisitorParserGeneration(Forest theForest, LexingRegexParsers regexParsers, boolean traceAll) {
         regexParsers.reset();
         this.theForest = theForest;
         this.regexParsers = regexParsers;
@@ -138,7 +138,7 @@ public class VisitorParserGeneration extends VisitorBase {
             String litString = Utils.unEscape(theForest.tokenBank.get(n.literalName).substring(1));
             String errMsg = n.errorMessage.isEmpty() ? 
                     String.format("literal:%s(%s)", n.literalName, n.nodeName()) : n.errorMessage;
-            return withMultiplicity(n.literalName.endsWith("_") ? regexParsers.literal$(errMsg, litString) : regexParsers.literal(errMsg, litString), n);
+            return withMultiplicity(n.literalName.endsWith("_") ? regexParsers.literal(errMsg, litString) : regexParsers.literal2(errMsg, litString), n);
         } else {
             parserGeneratedOk = false;
             return null;
@@ -174,8 +174,8 @@ public class VisitorParserGeneration extends VisitorBase {
             String errMsg = n.errorMessage.isEmpty() ? 
                     String.format("regex:%s(%s)", n.regexName, n.nodeName()) : n.errorMessage;
             return withMultiplicity(n.regexName.endsWith("_") ? 
-                    regexParsers.regex$(errMsg, regString) : 
-                    regexParsers.regex(errMsg, Pattern.compile(regString)), n);
+                    regexParsers.regex(errMsg, Pattern.compile(regString)) : 
+                    regexParsers.regex2(errMsg, Pattern.compile(regString)), n);
         } else {
             parserGeneratedOk = false;
             return null;
@@ -264,7 +264,7 @@ public class VisitorParserGeneration extends VisitorBase {
         }
     }
     
-    private SimpleLexingParsers regexParsers;
+    private LexingRegexParsers regexParsers;
     private boolean traceAll;
     private Map<NodeBase, Parser<? extends Object>[]> parserCache = new HashMap<NodeBase, Parser<? extends Object>[]>();
     public boolean parserGeneratedOk;
