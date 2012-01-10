@@ -70,7 +70,7 @@ public class ArithExprJavaDemo {
             SAXException, IOException {
         String input = "(3 + 5) * (8 - 4)";
         Vll4j vll = Vll4j.fromFile(new File("ArithExpr.vll"));
-        Vll4j.Parser exprParser = vll.getParser("Expr");
+        Vll4j.Parser exprParser = vll.getParserFor("Expr");
         Vll4j.ParseResult parseResult = vll.parseAll(exprParser, input);
         if (parseResult.successful()) {
             Object ast = parseResult.get();
