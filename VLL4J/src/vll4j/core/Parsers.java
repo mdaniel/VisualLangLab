@@ -25,6 +25,24 @@ import java.util.List;
 
 public class Parsers {
     
+    public abstract class Option<T> {
+        public abstract T get();
+    }
+    public class Some<T> extends Option<T> {
+        public Some(T t) {
+            this.t = t;
+        }
+        public T get() {
+            return t;
+        }
+        private T t;
+    }
+    public class None<T> extends Option<T> {
+        public T get() {
+            throw new UnsupportedOperationException();
+        }
+    }
+    
     public static interface Reader {
         public CharSequence source();
         public boolean atEnd();

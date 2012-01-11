@@ -23,7 +23,7 @@ package vll4j;
 import java.io.*;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import vll4j.core.LexingRegexParsers;
+import vll4j.core.PackratParsers;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
 import vll4j.core.ReaderFile;
@@ -31,7 +31,7 @@ import vll4j.tree.Forest;
 import vll4j.tree.NodeBase;
 import vll4j.tree.VisitorParserGeneration;
 
-public class Vll4j extends LexingRegexParsers {
+public class Vll4j extends PackratParsers {
 
     public static Vll4j fromStream(InputStream is) throws ParserConfigurationException, 
             SAXException, IOException {

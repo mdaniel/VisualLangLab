@@ -279,7 +279,6 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
     Action packratAction = new AbstractAction("Packrat") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(gui, "Packrat is NOT YET IMPLEMENTED", "WARNING - Packrat", JOptionPane.WARNING_MESSAGE);
             ((NodeRoot)selectedNode).isPackrat = ((JCheckBoxMenuItem)(e.getSource())).isSelected();
             resetNodeDisplay(selectedNode);
         }

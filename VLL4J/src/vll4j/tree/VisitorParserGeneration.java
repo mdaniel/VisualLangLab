@@ -24,17 +24,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import javax.script.ScriptException;
+import vll4j.core.PackratParsers;
 import vll4j.core.Parsers.Failure;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
 import vll4j.core.Parsers.Reader;
 import vll4j.core.Parsers.Success;
-import vll4j.core.LexingRegexParsers;
 import vll4j.core.Utils;
 
 public class VisitorParserGeneration extends VisitorBase {
     
-    public VisitorParserGeneration(Forest theForest, LexingRegexParsers regexParsers, boolean traceAll) {
+    public VisitorParserGeneration(Forest theForest, PackratParsers regexParsers, boolean traceAll) {
         regexParsers.reset();
         this.theForest = theForest;
         this.regexParsers = regexParsers;
@@ -150,10 +150,10 @@ public class VisitorParserGeneration extends VisitorBase {
         if (n.accept(visitorNodeValidation) == null) {
             String referredRuleName = n.refRuleName;
             NodeBase referredRule = theForest.ruleBank.get(referredRuleName);
-            if (!parserCache.containsKey(referredRule)) {
+            if (!parserCache.containsKey(referredRuleName)) {
                 referredRule.accept(this);
             }
-            final Parser<? extends Object> holder[] = parserCache.get(referredRule);
+            final Parser<? extends Object> holder[] = parserCache.get(referredRuleName);
             Parser<? extends Object> p = new Parser() {
                 @Override
                 public ParseResult<? extends Object> parse(Reader input) {
@@ -206,12 +206,15 @@ public class VisitorParserGeneration extends VisitorBase {
     public Parser<? extends Object> visitRoot(NodeRoot n) {
         Parser<? extends Object> p;
         Parser holder[] = new Parser[1];
-        parserCache.put(n, holder);
+        parserCache.put(n.ruleName, holder);
         if (n.accept(visitorNodeValidation) == null) {
             p = (Parser<? extends Object>)((NodeBase) n.getChildAt(0)).accept(this);
         } else {
             parserGeneratedOk = false;
             p = null;
+        }
+        if (n.isPackrat) {
+            p = regexParsers.parser2packrat(p);
         }
         holder[0] = withTrace(p, n);
         return holder[0];
@@ -264,9 +267,9 @@ public class VisitorParserGeneration extends VisitorBase {
         }
     }
     
-    private LexingRegexParsers regexParsers;
+    private PackratParsers regexParsers;
     private boolean traceAll;
-    private Map<NodeBase, Parser<? extends Object>[]> parserCache = new HashMap<NodeBase, Parser<? extends Object>[]>();
+    private Map<String, Parser<? extends Object>[]> parserCache = new HashMap<String, Parser<? extends Object>[]>();
     public boolean parserGeneratedOk;
     private int traceLevel = 0;
     private VisitorValidation visitorNodeValidation;

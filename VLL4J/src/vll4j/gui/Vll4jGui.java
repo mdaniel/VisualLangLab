@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
 import vll4j.core.LexingRegexParsers;
+import vll4j.core.PackratParsers;
 import vll4j.tree.Forest;
 import vll4j.tree.NodeRoot;
 
@@ -196,14 +197,15 @@ public class Vll4jGui extends JFrame {
     
     private void warnPreview() {
         String msg = "<html>This preview of the pure Java version has the following limitations:<br/><br/>" +
-                "&nbsp;&nbsp;1) Packrat parsing not yet implemented<br/>" +
-                "&nbsp;&nbsp;3) Non-essential GUI controls not implemented<br/><br/>" +
+                "&nbsp;&nbsp;1) Packrat parsing not yet functional<br/>" +
+                "&nbsp;&nbsp;3) A few GUI controls are not yet implemented<br/>" +
+                "&nbsp;&nbsp;3) Documentation is still being updated<br/><br/>" +
                 "It has all other planned capabilities, specifically:<br/><br/>" +
                 "&nbsp;&nbsp;a) Written in Java, with no other dependencies<br/>" +
                 "&nbsp;&nbsp;b) Action-code is written in JavaScript<br/>" +
                 "&nbsp;&nbsp;c) Same GUI, grammar-file format, as previous version<br/>" +
                 "&nbsp;&nbsp;d) Much smaller download than previous executable JAR<br/>" +
-                "&nbsp;&nbsp;e) Minor changes to AST structure and API<br/><br/>" +
+                "&nbsp;&nbsp;e) AST structure and API mostly backward-compatible<br/><br/>" +
                 "Check back at http://vll.java.net/ for full release version" ;
         JOptionPane.showMessageDialog(rootPane, msg, "Version 10 (Pure Java) Preview", JOptionPane.PLAIN_MESSAGE);
     }
@@ -232,7 +234,7 @@ public class Vll4jGui extends JFrame {
     ManagerMiscOps theMiscFunctionsManager = null;
     ManagerHelp theHelpFunctionsManager = null;
     
-    LexingRegexParsers regexParsers = new LexingRegexParsers();
+    PackratParsers regexParsers = new PackratParsers();
     Forest theForest = new Forest();
     
     JMenu fileMenu = new JMenu("File");

@@ -19,7 +19,11 @@
  */
 package vll4j.core;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class PackratParsers extends LexingRegexParsers {
 
@@ -34,7 +38,7 @@ public class PackratParsers extends LexingRegexParsers {
 
         PackratReader() {
         }
-
+        
         @Override
         public boolean atEnd() {
             return underlying.atEnd();
@@ -60,7 +64,7 @@ public class PackratParsers extends LexingRegexParsers {
             return underlying.first();
         }
         
-        MemoEntry getFromCache(Parser p) {
+        MemoEntry /*Option*/ getFromCache(Parser p) {
             Object key = new Object[] {p, offset()};
             if (cache.containsKey(key))
                 return cache.get(key);
@@ -99,22 +103,23 @@ public class PackratParsers extends LexingRegexParsers {
         Map<Object[], MemoEntry> cache = null;
         private PackratReader outer = this;
     }
-    
+
+    @Override
     public <T> Parser<T> phrase(Parser<T> p) {
         final Parser<T> q = super.phrase(p);
         return new PackratParser<T>() {
             public ParseResult<T> parse(Reader r) {
-                return q.parse(r instanceof PackratReader ? r : new PackratReader(r));
+                return memo(q).parse(r instanceof PackratReader ? r : new PackratReader(r));
             }
         };
     }
-    
+
     int getPosFromResult(ParseResult pr) {
         return pr.next().offset();
     }
 
     private static class MemoEntry<T> {
-        MemoEntry(ParseResult r) {
+        MemoEntry(ParseResult<T> r) {
             this.r = r;
         }
         MemoEntry(LR r) {
@@ -130,7 +135,7 @@ public class PackratParsers extends LexingRegexParsers {
         LR(ParseResult seed, Parser rule, Head head) {
             this.seed = seed;
             this.rule = rule;
-            this.head = head;
+            this.head = head; /*Option*/
         }
         int getPos() {
             return seed.next().offset();
@@ -153,14 +158,14 @@ public class PackratParsers extends LexingRegexParsers {
         List<Parser> involvedSet = new ArrayList<Parser>();
         List<Parser> evalSet = new ArrayList<Parser>();
     }
-    
+
     static abstract class PackratParser<T> extends Parser<T> {};
     
-    <T>PackratParser<T> parser2packrat(Parser<T> p) {
-        return null;
+    public <T>PackratParser<T> parser2packrat(Parser<T> p) {
+        return memo(p);
     }
-    
-    private MemoEntry recall(Parser p, PackratReader in) {
+
+    private MemoEntry /*Option*/ recall(Parser p, PackratReader in) {
         MemoEntry cached = in.getFromCache(p);
         Head head = in.recursionHeads.containsKey(in.offset()) ? 
                 in.recursionHeads.get(in.offset()) : null;
@@ -170,7 +175,7 @@ public class PackratParsers extends LexingRegexParsers {
             Parser hp = head.headParser;
             List<Parser> involved = head.involvedSet;
             List<Parser> evalSet = head.involvedSet;
-            if (cached == null && !(hp == p || involved.contains(p))) {
+            if (cached == null && !(hp.equals(p) || involved.contains(p))) {
                 return new MemoEntry(new Failure("dummy ", in, null));
             }
             if (evalSet.contains(p)) {
@@ -186,7 +191,7 @@ public class PackratParsers extends LexingRegexParsers {
             return cached;
         }
     }
-    
+
     void setupLR(Parser p, PackratReader in, LR recDetect) {
         if (recDetect.head == null)
             recDetect.head = new Head(p, new ArrayList<Parser>(), new ArrayList<Parser>());
@@ -198,7 +203,7 @@ public class PackratParsers extends LexingRegexParsers {
                 recDetect.head.involvedSet.add(0, lr.rule);
         }
     }
-    
+
     <T> ParseResult<T> lrAnswer(Parser<T> p, PackratReader in, LR growable) {
         ParseResult seed = growable.seed;
         Parser rule = growable.rule;
@@ -213,7 +218,7 @@ public class PackratParsers extends LexingRegexParsers {
                 return seed;
         }
     }
-    
+
     <T> PackratParser<T> memo(final Parser<T> p) {
         return new PackratParser<T>() {
             @Override
@@ -221,7 +226,7 @@ public class PackratParsers extends LexingRegexParsers {
                 PackratReader inMem = in instanceof PackratReader ? 
                         (PackratReader)in : new PackratReader(in);
                 MemoEntry m = recall(p, inMem);
-                if (m.r == null) {
+                if (m == null || m.r == null) {
                     LR base = new LR(new Failure("Base failure", in, null), p, null);
                     inMem.lrStack.add(0, base);
                     inMem.updateCacheAndGet(p, new MemoEntry(base));
@@ -247,7 +252,7 @@ public class PackratParsers extends LexingRegexParsers {
             }
         };
     }
-    
+
     ParseResult grow(Parser p, PackratReader rest, Head head) {
         rest.recursionHeads.put(rest.offset(), head);
         ParseResult oldRes = (ParseResult)rest.getFromCache(p).r;
@@ -267,5 +272,20 @@ public class PackratParsers extends LexingRegexParsers {
             rest.recursionHeads.remove(rest.offset());
             return oldRes;
         }
+    }
+    
+    public static void main(String args[]) {
+        PackratParsers pp = new PackratParsers();
+        Parser nbr = pp.regex2("nbr", Pattern.compile("[0-9]+"));
+        Parser plus = pp.literal2("PLUS", "+");
+        Parser minus = pp.literal2("MINUS", "-");
+        Parser plusOrMinus = pp.choice("plusOrMinus", plus, minus);
+        Parser suffix = pp.rep(pp.sequence(0, plusOrMinus, nbr));
+        Parser expr = pp.sequence(0, nbr, suffix);
+        ParseResult pr = pp.parseAll(expr, "123 + 5 - 7 + 23 - 567");
+        if (pr.successful())
+            System.out.println(pp.dumpValue(pr.get()));
+        else 
+            System.out.println(pp.dumpResult(pr));
     }
 }

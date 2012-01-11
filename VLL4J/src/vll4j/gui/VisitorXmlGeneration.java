@@ -22,17 +22,7 @@ package vll4j.gui;
 
 import java.io.PrintWriter;
 import vll4j.core.Utils;
-import vll4j.tree.Multiplicity;
-import vll4j.tree.NodeBase;
-import vll4j.tree.NodeChoice;
-import vll4j.tree.NodeLiteral;
-import vll4j.tree.NodeReference;
-import vll4j.tree.NodeRegex;
-import vll4j.tree.NodeRepSep;
-import vll4j.tree.NodeRoot;
-import vll4j.tree.NodeSemPred;
-import vll4j.tree.NodeSequence;
-import vll4j.tree.VisitorBase;
+import vll4j.tree.*;
 
 public class VisitorXmlGeneration extends VisitorBase {
     
@@ -44,7 +34,7 @@ public class VisitorXmlGeneration extends VisitorBase {
         if (n.multiplicity != Multiplicity.One)
             printWriter.printf("Mult=\"%s\" ", n.multiplicity);
         if (!n.errorMessage.isEmpty())
-            printWriter.printf("ErrMst=\"%s\" ", Utils.encode4xml(n.errorMessage));
+            printWriter.printf("ErrMsg=\"%s\" ", Utils.encode4xml(n.errorMessage));
         if (!n.description.isEmpty())
             printWriter.printf("Description=\"%s\" ", Utils.encode4xml(n.description));
         if (!n.actionText.isEmpty())
@@ -110,6 +100,8 @@ public class VisitorXmlGeneration extends VisitorBase {
         depth = 2;
         space();
         printWriter.printf("<Parser Name=\"%s\" ", n.ruleName);
+        if (n.isPackrat)
+            printWriter.print("Packrat=\"true\" ");
         commonAttributes(n, false);
         visitAllChildNodes(n);
         space();
