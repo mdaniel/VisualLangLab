@@ -24,7 +24,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
-import vll4j.core.LexingRegexParsers;
 import vll4j.core.PackratParsers;
 import vll4j.tree.Forest;
 import vll4j.tree.NodeRoot;

@@ -25,22 +25,19 @@ import java.util.List;
 
 public class Parsers {
     
-    public abstract class Option<T> {
+    public static abstract class Option<T> {
         public abstract T get();
+        public abstract boolean isEmpty();
     }
-    public class Some<T> extends Option<T> {
-        public Some(T t) {
-            this.t = t;
-        }
-        public T get() {
-            return t;
-        }
+    public static class Some<T> extends Option<T> {
+        public Some(T t) {this.t = t;}
+        public boolean isEmpty() {return false;}
+        public T get() {return t;}
         private T t;
     }
-    public class None<T> extends Option<T> {
-        public T get() {
-            throw new UnsupportedOperationException();
-        }
+    public static class None<T> extends Option<T> {
+        public boolean isEmpty() {return true;}
+        public T get() {throw new UnsupportedOperationException();}
     }
     
     public static interface Reader {

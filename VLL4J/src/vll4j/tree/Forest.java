@@ -33,8 +33,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import vll4j.core.PackratParsers;
 import vll4j.core.Parsers;
-import vll4j.core.LexingRegexParsers;
 
 public class Forest {
 
@@ -118,11 +118,10 @@ public class Forest {
 
     public void openInputStream(InputStream is) throws ParserConfigurationException, 
             SAXException, IOException {
-        Element docElmt = null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document d = db.parse(is);
-        docElmt = d.getDocumentElement();
+        Element docElmt = d.getDocumentElement();
         whiteSpace = docElmt.getElementsByTagName("Whitespace").item(0).getTextContent();
         comment = docElmt.getElementsByTagName("Comments").item(0).getTextContent();
         NodeList regs = docElmt.getElementsByTagName("Regex");
@@ -164,7 +163,7 @@ public class Forest {
                 cs.getEngine().put("vllCol", r.column());
                 cs.getEngine().put("vllOffset", r.offset());
                 cs.getEngine().put("vllInput", r.source().subSequence(r.offset(), r.source().length()));
-                cs.getEngine().put("vllLastNoSuccess", LexingRegexParsers.lastNoSuccess);
+                cs.getEngine().put("vllLastNoSuccess", PackratParsers.lastNoSuccess);
                 for (String k : bindings.keySet()) {
                     cs.getEngine().put(k, bindings.get(k));
                 }

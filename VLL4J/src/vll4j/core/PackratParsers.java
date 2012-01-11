@@ -28,27 +28,22 @@ import java.util.regex.Pattern;
 public class PackratParsers extends LexingRegexParsers {
 
     public static class PackratReader implements Reader {
-
         PackratReader(Reader underlying) {
             this.underlying = underlying;
             lrStack = new ArrayList<LR>();
             recursionHeads = new HashMap<Integer, Head>();
             cache = new HashMap<Object[], MemoEntry>();
         }
-
-        PackratReader() {
+        private PackratReader() {
         }
-        
         @Override
         public boolean atEnd() {
             return underlying.atEnd();
         }
-        
         @Override
         public int column() {
             return underlying.column();
         }
-
         @Override
         public Reader drop(int n) {
             PackratReader pr = new PackratReader();
@@ -58,45 +53,37 @@ public class PackratParsers extends LexingRegexParsers {
             pr.underlying = outer.underlying.drop(n);
             return pr;
         }
-
         @Override
         public char first() {
             return underlying.first();
         }
-        
-        MemoEntry /*Option*/ getFromCache(Parser p) {
+        Option<MemoEntry> getFromCache(Parser p) {
             Object key = new Object[] {p, offset()};
             if (cache.containsKey(key))
-                return cache.get(key);
+                return new Some<MemoEntry>(cache.get(key));
             else
-                return null;
+                return new None<MemoEntry>();
         }
-
         @Override
         public int line() {
             return underlying.line();
         }
-
         @Override
         public int offset() {
             return underlying.offset();
         }
-
         @Override
         public Reader rest() {
             return drop(1);
         }
-
         @Override
         public CharSequence source() {
             return underlying.source();
         }
-        
         MemoEntry updateCacheAndGet(Parser p, MemoEntry w) {
             cache.put(new Object[] {p, offset()}, w);
             return w;
         }
-
         private Reader underlying;
         List<LR> lrStack = null;
         Map<Integer, Head> recursionHeads = null;
@@ -106,16 +93,14 @@ public class PackratParsers extends LexingRegexParsers {
 
     @Override
     public <T> Parser<T> phrase(Parser<T> p) {
+System.out.println("phrase()");
         final Parser<T> q = super.phrase(p);
         return new PackratParser<T>() {
             public ParseResult<T> parse(Reader r) {
+System.out.println("phrase-parse()");
                 return memo(q).parse(r instanceof PackratReader ? r : new PackratReader(r));
             }
         };
-    }
-
-    int getPosFromResult(ParseResult pr) {
-        return pr.next().offset();
     }
 
     private static class MemoEntry<T> {
@@ -132,17 +117,17 @@ public class PackratParsers extends LexingRegexParsers {
     }
 
     static class LR {
-        LR(ParseResult seed, Parser rule, Head head) {
+        LR(ParseResult seed, Parser rule, Option<Head> head) {
             this.seed = seed;
             this.rule = rule;
-            this.head = head; /*Option*/
+            this.head = head; 
         }
         int getPos() {
             return seed.next().offset();
         }
         ParseResult seed;
         Parser rule;
-        Head head; // may be null
+        Option<Head> head; 
     }
 
     static class Head {
@@ -162,77 +147,85 @@ public class PackratParsers extends LexingRegexParsers {
     static abstract class PackratParser<T> extends Parser<T> {};
     
     public <T>PackratParser<T> parser2packrat(Parser<T> p) {
+System.out.println("parser2packrat");
         return memo(p);
     }
 
-    private MemoEntry /*Option*/ recall(Parser p, PackratReader in) {
-        MemoEntry cached = in.getFromCache(p);
-        Head head = in.recursionHeads.containsKey(in.offset()) ? 
-                in.recursionHeads.get(in.offset()) : null;
-        if (head == null) {
+    private Option<MemoEntry> recall(Parser p, PackratReader in) {
+        Option<MemoEntry> cached = in.getFromCache(p);
+        Option<Head> head = in.recursionHeads.containsKey(in.offset()) ? 
+                new Some<Head>(in.recursionHeads.get(in.offset())) : new None<Head>();
+System.out.printf("recall cached:%s, head:%s%n", cached, head);
+        if (head.isEmpty()) {
             return cached;
         } else {
-            Parser hp = head.headParser;
-            List<Parser> involved = head.involvedSet;
-            List<Parser> evalSet = head.involvedSet;
-            if (cached == null && !(hp.equals(p) || involved.contains(p))) {
-                return new MemoEntry(new Failure("dummy ", in, null));
+            Parser hp = head.get().headParser;
+            List<Parser> involved = head.get().involvedSet;
+            List<Parser> evalSet = head.get().evalSet;
+            if (cached.isEmpty() && !(hp.equals(p) || involved.contains(p))) {
+                return new Some<MemoEntry>(new MemoEntry(new Failure("dummy ", in, null)));
             }
             if (evalSet.contains(p)) {
-                for (int i = head.evalSet.size() - 1; i >= 0; --i) {
-                    Parser pi = head.evalSet.get(i);
+                for (int i = evalSet.size() - 1; i >= 0; --i) {
+                    Parser pi = evalSet.get(i);
                     if (pi.equals(p))
-                        head.evalSet.remove(pi);
+                        evalSet.remove(pi);
                 }
                 ParseResult tempRes = p.parse(in);
-                MemoEntry tempEntry = cached;
-                tempEntry.r = tempRes;
+                Option<MemoEntry> tempEntry = cached;
+                tempEntry.get().r = tempRes;
             }
             return cached;
         }
     }
 
     void setupLR(Parser p, PackratReader in, LR recDetect) {
-        if (recDetect.head == null)
-            recDetect.head = new Head(p, new ArrayList<Parser>(), new ArrayList<Parser>());
+System.out.println("setupLR");
+        if (recDetect.head.isEmpty())
+            recDetect.head = new Some<Head>(new Head(p, new ArrayList<Parser>(), new ArrayList<Parser>()));
         for (LR lr: in.lrStack) {
             if (lr.rule.equals(p))
                 break;
             lr.head = recDetect.head;
-            if (recDetect.head != null)
-                recDetect.head.involvedSet.add(0, lr.rule);
+            if (!recDetect.head.isEmpty())
+                recDetect.head.get().involvedSet.add(0, lr.rule);
         }
     }
 
     <T> ParseResult<T> lrAnswer(Parser<T> p, PackratReader in, LR growable) {
         ParseResult seed = growable.seed;
         Parser rule = growable.rule;
-        Head head = growable.head;
-        if (!head.getHead().equals(p)) {
+        Option<Head> head = growable.head;
+System.out.printf("lrAnswer seed:%s rule:%s head:%s%n", seed, rule, head);
+        if (head.isEmpty())
+            throw new IllegalArgumentException("lrAnswer with no head !!");
+        if (!head.get().getHead().equals(p)) {
             return seed;
         } else {
             in.updateCacheAndGet(p, new MemoEntry(seed));
             if (seed.successful())
-                return grow(p, in, head);
+                return grow(p, in, head.get());
             else
                 return seed;
         }
     }
 
     <T> PackratParser<T> memo(final Parser<T> p) {
+System.out.println("memo");
         return new PackratParser<T>() {
             @Override
             public ParseResult<T> parse(Reader in) {
                 PackratReader inMem = in instanceof PackratReader ? 
                         (PackratReader)in : new PackratReader(in);
-                MemoEntry m = recall(p, inMem);
-                if (m == null || m.r == null) {
-                    LR base = new LR(new Failure("Base failure", in, null), p, null);
+                Option<MemoEntry> m = recall(p, inMem);
+                if (m.isEmpty()) {
+System.out.println("memo-parse-empty");
+                    LR base = new LR(new Failure("Base failure", in, null), p, new None<Head>());
                     inMem.lrStack.add(0, base);
                     inMem.updateCacheAndGet(p, new MemoEntry(base));
                     ParseResult tempRes = p.parse(in);
                     inMem.lrStack.remove(0);
-                    if (base.head == null) {
+                    if (base.head.isEmpty()) {
                         inMem.updateCacheAndGet(p, new MemoEntry(tempRes));
                         return tempRes;
                     } else {
@@ -240,9 +233,11 @@ public class PackratParsers extends LexingRegexParsers {
                         return lrAnswer(p, inMem, base);
                     }
                 } else {
-                    Object mEntry = m.r;
+System.out.println("memo-parse-empty-else");
+                    Object mEntry = m.get().r;
                     if (mEntry instanceof LR) {
                         LR recDetect = (LR)mEntry;
+                        setupLR(p, inMem, recDetect);
                         return recDetect.seed;
                     } else {
                         ParseResult res = (ParseResult)mEntry;
@@ -254,8 +249,9 @@ public class PackratParsers extends LexingRegexParsers {
     }
 
     ParseResult grow(Parser p, PackratReader rest, Head head) {
+System.out.println("grow");
         rest.recursionHeads.put(rest.offset(), head);
-        ParseResult oldRes = (ParseResult)rest.getFromCache(p).r;
+        ParseResult oldRes = (ParseResult)rest.getFromCache(p).get().r;
         head.evalSet = head.involvedSet;
         ParseResult tempRes = p.parse(rest);
         if (tempRes.successful()) {
@@ -264,7 +260,7 @@ public class PackratParsers extends LexingRegexParsers {
                 return grow(p, rest, head);
             } else {
                 rest.recursionHeads.remove(rest.offset());
-                MemoEntry m = rest.getFromCache(p);
+                MemoEntry m = rest.getFromCache(p).get();
                 //if (m instanceof ParseResult)
                     return (ParseResult)m;
             }
