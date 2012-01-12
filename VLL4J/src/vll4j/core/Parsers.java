@@ -25,23 +25,8 @@ import java.util.List;
 
 public class Parsers {
     
-    public static abstract class Option<T> {
-        public abstract T get();
-        public abstract boolean isEmpty();
-    }
-    public static class Some<T> extends Option<T> {
-        public Some(T t) {this.t = t;}
-        public boolean isEmpty() {return false;}
-        public T get() {return t;}
-        private T t;
-    }
-    public static class None<T> extends Option<T> {
-        public boolean isEmpty() {return true;}
-        public T get() {throw new UnsupportedOperationException();}
-    }
-    
     public static abstract class Parser<T> {
-        public abstract ParseResult<T> parse(Reader input);
+        public abstract ParseResult<T> apply(Reader input);
         public String name;
     }
     
@@ -61,8 +46,11 @@ public class Parsers {
             this.reason = reason; // ++SPC (not in Scala parser combinators)
             lastNoSuccess = this;
         }
+        @Override
         public T get() {return null;}
+        @Override
         public boolean successful() {return false;}
+        @Override
         public Reader next() {return next;}
         public final String msg;
         public NoSuccess reason = null;
@@ -74,8 +62,11 @@ public class Parsers {
             this.result = result;
             this.next = next;
         }
+        @Override
         public T get() {return result;}
+        @Override
         public boolean successful() {return true;}
+        @Override
         public Reader next() {return next;}
         private final T result;
         private Reader next;
@@ -108,8 +99,9 @@ public class Parsers {
 */    public <T>Parser<T> phrase(final Parser<T> p) {
         lastNoSuccess = null;
         return new Parser<T>() {
-            public ParseResult<T> parse(Reader input) {
-                ParseResult<T> pr = p.parse(input);
+            @Override
+            public ParseResult<T> apply(Reader input) {
+                ParseResult<T> pr = p.apply(input);
                 if (pr.next().atEnd())
                     return pr;
                 else 
@@ -120,7 +112,8 @@ public class Parsers {
     
     public Parser<Object> failure(final String msg) {
         return new Parser<Object>() {
-            public ParseResult<Object> parse(Reader input) {
+            @Override
+            public ParseResult<Object> apply(Reader input) {
                 return new Failure(msg, input);
             }
         };
@@ -128,7 +121,8 @@ public class Parsers {
     
     public <T>Parser<T> success(final T value) {
         return new Parser<T>() {
-            public ParseResult<T> parse(Reader input) {
+            @Override
+            public ParseResult<T> apply(Reader input) {
                 return new Success(value, input);
             }
         };
@@ -136,8 +130,9 @@ public class Parsers {
     
     public <T>Parser<T> guard(final Parser<T>  p) {
         return new Parser<T>() {
-            public ParseResult<T> parse(Reader input) {
-                ParseResult<T> pr = p.parse(input);
+            @Override
+            public ParseResult<T> apply(Reader input) {
+                ParseResult<T> pr = p.apply(input);
                 if (pr.successful()) 
                     return new Success<T>(pr.get(), input);
                 else
@@ -148,8 +143,9 @@ public class Parsers {
     
     public <T>Parser<T> not(final Parser<T>  p) {
         return new Parser<T>() {
-            public ParseResult<T> parse(Reader input) {
-                ParseResult<T> pr = p.parse(input);
+            @Override
+            public ParseResult<T> apply(Reader input) {
+                ParseResult<T> pr = p.apply(input);
                 if (pr.successful()) 
                     return new Failure("??not??", input);
                 else
@@ -160,8 +156,9 @@ public class Parsers {
     
     public <T>Parser<Object[]> opt(final Parser<T> p) {
         return new Parser<Object[]>() {
-            public ParseResult<Object[]> parse(Reader input) {
-                ParseResult<T> pr = p.parse(input);
+            @Override
+            public ParseResult<Object[]> apply(Reader input) {
+                ParseResult<T> pr = p.apply(input);
                 if (pr.successful())
                     return new Success(new Object[]{pr.get()}, pr.next());
                 else
@@ -172,10 +169,11 @@ public class Parsers {
     
     public <T>Parser<List<T>> rep(final Parser<T> p) {
         return new Parser<List<T>>() {
-            public ParseResult<List<T>> parse(Reader input) {
+            @Override
+            public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
                 ParseResult<T> pr = null;
-                while ((pr = p.parse(input)).successful()) {
+                while ((pr = p.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
                 }
@@ -186,13 +184,14 @@ public class Parsers {
     
     public <T>Parser<List<T>> repSep(final Parser<T> rep, final Parser<T> sep) {
         return new Parser<List<T>>() {
-            public ParseResult<List<T>> parse(Reader input) {
+            @Override
+            public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
                 ParseResult<T> pr = null;
-                while ((pr = rep.parse(input)).successful()) {
+                while ((pr = rep.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
-                    if ((pr = sep.parse(input)).successful())
+                    if ((pr = sep.apply(input)).successful())
                         input = pr.next();
                     else
                         break;
@@ -208,10 +207,11 @@ public class Parsers {
     
     public <T>Parser<List<T>> rep1(final String errMsg, final Parser<T> p) {
         return new Parser<List<T>>() {
-            public ParseResult<List<T>> parse(Reader input) {
+            @Override
+            public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
                 ParseResult<T> pr = null;
-                while ((pr = p.parse(input)).successful()) {
+                while ((pr = p.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
                 }
@@ -229,13 +229,14 @@ public class Parsers {
     
     public <T>Parser<List<T>> rep1Sep(final String errMsg, final Parser<T> rep, final Parser<T> sep) {
         return new Parser<List<T>>() {
-            public ParseResult<List<T>> parse(Reader input) {
+            @Override
+            public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
                 ParseResult<T> pr = null;
-                while ((pr = rep.parse(input)).successful()) {
+                while ((pr = rep.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
-                    if ((pr = sep.parse(input)).successful())
+                    if ((pr = sep.apply(input)).successful())
                         input = pr.next();
                     else
                         break;
@@ -254,13 +255,14 @@ public class Parsers {
     
     public Parser<Object[]> sequence(final String errMsg, final int dropMap, final Parser<? extends Object>  ...p) {
         return new Parser<Object[]>() {
-            public ParseResult<Object[]> parse(Reader input) {
+            @Override
+            public ParseResult<Object[]> apply(Reader input) {
                 int bc = Integer.bitCount(dropMap);
                 Object res[] = new Object[p.length - bc];
                 Reader inputOriginal = input;
                 ParseResult<? extends Object> pr = null;
                 for (int i = 0, j = 0, mask = 1; i < p.length; ++i, mask <<= 1) {
-                    pr = p[i].parse(input);
+                    pr = p[i].apply(input);
                     if (!pr.successful())
                         break;
                     if ((dropMap & mask) == 0) {
@@ -285,11 +287,12 @@ public class Parsers {
     
     public Parser<Object[]/*<Object>*/> choice(final String errMsg, final Parser<? extends Object>  ...p) {
         return new Parser<Object[]/*<Object>*/>() {
-            public ParseResult<Object[]/*<Object>*/> parse(Reader input) {
+            @Override
+            public ParseResult<Object[]/*<Object>*/> apply(Reader input) {
                 ParseResult<? extends Object> pr = null;
                 int n = 0;
                 for (n = 0; n < p.length; ++n) {
-                    pr = p[n].parse(input);
+                    pr = p[n].apply(input);
                     if (pr.successful())
                         break;
                 }

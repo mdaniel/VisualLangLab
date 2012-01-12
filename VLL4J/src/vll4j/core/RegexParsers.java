@@ -51,7 +51,7 @@ public class RegexParsers extends Parsers {
     public Parser<String> literal(final String errMsg, final String lit) {
         return new Parser<String>() {
             @Override
-            public ParseResult<String> parse(Reader input) {
+            public ParseResult<String> apply(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
                 CharSequence cs = input.source();
                 if (cs.subSequence(offset2, cs.length()).toString().startsWith(lit))
@@ -69,7 +69,7 @@ public class RegexParsers extends Parsers {
     public Parser<String> regex(final String errMsg, final Pattern p) {
         return new Parser<String>() {
             @Override
-            public ParseResult<String> parse(Reader input) {
+            public ParseResult<String> apply(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
 //                Reader newInput = input.drop(offset2 - input.offset());
                 CharSequence cs = input.source();
@@ -87,8 +87,8 @@ public class RegexParsers extends Parsers {
     public <T>Parser<T> phrase(final Parser<T> p) {
         return new Parser<T>() {
             @Override
-            public ParseResult<T> parse(Reader input) {
-                ParseResult<T> pr = p.parse(input);
+            public ParseResult<T> apply(Reader input) {
+                ParseResult<T> pr = p.apply(input);
 //System.out.printf("%s: %s%n", p, pr);
                 if (!pr.successful())
                     return new Failure("phrase", input, (Failure)pr);
@@ -105,11 +105,11 @@ public class RegexParsers extends Parsers {
     }
     
     public ParseResult<? extends Object> parseAll(Parser<? extends Object> p, CharSequence cs) {
-        return phrase(p).parse(new CharSequenceReader(cs));
+        return phrase(p).apply(new CharSequenceReader(cs));
     }
     
     public ParseResult<? extends Object> parseAll(Parser<? extends Object> p, Reader rdr) {
-        return phrase(p).parse(rdr);
+        return phrase(p).apply(rdr);
     }
     
     public void reset() {
@@ -168,7 +168,7 @@ public class RegexParsers extends Parsers {
     private Parser<String> parserById(final String errMsg, final int id) {
         return new Parser<String>() {
             @Override
-            public ParseResult<String> parse(Reader input) {
+            public ParseResult<String> apply(Reader input) {
                 if (!setupDone) {
                     setupLexer();
                     setupDone = true;

@@ -188,7 +188,7 @@ public class ManagerTesting {
             int countOk = 0, countNotOk = 0;
             for (File f: mineFiles(inFile)) {
                 t1 = System.currentTimeMillis();
-                ParseResult pr = gui.regexParsers.parseAll(parser, new FFileReader(f));
+                ParseResult pr = gui.regexParsers.parseAll(parser, new ReaderFile(f));
                 t2 = System.currentTimeMillis();
                 if (pr.successful()) {
                     ++countOk;
@@ -206,7 +206,7 @@ public class ManagerTesting {
             }
         } else {
             t0 = System.currentTimeMillis();
-            ParseResult pr = gui.regexParsers.parseAll(parser, fromFile ? new FFileReader(inFile) : 
+            ParseResult pr = gui.regexParsers.parseAll(parser, fromFile ? new ReaderFile(inFile) : 
                     new ReaderTextArea(gui.theTestingPanel.inputArea));
             t1 = System.currentTimeMillis();
             appendStatus(String.format(", Parser: %d ms", t1 - t0), false);

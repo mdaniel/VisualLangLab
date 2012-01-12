@@ -196,12 +196,12 @@ public class Vll4jGui extends JFrame {
     
     private void warnPreview() {
         String msg = "<html>This preview of the pure Java version has the following limitations:<br/><br/>" +
-                "&nbsp;&nbsp;1) Packrat parsing not yet functional<br/>" +
-                "&nbsp;&nbsp;3) A few GUI controls are not yet implemented<br/>" +
+                "&nbsp;&nbsp;1) Packrat parsing not yet fully tested<br/>" +
+                "&nbsp;&nbsp;3) Some GUI controls are not yet implemented<br/>" +
                 "&nbsp;&nbsp;3) Documentation is still being updated<br/><br/>" +
                 "It has all other planned capabilities, specifically:<br/><br/>" +
                 "&nbsp;&nbsp;a) Written in Java, with no other dependencies<br/>" +
-                "&nbsp;&nbsp;b) Action-code is written in JavaScript<br/>" +
+                "&nbsp;&nbsp;b) Action-code supported in JavaScript only<br/>" +
                 "&nbsp;&nbsp;c) Same GUI, grammar-file format, as previous version<br/>" +
                 "&nbsp;&nbsp;d) Much smaller download than previous executable JAR<br/>" +
                 "&nbsp;&nbsp;e) AST structure and API mostly backward-compatible<br/><br/>" +
@@ -258,5 +258,5 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    String version = "10.05";
+    String version = "10.06";
 }

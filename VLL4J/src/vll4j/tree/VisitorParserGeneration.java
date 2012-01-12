@@ -61,10 +61,10 @@ public class VisitorParserGeneration extends VisitorBase {
         if (!(node instanceof NodeSemPred) && node.actionFunction != null) {
             pm = new Parser() {
                 @Override
-                public ParseResult<? extends Object> parse(Reader input) {
+                public ParseResult<? extends Object> apply(Reader input) {
                     try {
                         node.actionFunction.run(null, input);
-                        ParseResult<? extends Object> res = p.parse(input);
+                        ParseResult<? extends Object> res = p.apply(input);
                         if (res.successful()) {
                             Object r2 = node.actionFunction.run(res.get(), res.next());
                             return new Success(r2, res.next());
@@ -84,11 +84,11 @@ public class VisitorParserGeneration extends VisitorBase {
         if (node.isTraced || ((node instanceof NodeRoot) && traceAll)) {
             pm = new Parser() {
                 @Override
-                public ParseResult<? extends Object> parse(Reader input) {
+                public ParseResult<? extends Object> apply(Reader input) {
                     traceIndent();
                     System.out.print(String.format(">> %s (%d, %d)%n", node.nodeName(), input.line(), input.column()));
                     ++traceLevel;
-                    ParseResult<? extends Object> res = p.parse(input);
+                    ParseResult<? extends Object> res = p.apply(input);
                     --traceLevel;
                     traceIndent();
                     System.out.print(String.format("<< %s : %s (%d, %d)%n", node.nodeName(), res.getClass().getSimpleName(),
@@ -156,8 +156,8 @@ public class VisitorParserGeneration extends VisitorBase {
             final Parser<? extends Object> holder[] = parserCache.get(referredRuleName);
             Parser<? extends Object> p = new Parser() {
                 @Override
-                public ParseResult<? extends Object> parse(Reader input) {
-                    return holder[0].parse(input);
+                public ParseResult<? extends Object> apply(Reader input) {
+                    return holder[0].apply(input);
                 }
             };
             return withMultiplicity(p, n);
@@ -225,7 +225,7 @@ public class VisitorParserGeneration extends VisitorBase {
         if (n.accept(visitorNodeValidation) == null) {
             Parser<? extends Object> parser = new Parser() {
                 @Override
-                public ParseResult<? extends Object> parse(Reader input) {
+                public ParseResult<? extends Object> apply(Reader input) {
                     Object result = null;
                     try {
                         result = n.actionFunction.run(null, input);

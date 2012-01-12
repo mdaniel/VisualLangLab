@@ -38,7 +38,7 @@ public class PackratParsers extends RegexParsers {
             this.underlying = underlying;
             lrStack = new ArrayList<LR>();
             recursionHeads = new HashMap<Integer, Head>();
-            cache = new HashMap<Object[], MemoEntry>();
+            cache = new HashMap<String, MemoEntry>();
         }
         private PackratReader() {
         }
@@ -53,11 +53,11 @@ public class PackratParsers extends RegexParsers {
         @Override
         public Reader drop(int n) {
             PackratReader pr = new PackratReader();
+            pr.underlying = outer.underlying.drop(n);
             pr.cache = outer.cache;
             pr.lrStack = outer.lrStack;
             pr.recursionHeads = outer.recursionHeads;
-            pr.underlying = outer.underlying.drop(n);
-System.out.printf("underlying: %s%n", sn(underlying));
+//System.out.printf("underlying: %s%n", sn(underlying));
             return pr;
         }
         @Override
@@ -65,11 +65,14 @@ System.out.printf("underlying: %s%n", sn(underlying));
             return underlying.first();
         }
         Option<MemoEntry> getFromCache(Parser p) {
-            Object key = new Object[] {p, offset()};
-            if (cache.containsKey(key))
+            String key = String.format("%s%d", p, offset());
+        if (cache.containsKey(key)) {
+//System.out.printf("getFromCache([%s, %s]): %s (size=%d)%n", sn(p), offset(), sn(cache.get(key)), cache.size());
                 return new Some<MemoEntry>(cache.get(key));
-            else
+            } else {
+//System.out.printf("getFromCache([%s, %s]): x (size=%d)%n", sn(p), offset(), cache.size());
                 return new None<MemoEntry>();
+            }
         }
         @Override
         public int line() {
@@ -88,24 +91,27 @@ System.out.printf("underlying: %s%n", sn(underlying));
             return underlying.source();
         }
         MemoEntry updateCacheAndGet(Parser p, MemoEntry w) {
-            cache.put(new Object[] {p, offset()}, w);
+            String key = String.format("%s%d", p, offset());
+//System.out.printf("updateCacheAndGet([%s, %s]): %s%n", sn(p), offset(), sn(w));
+            cache.put(key, w);
             return w;
         }
         private Reader underlying;
         List<LR> lrStack = null;
         Map<Integer, Head> recursionHeads = null;
-        Map<Object[], MemoEntry> cache = null;
+        Map<String, MemoEntry> cache = null;
         private PackratReader outer = this;
     }
 
     @Override
     public <T> Parser<T> phrase(Parser<T> p) {
-System.out.println("phrase()");
+//System.out.println("phrase()");
         final Parser<T> q = super.phrase(p);
         return new PackratParser<T>() {
-            public ParseResult<T> parse(Reader r) {
-System.out.println("phrase-parse()");
-                return q.parse(r instanceof PackratReader ? r : new PackratReader(r));
+            @Override
+            public ParseResult<T> apply(Reader r) {
+//System.out.println("phrase-parse()");
+                return q.apply(r instanceof PackratReader ? r : new PackratReader(r));
             }
         };
     }
@@ -155,7 +161,7 @@ System.out.println("phrase-parse()");
     
     public <T>PackratParser<T> parser2packrat(Parser<T> p) {
         PackratParser<T> pp = memo(p);
-System.out.printf("parser2packrat(%s) -> %s%n", sn(p), sn(pp));
+//System.out.printf("parser2packrat(%s) -> %s%n", sn(p), sn(pp));
         return pp;
     }
 
@@ -163,10 +169,10 @@ System.out.printf("parser2packrat(%s) -> %s%n", sn(p), sn(pp));
         Option<MemoEntry> cached = in.getFromCache(p);
         Option<Head> head = in.recursionHeads.containsKey(in.offset()) ? 
                 new Some<Head>(in.recursionHeads.get(in.offset())) : new None<Head>();
-System.out.printf("recall(Parser:%s, PackratReader:%s) cached:%s, head:%s", 
-        sn(p), sn(in), sn(cached), sn(head));
+//System.out.printf("recall(Parser:%s, PackratReader:%s) cached:%s, head:%s", 
+//        sn(p), sn(in), sn(cached), sn(head));
         if (head.isEmpty()) {
-System.out.println(" -> X");
+//System.out.println(" -> X");
             return cached;
         } else {
             Parser hp = head.get().headParser;
@@ -181,18 +187,18 @@ System.out.println(" -> X");
                     if (pi.equals(p))
                         evalSet.remove(pi);
                 }
-                ParseResult tempRes = p.parse(in);
+                ParseResult tempRes = p.apply(in);
                 Option<MemoEntry> tempEntry = cached;
                 tempEntry.get().r = tempRes;
             }
-System.out.printf(" -> cached:%s%n", sn(cached));
+//System.out.printf(" -> cached:%s%n", sn(cached));
             return cached;
         }
     }
 
     void setupLR(Parser p, PackratReader in, LR recDetect) {
-System.out.printf("setupLR(Parser:%s, PackratReader:%s, LR:%s)%n", 
-        sn(p), sn(in), sn(recDetect));
+//System.out.printf("setupLR(Parser:%s, PackratReader:%s, LR:%s)%n", 
+//        sn(p), sn(in), sn(recDetect));
         if (recDetect.head.isEmpty())
             recDetect.head = new Some<Head>(new Head(p, new ArrayList<Parser>(), new ArrayList<Parser>()));
         for (LR lr: in.lrStack) {
@@ -208,8 +214,8 @@ System.out.printf("setupLR(Parser:%s, PackratReader:%s, LR:%s)%n",
         ParseResult seed = growable.seed;
         Parser rule = growable.rule;
         Option<Head> head = growable.head;
-System.out.printf("lrAnswer(Parser:%s PackratReader:%s LR:%s) seed:%s rule:%s head:%s%n", 
-        sn(p), sn(in), sn(growable), sn(seed), sn(rule), sn(head));
+//System.out.printf("lrAnswer(Parser:%s PackratReader:%s LR:%s) seed:%s rule:%s head:%s%n", 
+//        sn(p), sn(in), sn(growable), sn(seed), sn(rule), sn(head));
         if (head.isEmpty())
             throw new IllegalArgumentException("lrAnswer with no head !!");
         if (!head.get().getHead().equals(p)) {
@@ -226,17 +232,17 @@ System.out.printf("lrAnswer(Parser:%s PackratReader:%s LR:%s) seed:%s rule:%s he
     <T> PackratParser<T> memo(final Parser<T> p) {
         return new PackratParser<T>() {
             @Override
-            public ParseResult<T> parse(Reader in) {
+            public ParseResult<T> apply(Reader in) {
                 PackratReader inMem = in instanceof PackratReader ? 
                         (PackratReader)in : new PackratReader(in);
                 Option<MemoEntry> m = recall(p, inMem);
                 if (m.isEmpty()) {
-System.out.printf("%nmemo-parse-m.isEmpty(Parser:%s, Reader:(%s->%s))%n", 
-        sn(p), sn(in), sn(inMem));
+//System.out.printf("%nmemo-parse-m.isEmpty(Parser:%s, Reader:(%s->%s))%n", 
+//        sn(p), sn(in), sn(inMem));
                     LR base = new LR(new Failure("Base failure", in, null), p, new None<Head>());
                     inMem.lrStack.add(0, base);
                     inMem.updateCacheAndGet(p, new MemoEntry(base));
-                    ParseResult tempRes = p.parse(in);
+                    ParseResult tempRes = p.apply(in);
                     inMem.lrStack.remove(0);
                     if (base.head.isEmpty()) {
                         inMem.updateCacheAndGet(p, new MemoEntry(tempRes));
@@ -246,8 +252,8 @@ System.out.printf("%nmemo-parse-m.isEmpty(Parser:%s, Reader:(%s->%s))%n",
                         return lrAnswer(p, inMem, base);
                     }
                 } else {
-System.out.printf("%nmemo-parse-!m.isEmpty(Parser:%s, Reader:(%s->%s))%n", 
-        sn(p), sn(in), sn(inMem));
+//System.out.printf("%nmemo-parse-!m.isEmpty(Parser:%s, Reader:(%s->%s))%n", 
+//        sn(p), sn(in), sn(inMem));
                     Object mEntry = m.get().r;
                     if (mEntry instanceof LR) {
                         LR recDetect = (LR)mEntry;
@@ -263,12 +269,12 @@ System.out.printf("%nmemo-parse-!m.isEmpty(Parser:%s, Reader:(%s->%s))%n",
     }
 
     ParseResult grow(Parser p, PackratReader rest, Head head) {
-System.out.printf("grow(Parser:%s, PackratReader:%s,Head:%s)%n", 
-        sn(p), sn(rest), sn(head));
+//System.out.printf("grow(Parser:%s, PackratReader:%s,Head:%s)%n", 
+//        sn(p), sn(rest), sn(head));
         rest.recursionHeads.put(rest.offset(), head);
         ParseResult oldRes = (ParseResult)rest.getFromCache(p).get().r;
         head.evalSet = head.involvedSet;
-        ParseResult tempRes = p.parse(rest);
+        ParseResult tempRes = p.apply(rest);
         if (tempRes.successful()) {
             if (oldRes.next().offset() < tempRes.next().offset()) {
                 rest.updateCacheAndGet(p, new MemoEntry(tempRes));
@@ -277,7 +283,7 @@ System.out.printf("grow(Parser:%s, PackratReader:%s,Head:%s)%n",
                 rest.recursionHeads.remove(rest.offset());
                 MemoEntry m = rest.getFromCache(p).get();
                 //if (m instanceof ParseResult)
-                    return (ParseResult)m;
+                    return (ParseResult)m.r;
             }
         } else {
             rest.recursionHeads.remove(rest.offset());

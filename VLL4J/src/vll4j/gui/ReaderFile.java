@@ -26,8 +26,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import vll4j.core.Reader;
 
-public class FFileReader extends Reader {
-    public FFileReader(File theFile) {
+public class ReaderFile extends Reader {
+    public ReaderFile(File theFile) {
         if (!theFile.exists())
             throw new IllegalArgumentException("Nonexistent file");
         BufferedReader br = null;
@@ -46,7 +46,7 @@ public class FFileReader extends Reader {
         }
     }
     
-    private FFileReader(String b) {
+    private ReaderFile(String b) {
         buffer = b;
     }
     
@@ -59,7 +59,7 @@ public class FFileReader extends Reader {
     @Override
     public char first() {return buffer.charAt(offset);}
     @Override
-    public FFileReader rest() {
+    public ReaderFile rest() {
         return drop(1);
     }
     @Override
@@ -67,11 +67,11 @@ public class FFileReader extends Reader {
     @Override
     public int column() {return column;}
     @Override
-    public FFileReader drop(int nbrToDrop) {
+    public ReaderFile drop(int nbrToDrop) {
         String src = buffer;
         if (offset + nbrToDrop > src.length())
             throw new IllegalArgumentException();
-        FFileReader csr = new FFileReader(buffer);
+        ReaderFile csr = new ReaderFile(buffer);
         csr.offset = offset + nbrToDrop; csr.line = line; csr.column = column;
         for (int i = 0; i < nbrToDrop; ++i) {
             if (src.charAt(offset + i) == '\n') {
