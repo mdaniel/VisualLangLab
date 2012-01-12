@@ -23,10 +23,10 @@ package vll4j;
 import java.io.*;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+import vll4j.gui.FFileReader;
 import vll4j.core.PackratParsers;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
-import vll4j.core.ReaderFile;
 import vll4j.tree.Forest;
 import vll4j.tree.NodeBase;
 import vll4j.tree.VisitorParserGeneration;
@@ -76,7 +76,7 @@ public class Vll4j extends PackratParsers {
             Vll4j vll4j = Vll4j.fromStream(fis);
             Parser p = vll4j.getParserFor(args.length == 2 ? "Main" : args[1]);
             File dataFile = new File(args[args.length - 1]);
-            ParseResult pr = dataFile.exists() ? vll4j.parseAll(p, new ReaderFile(dataFile)) : 
+            ParseResult pr = dataFile.exists() ? vll4j.parseAll(p, new FFileReader(dataFile)) : 
                     vll4j.parseAll(p, args[args.length - 1]);
             if (pr.successful())
                 System.out.println(vll4j.dumpValue(pr.get()));

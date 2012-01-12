@@ -35,6 +35,7 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import vll4j.core.PackratParsers;
 import vll4j.core.Parsers;
+import vll4j.core.Reader;
 
 public class Forest {
 
@@ -157,7 +158,7 @@ public class Forest {
         final CompiledScript cs = compilable.compile(String.format("(function %s)(vllARG)", script));
         return new ActionFunction() {
             @Override
-            public Object run(Object arg, Parsers.Reader r) throws ScriptException {
+            public Object run(Object arg, Reader r) throws ScriptException {
                 cs.getEngine().put("vllARG", arg);
                 cs.getEngine().put("vllLine", r.line());
                 cs.getEngine().put("vllCol", r.column());

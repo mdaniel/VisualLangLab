@@ -24,9 +24,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import vll4j.core.Parsers.Reader;
+import vll4j.core.Reader;
 
-public class ReaderGrowingFile implements Reader {
+public class ReaderGrowingFile extends Reader {
     public ReaderGrowingFile(File theFile) {
         cache = new Cache(theFile);
     }

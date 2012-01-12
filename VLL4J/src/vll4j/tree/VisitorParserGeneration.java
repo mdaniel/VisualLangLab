@@ -28,8 +28,8 @@ import vll4j.core.PackratParsers;
 import vll4j.core.Parsers.Failure;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
-import vll4j.core.Parsers.Reader;
 import vll4j.core.Parsers.Success;
+import vll4j.core.Reader;
 import vll4j.core.Utils;
 
 public class VisitorParserGeneration extends VisitorBase {

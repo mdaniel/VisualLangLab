@@ -21,7 +21,7 @@
 package vll4j.tree;
 
 import javax.script.ScriptException;
-import vll4j.core.Parsers.Reader;
+import vll4j.core.Reader;
 
 public interface ActionFunction {
     public Object run(Object o, Reader r) throws ScriptException;

@@ -40,17 +40,6 @@ public class Parsers {
         public T get() {throw new UnsupportedOperationException();}
     }
     
-    public static interface Reader {
-        public CharSequence source();
-        public boolean atEnd();
-        public char first();
-        public Reader rest();
-        public int offset();
-        public int line();
-        public int column();
-        public Reader drop(int n);
-    }
-    
     public static abstract class Parser<T> {
         public abstract ParseResult<T> parse(Reader input);
         public String name;

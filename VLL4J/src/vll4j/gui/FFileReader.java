@@ -18,33 +18,35 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vll4j.core;
+package vll4j.gui;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import vll4j.core.Parsers.Reader;
+import vll4j.core.Reader;
 
-public class ReaderStream implements Reader {
-    public ReaderStream(InputStream inputStream) {
-        InputStreamReader isr = null;
+public class FFileReader extends Reader {
+    public FFileReader(File theFile) {
+        if (!theFile.exists())
+            throw new IllegalArgumentException("Nonexistent file");
         BufferedReader br = null;
+        FileReader fr = null;
         try {
-            isr = new InputStreamReader(inputStream);
-            br = new BufferedReader(isr);
+            fr = new FileReader(theFile);
+            br = new BufferedReader(fr);
             StringBuilder sb = new StringBuilder();
             while ((buffer = br.readLine()) != null)
                 sb.append(buffer).append('\n');
             buffer = sb.toString();
         } catch (Exception ex) {
         } finally {
-            try {isr.close();} catch (IOException ex) {}
+            try {fr.close();} catch (IOException ex) {}
             try {br.close();} catch (IOException ex) {}
         }
     }
     
-    private ReaderStream(String b) {
+    private FFileReader(String b) {
         buffer = b;
     }
     
@@ -57,7 +59,7 @@ public class ReaderStream implements Reader {
     @Override
     public char first() {return buffer.charAt(offset);}
     @Override
-    public ReaderStream rest() {
+    public FFileReader rest() {
         return drop(1);
     }
     @Override
@@ -65,11 +67,11 @@ public class ReaderStream implements Reader {
     @Override
     public int column() {return column;}
     @Override
-    public ReaderStream drop(int nbrToDrop) {
+    public FFileReader drop(int nbrToDrop) {
         String src = buffer;
         if (offset + nbrToDrop > src.length())
             throw new IllegalArgumentException();
-        ReaderStream csr = new ReaderStream(buffer);
+        FFileReader csr = new FFileReader(buffer);
         csr.offset = offset + nbrToDrop; csr.line = line; csr.column = column;
         for (int i = 0; i < nbrToDrop; ++i) {
             if (src.charAt(offset + i) == '\n') {

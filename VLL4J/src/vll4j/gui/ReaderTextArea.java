@@ -21,9 +21,9 @@
 package vll4j.gui;
 
 import javax.swing.JTextArea;
-import vll4j.core.Parsers.Reader;
+import vll4j.core.Reader;
 
-public class ReaderTextArea implements Reader {
+public class ReaderTextArea extends Reader {
     public ReaderTextArea(JTextArea textArea) {
         this.textArea = textArea;
     }
