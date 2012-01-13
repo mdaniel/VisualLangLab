@@ -20,6 +20,7 @@
 
 package vll4j.gui;
 
+import java.awt.Color;
 import vll4j.tree.VisitorValidation;
 import vll4j.tree.NodeBase;
 import java.awt.Component;
@@ -43,6 +44,7 @@ public class RendererRuleNode extends DefaultTreeCellRenderer {
     public Component getTreeCellRendererComponent(JTree tree, Object value,
         boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         theNode = (NodeBase)value;
+        isDropped = theNode.isDropped;
         JLabel c =  (JLabel)super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
         c.setText(theNode.getName());
         validationString = (String)theNode.accept(visitorNodeValidation);
@@ -89,9 +91,17 @@ public class RendererRuleNode extends DefaultTreeCellRenderer {
         if (validationString != null) {
             g.drawImage(Resources.errorMark.getImage(), 0, 0, null);
         }
+        if (isDropped) {
+            g.setColor(Color.black);
+            g.drawLine(0, getHeight(), getHeight(), 0);
+            g.setColor(Color.white);
+            g.drawLine(0, getHeight() + 1, getHeight(), 1);
+            g.drawLine(0, getHeight() - 1, getHeight(), -1);
+        }
     }
     
     NodeBase theNode;
     private VisitorValidation visitorNodeValidation = new VisitorValidation();
     private String validationString;
+    private boolean isDropped;
 }
