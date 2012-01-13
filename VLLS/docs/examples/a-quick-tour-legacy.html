@@ -22,20 +22,9 @@ The grammars used can be found online at this link:
 http://pragprog.com/titles/tpantlr/source_code</a>
 </p>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td>
-You should be using VisualLangLab version-10 or higher, else follow 
-<a href="a-quick-tour-legacy.html">this tutorial</a> instead. 
-Beginning version 10, the title bar of the <i>About VisualLangLab</i> 
-dialog box displays the version number (select "Help" -> "About VisualLangLab" 
-from the main menu). 
-Upgrading to the latest version is strongly recommended. 
-</td></tr></table>
-
 <p>
-This tutorial is not a feature comparison of the two tools. 
-It merely uses a familiar scenario (for many parsing-tool users) 
-to illustrate the use of VisualLangLab. 
-The suitability of VisualLangLab for any particular application 
+The purpose of this tutorial is to provide a familiar scenario for most users of parsing tools, 
+not a feature comparison. The suitability of VisualLangLab for any particular application 
 must be evaluated from the documentation and examples at the 
 <a href="http://vll.java.net/">VisualLangLab website</a>.  
 </p>
@@ -51,16 +40,15 @@ The following list describes some essential jargon.
       grammar specification used for parser-generation tools</li>
   <li><u>rule-tree</u>: the graphical tree-structured display of a grammar-rule 
       on the left side of the VisualLangLab GUI</li>
-  <li><u>saved-grammar</u>: An XML file containing a grammar specification 
-      produced ("File" -> "Save" from main menu) or used ("File" -> "Open" from main menu) 
-      by VisualLangLab</li>
+  <li><u>saved-grammar</u>: An XML file containing a grammar specification that is 
+      produced or consumed by VisualLangLab's File menu</li>
 </ul>
 
 <p>
-The only thing you need to follow this tutorial is the VisualLangLab JAR file 
-<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
-VisualLangLab is started by double-clicking <i>VLL4J.jar</i> (a 6.0+ JRE is required).
-No other software or tool is needed. 
+The only thing you need to follow this tutorial is the VisualLangLab all-inclusive JAR file 
+<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>. 
+If you have a 6.0+ JRE installed, VisualLangLab is started by double-clicking <i>VLLS-All.jar</i>.
+No other software, tool, or skill is required. 
 </p>
 
 <h2 id="RecognizerForLanguageSyntax">Recognizer for Language Syntax</h2>
@@ -72,11 +60,11 @@ This part of the tutorial describes VisualLangLab equivalents of section 3.1
 The Definitive ANTLR Reference</a>. The description below shows how to create 
 the parser from scratch, but you can also inspect the complete parser by just 
 invoking "Help" -> "Sample grammars" -> "TDAR-Expr" from the main menu 
-as shown on the right side of Figure-1 below. 
+as shown on the right side of Figure-1 below (only for version-7.01 onwards). 
 </p>
 
 <p id="Figure1">
-  <img src="images/renaming-main-prog.png" alt="Renaming Main to prog" /><br />
+  <img src="images/renaming-main-prog-legacy.png" alt="Renaming Main to prog" /><br />
   <i>Figure-1. Renaming "Main" to "prog"</i>
 </p>
 
@@ -85,10 +73,9 @@ as shown on the right side of Figure-1 below.
 <p>
 VisualLangLab creates an empty parser-rule (or <i>grammar-tree</i>) 
 called <i>Main</i> at startup, and we can produce the 
-grammar-rule <i>prog</i> by renaming <i>Main</i>. Click the toolbar's <i>Rename rule</i> 
-button (<img src="../images/ToolBarButtonRenameRule.gif" alt="The reference icon" 
-align="center" />) and enter <i>prog</i> 
-into the dialog presented (lower left of Figure-1 above). The rule's name will be 
+grammar-rule <i>prog</i> by renaming <i>Main</i>. Click the <i>Rename rule</i> 
+button (under the red box on the left side of Figure-1 above) and enter <i>prog</i> 
+into the dialog presented (also shown in Figure-1 above). The rule's name will be 
 changed in the toolbar's dropdown list as well at the rule-tree's root icon 
 (see Figure-2 below). 
 </p>
@@ -101,16 +88,15 @@ The parser-rule <i>prog</i> is defined as follows.
 
 <p>
 So we must create the grammar-rule <i>stat</i> before we can complete <i>prog</i>. 
-Click the <i>New rule</i> button (<img src="../images/ToolBarButtonNewRule.gif" 
-alt="The reference icon" align="center" />), 
+Click the <i>New rule</i> button (under red box on the left side of Figure-2 below), 
 and enter <i>stat</i> into the dialog presented. After the new rule has been created 
-and displayed (right side of Figure-2), click the <i>back</i> button 
+(and displayed as on the right side of Figure-2), click the <i>back</i> button 
 or select <i>stat</i> from the toolbar's drop-down list 
-(see right side of Figure-2) to return to <i>prog</i>. 
+(both identified on the right side of Figure-2 below) to return to <i>prog</i>. 
 </p>
 
 <p id="Figure2">
-  <img src="images/creating-stat.png" alt="Creating rule 'stat'" /><br />
+  <img src="images/creating-stat-legacy.png" alt="Creating rule 'stat'" /><br />
   <i>Figure-2. Creating rule 'stat'</i>
 </p>
 
@@ -126,7 +112,7 @@ A "+" sign next to the reference icon indicates that the multiplicity has been c
 </p>
 
 <p id="Figure3">
-  <img src="images/populating-prog.png" alt="Populating rule 'prog'" /><br />
+  <img src="images/populating-prog-legacy.png" alt="Populating rule 'prog'" /><br />
   <i>Figure-3. Populating rule 'prog'</i>
 </p>
 
@@ -158,7 +144,7 @@ sequence icons attached to the choice node (bottom right of Figure-4).
 </p>
 
 <p id="Figure4">
-  <img src="images/populating-stat.png" alt="Populating rule 'stat'" /><br />
+  <img src="images/populating-stat-legacy.png" alt="Populating rule 'stat'" /><br />
   <i>Figure-4. Populating rule 'stat'</i>
 </p>
 
@@ -195,7 +181,7 @@ following texts into the dialog: "<code>INT&nbsp;&nbsp;\\d+</code>" and
 </p>
 
 <p id="Figure5">
-  <img src="images/stat-tokens.png" alt="Creating tokens for 'stat'" /><br />
+  <img src="images/stat-tokens-legacy.png" alt="Creating tokens for 'stat'" /><br />
   <i>Figure-5. Creating tokens for 'stat'</i>
 </p>
 
@@ -224,7 +210,7 @@ on the right side of Figure-6 below.
 </p>
 
 <p id="Figure6">
-  <img src="images/stat-completion-one.png" alt="Completing (1) rule 'stat'" /><br />
+  <img src="images/stat-completion-one-legacy.png" alt="Completing (1) rule 'stat'" /><br />
   <i>Figure-6. Completing (1) rule 'stat'</i>
 </p>
 
@@ -243,7 +229,7 @@ This is the complete <i>stat</i> rule.
 </p>
 
 <p id="Figure7">
-  <img src="images/stat-completion-two.png" alt="Completing (2) rule 'stat'" /><br />
+  <img src="images/stat-completion-two-legacy.png" alt="Completing (2) rule 'stat'" /><br />
   <i>Figure-7. Completing (2) rule 'stat'</i>
 </p>
 
@@ -268,7 +254,7 @@ one on the left of Figure-8 below.
 </p>
 
 <p id="Figure8">
-  <img src="images/expr-completion.png" alt="Completing rule 'expr'" /><br />
+  <img src="images/expr-completion-legacy.png" alt="Completing rule 'expr'" /><br />
   <i>Figure-8. Completing rule 'expr'</i>
 </p>
 
@@ -296,7 +282,7 @@ The finished parser-rule should look like the one in Figure-9 below.
 </p>
 
 <p id="Figure9">
-  <img src="images/multExpr-completion.png" alt="Completing rule 'multExpr'" /><br />
+  <img src="images/multExpr-completion-legacy.png" alt="Completing rule 'multExpr'" /><br />
   <i>Figure-9. Completing rule 'multExpr'</i>
 </p>
 
@@ -320,7 +306,7 @@ Figure-10 below.
 </p>
 
 <p id="Figure10">
-  <img src="images/atom-completion.png" alt="Completing rule 'atomExpr'" /><br />
+  <img src="images/atom-completion-legacy.png" alt="Completing rule 'atomExpr'" /><br />
   <i>Figure-10. Completing rule 'atomExpr'</i>
 </p>
 
@@ -335,7 +321,7 @@ regular-expression ("<code>\\s+</code>"). You should change the value to
 </p>
 
 <p id="Figure11">
-  <img src="images/whitespace.png" alt="Specifying whitespace" /><br />
+  <img src="images/whitespace-legacy.png" alt="Specifying whitespace" /><br />
   <i>Figure-11. Specifying whitespace</i>
 </p>
 
@@ -393,7 +379,7 @@ GUI after the test.
 </p>
 
 <p id="Figure12">
-  <img src="images/test-one.png" alt="Performing test 1" /><br />
+  <img src="images/test-one-legacy.png" alt="Performing test 1" /><br />
   <i>Figure-12. Performing test 1</i>
 </p>
 
@@ -419,13 +405,8 @@ If you see error messages or find other problems, verify the following:
       (without the quote marks)</li>
 </ul>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td align="center">
-CAUTION<br/>
-The following text has not been updated for version 10. 
-</td></tr></table>
-
 <p id="Figure13">
-  <img src="images/editing-token-patterns.png" alt="Editing token patterns" /><br />
+  <img src="images/editing-token-patterns-legacy.png" alt="Editing token patterns" /><br />
   <i>Figure-13. Editing token patterns</i>
 </p>
 
@@ -436,8 +417,8 @@ on the next line as in Figure-12 above).
 </p>
 
 <p id="Figure14">
-  <img src="images/test-two.png" alt="Test two" /><br />
-  <img src="images/test-three.png" alt="Test three" /><br />
+  <img src="images/test-two-legacy.png" alt="Test two" /><br />
+  <img src="images/test-three-legacy.png" alt="Test three" /><br />
   <i>Figure-14. Testing error cases</i>
 </p>
 
@@ -519,7 +500,7 @@ the GUI somewhat, and you may notice small delays when opening such grammar file
 </p>
 
 <p id="Figure14">
-  <img src="images/actions-prog.png" alt="Action for rule 'prog'" /><br />
+  <img src="images/actions-prog-legacy.png" alt="Action for rule 'prog'" /><br />
   <i>Figure-14. Action for rule 'prog'</i>
 </p>
 
@@ -559,7 +540,7 @@ so that node must be selected to display the action-code function.
 </p>
 
 <p id="Figure15">
-  <img src="images/actions-stat.png" alt="Action for rule 'stat'" /><br />
+  <img src="images/actions-stat-legacy.png" alt="Action for rule 'stat'" /><br />
   <i>Figure-15. Action for rule 'stat'</i>
 </p>
 
@@ -614,7 +595,7 @@ so that node must be selected to display the action-code function.
 </p>
 
 <p id="Figure16">
-  <img src="images/actions-atom.png" alt="Action for rule 'atom'" /><br />
+  <img src="images/actions-atom-legacy.png" alt="Action for rule 'atom'" /><br />
   <i>Figure-16. Action for rule 'atom'</i>
 </p>
 
@@ -659,7 +640,7 @@ so that node must be selected to display the action-code function.
 </p>
 
 <p id="Figure17">
-  <img src="images/actions-multExpr.png" alt="Action for rule 'multExpr'" /><br />
+  <img src="images/actions-multExpr-legacy.png" alt="Action for rule 'multExpr'" /><br />
   <i>Figure-17. Action for rule 'multExpr'</i>
 </p>
 
@@ -696,7 +677,7 @@ so that node must be selected to display the action-code function.
 </p>
 
 <p id="Figure18">
-  <img src="images/actions-expr.png" alt="Action for rule 'expr'" /><br />
+  <img src="images/actions-expr-legacy.png" alt="Action for rule 'expr'" /><br />
   <i>Figure-18. Action for rule 'expr'</i>
 </p>
 
@@ -737,7 +718,7 @@ Proceed as follows.
 </ul>
 
 <p id="Figure19">
-  <img src="images/test-action-one.png" alt="Testing the action code" /><br />
+  <img src="images/test-action-one-legacy.png" alt="Testing the action code" /><br />
   <i>Figure-19. Testing the action code</i>
 </p>
 
@@ -797,7 +778,7 @@ side of Figure-20 shows the <i>stat</i> rule with several tokens dropped.
 </p>
 
 <p id="Figure20">
-  <img src="images/drop-stat-one.png" alt="Dropping part of an AST" /><br />
+  <img src="images/drop-stat-one-legacy.png" alt="Dropping part of an AST" /><br />
   <i>Figure-20. </i>Drop<i>ping part of an AST</i>
 </p>
 
@@ -918,7 +899,7 @@ As usual, remember to have a NEWLINE after the end of the last line of input.
 </p>
 
 <p id="Figure21">
-  <img src="images/action-code-ast.png" alt="Processing AST" /><br />
+  <img src="images/action-code-ast-legacy.png" alt="Processing AST" /><br />
   <i>Figure-21. Processing AST</i>
 </p>
 
@@ -1009,7 +990,7 @@ been altered to arrange them in order of specificity. The rules are otherwise un
 </p>
 
 <p id="Figure22">
-  <img src="images/tree-based-interpreter.png" alt="Interpreter in action code" /><br />
+  <img src="images/tree-based-interpreter-legacy.png" alt="Interpreter in action code" /><br />
   <i>Figure-22. Interpreter in action code</i>
 </p>
 
