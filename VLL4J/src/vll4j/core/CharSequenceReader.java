@@ -18,6 +18,12 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ The design of this class is inspired by the element of the same 
+ name in the Scala (http://scala-lang.org/) standard library. 
+ The Java code is also based on the corresponding Scala source.
+ */
+
 package vll4j.core;
 
 public class CharSequenceReader extends Reader {

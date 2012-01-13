@@ -18,6 +18,12 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ The design of this class is inspired by the element of the same 
+ name in the Scala (http://scala-lang.org/) standard library. 
+ The Java code is also based on the corresponding Scala source.
+ */
+
 package vll4j.core;
 
 import java.util.*;
@@ -301,7 +307,7 @@ public class RegexParsers extends Parsers {
         setupLexerRegexs();
     }
     
-    public String whiteSpaceRegex = "";
+    public String whiteSpaceRegex = Utils.reEscape(whiteSpace.pattern());
     public String commentSpecRegex = "";
     private Map<String, Parser<String>> tokenParserMap = new HashMap<String, Parser<String>>();
     private boolean setupDone = false;
