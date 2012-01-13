@@ -32,7 +32,7 @@ public class ManagerHelp {
         title = String.format("VisualLangLab %s", gui.version);
     }
     
-    Action aboutAction = new AbstractAction("About VisualLangLab") {
+    Action aboutAction = new AbstractAction("About VisualLangLab", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
             JTabbedPane tp = new JTabbedPane();
@@ -67,6 +67,14 @@ public class ManagerHelp {
             "</html>";
     };
             
+    Action versionCheck = new AbstractAction("Version check", Resources.tipOfTheDay16) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(gui, "New version check coming soon!", 
+                    "Version check", JOptionPane.PLAIN_MESSAGE);
+        }
+    };
+    
     Action sampleTdarExpr = new AbstractAction("TDAR-Expr") {
         @Override
         public void actionPerformed(ActionEvent e) {

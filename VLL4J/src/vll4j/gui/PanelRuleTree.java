@@ -22,6 +22,7 @@ package vll4j.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -83,12 +84,13 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         theModel.setRoot(rootNode);
         theTree.setSelectionPaths(tp);
         theTree.addTreeSelectionListener(this);
+        theModel.nodeChanged(selectedNode);
         for (int i = 0; i < theTree.getRowCount(); ++i) {
             theTree.expandRow(i);
         }
         gui.theAstPanel.resetView();
         gui.theActionCodePanel.resetView();
-        statusLabel.setText(String.format(" %s %s", selectedNode.nodeType(), selectedNode.nodeName()));
+        statusLabel.setText(String.format(" %s/%s", selectedNode.nodeType(), selectedNode.nodeName()));
     }
 
     void resetNodeDisplay(NodeBase node) {
@@ -329,7 +331,7 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         selectedNode = (NodeBase) e.getPath().getLastPathComponent();
         gui.theActionCodePanel.resetView();
         gui.theAstPanel.resetView();
-        statusLabel.setText(String.format(" %s %s", selectedNode.nodeType(), selectedNode.nodeName()));
+        statusLabel.setText(String.format(" %s/%s", selectedNode.nodeType(), selectedNode.nodeName()));
     }
     
     PopupMenuTree treePopupMenu;

@@ -43,6 +43,7 @@ public class Resources {
     static ImageIcon host16 = getIcon("Host16.gif");
     static ImageIcon icon = getIcon("Icon.gif");
     static ImageIcon import16 = getIcon("Import16.gif");
+    static ImageIcon information16 = getIcon("Information16.gif");
     static ImageIcon literal = getIcon("Literal.gif");
     static ImageIcon new16 = getIcon("New16.gif");
     static ImageIcon newLiteral = getIcon("NewLiteral.gif");
@@ -52,6 +53,7 @@ public class Resources {
     static ImageIcon paste16 = getIcon("Paste16.gif");
     static ImageIcon play16 = getIcon("Play16.gif");
     static ImageIcon predicate = getIcon("SemPred.gif");
+    static ImageIcon preferences16 = getIcon("Preferences16.gif");
     static ImageIcon reference = getIcon("Reference.gif");
     static ImageIcon refresh16 = getIcon("Refresh16.gif");
     static ImageIcon regex = getIcon("Regex.gif");
@@ -66,6 +68,7 @@ public class Resources {
     static ImageIcon server16 = getIcon("Server16.gif");
     static ImageIcon splashImage = getIcon("SplashImage.png");
     static ImageIcon stop16 = getIcon("Stop16.gif");
+    static ImageIcon tipOfTheDay16 = getIcon("TipOfTheDay16.gif");
     static ImageIcon token = getIcon("Token.gif");
     static ImageIcon wildCard = getIcon("WildCard.gif"); 
 }

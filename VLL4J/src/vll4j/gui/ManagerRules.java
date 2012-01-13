@@ -75,19 +75,13 @@ public class ManagerRules {
     }
     
     void removeRuleFromComboBox(String ruleName) {
-//for (int i = 0; i < theComboBox.getItemCount(); ++i) 
-//    System.out.printf("%d %s%n", i, theComboBox.getItemAt(i));
         int idx = theComboBox.getSelectedIndex();
-//System.out.printf("getSelectedIndex() %d%n", idx);
-//System.out.printf("getItemAt(idx) %s%n", theComboBox.getItemAt(idx));
-//        String nextItem = (idx == theComboBox.getItemCount() - 1) ?
-//                 theComboBox.getItemAt(idx - 1) : theComboBox.getItemAt(idx + 1);
-//System.out.println(idx == theComboBox.getItemCount() - 1);
-//System.out.printf("nextItem %s%n", nextItem);
         theComboBox.setAction(null);
         theComboBox.removeItemAt(idx);
         theComboBox.setAction(comboBoxAction);
-//        gui.theTreePanel.setRuleName(nextItem);
+        String nextItem = (idx >= theComboBox.getItemCount()) ?
+                 theComboBox.getItemAt((idx == 0) ? 0 : idx - 1) : theComboBox.getItemAt(idx);
+        gui.theTreePanel.setRuleName(nextItem);
     }
     
     Action ruleNewAction = new AbstractAction("New rule", Resources.newReference) {
@@ -169,6 +163,7 @@ public class ManagerRules {
                 theComboBox.addItem(newName);
                 theComboBox.setAction(comboBoxAction);
                 theComboBox.setMaximumSize(theComboBox.getPreferredSize());
+                gui.theTreePanel.setRuleName(newName);
             } else {
                 removeRuleFromComboBox(currentName);
                 addRuleToComboBox(newName);
@@ -207,6 +202,14 @@ public class ManagerRules {
             removeRuleFromComboBox(ruleToDelete);
             ruleStack.remove(ruleToDelete);
             ruleBackAction.setEnabled(!ruleStack.isEmpty());
+        }
+    };
+    
+    Action ruleOptimizeAction = new AbstractAction("Optimize rule", Resources.preferences16) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(gui, "Rule optimization coming soon!", 
+                    "Optimize rule", JOptionPane.PLAIN_MESSAGE);
         }
     };
     

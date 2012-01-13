@@ -110,7 +110,9 @@ public class Vll4jGui extends JFrame {
         menuBar.add(ruleMenu);
         ruleMenu.add(theRuleManager.ruleNewAction);
         ruleMenu.add(theRuleManager.ruleFindAction);
+        ruleMenu.add(new JSeparator());
         ruleMenu.add(theRuleManager.ruleRenameAction);
+        ruleMenu.add(theRuleManager.ruleOptimizeAction);
         ruleMenu.add(new JSeparator());
         ruleMenu.add(theRuleManager.ruleDeleteAction);
         menuBar.add(globalsMenu);
@@ -149,6 +151,7 @@ public class Vll4jGui extends JFrame {
         helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.samplePs2eArithExprAction));
         helpSamplesMenu.addSeparator();
         helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.samplePswpPayrollParserCombinators));
+        helpMenu.add(theHelpFunctionsManager.versionCheck);
         helpMenu.add(theHelpFunctionsManager.aboutAction);
     }
     
@@ -170,6 +173,7 @@ public class Vll4jGui extends JFrame {
         toolBar.add(theRuleManager.theComboBox);
         toolBar.add(tip(theRuleManager.ruleNewAction));
         toolBar.add(tip(theRuleManager.ruleFindAction));
+        toolBar.add(tip(theRuleManager.ruleOptimizeAction));
         toolBar.add(tip(theRuleManager.ruleRenameAction));
         toolBar.addSeparator();
         toolBar.add(tip(theTokenManager.newLiteralAction));
