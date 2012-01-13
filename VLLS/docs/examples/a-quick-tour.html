@@ -28,7 +28,8 @@ You should be using VisualLangLab version-10 or higher, else follow
 Beginning version 10, the title bar of the <i>About VisualLangLab</i> 
 dialog box displays the version number (select "Help" -> "About VisualLangLab" 
 from the main menu). 
-Upgrading to the latest version is strongly recommended. 
+The latest Version 10 jar file can be downloaded here: 
+<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
 </td></tr></table>
 
 <p>
@@ -59,7 +60,7 @@ The following list describes some essential jargon.
 <p>
 The only thing you need to follow this tutorial is the VisualLangLab JAR file 
 <a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
-VisualLangLab is started by double-clicking <i>VLL4J.jar</i> (a 6.0+ JRE is required).
+VisualLangLab is started by double-clicking <i>VLL4J.jar</i>. 
 No other software or tool is needed. 
 </p>
 
@@ -83,14 +84,13 @@ as shown on the right side of Figure-1 below.
 <h3 id="RuleProg">Rule 'prog'</h3>
 
 <p>
-VisualLangLab creates an empty parser-rule (or <i>grammar-tree</i>) 
-called <i>Main</i> at startup, and we can produce the 
-grammar-rule <i>prog</i> by renaming <i>Main</i>. Click the toolbar's <i>Rename rule</i> 
+VisualLangLab creates a parser-rule (or <i>grammar-tree</i>) called <i>Main</i> at startup. 
+You can create the grammar-rule <i>prog</i> by just renaming <i>Main</i>. 
+Click the toolbar's <i>Rename rule</i> 
 button (<img src="../images/ToolBarButtonRenameRule.gif" alt="The reference icon" 
-align="center" />) and enter <i>prog</i> 
-into the dialog presented (lower left of Figure-1 above). The rule's name will be 
-changed in the toolbar's dropdown list as well at the rule-tree's root icon 
-(see Figure-2 below). 
+align="center" />) and enter <i>prog</i> into the dialog presented (lower left of Figure-1). 
+The rule's name will be changed in the toolbar's dropdown list as well 
+at the rule-tree's root icon (see Figure-2 below). 
 </p>
 
 <p>
@@ -103,8 +103,8 @@ The parser-rule <i>prog</i> is defined as follows.
 So we must create the grammar-rule <i>stat</i> before we can complete <i>prog</i>. 
 Click the <i>New rule</i> button (<img src="../images/ToolBarButtonNewRule.gif" 
 alt="The reference icon" align="center" />), 
-and enter <i>stat</i> into the dialog presented. After the new rule has been created 
-and displayed (right side of Figure-2), click the <i>back</i> button 
+and enter <i>stat</i> into the dialog presented (left of Figure-2). 
+After the new rule has been created, click the <i>back</i> button 
 or select <i>stat</i> from the toolbar's drop-down list 
 (see right side of Figure-2) to return to <i>prog</i>. 
 </p>
@@ -115,14 +115,14 @@ or select <i>stat</i> from the toolbar's drop-down list
 </p>
 
 <p>
-Right-click the root-node of <i>prog</i>, and select <i>Reference</i> as on the 
-left side of Figure-3 below. Select <i>stat</i> from the dropdown list of the 
+Right-click the root-node of <i>prog</i>, and select <i>Reference</i> 
+(left of Figure-3 below). Select <i>stat</i> from the dropdown list of the 
 dialog presented, and click the <i>OK</i> button. The rule should now look 
 like that on the right side of Figure-3. Right-click the newly added 
 reference node (<img src="../images/GrammarIconReference.gif" alt="The reference icon" 
 align="center" />), and select "Multiplicity" -> "+ (1 or more)" from the context menu. 
 A "+" sign next to the reference icon indicates that the multiplicity has been changed 
-(in red oval at bottom right of Figure-3).
+(red circled at bottom right of Figure-3).
 </p>
 
 <p id="Figure3">
@@ -163,7 +163,9 @@ sequence icons attached to the choice node (bottom right of Figure-4).
 </p>
 
 <p>
-Note on error marks.
+The little red "x" marks at the top-right of some icons is an error indicator. 
+The tool-tip text (displayed when the mouse hovers over an icon) tells you 
+what the problem is.
 </p>
 
 <p>
@@ -179,7 +181,7 @@ the <i>stat</i> parser-rule again (as in bottom right of Figure-4 above).
 Next, create the tokens needed. Click the <i>New regex</i> toolbar button 
 (<img src="../images/ToolBarButtonNewRegex.gif" alt="The choice icon" align="center" />), 
 enter "<code>NEWLINE&nbsp;&nbsp;\\r?\\n</code>" into the dialog presented 
-(left of Figure-5 below), and click the <i>OK</i> button. 
+(right of Figure-5 below), and click the <i>OK</i> button. 
 The text entered into the dialog contains the token's name and regular-expression 
 pattern separated by one or more spaces. The name is used to refer to the token in 
 parser-rules, while the pattern describes the input text that it may match. 
@@ -202,7 +204,7 @@ following texts into the dialog: "<code>INT&nbsp;&nbsp;\\d+</code>" and
 <p>
 Then create a literal token by clicking the <i>New literal</i> toolbar button 
 (<img src="../images/ToolBarButtonNewLiteral.gif" alt="The choice icon" align="center" />), 
-enter "<code>EQUALS&nbsp;&nbsp;=</code>" into the dialog (right of Figure-5 above), 
+enter "<code>EQUALS&nbsp;&nbsp;=</code>" into the dialog (left of Figure-5 above), 
 and click the <i>OK</i> button. The pattern used for a literal token is just a literal, 
 not a regular-expression. 
 </p>
@@ -233,10 +235,10 @@ Now select the second sequence icon, and add the following entities to it: The t
 <i>ID</i>, the token <i>EQUALS</i>, the reference <i>expr</i>, and the token <i>NEWLINE</i>. 
 Now right-click the choice icon (just below the root), and add the token <i>NEWLINE</i>. 
 Your parser-rule should now look like the one on the left side of Figure-7 below. 
-This parser-rule is structurally similar to the original parser-rule, although 
+This parser-rule is structurally similar to the original ANTLR parser-rule, although 
 its behavior may differ somewhat in certain situations. 
 Alternative sub-rules in VisualLangLab should ideally be arranged with the most 
-specific ones near the top. So drag the lower (second) sequence icon and drag it 
+specific ones near the top. So click the lower (second) sequence icon and drag it 
 upwards above the upper (first) sequence icon. 
 Your parser-rule should now look like the one on the right side of Figure-7. 
 This is the complete <i>stat</i> rule.
@@ -276,7 +278,7 @@ one on the left of Figure-8 below.
 The one last thing you need to do is set the multiplicity of the inner sequence icon to 
 "*" (zero or more). Right-click the inner sequence icon, and select "Multiplicity" -> 
 "*(0 or more)" from the context menu (as shown on the left). 
-The multiplicity of the element (under small red oval) changes from "1" to "*". 
+The multiplicity of the element changes from "1" to "*" (near red arrow). 
 The finished parser-rule is on the right of Figure-8. 
 </p>
 
@@ -327,8 +329,8 @@ Figure-10 below.
 <h3 id="WhitespaceSpecification">Whitespace Specification</h3>
 
 <p>
-In VisualLangLab whitespace is specified not as a regular-expression pattern 
-but as a global parameter that you can inspect and modify as shown in Figure-11 below. 
+In VisualLangLab whitespace is specified 
+as a global parameter that you can inspect and modify as shown in Figure-11 below. 
 Selecting "Globals" -> "Whitespace" brings up a dialog with the default whitespace 
 regular-expression ("<code>\\s+</code>"). You should change the value to 
 "<code>[ \\t]+</code>" (without the quote marks) and click the <i>OK</i> button. 
@@ -343,7 +345,7 @@ regular-expression ("<code>\\s+</code>"). You should change the value to
 
 <p>
 VisualLangLab does not generate any code, and you don't have to compile any code 
-to run a parser produced by it. VisualLangLab uses 
+to run a parser produced by it. VisualLangLab uses a Java version of 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">
 Scala parser combinators</a> to turn the tree-models of the parser-rules <u>directly</u> 
 into a parser at run-time without generating or compiling code. The intuitiveness, 
@@ -398,9 +400,13 @@ GUI after the test.
 </p>
 
 <p>
-The selected text near the bottom of the GUI is the 
-<a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a> returned by 
-the parser. You don't have to validate it now, but further details can be found in 
+A VisualLangLab parser without actions spews out the 
+<a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a> 
+produced by the top-level parser-rule, and that is the text under 
+<i>Parser Test Input</i> near the bottom of the GUI. 
+You may assume that this output is correct as any parsing error 
+would produce red text (as in <a href="#Figure13">Figure-13</a> below). 
+Details about VisualLangLab's AST structure can be found in 
 <a href="../ASTAndActionCode.html">AST And Action Code</a>.
 </p>
 
@@ -413,38 +419,40 @@ If you see error messages or find other problems, verify the following:
       (see bottom left of Figure-12 above)</li>
   <li>That your parser-rules (prog, stat, expr, multExpr, and atom) look like those 
       in figures 3 (bottom right), 7 (right side), 8 (right side), 9, and 10 respectively</li>
-  <li>That the tokens have the patterns shown in Figure-13 below. You can edit 
+  <li>That the tokens have the patterns shown in the table below. You can edit 
       token patterns by selecting "Tokens" -> "Edit token" from the main menu</li>
   <li>That the <a href="#WhitespaceSpecification">whitespace regular-expression is set</a> to "<code>[ \\t]+</code>" 
       (without the quote marks)</li>
 </ul>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td align="center">
-CAUTION<br/>
-The following text has not been updated for version 10. 
-</td></tr></table>
+<table border="1" style="border: 1px solid black;">
+<tr><th align="center" colspan="3">Token Definitions</th></tr>
+<tr><td align="center">Name</td><td align="center">Type</td><td align="center">Pattern</td></tr>
+<tr><td align="center">EQUALS</td><td align="center">L</td><td align="center">=</td></tr>
+<tr><td align="center">ID</td><td align="center">R</td><td align="center">[a-zA-Z]+</td></tr>
+<tr><td align="center">INT</td><td align="center">R</td><td align="center">\\d+</td></tr>
+<tr><td align="center">LPAREN</td><td align="center">L</td><td align="center">(</td></tr>
+<tr><td align="center">MINUS</td><td align="center">L</td><td align="center">-</td></tr>
+<tr><td align="center">MULT</td><td align="center">L</td><td align="center">*</td></tr>
+<tr><td align="center">NEWLINE</td><td align="center">R</td><td align="center">\\r?\\n</td></tr>
+<tr><td align="center">PLUS</td><td align="center">L</td><td align="center">+</td></tr>
+<tr><td align="center">RPAREN</td><td align="center">L</td><td align="center">)</td></tr>
+</table>
+
+<p>
+The results of a few more tests are shown in Figure-13 below. In all cases, ensure that 
+the test-input string is terminated with a newline character (the text cursor must be 
+on the next line as in Figure-12 above). VisualLangLab's error messages are in the 
+nature of a stack-trace, showing (from top to bottom) the nesting of rules at the 
+time of the failure. VisualLangLab does not implement automatic error recovery, 
+but supports mechanisms that can be used to issue application-specific error messages, 
+and recover from errors in predictable ways.
+</p>
 
 <p id="Figure13">
-  <img src="images/editing-token-patterns.png" alt="Editing token patterns" /><br />
-  <i>Figure-13. Editing token patterns</i>
-</p>
-
-<p>
-The results of a few more tests are shown in Figure-14 below. In all cases, ensure that 
-the test-input string is terminated with a newline character (the text cursor must be 
-on the next line as in Figure-12 above). 
-</p>
-
-<p id="Figure14">
   <img src="images/test-two.png" alt="Test two" /><br />
   <img src="images/test-three.png" alt="Test three" /><br />
-  <i>Figure-14. Testing error cases</i>
-</p>
-
-<p>
-A VisualLangLab parser without actions spews out the AST produced by the top-level 
-parser-rule, and that is the structure seen in Figure-12 (the selected text under 
-<i>Parser Log</i>). 
+  <i>Figure-13. Testing error cases</i>
 </p>
 
 <h2 id="SyntaxDrivenActionExecution">Syntax Driven Action Execution</h2>
@@ -456,8 +464,7 @@ This part of the tutorial describes VisualLangLab equivalents of section 3.2
 The Definitive ANTLR Reference</a>. 
 The description below shows how to add action code to the parser created above, 
 but you can also inspect the end result by just invoking 
-"Help" -> "Sample grammars" -> "TDAR-Expr-Actions" from the main menu 
-(the GUI will appear to freeze for a moment or two, this is expected). 
+"Help" -> "Sample grammars" -> "TDAR-Expr-Actions" from the main menu. 
 The tutorial explains the use of action code within VisualLangLab, 
 but you can learn more details at 
 <a href="../ASTAndActionCode.html#ActionCodeDesign">Action Code Design</a>. 
@@ -467,19 +474,17 @@ but you can learn more details at
 
 <p>
 Action code in VisualLangLab is written not as a <i>code snippet</i> 
-but as an anonymous function in either <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> or 
-<a href="http://www.scala-lang.org/">Scala</a>. This tutorial uses a mix of both languages 
-(in the same parser) to show the relative advantages of each.
-You do not have to install any additional software for Scala or JavaScript 
-to support action code in VisualLangLab. Here are the main concepts:
+but as an complete <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> 
+function. Here are the main concepts:
 </p>
 
 <ul style="list-style-type: disc;">
   <li>an action code function can be associated with any parser-tree node except the root</li>
-  <li>the function takes one argument (typed <code>Any</code> in Scala)</i></li>
-  <li>the function is called twice: once before the associated parser-rule node is 
-      parsed (the argument is then null), and then after the node is parsed 
-      (when the argument carries the resulting AST)</li>
+  <li>the function takes one argument</li>
+  <li>the function is called twice: first before the associated parser-rule node is 
+      parsed (the argument is then <i>null</i>), and second when 
+      (and only if) the node is successfully parsed 
+      (the argument then carries the resulting AST)</li>
   <li>the function should process the AST as needed, and return the processed 
       value which then becomes part of the higher-level containing AST</li>
   <li>an action function has no access to the parser's lexical environment except via 
@@ -488,10 +493,16 @@ to support action code in VisualLangLab. Here are the main concepts:
 
 <p>
 The structure of the AST for any parser-rule node is displayed in the panel next to the 
-rule-tree (under <i>Parse Tree (AST) Structure</i>). You need a basic understanding 
-of the standard Scala types to exploit the AST. But JavaScript users should know that 
-every container type (Pair, List, and Option) becomes an equivalent Array. The following 
+rule-tree (under <i>Parse Tree (AST) Structure</i>). The following 
 examples should clarify these ideas. 
+</p>
+
+<p>
+The ASTs passed to JavaScript action-code functions contain native JVM types (arrays, 
+Lists, etc.). Users must be aware that all primitive types placed in arrays or Lists 
+will have been auto-boxed (on the Java side) before being passed to JavaScript. 
+The action-code functions must therefore explicitly unbox primitive types contained 
+in arrays and Lists within ASTs.
 </p>
 
 <h3 id="ActionForProg">Action for 'prog'</h3>
@@ -508,14 +519,15 @@ To assign the action-code to the rule-tree created previously, proceed as follow
   <li>select (click on) the reference icon that points to <i>stat</i></li>
   <li>type or paste (copy the code from the box below) the code into the text area 
       under <i>Action Code</i></li>
-  <li>click the <i>Save</i> button under the text area</li>
+  <li>click the <i>Save</i> button under the text area. (The button becomes enabled 
+      when the contents of the text area are changed)</li>
   <li>The dialog shown at lower left should appear, click its <i>OK</i> button. 
       An action code indicator flag should appear next to the reference icon</li>
 </ul>
 
 <p>
-The addition of actions (particularly in Scala) to a VisualLangLab grammar tends to slow down 
-the GUI somewhat, and you may notice small delays when opening such grammar files. 
+If there are any syntax errors in the action-code text, a dialog box indicating the 
+error is displayed on clicking the <i>Save</i> button. 
 </p>
 
 <p id="Figure14">
@@ -531,7 +543,7 @@ Here is the action code for 'prog' that you can copy to paste into VisualLangLab
 <table border="1" style="border: 1px solid black;"><tr><td>
 <pre><code>function (arg) {
   if (!arg) {
-    VLL.memory = {};
+    memory = {};
   } else {
     return "Ok";
   }
@@ -539,12 +551,22 @@ Here is the action code for 'prog' that you can copy to paste into VisualLangLab
 </td></tr></table>
 
 <p>
-In effect, this is a package of two snippets: <code>VLL.memory = {};</code> executed before parsing begins, 
-and <code>return "Ok";</code> executed after parsing ends. The first snippet (<code>VLL.memory = {};</code>) is therefore 
+In effect, this is a package of two code snippets ...
+</p>
+
+<pre><code>memory = {};</code></pre>
+
+<p>
+... which is executed before parsing begins, 
+and ...
+</p>
+
+<pre><code>return "Ok";</code></pre>
+
+<p>
+... which is executed after parsing ends. The first snippet (<code>memory = {};</code>) is therefore 
 functionally equivalent to the line <code>HashMap memory = new HashMap();</code> in the original ANTLR parser. 
-The symbol <code>VLL</code> is a <a href="../ASTAndActionCode.html#PredefinedVariables">
-VisualLangLab predefined variable</a> that action code should use to store parser-specific information 
-(such as the variable <code>memory</code> ). The second snippet (<code>return "Ok";</code>) 
+The second snippet (<code>return "Ok";</code>) 
 subverts VisualLangLab's default action of passing the AST up the call chain. This causes VisualLangLab to 
 print just the string <i>Ok</i> instead of the entire AST after parsing is complete. 
 </p>
@@ -590,15 +612,15 @@ The text of the action-code for this parser-rule is given below.
 <table border="1" style="border: 1px solid black;"><tr>
 <td><pre><code>function (arg) {
   if (arg) {
-    switch (arg[0]) {
+    switch (arg[0].intValue()) {
       case 0: 
-        VLL.memory[arg[1][0]] = arg[1][2];
+        memory[arg[1][0]] = arg[1][2].doubleValue(); 
         break;
       case 1:
         println(arg[1][0]); break;
-      case 2: 
-        return arg; 
+      case 2: break;
     }
+    return arg; 
   }
 }</code></pre></td>
 </tr></table>
@@ -632,17 +654,19 @@ The text of the action-code function for the parser-rule is shown below.
 <table border="1" style="border: 1px solid black;"><tr>
 <td><pre><code>function (arg) {
   if (arg) {
-    switch (arg[0]) {
+    switch (arg[0].intValue()) {
       case 0: 
         return parseInt(arg[1]); 
       case 1:
-        if (VLL.memory.hasOwnProperty(arg[1])) {
-          return VLL.memory[arg[1]]; 
+        if (memory.hasOwnProperty(arg[1])) {
+          return memory[arg[1]]; 
         } else {
+          println("undefined variable " +
+              arg[1]);
           return 0;
         }
       case 2: 
-        return arg[1][1]; 
+        return arg[1][1].doubleValue(); 
     }
   }
 }</code></pre></td>
@@ -653,7 +677,7 @@ The text of the action-code function for the parser-rule is shown below.
 
 <p>
 Figure-17 below shows the rule-tree and AST for parser-rule 
-<i>multExpr</i> as well as the Scala function to be used as its action code. 
+<i>multExpr</i> as well as the function to be used as its action code. 
 The action-code is associated with the sequence node just below the root node, 
 so that node must be selected to display the action-code function. 
 </p>
@@ -664,33 +688,31 @@ so that node must be selected to display the action-code function.
 </p>
 
 <p>
-You see the direct correspondence of the AST structure and the Scala types in this code. 
-Scala's pattern matching operations also seem to make AST operations more intuitive. 
-</p>
-
-<p>
 The text of the action-code function for the parser-rule is shown below. 
+Observe that the keyword <i>function</i> has been abbreviated to just <i>f</i>. 
+Any prefix of the word <i>function</i> may be used as an abbreviation here.
 </p>
 
 <table border="1" style="border: 1px solid black;"><tr>
-<td><pre><code>(arg: Any) => arg match {
-  case Array(atom: Double, lst: List[_]) =>
-    var result = atom
-    lst foreach (_ match {
-        case Array(_, a: Double) =>
-          result *= a
-      }
-    )
-  result
-  case null => // Do nothing
-}</code></pre></td>
+<td><pre><code>f (arg) {
+  if (arg) {
+    var atom = arg[0].doubleValue();
+    var list = arg[1];
+    for (var i = 0; i < list.size(); ++i) {
+      var arr = list.get(i);
+      atom *= arr[1].doubleValue();
+    }
+    return atom;
+  }
+}
+</code></pre></td>
 </tr></table>
 
 <h3 id="ActionForExpr">Action for 'expr'</h3>
 
 <p>
 Figure-18 below shows the rule-tree and AST for parser-rule 
-<i>expr</i> as well as the Scala function to be used as its action code. 
+<i>expr</i> as well as the function to be used as its action code. 
 The action-code is associated with the sequence node just below the root node, 
 so that node must be selected to display the action-code function. 
 </p>
@@ -705,20 +727,22 @@ The text of the action-code function for the parser-rule is shown below.
 </p>
 
 <table border="1" style="border: 1px solid black;"><tr>
-<td><pre><code>(arg: Any) => arg match {
-  case Array(multExpr: Double, lst: List[_]) =>
-    var result = multExpr
-    lst foreach (_ match {
-        case Array(Pair(d: Int, _), mExpr: Double) =>
-          d match {
-            case 0 => result += mExpr
-            case 1 => result -= mExpr
-          }
+<td><pre><code>f (arg) {
+  if (arg) {
+    var multExpr = arg[0].doubleValue();
+    var list = arg[1];
+    for (var i = 0; i < list.size(); ++i) {
+      var arr = list.get(i);
+      var choice = arr[0][0].intValue();
+      switch (choice) {
+        case 0: multExpr += arr[1].doubleValue(); break;
+        case 1: multExpr -= arr[1].doubleValue(); break;
       }
-    )
-  result
-  case null => // Do nothing
-}</code></pre></td>
+    }
+    return multExpr;
+  }
+}
+</code></pre></td>
 </tr></table>
 
 <h3 id="TestingTheActionCode">Testing the Action Code</h3>
@@ -748,6 +772,11 @@ A grammar with embedded actions can be saved ("File" -> "Save") and
 opened again ("File" -> "Open") with VisualLangLab's main menu operations 
 just like any other grammar. The code is saved as text (source code) within the XML file. 
 </p>
+
+<table border="1" style="border: 1px solid red;" width="100%"><tr><td align="center">
+CAUTION<br/>
+The following text has not been updated for version 10. 
+</td></tr></table>
 
 <h2 id="EvaluatingExpressionsUsingAnAST">Evaluating Expressions Using an AST</h2>
 
