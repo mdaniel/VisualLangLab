@@ -119,6 +119,26 @@ public class ManagerHelp {
             "&nbsp;&nbsp;&nbsp;&nbsp;http://vll.java.net/examples/a-quick-tour.html";
     };
 
+    Action sampleTdarExprAst = new AbstractAction("TDAR-Expr-AST") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(gui, msg, "TDAR-Expr-AST", JOptionPane.INFORMATION_MESSAGE);
+            InputStream is = ClassLoader.getSystemClassLoader().
+                    getResourceAsStream("vll4j/gui/resources/TDAR-Expr-AST.vll");
+            gui.theFileManager.openInputStream(is);
+            gui.setGrammarName("TDAR-Expr-AST");
+            gui.theRuleManager.reset();
+        }
+        String msg = "<html>" + 
+            "This grammar supports discussion of the techinque in section 3.3, <br/>" + 
+            "<i>Evaluating Expressions Using an AST Intermediate Form</i>, <br/>" + 
+            "of the book <i>The Definitive ANTLR Reference</i> <br>" + 
+            "(http://pragprog.com/book/tpantlr/the-definitive-antlr-reference)<br/><br/>" +
+            "Further discussion of the use of this grammar can be <br/>" + 
+            "found at the following url:<br/>" + 
+            "&nbsp;&nbsp;&nbsp;&nbsp;http://vll.java.net/examples/a-quick-tour.html";
+    };
+
     Action sampleTdarSimpleTreeInterpreter = new AbstractAction("TDAR-Simple-Tree-Based-Interpreter") {
         @Override
         public void actionPerformed(ActionEvent e) {

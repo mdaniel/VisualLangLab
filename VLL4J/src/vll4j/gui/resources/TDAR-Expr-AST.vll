@@ -26,9 +26,9 @@
         <Token Ref="INT" />
         <Token Ref="ID" />
         <Sequence >
-          <Token Ref="LPAREN" />
+          <Token Ref="LPAREN" Drop="true" />
           <Reference Ref="expr" />
-          <Token Ref="RPAREN" />
+          <Token Ref="RPAREN" Drop="true" />
         </Sequence>
       </Choice>
     </Parser>
@@ -57,13 +57,13 @@
       <Choice >
         <Sequence >
           <Token Ref="ID" />
-          <Token Ref="EQUALS" />
+          <Token Ref="EQUALS" Drop="true" />
           <Reference Ref="expr" />
-          <Token Ref="NEWLINE" />
+          <Token Ref="NEWLINE" Drop="true" />
         </Sequence>
         <Sequence >
           <Reference Ref="expr" />
-          <Token Ref="NEWLINE" />
+          <Token Ref="NEWLINE" Drop="true" />
         </Sequence>
         <Token Ref="NEWLINE" />
       </Choice>
