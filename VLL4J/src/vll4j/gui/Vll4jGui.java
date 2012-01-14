@@ -150,7 +150,7 @@ public class Vll4jGui extends JFrame {
         helpSamplesMenu.add(new JSeparator());
         helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.samplePs2eArithExpr));
         helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.samplePs2eArithExprAction));
-        helpSamplesMenu.addSeparator();
+        helpSamplesMenu.add(new JSeparator());
         helpSamplesMenu.add(new JMenuItem(theHelpFunctionsManager.samplePswpPayrollParserCombinators));
         helpMenu.add(theHelpFunctionsManager.versionCheck);
         helpMenu.add(theHelpFunctionsManager.aboutAction);
@@ -263,5 +263,5 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    String version = "10.08";
+    String version = "10.09";
 }
