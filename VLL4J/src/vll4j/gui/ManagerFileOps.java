@@ -49,7 +49,6 @@ public class ManagerFileOps {
     };
 
     void openInputStream(InputStream is, boolean tokensOnly) {
-        gui.reset(false);
         try {
             gui.theForest.openInputStream(is, tokensOnly);
             if (!tokensOnly) {
@@ -82,6 +81,7 @@ public class ManagerFileOps {
             grammarFile = fc.getSelectedFile();
             try {
                 InputStream is = new FileInputStream(grammarFile);
+                gui.reset(false);
                 openInputStream(is, false);
                 gui.setGrammarName(grammarFile.getName());
                 gui.theRuleManager.reset();

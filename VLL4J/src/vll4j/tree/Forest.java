@@ -117,7 +117,7 @@ public class Forest {
         }
     }
 
-    public void openInputStream(InputStream is, boolean onlyTokens) throws ParserConfigurationException, 
+    public void openInputStream(InputStream is, boolean tokensOnly) throws ParserConfigurationException, 
             SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -137,17 +137,17 @@ public class Forest {
             String litPat = r.getAttributes().getNamedItem("Pattern").getTextContent();
             tokenBank.put(litName, "L" + litPat);
         }
-        if (onlyTokens)
-            return;
-        whiteSpace = docElmt.getElementsByTagName("Whitespace").item(0).getTextContent();
-        comment = docElmt.getElementsByTagName("Comments").item(0).getTextContent();
-        NodeList parsers = docElmt.getElementsByTagName("Parser");
-        for (int i = 0; i < parsers.getLength(); ++i) {
-            Node xNode = parsers.item(i);
-            String ruleName = xNode.getAttributes().getNamedItem("Name").getTextContent();
-            NodeRoot root = new NodeRoot(ruleName);
-            populateNode(xNode, root);
-            ruleBank.put(ruleName, root);
+        if (!tokensOnly) {
+            whiteSpace = docElmt.getElementsByTagName("Whitespace").item(0).getTextContent();
+            comment = docElmt.getElementsByTagName("Comments").item(0).getTextContent();
+            NodeList parsers = docElmt.getElementsByTagName("Parser");
+            for (int i = 0; i < parsers.getLength(); ++i) {
+                Node xNode = parsers.item(i);
+                String ruleName = xNode.getAttributes().getNamedItem("Name").getTextContent();
+                NodeRoot root = new NodeRoot(ruleName);
+                populateNode(xNode, root);
+                ruleBank.put(ruleName, root);
+            }
         }
     }
 

@@ -81,6 +81,7 @@ public class ManagerHelp {
             JOptionPane.showMessageDialog(gui, msg, "TDAR-Expr", JOptionPane.INFORMATION_MESSAGE);
             InputStream is = ClassLoader.getSystemClassLoader().
                     getResourceAsStream("vll4j/gui/resources/TDAR-Expr.vll");
+            gui.reset(false);
             gui.theFileManager.openInputStream(is, false);
             gui.setGrammarName("TDAR-Expr");
             gui.theRuleManager.reset();
@@ -102,6 +103,7 @@ public class ManagerHelp {
             JOptionPane.showMessageDialog(gui, msg, "TDAR-Expr-Action", JOptionPane.INFORMATION_MESSAGE);
             InputStream is = ClassLoader.getSystemClassLoader().
                     getResourceAsStream("vll4j/gui/resources/TDAR-Expr-Action.vll");
+            gui.reset(false);
             gui.theFileManager.openInputStream(is, false);
             gui.setGrammarName("TDAR-Expr-Action");
             gui.theRuleManager.reset();
@@ -125,6 +127,7 @@ public class ManagerHelp {
             JOptionPane.showMessageDialog(gui, msg, "TDAR-Expr-AST", JOptionPane.INFORMATION_MESSAGE);
             InputStream is = ClassLoader.getSystemClassLoader().
                     getResourceAsStream("vll4j/gui/resources/TDAR-Expr-AST.vll");
+            gui.reset(false);
             gui.theFileManager.openInputStream(is, false);
             gui.setGrammarName("TDAR-Expr-AST");
             gui.theRuleManager.reset();
@@ -145,6 +148,7 @@ public class ManagerHelp {
             JOptionPane.showMessageDialog(gui, msg, "TDAR-Simple-Tree-Based-Interpreter", JOptionPane.INFORMATION_MESSAGE);
             InputStream is = ClassLoader.getSystemClassLoader().
                     getResourceAsStream("vll4j/gui/resources/TDAR-Simple-Tree-Based-Interpreter.vll");
+            gui.reset(false);
             gui.theFileManager.openInputStream(is, false);
             gui.setGrammarName("TDAR-Simple-Tree-Based-Interpreter");
             gui.theRuleManager.reset();
@@ -169,6 +173,7 @@ public class ManagerHelp {
             JOptionPane.showMessageDialog(gui, msg, "P2SE-ArithExpr", JOptionPane.INFORMATION_MESSAGE);
             InputStream is = ClassLoader.getSystemClassLoader().
                     getResourceAsStream("vll4j/gui/resources/PS2E-ArithExpr.vll");
+            gui.reset(false);
             gui.theFileManager.openInputStream(is, false);
             gui.setGrammarName("P2SE-ArithExpr");
             gui.theRuleManager.reset();
@@ -188,6 +193,7 @@ public class ManagerHelp {
             JOptionPane.showMessageDialog(gui, msg, "PS2E-ArithExpr-Action", JOptionPane.INFORMATION_MESSAGE);
             InputStream is = ClassLoader.getSystemClassLoader().
                     getResourceAsStream("vll4j/gui/resources/PS2E-ArithExpr-Action.vll");
+            gui.reset(false);
             gui.theFileManager.openInputStream(is, false);
             gui.setGrammarName("PS2E-ArithExpr-Action");
             gui.theRuleManager.reset();
@@ -206,6 +212,7 @@ public class ManagerHelp {
             JOptionPane.showMessageDialog(gui, msg, "PSWP-Payroll-Parser-Combinators", JOptionPane.INFORMATION_MESSAGE);
             InputStream is = ClassLoader.getSystemClassLoader().
                     getResourceAsStream("vll4j/gui/resources/PSWP-Payroll-Parser-Combinators.vll");
+            gui.reset(false);
             gui.theFileManager.openInputStream(is, false);
             gui.setGrammarName("PSWP-Payroll-Parser-Combinators");
             gui.theRuleManager.reset();
