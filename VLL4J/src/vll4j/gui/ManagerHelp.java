@@ -241,17 +241,20 @@ public class ManagerHelp {
         }
     };
 
-    Action displayHelpRuleTree = new AbstractAction("", Resources.help16) {
+    Action displayHelpRuleTree = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
             helpPane.setSelectedIndex(2);
+            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
+            if (lbl.getText().isEmpty())
+                lbl.setText(getHtml("PanelRuleTree.html"));
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };
 
-    Action displayHelpAST = new AbstractAction("", Resources.help16) {
+    Action displayHelpAST = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
@@ -264,7 +267,7 @@ public class ManagerHelp {
         }
     };
 
-    Action displayHelpActionCode = new AbstractAction("", Resources.help16) {
+    Action displayHelpActionCode = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
@@ -277,22 +280,28 @@ public class ManagerHelp {
         }
     };
 
-    Action displayHelpTestInput = new AbstractAction("", Resources.help16) {
+    Action displayHelpTestInput = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
             helpPane.setSelectedIndex(3);
+            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
+            if (lbl.getText().isEmpty())
+                lbl.setText(getHtml("PanelTestInput.html"));
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };
 
-    Action displayHelpTestLog = new AbstractAction("", Resources.help16) {
+    Action displayHelpTestLog = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (helpPane == null)
                 createHelpPane();
             helpPane.setSelectedIndex(4);
+            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
+            if (lbl.getText().isEmpty())
+                lbl.setText(getHtml("PanelTestLog.html"));
             JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
         }
     };

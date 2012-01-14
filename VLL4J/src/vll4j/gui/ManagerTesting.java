@@ -172,7 +172,7 @@ public class ManagerTesting {
         if (!visitorParserGenerator.parserGeneratedOk) {
             JOptionPane.showMessageDialog(gui, "Can't generate parser\nReview rule definitions", 
                     fromFile ? "ERROR - Parse file" : "ERROR - Parse input", JOptionPane.ERROR_MESSAGE);
-        appendStatus("Can't generate parser - Review rule definitions", true);
+        appendStatus(" Can't generate parser - Review rule definitions", true);
             return;
         } else {
             t1 = System.currentTimeMillis();

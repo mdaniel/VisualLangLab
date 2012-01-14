@@ -2,9 +2,15 @@
     Action-Code (or just <i>Action</i>) is a JavaScript function associated with <br/>
     any rule-tree node. Action-code functions are optional elements of a grammar <br/>
     used to modify the native AST of a rule-tree on the fly. <br/>
-    JavaScript functions used as Actions have the following characteristics:<br/>
+    A function used as Action-code has the following characteristics:<br/>
     <ul>
-        <li>Take one argument that receives the AST of the associated node.</li>
+        <li>Takes one argument that receives the AST of the associated node.</li>
+        <li>Returns the modified AST (or null).</li>
+        <li>Is called twice: first unconditionally before parsing of the <br/>
+            associated node begins, and again (only if parsing was successful) <br/>
+            after parsing has been completed. The first call uses an argument value <br/>
+            of null, while during the second call the argument contains the <br/>
+            AST. </li>
     </ul>
-    The basic structure described above is further modified as follows:
+    Further details can be found at http://vll.java.net/ASTAndActionCode.html
 </html>
