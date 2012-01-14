@@ -20,8 +20,6 @@
 
 package vll4j.gui;
 
-import vll4j.tree.NodeBase;
-import vll4j.core.Utils;
 import java.awt.event.ActionEvent;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -29,6 +27,8 @@ import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
+import vll4j.core.Utils;
+import vll4j.tree.NodeBase;
 
 public class ManagerTokens {
     ManagerTokens(Vll4jGui theGui) {
@@ -203,18 +203,6 @@ public class ManagerTokens {
             if (opt == JOptionPane.OK_OPTION) {
                 gui.theForest.tokenBank.remove(tokenToDelete);
             }
-        }
-    };
-        
-    Action importTokenAction = new AbstractAction("Import tokens", Resources.import16) {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-        }
-    };
-        
-    Action exportTokenAction = new AbstractAction("Export tokens", Resources.export16) {
-        @Override
-        public void actionPerformed(ActionEvent e) {
         }
     };
         

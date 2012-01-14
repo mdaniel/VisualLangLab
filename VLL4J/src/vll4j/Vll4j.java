@@ -23,10 +23,10 @@ package vll4j;
 import java.io.*;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import vll4j.gui.ReaderFile;
 import vll4j.core.PackratParsers;
 import vll4j.core.Parsers.ParseResult;
 import vll4j.core.Parsers.Parser;
+import vll4j.gui.ReaderFile;
 import vll4j.tree.Forest;
 import vll4j.tree.NodeBase;
 import vll4j.tree.VisitorParserGeneration;
@@ -89,7 +89,7 @@ public class Vll4j extends PackratParsers {
 
     private void initForest(InputStream fis) throws ParserConfigurationException, 
             SAXException, IOException {
-        forest.openInputStream(fis);
+        forest.openInputStream(fis, false);
         commentSpecRegex = forest.comment;
         whiteSpaceRegex = forest.whiteSpace;
         resetWhitespace();

@@ -105,8 +105,8 @@ public class Vll4jGui extends JFrame {
         tokenMenu.add(new JSeparator());
         tokenMenu.add(theTokenManager.deleteTokenAction);
         tokenMenu.add(new JSeparator());
-        tokenMenu.add(theTokenManager.importTokenAction);
-        tokenMenu.add(theTokenManager.exportTokenAction);
+        tokenMenu.add(theFileManager.importTokenAction);
+        tokenMenu.add(theFileManager.exportTokenAction);
         menuBar.add(ruleMenu);
         ruleMenu.add(theRuleManager.ruleNewAction);
         ruleMenu.add(theRuleManager.ruleFindAction);
@@ -181,8 +181,8 @@ public class Vll4jGui extends JFrame {
         toolBar.add(tip(theTokenManager.newRegexAction));
         toolBar.add(tip(theTokenManager.findTokenAction));
         toolBar.add(tip(theTokenManager.editTokenAction));
-        toolBar.add(tip(theTokenManager.importTokenAction));
-        toolBar.add(tip(theTokenManager.exportTokenAction));
+        toolBar.add(tip(theFileManager.importTokenAction));
+        toolBar.add(tip(theFileManager.exportTokenAction));
         toolBar.addSeparator();
         toolBar.add(tip(theTestManager.parseInputAction));
         toolBar.add(tip(theTestManager.parseFileAction));

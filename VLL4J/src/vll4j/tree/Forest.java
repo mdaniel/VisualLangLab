@@ -117,14 +117,12 @@ public class Forest {
         }
     }
 
-    public void openInputStream(InputStream is) throws ParserConfigurationException, 
+    public void openInputStream(InputStream is, boolean onlyTokens) throws ParserConfigurationException, 
             SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document d = db.parse(is);
         Element docElmt = d.getDocumentElement();
-        whiteSpace = docElmt.getElementsByTagName("Whitespace").item(0).getTextContent();
-        comment = docElmt.getElementsByTagName("Comments").item(0).getTextContent();
         NodeList regs = docElmt.getElementsByTagName("Regex");
         for (int i = 0; i < regs.getLength(); ++i) {
             Node r = regs.item(i);
@@ -139,6 +137,10 @@ public class Forest {
             String litPat = r.getAttributes().getNamedItem("Pattern").getTextContent();
             tokenBank.put(litName, "L" + litPat);
         }
+        if (onlyTokens)
+            return;
+        whiteSpace = docElmt.getElementsByTagName("Whitespace").item(0).getTextContent();
+        comment = docElmt.getElementsByTagName("Comments").item(0).getTextContent();
         NodeList parsers = docElmt.getElementsByTagName("Parser");
         for (int i = 0; i < parsers.getLength(); ++i) {
             Node xNode = parsers.item(i);
