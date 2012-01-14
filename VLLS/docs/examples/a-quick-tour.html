@@ -773,11 +773,6 @@ opened again ("File" -> "Open") with VisualLangLab's main menu operations
 just like any other grammar. The code is saved as text (source code) within the XML file. 
 </p>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td align="center">
-CAUTION<br/>
-The following text has not been updated for version 10. 
-</td></tr></table>
-
 <h2 id="EvaluatingExpressionsUsingAnAST">Evaluating Expressions Using an AST</h2>
 
 <p>
@@ -839,14 +834,11 @@ To inspect a version of this grammar with all disposable parts dropped, select
 
 <p>
 This section shows you how to embed and use a VisualLangLab parser in an 
-application program. We use Scala for this example to show how the AST structure 
-displayed by VisualLangLab matches the structure of the processing code. 
-The source code of the program is shown beloow. To compile and run it proceed 
-as follows.
+application program. To compile and run the code below proceed as follows.
 </p>
 
 <ul style="list-style-type: disc;">
-  <li>for compilation and running, the working directory as well as <i>VLLS.jar</i> (or <i>VLLS-All.jar</i>) 
+  <li>for compilation and running, the working directory as well as <i>VLL4J.jar</i> 
       must be on the classpath</li>
   <li>when running, the saved-grammar file (named <i>TDAR-Expr-AST.vll</i>) must be in the 
       working directory. You get this file by selecting "Help" -> "Sample grammars" 
@@ -855,150 +847,112 @@ as follows.
 </ul>
 
 <p>
-The text that is parsed and interpreted by the program is in the first line of the 
-<code>main()</code> functions. You can change the contents of that line to check out 
-the parser fully. The parts in red in the code below are dependent on the 
-<a href="../UsingTheAPI.html">VisualLangLab API</a>, while the parts in blue are 
-dependent on Scala's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">parser combinators</a>. 
+The text parsed and interpreted by the program is in the first line of 
+<code>main()</code>. You can change the contents of that line to check out 
+the parser fully. The red and blue parts of the code below are dependent on the 
+<a href="../UsingTheAPI.html">VisualLangLab API</a>. The blue parts follow 
+naming and usage conventions based on Scala's 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">parser combinators</a>. 
 There is one function dedicated to handling each rule (e.g. function <i>atomHdlr</i> for rule <i>atom</i>, 
-function <i>multExprHdlr</i> for rule <i>multExpr</i>, etc.), so comparing the code of each 
-such funcion with the AST structure of the corresponding rule is helpful. It is also possible to 
-write the application program in Java (or any other JVM language) using principles 
-explained in  <a href="../UsingTheAPI.html">Using the API</a>. A Java application program 
-is also shown in <a href="#InterpreterInJavaProgram">Interpreter in Java Program</a> below. 
+function <i>multExprHdlr</i> for rule <i>multExpr</i>, etc.). So comparing the code of each 
+such funcion with the AST structure of the corresponding rule is easy. It is possible to 
+write the application program in any JVM language using principles 
+explained in  <a href="../UsingTheAPI.html">Using the API</a>. 
 </p>
 
-<pre><code>import java.io.File
-<span style="color:red; font-weight: bold">import vll.core.VllParsers</span>
+<pre><code>import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+import <span style="color:red; font-weight: bold">vll4j.Vll4j</span>;
 
-object TDARExprAST {
-  
-  val memory = scala.collection.mutable.Map[String, BigInt]()
+public class TDARExprAST {
 
-  def atomHdlr(xa: Any): BigInt = xa match {
-    case Pair(0, s: String) => s.toInt
-    case Pair(1, id: String) => 
-      if (memory.contains(id)) memory(id)
-      else {println("undefined: " + id); 0}
-    case Pair(2, expr) => exprHdlr(expr)
-  }
-
-  def multExprHdlr(xme: Any): BigInt = xme match {
-    case Array(mexpr, lst: List[_]) => 
-      var result = atomHdlr(mexpr)
-      lst.foreach(result *= atomHdlr(_))
-      result
-  }
-
-  def exprHdlr(xe: Any): BigInt = xe match {
-    case Array(mexpr, lst: List[_]) => 
-      var result = multExprHdlr(mexpr)
-      lst.foreach(_ match {
-          case Array(Pair(0, _), mexpr2) => result += multExprHdlr(mexpr2)
-          case Array(Pair(1, _), mexpr2) => result -= multExprHdlr(mexpr2)
-        })
-      result
-  }
-
-  def statHdlr(s: Any) = s match {
-    case Pair(0, Array(id: String, expr)) => memory(id) = exprHdlr(expr)
-    case Pair(1, expr) => println(exprHdlr(expr))
-    case Pair(2, _) => // do nothing
-  }
-  
-  def progHdlr(p: Any) = p match {
-    case lst: List[_] => lst.foreach(statHdlr)
-  }
-
-  def main(args: Array[String]) {
-    val input1 = "a=3\n b=4\n a+b*5\n (a+b)*5\n"
-    val vll = <span style="color:red; font-weight: bold">VllParsers.fromFile</span>(new File("TDAR-Expr-AST.vll"))
-    val parser = vll.<span style="color:red; font-weight: bold">getParserFor</span>("Prog")
-    val parseResult = vll.<span style="color:blue; font-weight: bold">parseAll</span>(parser, input1) 
-    parseResult match {
-      case vll.<span style="color:blue; font-weight: bold">Success</span>(resultAST, _) => progHdlr(resultAST)
-      case vll.<span style="color:blue; font-weight: bold">Failure</span>(msg, where) => printf("Error: '%s' at line %d col %d%n", 
-          msg, where.pos.line, where.pos.column)
+    static float evalAtom(Object ast) {
+        Object pair[] = (Object[])ast;
+        switch ((Integer)pair[0]) {
+            case 0: 
+                return Float.parseFloat((String)pair[1]);
+            case 1: 
+                if (memory.containsKey(pair[1])) {
+                    return memory.get(pair[1]);
+                }
+                else {
+                    System.out.printf("Undefined variable: %s%n", pair[1]); 
+                    return 0;
+                }
+            case 2: return evalExpr(pair[1]);
+        }
+        return 0; /* never used, keeps compiler happy */
     }
-  }
+    
+    static float evalMultExpr(Object ast) {
+        Object arr[] = (Object[])ast;
+        Float res = evalAtom(arr[0]);
+        List<Object[]> lst = (List<Object[]>)arr[1];
+        for (Object pair[]: lst) {
+            res *= evalAtom(pair[1]);
+        }
+        return res;
+    }
+    
+    static float evalExpr(Object ast) {
+        Object arr[] = (Object[])ast;
+        Float res = evalMultExpr(arr[0]);
+        List<Object[]> lst = (List<Object[]>)arr[1];
+        for (Object pair[]: lst) {
+            Object discr[] = (Object[])pair[0];
+            switch ((Integer)discr[0]) {
+                case 0: res += evalMultExpr(pair[1]); break;
+                case 1: res -= evalMultExpr(pair[1]); break;
+            }
+        }
+        return res;
+    }
+    
+    static void evalStat(Object ast) {
+        Object pair[] = (Object[])ast;
+        switch ((Integer)pair[0]) {
+            case 0: 
+                Object arr[] = (Object[])pair[1];
+                String id = (String)arr[0];
+                Float res = evalExpr(arr[1]);
+                memory.put(id, res);
+                break;
+            case 1: 
+                System.out.println(evalExpr(pair[1])); 
+                break;
+            case 2: /*do nothing*/ 
+                break;
+        }
+    }
+    
+    static void evalProg(Object ast) {
+        List listOfStat = (List)ast;
+        for (Object stat: listOfStat) {
+            evalStat(stat);
+        }
+    }
+    
+    static Map<String, Float> memory = new HashMap<String, Float>();
+
+    public static void main(String[] args) throws ParserConfigurationException, 
+            SAXException, IOException {
+        String input = "a=3\nb=4\n2+a*b\n";
+        <span style="color:red; font-weight: bold">Vll4j</span> vll = <span style="color:red; font-weight: bold">Vll4j.fromFile</span>(new File("TDAR-Expr-AST.vll"));
+        Vll4j.Parser exprParser = vll.getParserFor("Prog");
+        <span style="color:blue; font-weight: bold">Vll4j.ParseResult</span> parseResult = vll.<span style="color:blue; font-weight: bold">parseAll</span>(exprParser, input);
+        if (parseResult.<span style="color:blue; font-weight: bold">successful</span>()) {
+            Object ast = parseResult.<span style="color:blue; font-weight: bold">get</span>();
+            evalProg(ast);
+        } else {
+            System.out.println(parseResult);
+        }
+    }
 }</code></pre>
-
-<p>
-It is obviously possible to obtain the same effect within the VisualLangLab GUI 
-by using similar code in an action attached to the top-level parser. To try this 
-approach copy the code shown below and add it to the top-level parser 
-(<i>Prog</i>) as shown in Figure-21 below. Proceed as follows:
-</p>
-
-<ul style="list-style-type: disc;">
-  <li>select "Help" -> "Sample grammars" -> "TDAR-Expr-AST" from the main menu</li>
-  <li>ensure that the top-level parser <i>Prog</i> is selected</li>
-  <li>in the rule-tree, select (click on) the <i>stat</i> reference node</li>
-  <li>copy the action code given below, and paste into the text area under 
-      <i>Action Code</i></li>
-  <li>click the <i>Save</i> button under the text area, click the <i>OK</i> button 
-      of the dialog presented</li>
-</ul>
-
-<p>
-You may test the parser and the associated code by typing some input under the 
-<i>Parser Test Input</i> (as shown in Figure-21), and clicking the <i>Parse input</i> button. 
-As usual, remember to have a NEWLINE after the end of the last line of input. 
-</p>
-
-<p id="Figure21">
-  <img src="images/action-code-ast.png" alt="Processing AST" /><br />
-  <i>Figure-21. Processing AST</i>
-</p>
-
-<p>
-The action code to be used for this exercise (see Figure-21 above) is shown below.
-</p>
-
-<pre><code></code>(arg: Any) => {
-
-  val memory = scala.collection.mutable.Map[String, BigInt]()
-
-  def atomHdlr(xa: Any): BigInt = xa match {
-    case Pair(0, s: String) => s.toInt
-    case Pair(1, id: String) => 
-      if (memory.contains(id)) memory(id)
-      else {println("undefined: " + id); 0}
-    case Pair(2, expr) => exprHdlr(expr)
-  }
-
-  def multExprHdlr(xme: Any): BigInt = xme match {
-    case Array(mexpr, lst: List[_]) => 
-      var result = atomHdlr(mexpr)
-      lst.foreach(result *= atomHdlr(_))
-      result
-  }
-
-  def exprHdlr(xe: Any): BigInt = xe match {
-    case Array(mexpr, lst: List[_]) => 
-      var result = multExprHdlr(mexpr)
-      lst.foreach(_ match {
-          case Array(Pair(0, _), mexpr2) => result += multExprHdlr(mexpr2)
-          case Array(Pair(1, _), mexpr2) => result -= multExprHdlr(mexpr2)
-        })
-      result
-  }
-
-  def statHdlr(s: Any) = s match {
-    case Pair(0, Array(id: String, expr)) => memory(id) = exprHdlr(expr)
-    case Pair(1, expr) => println(exprHdlr(expr))
-    case Pair(2, _) => // do nothing
-  }
-  
-  def progHdlr(p: Any) = p match {
-    case lst: List[_] => lst.foreach(statHdlr)
-  }
-
-  arg match {
-    case null => // do nothing
-    case ast => progHdlr(ast)
-  }
-}</pre>
 
 <h2 id="ASimpleTreeBasedInterpreter">A Simple Tree-Based Interpreter</h2>
 
@@ -1029,7 +983,7 @@ Select "Help" -> "Sample grammars" -> "TDAR-Simple-Tree-Based-Interpreter" from 
 menu (the GUI will appear to freeze for a new moments, this is expected). 
 The action code (in Scala) is associated with the reference node (labeled <i>stat</i>) 
 of the top-level rule (<i>Prog</i>), and is displayed when the reference node is selected 
-(as in Figure-22 below). 
+(as in Figure-21 below). 
 </p>
 
 <p>
@@ -1037,195 +991,14 @@ of the top-level rule (<i>Prog</i>), and is displayed when the reference node is
 been altered to arrange them in order of specificity. The rules are otherwise unchanged. 
 </p>
 
-<p id="Figure22">
+<p id="Figure21">
   <img src="images/tree-based-interpreter.png" alt="Interpreter in action code" /><br />
-  <i>Figure-22. Interpreter in action code</i>
+  <i>Figure-21. Interpreter in action code</i>
 </p>
 
 <p>
-Figure-22 also shows the execution a few lines of <i>code</i> that include 
+Figure-21 also shows the execution a few lines of <i>code</i> that include 
 a definition and use of the <i>factorial</i> function. 
-</p>
-
-<h3 id="InterpreterInJavaProgram">Interpreter in Java Program</h3>
-
-<p>
-This section illustrates how a Java program (an interpreter in this case) may embed and use a 
-VisualLangLab parser. 
-The parser used in this secion is the same as that in the previous section but with the embedded 
-action code removed. To obtain the parser required proceed as follows:
-</p>
-
-<ul style="list-style-type: disc;">
-  <li>select "Help" -> "Sample grammars" -> "TDAR-Simple-Tree-Based-Interpreter" from the 
-      main menu</li>
-  <li>ensure that rule <i>Prog</i> is selected, and click on the <i>stat</i> reference icon 
-      (as in Figure-22 above)</li>
-  <li>select all the text under <i>Action Code</i> and delete it (effectively clearing 
-      the panel)</li>
-  <li>click the <i>Save</i> button under the text area for action-code. Ensure that the 
-      <i>action</i> attribute displayed near the <i>stat</i> icon (in the rule-tree) is 
-      removed</li>
-  <li>select "File" -> "Save As" from the main menu, and save the parser to the file 
-      <i>TDAR-Simple-Tree-Based-Interpreter.vll</i></li>
-</ul>
-
-<p>
-To compile the Java program shown below you should have the all-inclusive VisualLangLab jar file 
-<i>VLLS-All.jar</i> on the classpath. To run the program you should have the directory containing 
-the class file as well as <i>VLLS-All.jar</i> on the classpath. You do not need to install Scala, 
-or to include any Scala libraries on the classpath. The saved gramamr file <i>TDAR-Simple-Tree-Based-Interpreter.vll</i> 
-(see last point above), must be in the working directory. 
-</p>
-
-<p>
-As in the examples above, the functions in this program are based on the names of the grammar 
-rules, and the logic is governed by the purpose of the grammar. As before, the red parts are 
-dependent on the <a href="../UsingTheAPI.html">VisualLangLab API</a>, while the blue parts are 
-dependent on Scala's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">parser combinators</a>. 
-</p>
-
-<p>
-A particularly important part of the code is the call to <code>ast4jvm</code>. This function 
-converts the AST (natively constructed using standard Scala types) to a version that uses only 
-standard JVM data types. This is useful when writing applications in languages other than Scala. 
-</p>
-
-<pre><code>import java.io.File;
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
-<span style="color:red; font-weight: bold">import vll.core.VllParsers</span>
-
-public class TDARSimpleTreeBasedInterpreterJava {
-
-    private static HashMap&lt;String, BigInteger> memory = new HashMap&lt;String, BigInteger>();
-    private static HashMap&lt;String, BigInteger> funcConstants = new HashMap&lt;String, BigInteger>();
-    private static HashMap&lt;String, Object[]> funcFormulae = new HashMap&lt;String, Object[]>();
-    
-    static BigInteger funcCall(String id, Object arg) {
-        BigInteger result = BigInteger.ZERO;
-        BigInteger argValue = exprHdlr(arg);
-        String funcConstKey = id + ":" + argValue;
-        if (funcConstants.containsKey(funcConstKey)) {
-            result = funcConstants.get(funcConstKey);
-        } else if (funcFormulae.containsKey(id)) {
-            Object[] funcDetail = funcFormulae.get(id);
-            String argName = (String) funcDetail[0];
-            BigInteger oldVal = memory.containsKey(argName) ? memory.get(argName) : null;
-            memory.put(argName, argValue);
-            result = exprHdlr(funcDetail[1]);
-            if (oldVal == null) {
-                memory.remove(argName);
-            } else {
-                memory.put(argName, oldVal);
-            }
-        } else {
-            System.out.printf("undefined function: %s%n", id);
-        }
-        return result;
-    }
-
-    static void funcHdlr(Object ast) {
-        Object[] arr = (Object[]) ast;
-        Object[] formalParam = (Object[]) arr[1];
-        if (formalParam[0].equals(0)) {
-            funcFormulae.put((String)arr[0], new Object[] {formalParam[1], arr[2]});
-        } else if (formalParam[0].equals(1)) {
-            funcConstants.put(arr[0] + ":" + formalParam[1], exprHdlr(arr[2]));
-        }
-    }
-    
-    static BigInteger atomHdlr(Object ast) {
-        BigInteger result = BigInteger.ZERO;
-        Object[] pair = (Object[]) ast;
-        if (pair[0].equals(0)) {
-            Object[] arr = (Object[]) pair[1];
-            result = funcCall((String)arr[0], arr[1]);
-        } else if (pair[0].equals(1)) {
-            result = exprHdlr(pair[1]);
-        } else if (pair[0].equals(2)) {
-            result = BigInteger.valueOf(Long.parseLong((String)pair[1]));
-        } else if (pair[0].equals(3)) {
-            String id = (String)pair[1];
-            if (memory.containsKey(id)) {
-                result = memory.get(id);
-            } else {
-                System.out.printf("undefined variable: %s%n", id);
-                result = BigInteger.ZERO;
-            }
-        }
-        return result;
-    }
-
-    static BigInteger multExprHdlr(Object ast) {
-        Object[] arr = (Object[]) ast;
-        BigInteger result = atomHdlr(arr[0]);
-        for (Object[] arr2: (List&lt;Object[]>) arr[1]) {
-            Object[] pair = (Object[]) arr2[0];
-            if (pair[0].equals(0)) {
-                result = result.multiply(atomHdlr(arr2[1]));
-            } else if (pair[0].equals(1)) {
-                result = result.divide(atomHdlr(arr2[1]));
-            } else if (pair[0].equals(2)) {
-                result = result.mod(atomHdlr(arr2[1]));
-            }
-        }
-        return result;
-    }
-
-    static BigInteger exprHdlr(Object ast) {
-        Object[] arr = (Object[]) ast;
-        BigInteger result = multExprHdlr(arr[0]);
-        for (Object[] arr2: (List&lt;Object[]>) arr[1]) {
-            Object[] pair = (Object[]) arr2[0];
-            if (pair[0].equals(0)) {
-                result = result.add(multExprHdlr(arr2[1]));
-            } else if (pair[0].equals(1)) {
-                result = result.subtract(multExprHdlr(arr2[1]));
-            }
-        }
-        return result;
-    }
-
-    static void statHdlr(Object ast) {
-        Object[] pair = (Object[]) ast;
-        if (pair[0].equals(0)) {
-            Object[] arr = (Object[]) pair[1];
-            memory.put((String)arr[0], exprHdlr(arr[1]));
-        } else if (pair[0].equals(1)) {
-            funcHdlr(pair[1]);
-        } else if (pair[0].equals(2)) {
-            System.out.println(exprHdlr(pair[1]));
-        } else if (pair[0].equals(3)) {
-            // do nothing
-        }
-    }
-
-    static void progHdlr(Object ast) {
-        for (Object stat: (List&lt;Object>) ast) {
-            statHdlr(stat);
-        }
-    }
-
-    public static void main(String[] args) {
-        String input = "f(0)=1\n f(x)=f(x-1)*x\n a=3\n b=4\n (a+b)*5\n f(a+b)\n";
-        <span style="color:red; font-weight: bold">VllParsers</span> vll = <span style="color:red; font-weight: bold">VllParsers.fromFile</span>(new File("TDAR-Simple-Tree-Based-Interpreter.vll"));
-        <span style="color:red; font-weight: bold">VllParsers</span>.<span style="color:blue; font-weight: bold">Parser</span> exprParser = vll.<span style="color:red; font-weight: bold">getParserFor</span>("Prog");
-        <span style="color:red; font-weight: bold">VllParsers</span>.<span style="color:blue; font-weight: bold">ParseResult</span>&lt;Object> parseResult = vll.<span style="color:blue; font-weight: bold">parseAll</span>(exprParser, input);
-        if (parseResult.<span style="color:blue; font-weight: bold">successful()</span>) {
-            Object ast = vll.<span style="color:red; font-weight: bold">ast4jvm</span>(parseResult.get());
-            progHdlr(ast);
-        } else {
-            System.out.println(parseResult);
-        }
-    }
-}</code></pre>
-
-<p>
-The expressions that it interprets are in the string assigned to the variable <code>input</code> 
-(first line of function <code>main()</code>). You can modify this string or other parts of the 
-program to understand how it works.
 </p>
 
 <h3 id="InterpreterInClojureProgram">Interpreter in Clojure Program</h3>
