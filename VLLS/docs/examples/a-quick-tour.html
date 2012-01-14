@@ -980,15 +980,17 @@ program via the <a href="../UsingTheAPI.html">VisualLangLab API</a>.
 <p>
 The grammar for this application (including the action code) is bundled with VisualLangLab. 
 Select "Help" -> "Sample grammars" -> "TDAR-Simple-Tree-Based-Interpreter" from the main 
-menu (the GUI will appear to freeze for a new moments, this is expected). 
-The action code (in Scala) is associated with the reference node (labeled <i>stat</i>) 
+menu. 
+The action code is associated with the reference node (labeled <i>stat</i>) 
 of the top-level rule (<i>Prog</i>), and is displayed when the reference node is selected 
 (as in Figure-21 below). 
 </p>
 
 <p>
 <u>Note</u>: The relative position of some of the alternative branches in some of the rules have 
-been altered to arrange them in order of specificity. The rules are otherwise unchanged. 
+been altered to arrange them in order of specificity. The interpreter also uses JavaScript's 
+native numeric type for computations instead of BigDecimal (as in the original example code).
+The rules are otherwise unchanged. 
 </p>
 
 <p id="Figure21">
