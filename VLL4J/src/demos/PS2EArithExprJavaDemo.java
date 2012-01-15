@@ -27,7 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import vll4j.Vll4j;
 
-public class ArithExprJavaDemo {
+public class PS2EArithExprJavaDemo {
 
     static Float evalFactorAST(Object ast) {
         Object[] pair = (Object[]) ast;
@@ -66,10 +66,10 @@ public class ArithExprJavaDemo {
         return factor;
     }
 
-    public static void main(String[] args) throws ParserConfigurationException, 
-            SAXException, IOException {
+    public static void main(String[] args) throws 
+            ParserConfigurationException, SAXException, IOException {
         String input = "(3 + 5) * (8 - 4)";
-        Vll4j vll = Vll4j.fromFile(new File("ArithExpr.vll"));
+        Vll4j vll = Vll4j.fromFile(new File("PS2EArithExpr.vll"));
         Vll4j.Parser exprParser = vll.getParserFor("Expr");
         Vll4j.ParseResult parseResult = vll.parseAll(exprParser, input);
         if (parseResult.successful()) {

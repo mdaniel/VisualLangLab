@@ -201,7 +201,7 @@ public class ManagerHelp {
         String msg = "<html>" + 
             "This parser is based on the code at page 764 of \"Programming in Scala\"<br/>" + 
             "(http://www.artima.com/shop/programming_in_scala_2ed)<br/><br/>" + 
-            "IMPORTANT: Select the top-level parser (Expr) when running it.<br/>" +
+            "IMPORTANT: Select the top-level parser (Value) when running it.<br/>" +
             "</html>";
     };
 

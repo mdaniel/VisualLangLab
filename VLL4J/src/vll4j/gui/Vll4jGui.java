@@ -225,7 +225,7 @@ public class Vll4jGui extends JFrame {
         System.setOut(me.theTestingPanel.getOutStream());
         System.setErr(me.theTestingPanel.getErrStream());
         me.setVisible(true);
-        me.warnPreview();
+//        me.warnPreview();
     }
     
     PanelRuleTree theTreePanel = null;
@@ -264,5 +264,5 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    String version = "10.11";
+    String version = "10.12";
 }
