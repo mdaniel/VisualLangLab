@@ -1,0 +1,449 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>AST Structure and Action Code</title>
+  <meta name="description" content="VisualLangLab's Abstract Syntax Tree (AST) and Semantic Action Code in Scala and Javascript" />
+</head>
+
+<body>
+  <h1>VisualLangLab - AST Structure and Action Code</h1>
+
+<table border="1" style="border: 1px solid red;" width="100%"><tr><td>
+This tutorial is for  use with VisualLangLab version-7 or older only 
+If you are using Version-10 or later (recommended) use 
+<a href="ASTAndActionCode.html">this tutorial</a> instead. 
+Beginning version 10, the title bar of the <i>About VisualLangLab</i> 
+dialog box displays the version number (select "Help" -> "About VisualLangLab" 
+from the main menu). 
+The latest Version 10 jar file can be downloaded here: 
+<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
+</td></tr></table>
+
+  <p>The terms <i>parse-tree</i> and <i>AST</i> (short for <i>Abstract Syntax Tree</i>)
+  are used interchangably thoroughout the documentation to mean the same thing -- the
+  structure of information gathered during the parsing process. 
+  This is how <a href=
+  "http://en.wikipedia.org/wiki/Abstract_syntax_tree">Wikipedia defines AST</a>.</p>
+
+  <p>The discussion below explains two related issues: how <a href=
+  "http://vll.java.net/">VisualLangLab</a> determines the structure of the AST for any
+  parser-rule (or grammar-tree), and how the user should design and program action-code 
+  to process an AST. The same knowledge is also required when writing a custom application 
+  as described in <a href="UsingTheAPI.html">Using the API</a></p>
+
+  <h2 id="SmatteringOfScala">A Smattering of Scala</h2>
+
+  <p>This version of <a href="http://vll.java.net/">VisualLangLab</a> is written in
+  <a href="http://www.scala-lang.org/">Scala</a>, so the AST is expressed in terms of
+  standard Scala data-structures. While knowledge of Scala programming is not needed to
+  develop a parser, a rudimentary understanding of the data-structures is required for
+  understanding the AST. For a formal introduction to Scala use any of the books featured
+  on the <a href="http://www.scala-lang.org">official Scala web-site</a>.</p>
+
+  <h3 id="EssentialDataStructures">Essential Data-Structures</h3>
+
+  <p>The following standard Scala types are used in constructing ASTs. </p>
+
+  <ul style="list-style-type: disc;">
+    <li><a href=
+    "http://download.oracle.com/javase/6/docs/api/java/lang/String.html">String</a>
+    - used to represent nodes of type <i>Literal</i> or <i>Regex</i></li>
+
+    <li><a href=
+    "http://www.scala-lang.org/api/current/index.html#scala.Array">Array[Any]</a>
+    - used to represent <i>Sequence</i> nodes</li>
+
+    <li><a href=
+    "http://www.scala-lang.org/api/current/index.html#scala.Option">Option[Any]</a> 
+    - used to wrap nodes that have multiplicity <i>?</i> (0 or 1)</li>
+
+    <li><a href=
+    "http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.List">List[Any]</a>
+    - used to wrap <i>RepSep</i> nodes, and also nodes of other types that have a multiplicity of
+    <i>*</i> (0 or more) or <i>+</i> (1 or more)</li>
+
+    <li><a href="http://www.scala-lang.org/api/current/scala/Predef$$Pair$.html">Pair</a>
+    and <a href=
+    "http://www.scala-lang.org/api/current/index.html#scala.Tuple2">Tuple2[Int,Any]</a>
+    - used to represent <i>Choice</i> nodes</li>
+  </ul>
+
+  <p>The AST of a complete parser-rule (or grammar-tree) is built up by recursively nesting these
+  structures as required. That is why the content-type parameter is always
+  <code>Any</code> (to permit unconstrained nesting). The examples in the following
+  sections illustrate this concept.</p>
+
+  <h3 id="JVMLanguageASTView">JVM Language AST View</h3>
+
+  <p>Starting with release 6.01, the <a href="UsingTheAPI.html">VisualLangLab API</a> 
+  has added features to facilitate use from JVM languages other than Scala. 
+  The API is no longer awkward to use, 
+  and is now equally usable from <i>all</i> JVM languages. 
+  Descriptions of the AST structure below have been augmented with the AST view 
+  for JVM languages - look for the <span style="color: red; font-weight: bold">New in 6.01+ API:</span> 
+  tag. </p>
+
+  <p>The AST structure seen by <a href="#ActionCodeDesign">action-code functions</a>, 
+  however, remains unchanged.</p>
+
+  <h2 id="ASTStructure">AST Structure</h2>
+
+  <p>The structure of an AST for any particular grammar-tree is determined by the
+  arrangement, type, and multiplicity of the nodes comprising the grammar-tree. Starting
+  from the root-node, the following rules are applied recursively:</p>
+
+  <ul style="list-style-type: disc;">
+    <li>The <i>Root</i> node does not influence the AST structure -- its AST is the same
+    as that of the contained tree</li>
+
+    <li>A <i>Literal</i> token contributes a <code>String</code> (identical to the
+    Literal itself)</li>
+
+    <li>A <i>Regexp</i> token contributes a <code>String</code> (the <i>lexeme</i> or the
+    matched input)</li>
+
+    <li>A <i>Sequence</i> contributes an <code>Array[Any]</code> containing the items
+    contributed by its child nodes</li>
+
+    <li>A <i>Choice</i> contributes a <code>Pair[Int,Any]</code> where the first member
+    is the (0-based) index of the matching alternative, and the second member is the
+    value contributed by the matched alternative. 
+    <span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
+    (other than Scala) see an <code>Array[Object]</code> containing the same 
+    two members (boxed as required)</li>
+
+    <li>A <i>RepSep</i> contributes a <code>List[Any]</code> containing all the matched
+    items. <span style="color: red; font-weight: bold">New in 6.01+ API:</span> 
+    JVM languages (other than Scala) see a <code>java.util.List<strike>Iterator</strike></code>
+    (changed to <code>List</code> in <span style="color: red; font-weight: bold">7.01+</span>)</li>
+  </ul>
+
+  <p>Additionally, certain annotations cause the structure defined above to be modified
+  in the following ways:</p>
+
+  <ul style="list-style-type: disc;">
+    <li>A node with multiplicity <i>?</i> (0 or 1) contributes an
+    <code>Option[Any]</code>. A <code>None</code> is returned if the expected item was
+    not found in the input, and a <code>Some[Any]</code> is returned if the item was
+    present. <span style="color: red; font-weight: bold">New in 6.01+ API:</span> 
+    JVM languages (other than Scala) see an <code>Array[Object]</code> of 
+    one element which is set to <code>null</code> if the item was not present </li>
+
+    <li>A node with a multiplicity <i>*</i> (0-or-more) or <i>+</i> (1-or-more) wraps the
+    underlying values into a <code>List[Any]</code>. A <code>Nil</code> is returned if
+    the multiplicity is <i>*</i>, and no matching elements were found in the input.
+    <span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
+    (other than Scala) see a <code>java.util.List<strike>Iterator</strike></code> that 
+    may be empty. (changed to <code>List</code> in 
+    <span style="color: red; font-weight: bold">7.01+</span>)</li>
+
+
+    <li>A node with multiplicity <i>0</i> (<i>not</i>) or <i>=</i> (<i>guard</i>)
+    contributes nothing to the AST</li>
+
+    <li>A child node of a <i>Sequence</i> with the <i>drop</i> annotation contributes
+    nothing to the AST</li>
+
+    <li>A <i>Sequence</i> with only one child that contributes to the AST (because all
+    other child nodes have a <i>drop</i> annotation, or have multiplicities of <i>0</i>
+    (not) or <i>=</i> (guard)) does not produce an <code>Array[Any]</code>, but just
+    passes on the AST produced by its one contributing child node</li>
+  </ul>
+
+  <p>The examples below illustrate these principles using grammar trees from the built-in
+  parser for <i>SimpleJSON</i>. Remember that the AST shown in the figures is the AST of
+  the <i>selected</i> node. Also, remember that the root-node of a grammar-tree merely
+  reflects the AST of the contained tree.</p>
+
+<h3 id="AssociatingRuleTreeNodeAndASTSegment">Associating Rule-Tree Node and AST Segment</h3>
+
+<p>
+<span style="color: red; font-weight: bold">New in 7.01+:</span>
+When working with large ASTs, it is sometimes difficult to determine which rule-tree node 
+contributed to a segment of the AST. To help with these situations, VisualLangLab 
+adds the <i>description</i> field of a rule-tree node (if provided) to the AST segment 
+produced for it. 
+</p>
+
+  <h3 id="SequenceNodeExample">Sequence Node Example</h3>
+
+  <p>Figure-1 below illustrates the AST of a Sequence node. It also shows the result of
+  testing the grammar-tree with some user-provided input.</p>
+
+  <p><img src="images/ASTSequence-legacy.png" alt="Sequence node AST" /><br />
+  <i>Figure-1. Sequence node AST</i></p>
+
+  <p>The text displayed in the TextArea to the right of the grammar-tree is the structure
+  of the AST that will be used by VisualLangLab for this grammar-tree. Observe that the
+  structure is an <code>Array</code> with three elements (corresponding to the number of
+  child-nodes of the Sequence node). The format used for the array's elements is
+  described below:</p>
+
+  <ul style="list-style-type: disc;">
+    <li>[stringLiteral] - this form (name of a Regex node within square brackets)
+    represents the lexeme matching the regular-expression</li>
+
+    <li>":" - a string within double-quotes represents the string itself</li>
+
+    <li>@Value - an <i>@</i> prefixed parser-clause (or grammar-tree) name represent the
+    AST returned by the named grammar-tree</li>
+  </ul>
+
+  <p>The two TextAreas at the bottom of the GUI show the result of actually testing the
+  parser. Some test input (<i>"count" : 55</i>) has been typed into the <i>Parser Test
+  Input</i> area, and the result of running the parser appears under <i>Parser Log</i>.
+  The AST actually generated is on the last line of the output (<i>Array("count", :,
+  Pair(3, 55))</i>).</p>
+
+  <p>As described in <a href="TestingParsers.html">Testing Parsers</a> the displayed
+  grammar-tree is run by choosing <i>Test -&gt; Parse input</i> from the main menu or by
+  clicking on the corresponding toolbar button (<img src=
+  "images/ToolBarButtonParseInput.gif" align="center" alt="The Parse-input button" />).</p>
+
+  <p>JVM languages (other than Scala) see the same view.</p>
+
+  <h3 id="ChoiceNodeExample">Choice Node Example</h3>
+
+  <p>The grammar-tree in Figure-2 below illustrates the AST of a <i>Choice</i> node.</p>
+
+  <p><img src="images/ASTChoice-legacy.png" alt="Choice node AST" /><br />
+  <i>Figure-2. Choice node AST</i></p>
+
+  <p>The displayed AST illustrates the format used to describe the AST of a Choice node.
+  The value actually returned by the parser is any one of the alternative
+  <code>Pair[Int,Any]</code>s shown. The first member of the <code>Pair</code> is the
+  index of the matching alternative, while the second member is the value obtained by
+  parsing the actual alternative.</p>
+
+  <p>The text in testing area show the result of a parser run. The text <i>3.14</i> was
+  typed into the <i>Parser Test Input</i> area, and the result of the run is the output
+  <code>Pair(3, 3.14)</code> (last line under <i>Parser Log</i>). The first member of the
+  <code>Pair</code> in this example (the value <i>3</i>) is the 0-based index of the
+  matching alternative (the Regex node <i>floatingPointNumber</i>).</p>
+
+  <p><span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
+  (other than Scala) see an <code>Array[Object]</code> (instead of a 
+    <code>Pair[Int,Any]</code>) containing the same two members (boxed as required).</p>
+
+  <h3 id="RepSepNodeExample">RepSep Node Example</h3>
+
+  <p>The grammar-tree in Figure-3 below illustrates the AST of a <i>RepSep</i> node.</p>
+
+  <p><img src="images/ASTRepSep-legacy.png" alt="RepSep node AST" /><br />
+  <i>Figure-3. RepSep node AST</i></p>
+
+  <p>Observe the the AST in this case is a 2-level structure -- a <code>List</code>
+  nested within an <code>Array</code>. The <code>List</code> represents the
+  <i>RepSep</i>, while the <code>Array</code> represents the containing
+  <i>Sequence</i>.</p>
+
+  <p>The parser when tested with the following input: <i>[false, 3.14, "hello"]</i>
+  produces this AST as output: 
+  </p>
+
+<pre><code>Array([, <span style="color: red;">List(<span style="color: blue;">Pair(6, false)</span>, <span style="color: blue;">Pair(3, 3.14)</span>, <span style="color: blue;">Pair(2, "hello")</span>)</span>, ])</code></pre>
+
+  <p>The red parts come from the <i>RepSep</i>, while the blue parts come from the <i>Value</i> rule 
+  it uses. 
+  </p>
+
+  <p><span style="color: red; font-weight: bold">New in 6.01+ API:</span> JVM languages 
+    (other than Scala) see a <code>java.util.List<strike>Iterator</strike>[Object]</code> instead of a 
+    <code>List[Any]</code>. (changed to <code>List</code> in 
+<span style="color: red; font-weight: bold">7.01+</span>)</li>
+</p>
+
+  <h3 id="SequenceNodeWithOneContributingNode">Sequence Node Example with One Contributing Node</h3>
+
+  <p>Our last example Figure-4 below illustrates the AST of a <i>Sequence</i> node with
+  just 1 contributing node. It also shows the effect of applying the <i>drop</i>
+  annotation to the child node of a <i>Sequence</i>.</p>
+
+  <p><img src="images/ASTSeqWithDrop-legacy.png" alt="Sequence node AST with 1 contributing node" /><br />
+  <i>Figure-4. Sequence node AST with 1 contributing node</i></p>
+
+  <p>This example uses the same grammar-tree as the previous example, but applies the
+  <i>drop</i> annotation to the Literal nodes <i>LBKT</i> and <i>RBKT</i> (see <a href=
+  "EditingTheGrammarTree.html">Editing the Grammar Tree</a>). The presence of the
+  attribute is clearly evident in the grammar tree from the textual annotation as well as
+  the overlay applied to the basic Literal icon.</p>
+
+  <p>The AST changes drastically beacuse of these modifications. The two <i>drop</i>ped
+  nodes do not appear in the AST. And, since the Sequence has just one child node left
+  that contributes to the AST (the RepSep), the Sequence merely passes on the AST of the
+  RepSep. It does not need to produce an <code>Array</code>.</p>
+
+  <h2 id="ActionCodeDesign">Action-Code Design</h2>
+
+  <p>Within <a href="http://vll.java.net/">VisualLangLab</a> action-code is an anonymous
+  function literal written in Scala or Javascript, and this section assumes that the reader 
+  knows one of those languages reasonably well.</p>
+
+  <h3 id="CodeStructureAndInvocation">Code Structure and Invocation</h3>
+
+  <p>An action-code function literal must have one argument that can accept <i>any</i>
+  value. The value returned by the function depends on the overall design of the
+  parser.</p>
+
+  <p>An action-code function is called twice by the parser: once before parsing of the
+  associated node begins, and again after parsing of the node has ended. The first
+  invocation allows the function to perform any setup actions, while the second
+  invocation is intended for AST processing. The action-code function can distinguish the
+  two invocations by testing the value of its argument. The argument has a
+  <i>null</i> value during the first invocation, but has a reference to the AST (which
+  is necessarily non-null) during the second invocation. Action-code functions must
+  test the argument's value and act accordingly.</p>
+
+  <h3 id="PredefinedVariables">Predefined Variables</h3>
+
+  <p>To facilitate the design of stateful behavior, and give action-code access to
+  required environmental information, the action-code launcher arranges for certain
+  predefined global variables to be available. These variables are listed in Table-1
+  below.</p><i>Table-1. Predefined global variables</i>
+
+  <table border="1" style="border: 1px solid black;">
+    <tr>
+      <th style="text-align: center; font-weight: bold;">Name</th>
+      <th style="text-align: center; font-weight: bold;">Description</th>
+    </tr>
+    <tr>
+      <td align="center"><code>VLL</code></td>
+      <td>See descriptions for specific languages below</td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllLine</code></td>
+      <td>The line number of the input position at which the action-code 
+          function is called</td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllCol</code></td>
+      <td>The column number of the input position at which the action-code 
+          function is called</td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllOffset</code></td>
+      <td>The offset of the input position at which the action-code 
+          function is called</td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllInput</code></td>
+      <td>A <code>java.lang.CharSequence</code> containing the 
+        input text matching this node</td>
+    </tr>
+
+    <tr>
+      <td align="center"><code>vllLastMsg</code></td>
+      <td>The Last error message issued by the parser</td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllLastLine</code></td>
+      <td>The line number at which the last error message was issued</td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllLastCol</code></td>
+      <td>The column number at which the last error message was issued</td>
+    </tr>
+
+    <tr>
+      <td align="center"><code>vllParserTestInput</code></td>
+      <td>The GUI's <code>JTextComponent</code> containing user-provided test input 
+        (just under the <i>Parser Test Input</i> label)</td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllParserLog</code></td>
+      <td>The GUI's <code>JTextComponent</code> containing parser log text 
+        (just under the <i>Parser Log</i> label)</td>
+    </tr>
+  </table>
+
+  <p>The last two variables above (<i>vllParserTestInput</i>, and <i>vllParserLog</i>) are useful for
+  writing automated test scripts as described in <a  href="TestingParsers.html#WrapperWithActionCode">Wrapper with Action Code</a>.</p>
+
+  <h3 id="ScalaAction">Scala</h3>
+
+  <p>Action-code in Scala is written as a function-literal that accepts a single argument
+  of type <code>Any</code> and returns a value of any type (depending on the overall
+  design). The code can use all of the Scala and Java APIs. The following code is an
+  example taken from the built-in <i>ArithExpr with action-code</i> parser:</p>
+  <pre>
+<code>(a: Any) =&gt; a match {
+    // first invocation (do nothing) ...
+  case null =&gt; null
+    // second invocation (process AST) ...
+  case Array(f: Double, lst:List[_]) =&gt; 
+    var res = f
+    lst.foreach(_ match {
+      case Pair(0, f2:Double) =&gt; res *= f2
+      case Pair(1, f2:Double) =&gt; res /= f2
+    })
+    res
+}</code>
+</pre>
+
+  <p>In Scala the predefined variable <i>VLL</i> behaves as if it has a data member
+  called <i>value</i> defined like this: <code>var value: Any = _</code>, so action-code
+  can store any value like this: <code>VLL.value = /*some value*/</code>, and recover the
+  value later by using <code>VLL.value.asInstanceOf[/*some type*/]</code>.</p>
+
+  <p>Under the hood, any user-provided Scala code must be actually <i>compiled</i> before
+  use, so the presence of action-code in Scala does perceptibly slow down the <a href=
+  "http://vll.java.net/">VisualLangLab</a> GUI at certain points.</p>
+
+  <h3 id="JavascriptAction">Javascript</h3>
+
+  <p>Action-code in Javascript is written as an anonymous function that accepts one
+  argument and returns a value that depends on the overall design. To simplify the
+  writing of action-code in Javascript, <a href="http://vll.java.net/">VisualLangLab</a>
+  transforms all Scala container types into native Javascript arrays. The following
+  transformations are performed:</p>
+
+  <ul style="list-style-type: disc;">
+    <li>Scala <a href=
+    "http://www.scala-lang.org/api/current/index.html#scala.Array">Array[Any]</a>s become
+    Javascript arrays</li>
+
+    <li>Scala <a href=
+    "http://download.oracle.com/javase/6/docs/api/java/lang/String.html">String</a>s
+    become Javascript strings</li>
+
+    <li>An <a href=
+    "http://www.scala-lang.org/api/current/index.html#scala.Option">Option[Any]</a>
+    becomes a Javascript array containing one possibly <i>null</i>-valued element</li>
+
+    <li>A <a href=
+    "http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.List">List[Any]</a>
+    becomes a Javascript array of 0 or more elements</li>
+
+    <li>A <a href=
+    "http://www.scala-lang.org/api/current/scala/Predef$$Pair$.html">Pair</a> (or
+    <a href="http://www.scala-lang.org/api/current/index.html#scala.Tuple2">Tuple2[Int,Any]</a>)
+    becomes a Javascript array of 2 elements</li>
+  </ul>
+
+  <p>The code is interpreted by the JVM's embedded Javascript engine (<a href=
+  "http://www.mozilla.org/rhino/">Rhino</a>), and can therefore <a href=
+  "http://www.mozilla.org/rhino/ScriptingJava.html">use the JDK API</a>. The following
+  code is an example taken from the built-in <i>ArithExpr with action-code</i>
+  parser.</p>
+  <pre>
+<code>function (arg) {
+    // first invocation (do nothing) ...
+  if (!arg) {
+    return;
+  }
+    // second invocation (process AST) ...
+  switch (arg[0]) {
+  case 0:
+    return parseFloat(arg[1]); break;
+  case 1: 
+    return arg[1]; break;
+  } 
+}</code>
+</pre>
+
+  <p>In Javascript the predefined variable <i>VLL</i> is an object with no particular
+  data or function members, but which can be modified by the action-code as required.</p>
+</body>
+</html>
