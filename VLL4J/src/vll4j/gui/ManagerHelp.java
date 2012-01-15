@@ -170,12 +170,12 @@ public class ManagerHelp {
     Action samplePs2eArithExpr = new AbstractAction("PS2E-ArithExpr") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(gui, msg, "P2SE-ArithExpr", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(gui, msg, "PS2E-ArithExpr", JOptionPane.INFORMATION_MESSAGE);
             InputStream is = ClassLoader.getSystemClassLoader().
                     getResourceAsStream("vll4j/gui/resources/PS2E-ArithExpr.vll");
             gui.reset(false);
             gui.theFileManager.openInputStream(is, false);
-            gui.setGrammarName("P2SE-ArithExpr");
+            gui.setGrammarName("PS2E-ArithExpr");
             gui.theRuleManager.reset();
         }
         String msg = "<html>" + 
@@ -185,6 +185,24 @@ public class ManagerHelp {
             "AST to a number is also available (P2SE-ArithExpr-Action).<br/><br/>" +
             "IMPORTANT: Select the top-level parser (Expr) when running it.<br/>" +
             "Sample input (remove quotes): \"(2 + 3) * (7 - 3)\"</html>";
+    };
+
+    Action samplePs2eSimpleJson = new AbstractAction("PS2E-SimpleJSON") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(gui, msg, "PS2E-SimpleJSON", JOptionPane.INFORMATION_MESSAGE);
+            InputStream is = ClassLoader.getSystemClassLoader().
+                    getResourceAsStream("vll4j/gui/resources/PS2E-SimpleJSON.vll");
+            gui.reset(false);
+            gui.theFileManager.openInputStream(is, false);
+            gui.setGrammarName("PS2E-SimpleJSON");
+            gui.theRuleManager.reset();
+        }
+        String msg = "<html>" + 
+            "This parser is based on the code at page 764 of \"Programming in Scala\"<br/>" + 
+            "(http://www.artima.com/shop/programming_in_scala_2ed)<br/><br/>" + 
+            "IMPORTANT: Select the top-level parser (Expr) when running it.<br/>" +
+            "</html>";
     };
 
     Action samplePs2eArithExprAction = new AbstractAction("PS2E-ArithExpr-Action") {
