@@ -143,17 +143,17 @@ public class ManagerTesting {
     private File[] dredgeFiles(File f) {
         if (f.isDirectory()) {
             List<File> lf = new ArrayList<File>();
-            mineFiles(f, lf);
+            dredgeFiles(f, lf);
             return lf.toArray(new File[lf.size()]);
         } else 
             return new File[] {f};
     }
     
-    private void mineFiles(File root, List<File>lf) {
+    private void dredgeFiles(File root, List<File>lf) {
         File files[] = root.listFiles();
         for (File f: files) {
             if (f.isDirectory()) {
-                mineFiles(f, lf);
+                dredgeFiles(f, lf);
             } else {
                 lf.add(f);
             }
@@ -189,11 +189,12 @@ public class ManagerTesting {
                     t2 = System.currentTimeMillis();
                     if (pr.successful()) {
                         ++countOk;
-                        System.out.printf("%s: %d ms%n", f.getAbsolutePath(), t2 - t1);
+                        System.out.printf("%s: OK: %d bytes %d ms%n", f.getAbsolutePath(), 
+                                f.length(), t2 - t1);
                     } else {
                         ++countNotOk;
-                        System.err.printf("%s: (%d,%d) %d: ms%n", f.getAbsolutePath(), 
-                                pr.next().line(), pr.next().column(), t2 - t1);
+                        System.err.printf("%s: ERROR (%d,%d): %d bytes %d: ms%n", f.getAbsolutePath(), 
+                                pr.next().line(), pr.next().column(), f.length(), t2 - t1);
                     }
                 } catch (Throwable t) {
                     long maxMemory = Runtime.getRuntime().maxMemory();
