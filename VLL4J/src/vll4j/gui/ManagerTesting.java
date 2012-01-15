@@ -44,11 +44,7 @@ public class ManagerTesting {
                 public void run() {
                     parseStopAction.setEnabled(true);
                     setEnabled(false);
-                    try {
-                        runner(false);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
+                    runner(false);
                     setEnabled(true);
                     parseStopAction.setEnabled(false);
                 }
@@ -144,7 +140,7 @@ public class ManagerTesting {
         }});
     }
     
-    private File[] mineFiles(File f) {
+    private File[] dredgeFiles(File f) {
         if (f.isDirectory()) {
             List<File> lf = new ArrayList<File>();
             mineFiles(f, lf);
@@ -186,17 +182,26 @@ public class ManagerTesting {
             inFile = fileChooser.getSelectedFile();
             t0 = System.currentTimeMillis();
             int countOk = 0, countNotOk = 0;
-            for (File f: mineFiles(inFile)) {
+            for (File f: dredgeFiles(inFile)) {
                 t1 = System.currentTimeMillis();
-                ParseResult pr = gui.regexParsers.parseAll(parser, new ReaderFile(f));
-                t2 = System.currentTimeMillis();
-                if (pr.successful()) {
-                    ++countOk;
-                    System.out.printf("%s: %d ms%n", f.getAbsolutePath(), t2 - t1);
-                } else {
+                try {
+                    ParseResult pr = gui.regexParsers.parseAll(parser, new ReaderFile(f));
+                    t2 = System.currentTimeMillis();
+                    if (pr.successful()) {
+                        ++countOk;
+                        System.out.printf("%s: %d ms%n", f.getAbsolutePath(), t2 - t1);
+                    } else {
+                        ++countNotOk;
+                        System.err.printf("%s: (%d,%d) %d: ms%n", f.getAbsolutePath(), 
+                                pr.next().line(), pr.next().column(), t2 - t1);
+                    }
+                } catch (Throwable t) {
+                    long maxMemory = Runtime.getRuntime().maxMemory();
+                    long totalMemory = Runtime.getRuntime().totalMemory();
+                    System.out.printf("Memory: %d/%d%n", totalMemory, maxMemory);
                     ++countNotOk;
-                    System.err.printf("%s: (%d,%d) %d: ms%n", f.getAbsolutePath(), 
-                            pr.next().line(), pr.next().column(), t2 - t1);
+                    t.printStackTrace();
+                    break;
                 }
                 appendStatus(String.format(" %d Ok, %d NOk in %d ms", countOk, countNotOk, t1 - t0), true);
                 if (stopRequested) {
@@ -206,22 +211,29 @@ public class ManagerTesting {
             }
         } else {
             t0 = System.currentTimeMillis();
-            ParseResult pr = gui.regexParsers.parseAll(parser, fromFile ? new ReaderFile(inFile) : 
+            try {
+                ParseResult pr = gui.regexParsers.parseAll(parser, fromFile ? new ReaderFile(inFile) : 
                     new ReaderTextArea(gui.theTestingPanel.inputArea));
-            t1 = System.currentTimeMillis();
-            appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
-            if (pr.successful()) {
-                t0 = System.currentTimeMillis();
-                String ast = gui.regexParsers.dumpValue(pr.get());
                 t1 = System.currentTimeMillis();
-                appendStatus(String.format(", AST.toString: %d ms", t1 - t0), false);
-                t0 = System.currentTimeMillis();
-                System.out.println(ast);
-                System.out.println();
-                t1 = System.currentTimeMillis();
-                appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
-            } else {
-                System.err.printf("%s%n", gui.regexParsers.dumpResult(pr));
+                appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
+                if (pr.successful()) {
+                    t0 = System.currentTimeMillis();
+                    String ast = gui.regexParsers.dumpValue(pr.get());
+                    t1 = System.currentTimeMillis();
+                    appendStatus(String.format(", AST.toString: %d ms", t1 - t0), false);
+                    t0 = System.currentTimeMillis();
+                    System.out.println(ast);
+                    System.out.println();
+                    t1 = System.currentTimeMillis();
+                    appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
+                } else {
+                    System.err.printf("%s%n", gui.regexParsers.dumpResult(pr));
+                }
+            } catch (Throwable t) {
+                long maxMemory = Runtime.getRuntime().maxMemory();
+                long totalMemory = Runtime.getRuntime().totalMemory();
+                System.out.printf("Memory: %d/%d%n", totalMemory, maxMemory);
+                t.printStackTrace();
             }
         }
     }

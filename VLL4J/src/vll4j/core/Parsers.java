@@ -194,13 +194,14 @@ public class Parsers {
             public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
                 ParseResult<T> pr = null;
-                while ((pr = rep.apply(input)).successful()) {
+                if ((pr = rep.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
-                    if ((pr = sep.apply(input)).successful())
+                    while ((pr = sep.apply(input)).successful() && 
+                            (pr = rep.apply(pr.next())).successful()) {
+                        list.add(pr.get());
                         input = pr.next();
-                    else
-                        break;
+                    }
                 }
                 return new Success(list, input);
             }
@@ -239,13 +240,14 @@ public class Parsers {
             public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
                 ParseResult<T> pr = null;
-                while ((pr = rep.apply(input)).successful()) {
+                if ((pr = rep.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
-                    if ((pr = sep.apply(input)).successful())
+                    while ((pr = sep.apply(input)).successful() && 
+                            (pr = rep.apply(pr.next())).successful()) {
+                        list.add(pr.get());
                         input = pr.next();
-                    else
-                        break;
+                    }
                 }
                 if (list.isEmpty())
                     return new Failure(errMsg, input, (NoSuccess<T>)pr);
