@@ -27,6 +27,13 @@ context of a real example. Using the API requires a good knowledge of the
 <a href="ASTAndActionCode.html#ActionCodeDesign">action-code design</a> is also helpful.
 </p>
 
+<p>
+The rest of this article describes a compact example based on one of the sample grammars 
+bundled with the VisualLangLab GUI. Another, somewhat larger, example can be found in 
+<a href="examples/a-quick-tour.html#EvaluatingExpressionsUsingAnAST">Evaluating Expressions 
+Using an AST</a>.
+</p>
+
 <h2 id="AnArithmeticExpressionParser">An Arithmetic Expression Parser</h2>
 
 <p>
@@ -296,12 +303,20 @@ understand the logic better.
 
 
 <p>
-The AST of this rule (<i>term</i>) is structurally identical to the previous case (<i>Expr</i>), 
-so the code is also structurally identical. 
-The only difference is in the identity of the rule 
-(<i>factor</i> in this case) to which the sub-AST is handed off for further processing, 
-and the arithmetic operators (<code>*=</code> and <code>/=</code> in this case) 
-used for updating the cumulated value.
+The top-level of this AST is a Choice, meaning that one of the two array objects defined 
+in the Choice will be received. Line-2 of the code therefore assigns the AST as received 
+to <code>pair</code> which is an array of two Objects. It then proceeds to test the first 
+element of the array to help it to decide how to process the second element.
+</p>
+
+<h3 id="BoxingAndUnboxing">Boxing and Unboxing</h3>
+
+<p>
+The last example above (funcion <code>evalFactorAST()</code>) makes it clear that 
+<a href="http://docs.oracle.com/javase/1.5.0/docs/guide/language/autoboxing.html">autoboxing</a> 
+is at work on the API side. How else would an array of <code>Object</code>'s carry an 
+integer? The API user should be aware of this and exploit Java's unboxing 
+capabilities appropriately.
 </p>
 
 <h3 id="RunningTheCode">Running the Code</h3>
