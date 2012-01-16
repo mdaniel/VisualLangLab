@@ -267,6 +267,18 @@ public class VisitorParserGeneration extends VisitorBase {
         }
     }
     
+    @Override
+    public Parser<? extends Object> visitWildCard(NodeWildCard n) {
+        if (n.accept(visitorNodeValidation) == null) {
+            String errMsg = n.errorMessage.isEmpty() ? 
+                    String.format("wildCard(%s)", n.nodeName()) : n.errorMessage;
+            return withMultiplicity(regexParsers.wildCard(errMsg), n);
+        } else {
+            parserGeneratedOk = false;
+            return null;
+        }
+    }
+
     private PackratParsers regexParsers;
     private boolean traceAll;
     private Map<String, Parser<? extends Object>[]> parserCache = new HashMap<String, Parser<? extends Object>[]>();

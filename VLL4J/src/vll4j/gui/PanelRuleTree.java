@@ -136,6 +136,15 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         }
     };
     
+    Action addWildCardAction = new AbstractAction("WildCard", Resources.wildCard) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            NodeWildCard newNode = new NodeWildCard();
+            theModel.insertNodeInto(newNode, selectedNode, selectedNode.getChildCount());
+            resetNodeDisplay(newNode);
+        }
+    };
+    
     Action goToAction = new AbstractAction("Go to") {
         @Override
         public void actionPerformed(ActionEvent e) {

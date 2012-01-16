@@ -62,6 +62,7 @@ public class PopupMenuTree extends JPopupMenu {
         addMenu.add(treePanel.addRepSepAction);
         addMenu.add(new JSeparator());
         addMenu.add(treePanel.addSemPredAction);
+        addMenu.add(treePanel.addWildCardAction);
         add(multiplicityMenu);
         multiplicityMenu.add(multiplicityOneItem);
         multiplicityMenu.add(multiplicityZeroMoreItem);

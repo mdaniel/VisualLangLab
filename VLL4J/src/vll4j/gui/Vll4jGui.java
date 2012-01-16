@@ -192,8 +192,8 @@ public class Vll4jGui extends JFrame {
         toolBar.add(tip(theTestManager.logCopyAction));
         toolBar.add(tip(theTestManager.logClearAction));
         theTestManager.parseStopAction.setEnabled(false);
-        toolBar.addSeparator();
-        toolBar.add(tip(theHelpFunctionsManager.displayHelpMain));
+//        toolBar.addSeparator();
+//        toolBar.add(tip(theHelpFunctionsManager.displayHelpMain));
     }
 
     void setGrammarName(String grammarName) {

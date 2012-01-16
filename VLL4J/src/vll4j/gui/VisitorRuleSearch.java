@@ -21,16 +21,7 @@
 package vll4j.gui;
 
 import java.util.TreeSet;
-import vll4j.tree.NodeBase;
-import vll4j.tree.NodeChoice;
-import vll4j.tree.NodeLiteral;
-import vll4j.tree.NodeReference;
-import vll4j.tree.NodeRegex;
-import vll4j.tree.NodeRepSep;
-import vll4j.tree.NodeRoot;
-import vll4j.tree.NodeSemPred;
-import vll4j.tree.NodeSequence;
-import vll4j.tree.VisitorBase;
+import vll4j.tree.*;
 
 public class VisitorRuleSearch extends VisitorBase {
     
@@ -88,6 +79,11 @@ public class VisitorRuleSearch extends VisitorBase {
     @Override
     public Object visitSequence(NodeSequence n) {
         visitAllChildNodes(n);
+        return null;
+    }
+    
+    @Override
+    public Object visitWildCard(NodeWildCard n) {
         return null;
     }
     

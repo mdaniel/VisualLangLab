@@ -29,14 +29,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import vll4j.tree.NodeChoice;
-import vll4j.tree.NodeLiteral;
-import vll4j.tree.NodeReference;
-import vll4j.tree.NodeRegex;
-import vll4j.tree.NodeRepSep;
-import vll4j.tree.NodeRoot;
-import vll4j.tree.NodeSemPred;
-import vll4j.tree.NodeSequence;
+import vll4j.tree.*;
 
 public class RendererRuleNode extends DefaultTreeCellRenderer {
     
@@ -80,6 +73,8 @@ public class RendererRuleNode extends DefaultTreeCellRenderer {
             return Resources.semPred;
         } else if (theNode instanceof NodeSequence) {
             return Resources.sequence;
+        } else if (theNode instanceof NodeWildCard) {
+            return Resources.wildCard;
         } else 
             return null;
     }

@@ -92,4 +92,9 @@ public class VisitorValidation extends VisitorBase {
         }
     }
     
+    @Override
+    public String visitWildCard(NodeWildCard n) {
+        return null;
+    }
+    
 }

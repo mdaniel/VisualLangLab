@@ -128,5 +128,13 @@ public class VisitorXmlGeneration extends VisitorBase {
         return null;
     }
     
+    @Override
+    public Object visitWildCard(NodeWildCard n) {
+        space();
+        printWriter.printf("<Token ");
+        commonAttributes(n, true);
+        return null;
+    }
+    
     private PrintWriter printWriter;
 }

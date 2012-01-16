@@ -41,9 +41,9 @@ public class PS2EArithExprJavaDemo {
     }
 
     static Float evalExprAST(Object ast) {
-        Object[] arr = (Object[]) ast;
-        Float term = evalTermAST(arr[0]);
-        for (Object pair[] : (List<Object[]>) arr[1]) {
+        Object[] array = (Object[]) ast;
+        Float term = evalTermAST(array[0]);
+        for (Object pair[] : (List<Object[]>) array[1]) {
             if (pair[0].equals(0)) {
                 term += evalTermAST(pair[1]);
             } else if (pair[0].equals(1)) {
@@ -54,9 +54,9 @@ public class PS2EArithExprJavaDemo {
     }
 
     static Float evalTermAST(Object ast) {
-        Object[] arr = (Object[]) ast;
-        Float factor = evalFactorAST(arr[0]);
-        for (Object[] pair : (List<Object[]>) arr[1]) {
+        Object[] array = (Object[]) ast;
+        Float factor = evalFactorAST(array[0]);
+        for (Object[] pair : (List<Object[]>) array[1]) {
             if (pair[0].equals(0)) {
                 factor *= evalFactorAST(pair[1]);
             } else if (pair[0].equals(1)) {
@@ -69,7 +69,7 @@ public class PS2EArithExprJavaDemo {
     public static void main(String[] args) throws 
             ParserConfigurationException, SAXException, IOException {
         String input = "(3 + 5) * (8 - 4)";
-        Vll4j vll = Vll4j.fromFile(new File("PS2EArithExpr.vll"));
+        Vll4j vll = Vll4j.fromFile(new File("PS2E-ArithExpr.vll"));
         Vll4j.Parser exprParser = vll.getParserFor("Expr");
         Vll4j.ParseResult parseResult = vll.parseAll(exprParser, input);
         if (parseResult.successful()) {

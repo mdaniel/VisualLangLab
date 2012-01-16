@@ -21,15 +21,7 @@
 package vll4j.gui;
 
 import java.util.ArrayList;
-import vll4j.tree.NodeChoice;
-import vll4j.tree.NodeLiteral;
-import vll4j.tree.NodeReference;
-import vll4j.tree.NodeRegex;
-import vll4j.tree.NodeRepSep;
-import vll4j.tree.NodeRoot;
-import vll4j.tree.NodeSemPred;
-import vll4j.tree.NodeSequence;
-import vll4j.tree.VisitorBase;
+import vll4j.tree.*;
 
 public class VisitorRuleRenaming extends VisitorBase {
     
@@ -83,6 +75,11 @@ public class VisitorRuleRenaming extends VisitorBase {
     @Override
     public Object visitSequence(NodeSequence n) {
         visitAllChildNodes(n);
+        return null;
+    }
+    
+    @Override
+    public Object visitWildCard(NodeWildCard n) {
         return null;
     }
     

@@ -171,6 +171,10 @@ public class RegexParsers extends Parsers {
         return p;
     }
     
+    public Parser<String> wildCard(String errMsg) {
+        return parserById(errMsg, Integer.MAX_VALUE);
+    }
+    
     private Parser<String> parserById(final String errMsg, final int id) {
         return new Parser<String>() {
             @Override
@@ -189,7 +193,7 @@ public class RegexParsers extends Parsers {
                         return new Failure(errMsg, input);
                     } else {
                         int regId = (Integer)regRes[1];
-                        if (regId == id)
+                        if (regId == id || id == Integer.MAX_VALUE)
                             return new Success(reg, input.drop((Integer)regRes[2]));
                         else 
                             return new Failure(errMsg, input);
@@ -197,7 +201,7 @@ public class RegexParsers extends Parsers {
                 } else {
                     if (reg == null) {
                         int litId = (Integer)litRes[1];
-                        if (litId == id)
+                        if (litId == id || id == Integer.MAX_VALUE)
                             return new Success(lit, input.drop((Integer)litRes[2]));
                         else
                             return new Failure(errMsg, input);

@@ -249,11 +249,16 @@ public class VisitorAstGeneration extends VisitorBase {
         return sb.toString();
     }
     
+    @Override
+    public Object visitWildCard(NodeWildCard n) {
+        // Never called! Exists only to keep the compiler happy
+        return getSpaces(n) + "*";
+    }
+    
     private Vll4jGui gui;
     private String spacer  = "|  ";
     private Map<Integer, String> spacers = new HashMap<Integer, String>();
     int level = 0;
-    private VisitorValidation visitorNodeValidation = new VisitorValidation();
     int maxDepth = 0;
     private Set<NodeBase> activeNodes = new HashSet<NodeBase>();
 }

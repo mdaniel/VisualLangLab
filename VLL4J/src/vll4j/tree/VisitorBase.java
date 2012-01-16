@@ -39,6 +39,7 @@ public abstract class VisitorBase {
     public abstract Object visitRoot(NodeRoot n);
     public abstract Object visitSemPred(NodeSemPred n);
     public abstract Object visitSequence(NodeSequence n);
+    public abstract Object visitWildCard(NodeWildCard n);
     
     protected int depth = 0;
 }

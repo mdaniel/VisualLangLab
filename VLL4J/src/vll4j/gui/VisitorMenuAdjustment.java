@@ -20,17 +20,7 @@
 
 package vll4j.gui;
 
-import vll4j.tree.Multiplicity;
-import vll4j.tree.NodeBase;
-import vll4j.tree.NodeChoice;
-import vll4j.tree.NodeLiteral;
-import vll4j.tree.NodeReference;
-import vll4j.tree.NodeRegex;
-import vll4j.tree.NodeRepSep;
-import vll4j.tree.NodeRoot;
-import vll4j.tree.NodeSemPred;
-import vll4j.tree.NodeSequence;
-import vll4j.tree.VisitorBase;
+import vll4j.tree.*;
 
 public class VisitorMenuAdjustment extends VisitorBase {
     
@@ -161,6 +151,16 @@ public class VisitorMenuAdjustment extends VisitorBase {
         theMenu.goToItem.setEnabled(false);
         theMenu.pasteMenuItem.setEnabled(theMenu.treePanel.theClipBoard != null);
         theMenu.treePanel.addSemPredAction.setEnabled(true);
+        return null;
+    }
+    
+    @Override
+    public Object visitWildCard(NodeWildCard n) {
+        commonSetting(n);
+        theMenu.addMenu.setEnabled(false);
+        theMenu.goToItem.setEnabled(false);
+        theMenu.pasteMenuItem.setEnabled(false);
+        theMenu.treePanel.addSemPredAction.setEnabled(false);
         return null;
     }
     
