@@ -892,7 +892,7 @@ public class TDARExprAST {
     static float evalMultExpr(Object ast) {
         Object arr[] = (Object[])ast;
         Float res = evalAtom(arr[0]);
-        List<Object[]> lst = (List<Object[]>)arr[1];
+        List&lt;Object[]> lst = (List&lt;Object[]>)arr[1];
         for (Object pair[]: lst) {
             res *= evalAtom(pair[1]);
         }
@@ -902,7 +902,7 @@ public class TDARExprAST {
     static float evalExpr(Object ast) {
         Object arr[] = (Object[])ast;
         Float res = evalMultExpr(arr[0]);
-        List<Object[]> lst = (List<Object[]>)arr[1];
+        List&lt;Object[]> lst = (List&lt;Object[]>)arr[1];
         for (Object pair[]: lst) {
             Object discr[] = (Object[])pair[0];
             switch ((Integer)discr[0]) {
@@ -937,7 +937,7 @@ public class TDARExprAST {
         }
     }
     
-    static Map<String, Float> memory = new HashMap<String, Float>();
+    static Map&lt;String, Float> memory = new HashMap&lt;String, Float>();
 
     public static void main(String[] args) throws ParserConfigurationException, 
             SAXException, IOException {
