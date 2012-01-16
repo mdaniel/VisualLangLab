@@ -7,16 +7,6 @@
   <body>
     <h1>VisualLangLab - Testing Parsers</h1>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td>
-<span style="font-size: larger;">For Ver-10.10 or higher only!</span><br/>
-If you are using an older version, follow 
-<a href="TheGUI-legacy.html">this tutorial</a> instead. 
-Beginning Ver-10.01, the title bar of the <i>About VisualLangLab</i> 
-dialog box displays the version number. 
-The latest jar file can be downloaded here: 
-<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
-</td></tr></table>
-
     <p>
       The greatest advantage of <a href="http://vll.java.net">VisualLangLab</a> 
       over other tools is ease of testing. 
@@ -161,10 +151,11 @@ The latest jar file can be downloaded here:
       This simple yet highly effective approach uses an additional 
       parser-rule to wrap <i>before</i> and <i>after</i> test-code around the 
       grammar under test. Figure-3 below illustrates the technique being used 
-      to test the built-in <i>PS2E-ArithExpr-Action</i> grammar. 
+      to test the built-in <i>ArithExpr with action-code</i> grammar. 
+      This grammar can be found in <i>TestArithExpr.vll</i> in the <i>grammars</i> 
+      directory of the zip distribution. 
       The grammar-tree shown (<i>ExprTester</i>) is the additional <i>wrapper</i> 
-      created only for testing (it exists in the bundled sample grammar). 
-      Given it's limited purpose, it merely invokes 
+      created only for testing. Given it's limited purpose, it merely invokes 
       <i>Expr</i> (the top-level parser-rule of the parser under test) using a 
       <i>Reference</i> node. It also 
       uses a Javascript function as action-code to wrap testing logic around the 
@@ -196,7 +187,35 @@ The latest jar file can be downloaded here:
       The result of the test (<i>OK</i> in this case) can be seen at (5) in the 
       <i>Parser Log</i> area. You can modify the parser input in the script and simulate 
       a failure. This is a simple example, but the technique can be 
-      extended to run an exhaustive set of tests as well. 
+      extended to run an exhaustive set of tests as well. The example in Figure-4 
+      below uses a 2-layered tester to run a set of separate tests. 
+      The grammar file used is <i>MultiTestArithExpr.vll</i> in the <i>grammars</i> 
+      directory of the zip distribution.
+    </p>
+
+    <img src="images/TestingMultWithActionCode1.png" alt="A 2-layer wrapper for multiple tests" /><br/>
+    <i>Figure-4. A 2-layer wrapper for multiple tests</i>
+
+    <p>
+      In this example <i>testMain</i> the top-level wrapper contains a sequence 
+      that references several tests (for division, subtraction, multiplication, 
+      and addition respectively). The action code at this level just sets up the 
+      input required for all the tests.
+      One of the 2nd-layer wrappers is depicted in Figure-5 below. These are the 
+      actual tests (each invokes a specific parser for testing), and checks the 
+      result against the expected value.
+    </p>
+
+    <img src="images/TestingMultOneWithActionCode1.png" alt="An example 2nd-layer wrapper" /><br/>
+    <i>Figure-5. An example 2nd-layer wrapper</i>
+
+    <p>
+      In this example the outputs at both levels are just printed 
+      (see Figure-4 above), so manual inspection is still needed. 
+      In a real-life automated test scenario, 
+      the 2nd-level parsers should return a true/false value to 
+      indicate success or failure, and the top-level wrapper would inspect 
+      the individual results and consolidate the results into a report. 
     </p>
 
     <h3 id="UsingJUnit">Using JUnit and the VisualLangLab API</h3>

@@ -9,6 +9,16 @@
   <body>
     <h1>VisualLangLab - Editing the Grammar Tree</h1>
 
+<table border="1" style="border: 1px solid red;" width="100%"><tr><td>
+<span style="font-size: larger;">For Ver-10.10 or higher only!</span><br/>
+If you are using an older version, follow 
+<a href="TheGUI-legacy.html">this tutorial</a> instead. 
+Beginning Ver-10.01, the title bar of the <i>About VisualLangLab</i> 
+dialog box displays the version number. 
+The latest jar file can be downloaded here: 
+<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
+</td></tr></table>
+
     <p>
       <a href="http://vll.java.net/">VisualLangLab</a> 
       depicts parser-rules as visual trees with distinct icons for different grammar elements. 
@@ -251,9 +261,7 @@ Parsers</a> class.
       Figure-4 below shows how action-code is associated with a grammar-tree node. 
       Proceed as follows: select a grammar-tree node ("A" in the figure), 
       enter the code under <i>Action Code</i> (at "B"), click the 
-      <i>Save</i> button (at "C"). If the code is error free, the dialog box 
-      shown in the figure is displayed. Click the <i>OK</i> button (at "D") to 
-      complete the procedure. 
+      <i>Save</i> button (at "C", is enabled whenever the text is changed). 
     </p>
 
     <p>
@@ -297,12 +305,12 @@ Parsers</a> class.
     <h3 id="RecursionMutualLeft">Recursion, Mutual Recursion, and Left Recursion</h3>
 
     <p>
-      Since <a href="http://vll.java.net/">VisualLangLab</a> is based on Scala's 
+      Since <a href="http://vll.java.net/">VisualLangLab</a> uses a design based on Scala's 
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>, 
       parser-rules can be recursive or mutually recursive. However, left-recursion 
       can only be handled by 
       <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParser.html">packrat parsers</a>, 
-      so the grammar-tree's context-menu should be used to add the <i>packrat</i> annotation 
+      so the grammar-tree's root is left-clicked, and the context-menu should be used to add the <i>packrat</i> annotation 
       to left-recursive grammar-rules as shown in Figure-6 below. 
     </p>
 
@@ -312,7 +320,7 @@ Parsers</a> class.
     </p>
 
     <p>
-      In the grammar shown above, the token <i>number</i> is defined as the 
+      In the grammar shown above, the token <i>NUMBER</i> is defined as the 
       regular expression <i>\\d+</i>. It can parse strings like <i>3 + 5</i> and 
       <i>7 - 9</i> etc. Trying to run it without the packrat annotation 
       causes a stack-overflow error. 
@@ -365,12 +373,6 @@ Parsers</a> class.
       or click the buttons.
     </p>
 
-<p>
-<font color="red"><u>Change in Version 7.01</u>: The dialogs in Figure-8 below 
-do not accept the comma. The name and pattern are just separated by one or more 
-space (and/or tab) characters</font>
-</p>
-
     <p>
       <img src="images\GrammarNewLiteralDialog.png" alt="The New-literal dialog" /> 
       <img src="images\GrammarNewRegexDialog.png" alt="The New-regex dialog" /><br/>
@@ -403,15 +405,8 @@ space (and/or tab) characters</font>
 <p>
 Two or more <i>Regex</i> tokens will sometimes match the same bit of input. 
 You can assign a <i>priority</i> value to enable disambiguation of such tokens. 
-To assign a priority to a <i>Regex</i> token append a <strike>tilde (~) and a number</strike> 
-<u>colon, an optional minus sign, and an integer</u> (<font color="red">Version 7.02 onwards</font>)
-to the token's name as in Figure-9 below.
-</p>
-
-<p>
-<font color="red"><u>Change in Version 7.01</u>: The dialog in Figure-9 below 
-does not accept the comma. The name and pattern are just separated by one or more 
-space (and/or tab) characters</font>
+To assign a priority to a <i>Regex</i> token append a colon, an optional minus sign, 
+and an integer to the token's name as in Figure-9 below.
 </p>
 
     <p>
