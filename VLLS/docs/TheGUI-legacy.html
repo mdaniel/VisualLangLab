@@ -7,22 +7,12 @@
   <body>
     <h1>VisualLangLab - The GUI</h1>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td>
-<span style="font-size: larger;">For Ver-10.10 or higher only!</span><br/>
-If you are using an older version, follow 
-<a href="TheGUI-legacy.html">this tutorial</a> instead. 
-Beginning Ver-10.01, the title bar of the <i>About VisualLangLab</i> 
-dialog box displays the version number. 
-The latest jar file can be downloaded here: 
-<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
-</td></tr></table>
-
     <p>
       Figure-1 below depicts the complete <a href="http://vll.java.net/">VisualLangLab</a> GUI. 
       The following description details all its features.
     </p>
 
-    <img src="images/GuiFull1.png" id="Figure1" alt="The VisualLangLab GUI" /><br/>
+    <img src="images/GuiFull1-legacy.png" id="Figure1" alt="The VisualLangLab GUI" /><br/>
     <i>Figure-1. The VisualLangLab GUI</i>
 
     <h2 id="TheMenuBar">The Menu Bar</h2>
@@ -37,7 +27,8 @@ The latest jar file can be downloaded here:
           When you finish developing and testing a parser (or when work must be suspended 
           temorarily) the parser can be saved to a file by invoking <i>File -> Save</i> 
           or  <i>File -> SaveAs</i>. The saved grammar file has a <i>.vll</i> extension, 
-          and contains an XML representation of all the data entered into the GUI. 
+          and contains an XML representation of all the data entered into the GUI 
+          (but no other data, serialized Scala objects or code). 
           A saved grammar can be opened again later for review, 
           <a href="TestingParsers.html">testing</a>, or further 
           <a href="EditingTheGrammarTree.html">editing</a> by invoking <i>File -> Open</i>. 
@@ -56,7 +47,7 @@ The latest jar file can be downloaded here:
           The <i>Import</i> and <i>Export</i> items allow token definitions to be 
           imported from or exported to 
           <a href="EditingTheGrammarTree.html#TokenLibraries">token libraries</a></li>
-      <li id="MenuBarRules">Rules - the <i>New</i>, <i>Rename</i>, <i>Find</i>, <i>Optimize</i>, and <i>Delete</i> menu-items 
+      <li id="MenuBarRules">Rules - the <i>New</i>, <i>Rename</i>, <i>Find</i>, and <i>Delete</i> menu-items 
           support parser-rule management operations.
           <i>New rule</i> is used to 
           <a href="EditingTheGrammarTree.html#CreatingNewParserRule">create new rules</a>, while 
@@ -92,12 +83,9 @@ The latest jar file can be downloaded here:
       <li id="ToolBarBack">Back button (<img src="images/ToolBarButtonBack.gif" align="center" alt="The Back button" />) 
       to display last viewed parser-rule (or grammar-tree)</li>
       <li id="ToolBarCombo">Combo box to select parser-rule (or grammar-tree) by name</li>
-
       <li id="ToolBarRules">Rules - <i>New</i> (<img src="images/NewReference.gif" align="center" alt="The New-rule button" />), 
-      <i>Find</i> (<img src="images/ToolBarButtonFindRule.gif" align="center" alt="The Find-rule button" />), 
-      <i>Optimize</i> (<img src="images/ToolBarButtonOptimize.gif" align="center" alt="The Find-rule button" />), 
-      and <i>Rename</i> (<img src="images/ToolBarButtonRenameRule.gif" align="center" alt="The Rename-rule button" />) operations</li>
-
+      <i>Rename</i> (<img src="images/ToolBarButtonRenameRule.gif" align="center" alt="The Rename-rule button" />), 
+      and <i>Find</i> (<img src="images/ToolBarButtonFindRule.gif" align="center" alt="The Find-rule button" />) operations</li>
       <li id="ToolBarTokens">Tokens - <i>New literal</i> (<img src="images/ToolBarButtonNewLiteral.gif" align="center" alt="The New-literal button" />), 
           <i>New regex</i> (<img src="images/ToolBarButtonNewRegex.gif" align="center" alt="The New-regex button" />), 
           <i>Edit</i> (<img src="images/ToolBarButtonEditToken.gif" align="center" alt="The Edit-token button" />), 
@@ -149,7 +137,7 @@ The latest jar file can be downloaded here:
       The action-code area is the text area at the top right (below the toolbar).
       This editable area can be used to optionally provide any action-code for 
       the selected grammar-tree node. 
-      The action-code must be a Javascript function with one argument. 
+      The action-code must be a Javascript or Scala function with one argument. 
       More details and examples can be found in 
       <a href="ASTAndActionCode.html#ActionCodeDesign">Action Code Design</a>.
     </p>

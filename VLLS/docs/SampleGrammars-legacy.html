@@ -7,39 +7,21 @@
   <body>
     <h1>VisualLangLab - Sample Grammars</h1>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td>
-<span style="font-size: larger;">For Ver-10.10 or higher only!</span><br/>
-If you are using an older version, follow 
-<a href="ASTAndActionCode-legacy.html">this tutorial</a> instead. 
-Beginning Ver-10.01, the title bar of the <i>About VisualLangLab</i> 
-dialog box displays the version number. 
-The latest jar file can be downloaded here: 
-<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
-</td></tr></table>
-
 <p>
 So that users may quickly become familiar with grammar-trees, 
 <a href="">VisualLangLab</a> has some built-in sample grammars that can 
-be inspected, edited, run, and even saved as external files. 
+be inspected and edited. 
 These grammars can be opened by invoking <i>Help -> Sample grammars</i> 
 from the main menu as shown in Figure-1 below. 
-There are three groups: 
-<p>
+There are two groups: those prefixed with <i>TDAR</i> are inspired by 
+the chapter 3, <i>A Quick Tour for the Impatient</i>, of the book 
+<a href="http://pragprog.com/book/tpantlr/the-definitive-antlr-reference">
+The Definitive ANTLR Reference</a>, and those prefixed with <i>PS2E</i> are 
+based on examples in the chapter <i>Combinator Parsing</i> of the book 
+<a href="http://www.artima.com/shop/programming_in_scala">Programming in Scala</a>. 
+</p>
 
-<ul style="list-style-type: disc;">
-
-  <li>those prefixed with <i>TDAR</i> are inspired by the chapter 3, 
-      <i>A Quick Tour for the Impatient</i>, of the book 
-      <a href="http://pragprog.com/book/tpantlr/the-definitive-antlr-reference">
-      The Definitive ANTLR Reference</a> </li>
-  <li>those prefixed with <i>PS2E</i> are based on examples in the chapter 
-      <i>Combinator Parsing</i> of the book 
-      <a href="http://www.artima.com/shop/programming_in_scala">Programming in Scala</a> </li>
-  <li>the one prefixed with <i>PSWP</i> are based on the examples around page-240 
-      of the book <a href="http://programmingscala.com/">Programming Scala</a> </li>
-</ul>
-
-<img src="images/SampleGrammar1.png" alt="Opening sample grammars" /><br/>
+<img src="images/SampleGrammar1-legacy.png" alt="Opening sample grammars" /><br/>
 <i>Figure-1. Opening sample grammars</i>
 
     <p>
@@ -92,10 +74,12 @@ There are three groups:
     <h3 id="ActionCode">Action-Code</h3>
 
     <p>
-      Action-code (a Javascript function assigned to a node to process its AST) 
+      Action-code (a Javascript or Scala function assigned to a node to process its AST) 
       can be optionally associated with any grammar-tree node. 
       Action-code associated with any grammar-tree node is displayed (and edited) 
       in the TextArea on the right of the parse-tree.
+      The <i>ArithExpr</i> 
+      parser described below illustrates action-code functions in both languages. 
       The design of action-code functions is described in 
       <a href="ASTAndActionCode.html">AST and Action Code</a>.
     </p>
@@ -103,7 +87,7 @@ There are three groups:
     <h3 id="TestRunning">Test-Running a Parser</h3>
 
     <p>
-      Figure-3 below shows the grammar-tree <i>expr</i> of the builtin <i>PS2E-ArithExpr</i> 
+      Figure-3 below shows the grammar-tree <i>expr</i> of the builtin <i>ArithExpr</i> 
       parser being tested with the input text <i>12 / 3 + 5 * 4</i>. 
       To <i>test-run</i> the displayed grammar-tree just enter the test input 
       into the <i>Parser Test Input</i> area (as at "A" in Figure-3), 
@@ -112,7 +96,7 @@ There are three groups:
       appear in the <i>Parser Log</i> area ("C" in the figure).
     </p>
 
-    <img src="images/TestingArithExpr1.png" alt="Testing a parser (or grammar-tree)" /><br/>
+    <img src="images/TestingArithExpr1-legacy.png" alt="Testing a parser (or grammar-tree)" /><br/>
     <i>Figure-3. Testing a parser (or grammar-tree)</i>
 
     <p>
@@ -129,7 +113,7 @@ The Definitive ANTLR Reference</a> are described in detail in
 <a href="examples/a-quick-tour.html">A Quick Tour</a>
 </p>
 
-    <h2 id="ThePS2EArithExprParser">The PS2E-ArithExpr Parser</h2>
+    <h2 id="TheArithExprParser">The ArithExpr Parser</h2>
 
     <p>
       As mentioned elsewhere, the grammar trees in Figure-2 implement the following 
@@ -163,7 +147,23 @@ The Definitive ANTLR Reference</a> are described in detail in
     </table>
     <i>Figure-4. Grammar-trees of the ArithExpr parser</i>
 
-    <h2 id="ThePS2ESimpleJSONParser">The PS2E-SimpleJSON Parser</h2>
+    <p>
+      All three grammar-trees use an action-code function at the top-level 
+      (the node just below the root-node). The action-code of each grammar-tree can be displayed 
+      by clicking the top-level node. Note that grammar-tree nodes with associated action-code 
+      can be spotted by the presence of the <i>action</i> annotation (within square brackets 
+      that group optional annotations).
+    </p>
+
+    <p>
+      Also note the <i>drop</i> annotation (and the corresponding icon overlay) on several 
+      literal tokens in all three grammar-trees. A <i>drop</i>ped part of a grammar-tree 
+      contributes nothing to the AST -- though it is expected to be seen in the input. 
+      The use of <i>drop</i> is explained fully in 
+      <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
+    </p>
+
+    <h2 id="TheSimpleJSONParser">The SimpleJSON Parser</h2>
 
     <p>
       The grammar-trees of the SimpleJSON parser are shown in Figure-3 below for 
@@ -186,7 +186,7 @@ The Definitive ANTLR Reference</a> are described in detail in
       For more details see <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
     </p>
 
-    <h2 id="ThePS2EArithExprActionParser">The <i>PS2E-ArithExpr-Action</i> Parser</h2>
+    <h2 id="ArithExprWithActionCode">The <i>ArithExpr with action-code</i> Parser</h2>
 
     <p>
       This grammar is identical to the <i>ArithExpr</i> grammar discussed above (and depicted in 
@@ -197,30 +197,19 @@ The Definitive ANTLR Reference</a> are described in detail in
       selected as in Figure-6 below.
     </p>
 
-    <img src="images/SampleGrammarWithActionCode1.png" alt="Action code associated with grammar-tree node" /><br/>
+    <img src="images/SampleGrammarWithActionCode1-legacy.png" alt="Action code associated with grammar-tree node" /><br/>
     <i>Figure-6. Action code associated with grammar-tree node</i>
-
-    <p>
-      All three grammar-trees use an action-code function at the top-level 
-      (the node just below the root-node). The action-code of each grammar-tree can be displayed 
-      by clicking the top-level node. Note that grammar-tree nodes with associated action-code 
-      can be spotted by the presence of the <i>action</i> annotation (within square brackets 
-      that group optional annotations).
-    </p>
-
-    <p>
-      Also note the <i>drop</i> annotation (and the corresponding icon overlay) on several 
-      literal tokens in all three grammar-trees. A <i>drop</i>ped part of a grammar-tree 
-      contributes nothing to the AST -- though it is expected to be seen in the input. 
-      The use of <i>drop</i> is explained fully in 
-      <a href="EditingTheGrammarTree.html">Editing the Grammar Tree</a>.
-    </p>
 
     <p>
       The action-code (explained fully in <a href="ASTAndActionCode.html">AST and Action Code</a>) 
       evaluates the AST (the result of parsing the arithmetic expression) to a number.
       The effect of this can be seen by testing the parser with the same input (<i>12 / 4 + 5 * 4</i>). 
       The parser's result should be <i>23.0</i>.
+    </p>
+
+    <p>
+      For purposes of illustration, the parser has two action-code snippets written in Javascript, 
+      and one in Scala. These are the two supported languages for action-code.
     </p>
 
   </body>

@@ -19,16 +19,16 @@ download the <i>all-inclusive jar file</i> (immediately below here).
 
 <p>
 For all practical purposes, you only need 
-<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a> 
+<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
 to run VisualLangLab. Double-clicking this file starts the VisualLangLab GUI. 
 The only pre-requisite is a 6.0+ JRE. Users with Unix-like systems will first need to 
 perform a "<code>chmod +x VLLS-All.jar</code>". 
 </p> 
 
 <p>
-You do not have to install any other software. 
-This jar file also includes the <a href="SampleGrammars.html">Sample Grammars</a>, 
-but not the HTML documentation (which are in the <i>VLL4J.zip</i> file described below). 
+This jar file includes all libraries required, so you do not have to install Scala or 
+any other software. It includes the <a href="SampleGrammars.html">Sample Grammars</a>, 
+but not the HTML documentation (which are in the <i>VLLS.zip</i> file described below). 
 It also includes the <i>readme.txt</i>, <i>copying.txt</i>, <i>changes.txt</i>, and 
 <i>licenses</i> files described below. 
 </p> 
@@ -40,30 +40,36 @@ It also includes the <i>readme.txt</i>, <i>copying.txt</i>, <i>changes.txt</i>, 
   <li><i>licenses</i> - Directory containing copyright files</li>
 </ul>
 
-<h2>Full Binary-Release ZIP File (Planned, not Available)</h2>
+<h2>Latest Binary-Release ZIP File</h2>
 
 <p>
-The full binary release 
-(<a href="http://java.net/projects/vll/downloads/download/VLL4J.zip">VLL4J.zip</a>) contains 
-the following files/directories:
+The <i>latest-release</i> file 
+(<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>) contains 
+all the VisualLangLab class files and the HTML documentation, but not the Scala libraries. 
+You can use this file to run VisualLangLab only if you have a Scala installation. 
+This zip file contains the following files/directories:
 </p>
 
 <ul style="list-style-type: disc;">
-  <li><i>VLL4J.jar</i> - the <i>All-inclusive</i> jar file described above</li>
-  <li><i>VLL4J-API.jar</i> - a minimal library jar for supporting client programs</li>
-  <li><i>index.html</i> - the entry-point for HTML documentation</li>
-  <li><i>docs</i> - Directory containing documentation files</li>
+  <li><i>VLLS.jar</i> - the run-time class-library</li>
+  <li><i>vlls.bat</i> - a launcher for Windows. It assumes that <i>VLLS.jar</i> is also in 
+          the same directory</li>
+  <li><i>vlls</i> - a launcher for UNIX-like environments. It assumes that <i>VLLS.jar</i> is 
+      also in the same directory</li>
   <li><i>readme.txt</i> - Summary information about VisualLangLab</li>
   <li><i>copying.txt</i> - Copyright information</li>
   <li><i>changes.txt</i> - Changes from previous version</li>
+  <li><i>index.html</i> - Documentation in HTML</li>
+  <li><i>docs</i> - Directory containing documentation files</li>
   <li><i>licenses</i> - Directory containing copyright files</li>
 </ul>
 
 <p>
 There is no particular installation action required. After unzipping the fle to a directory, 
 <a href="http://vll.java.net/">VisualLangLab</a> can be started 
-by just double-clicking <i>VLL4J.jar</i> as described for <i>All-Inclusive JAR File</i> 
-above.
+by invoking one of the launcher scripts -- <i>vlls.bat</i> for Windows, 
+or <i>vlls</i> for UNIX-like systems. 
+Both launchers assume that <i>VLLS.jar</i> is also in the same directory.
 </p>
 
   </body>
