@@ -20,9 +20,14 @@
 
 package vll4j.gui;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class ManagerHelp {
@@ -30,6 +35,9 @@ public class ManagerHelp {
     ManagerHelp(Vll4jGui gui) {
         this.gui = gui;
         title = String.format("VisualLangLab %s", gui.version);
+        if (Desktop.isDesktopSupported()) {
+            desktop = Desktop.getDesktop();
+        }
     }
     
     Action aboutAction = new AbstractAction("About VisualLangLab", Resources.information16) {
@@ -252,88 +260,83 @@ public class ManagerHelp {
     Action displayHelpMain = new AbstractAction("Help", Resources.help16) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (helpPane == null)
-                createHelpPane();
-            helpPane.setSelectedIndex(5);
-            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+            try {
+                URI webLink = new URL("http://vll.java.net/").toURI();
+                desktop.browse(webLink);
+            } catch (Exception ex) {}
         }
     };
 
     Action displayHelpRuleTree = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (helpPane == null)
-                createHelpPane();
-            helpPane.setSelectedIndex(2);
-            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
-            if (lbl.getText().isEmpty())
-                lbl.setText(getHtml("PanelRuleTree.html"));
-            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+            JLabel hlpLabel = new JLabel(getHtml("PanelRuleTree.html"));
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+                try {
+                    URI webLink = new URL("http://vll.java.net/EditingTheGrammarTree.html").toURI();
+                    desktop.browse(webLink);
+                } catch (Exception ex) {
+                }
+            }
         }
     };
 
     Action displayHelpAST = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (helpPane == null)
-                createHelpPane();
-            helpPane.setSelectedIndex(0);
-            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
-            if (lbl.getText().isEmpty())
-                lbl.setText(getHtml("PanelAST.html"));
-            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+            JLabel hlpLabel = new JLabel(getHtml("PanelAST.html"));
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+                try {
+                    URI webLink = new URL("http://vll.java.net/ASTAndActionCode.html").toURI();
+                    desktop.browse(webLink);
+                } catch (Exception ex) {
+                }
+            }
         }
     };
 
     Action displayHelpActionCode = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (helpPane == null)
-                createHelpPane();
-            helpPane.setSelectedIndex(1);
-            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
-            if (lbl.getText().isEmpty())
-                lbl.setText(getHtml("PanelActionCode.html"));
-            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+            JLabel hlpLabel = new JLabel(getHtml("PanelActionCode.html"));
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+                try {
+                    URI webLink = new URL("http://vll.java.net/ASTAndActionCode.html#ActionCodeDesign").toURI();
+                    desktop.browse(webLink);
+                } catch (Exception ex) {
+                }
+            }
         }
     };
 
     Action displayHelpTestInput = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (helpPane == null)
-                createHelpPane();
-            helpPane.setSelectedIndex(3);
-            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
-            if (lbl.getText().isEmpty())
-                lbl.setText(getHtml("PanelTestInput.html"));
-            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+            JLabel hlpLabel = new JLabel(getHtml("PanelTestInput.html"));
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+                try {
+                    URI webLink = new URL("http://vll.java.net/TestingParsers.html").toURI();
+                    desktop.browse(webLink);
+                } catch (Exception ex) {
+                }
+            }
         }
     };
 
     Action displayHelpTestLog = new AbstractAction("", Resources.information16) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (helpPane == null)
-                createHelpPane();
-            helpPane.setSelectedIndex(4);
-            JLabel lbl = (JLabel)helpPane.getSelectedComponent();
-            if (lbl.getText().isEmpty())
-                lbl.setText(getHtml("PanelTestLog.html"));
-            JOptionPane.showMessageDialog(gui, helpPane, title + " Help", JOptionPane.PLAIN_MESSAGE);
+            JLabel hlpLabel = new JLabel(getHtml("PanelTestLog.html"));
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+                try {
+                    URI webLink = new URL("http://vll.java.net/TestingParsers.html").toURI();
+                    desktop.browse(webLink);
+                } catch (Exception ex) {
+                }
+            }
         }
     };
 
-    private void createHelpPane() {
-        helpPane = new JTabbedPane();
-        helpPane.add("AST", new JLabel());
-        helpPane.add("Action-Code", new JLabel());
-        helpPane.add("Rule-Tree", new JLabel());
-        helpPane.add("Test-Input", new JLabel());
-        helpPane.add("Test-Log", new JLabel());
-        helpPane.add("VisualLangLab", new JLabel());
-    }
-    
     private String getHtml(String name) {
         ClassLoader cl = ClassLoader.getSystemClassLoader();
         URL res = cl.getResource("vll4j/gui/resources/" + name);
@@ -349,5 +352,5 @@ public class ManagerHelp {
 
     private Vll4jGui gui;
     String title;
-    private JTabbedPane helpPane = null;
+    private Desktop desktop = null;
 }
