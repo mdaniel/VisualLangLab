@@ -38,7 +38,7 @@ to obtain the value of the expression.
 For better clarity, the program is organized as 4 functions with distinct roles: 
 </p>
 
-<ul>
+<ul style="list-style-type: disc;">
 
 <li>The <code>main()</code> 
 function loads the grammar from a file, fetches the top-level rule, and <i>applies</i> the 
@@ -170,8 +170,8 @@ understand the logic better.
 </p>
 
 <table border="1" style="border: 1px solid black;"><tr>
-<th>AST</th><th>Code</th></tr>
-<td>
+<th style="text-align: center; font-weight: bold;">AST</th><th style="text-align: center; font-weight: bold;">Code</th></tr>
+<td style="padding: 0px;">
 <pre><code>Array(
 |  @term,
 |  List(
@@ -182,7 +182,7 @@ understand the logic better.
 |  )
 )</code></pre>
 </td>
-<td>
+<td style="padding: 0px;">
 <pre><code>01 static Float evalExprAST(Object ast) {
 02     Object[] array = (Object[]) ast;
 03     Float term = evalTermAST(array[0]);
@@ -225,8 +225,8 @@ understand the logic better.
 </p>
 
 <table border="1" style="border: 1px solid black;"><tr>
-<th>AST</th><th>Code</th></tr>
-<td>
+<th style="text-align: center; font-weight: bold;">AST</th><th style="text-align: center; font-weight: bold;">Code</th></tr>
+<td style="padding: 0px;">
 <pre><code>Array(
 |  @factor,
 |  List(
@@ -237,7 +237,7 @@ understand the logic better.
 |  )
 )</code></pre>
 </td>
-<td>
+<td style="padding: 0px;">
 <pre><code>01 static Float evalTermAST(Object ast) {
 02     Object[] array = (Object[]) ast;
 03     Float factor = evalFactorAST(array[0]);
@@ -272,14 +272,14 @@ understand the logic better.
 </p>
 
 <table border="1" style="border: 1px solid black;"><tr>
-<th>AST</th><th>Code</th></tr>
-<td>
+<th style="text-align: center; font-weight: bold;">AST</th><th style="text-align: center; font-weight: bold;">Code</th></tr>
+<td style="padding: 0px;">
 <pre><code>Choice(
 |  Array(0, [floatingPointNumber]),
 |  Array(1, @Expr)
 )</code></pre>
 </td>
-<td>
+<td style="padding: 0px;">
 <pre><code>01 static Float evalFactorAST(Object ast) {
 02     Object[] pair = (Object[]) ast;
 03     Float factorResult = -1f;
