@@ -92,18 +92,21 @@ public class ManagerTesting {
     Action treeHandlerBasicAction = new AbstractAction("Basic") {
         @Override
         public void actionPerformed(ActionEvent e) {
+            printStructured = false;
         }
     };
 
     Action treeHandlerStructuredAction = new AbstractAction("Structured") {
         @Override
         public void actionPerformed(ActionEvent e) {
+            printStructured = true;
         }
     };
 
     Action treeHandlerCustomAction = new AbstractAction("Custom") {
         @Override
         public void actionPerformed(ActionEvent e) {
+            printStructured = false;
         }
     };
 
@@ -168,7 +171,7 @@ public class ManagerTesting {
         if (!visitorParserGenerator.parserGeneratedOk) {
             JOptionPane.showMessageDialog(gui, "Can't generate parser\nReview rule definitions", 
                     fromFile ? "ERROR - Parse file" : "ERROR - Parse input", JOptionPane.ERROR_MESSAGE);
-        appendStatus(" Can't generate parser - Review rule definitions", true);
+            appendStatus(" Can't generate parser - Review rule definitions", true);
             return;
         } else {
             t1 = System.currentTimeMillis();
@@ -197,9 +200,9 @@ public class ManagerTesting {
                                 pr.next().line(), pr.next().column(), f.length(), t2 - t1);
                     }
                 } catch (Throwable t) {
-                    long maxMemory = Runtime.getRuntime().maxMemory();
-                    long totalMemory = Runtime.getRuntime().totalMemory();
-                    System.out.printf("Memory: %d/%d%n", totalMemory, maxMemory);
+//                    long maxMemory = Runtime.getRuntime().maxMemory();
+//                    long totalMemory = Runtime.getRuntime().totalMemory();
+//                    System.out.printf("Memory: %d/%d%n", totalMemory, maxMemory);
                     ++countNotOk;
                     t.printStackTrace();
                     break;
@@ -219,9 +222,9 @@ public class ManagerTesting {
                 appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
                 if (pr.successful()) {
                     t0 = System.currentTimeMillis();
-                    String ast = gui.regexParsers.dumpValue(pr.get());
+                    String ast = gui.regexParsers.dumpValue(pr.get(), printStructured);
                     t1 = System.currentTimeMillis();
-                    appendStatus(String.format(", AST.toString: %d ms", t1 - t0), false);
+                    appendStatus(String.format(", AST->String: %d ms", t1 - t0), false);
                     t0 = System.currentTimeMillis();
                     System.out.println(ast);
                     System.out.println();
@@ -245,4 +248,5 @@ public class ManagerTesting {
     private JFileChooser fileChooser = null;
     private boolean traceAll = false;
     private boolean stopRequested = false;
+    private boolean printStructured = false;
 }

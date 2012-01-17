@@ -79,7 +79,7 @@ public class Vll4j extends PackratParsers {
             ParseResult pr = dataFile.exists() ? vll4j.parseAll(p, new ReaderFile(dataFile)) : 
                     vll4j.parseAll(p, args[args.length - 1]);
             if (pr.successful())
-                System.out.println(vll4j.dumpValue(pr.get()));
+                System.out.println(vll4j.dumpValue(pr.get(), true));
             else
                 System.out.println(vll4j.dumpResult(pr));
         } catch (Exception e) {

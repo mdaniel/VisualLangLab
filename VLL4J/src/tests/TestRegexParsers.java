@@ -16,10 +16,10 @@ public class TestRegexParsers {
         Parser<Object[]> line = me.sequence(0, name, nbr, semi);
         ParseResult pr = me.parseAll(line, "sanjay \t\r\n  100   ;  ");
         me.dumpResult(pr);
-        System.out.println(me.dumpValue(pr.get()));
+        System.out.println(me.dumpValue(pr.get(), true));
         Parser<List<Object[]/*<Object>*/>> choice = me.rep(me.choice(nbr, name, semi));
         pr = me.parseAll(choice, "sanjay \t\r\n  100   ;  ");
         me.dumpResult(pr);
-        System.out.println(me.dumpValue(pr.get()));
+        System.out.println(me.dumpValue(pr.get(), true));
     }
 }

@@ -333,40 +333,55 @@ public class Parsers {
         return String.format("Unknown: [%s] %s", pr.getClass().getName(), pr);
     }
     
-    public String dumpValue(Object v) {
+    public String dumpValue(Object v, boolean structured) {
         StringBuilder sb = new StringBuilder();
-        dumpValue(v, sb);
+        dumpValue(v, sb, structured, 0);
         return sb.toString();
     }
     
-    private void dumpValue(Object v, StringBuilder sb) {
+    private void dumpValue(Object v, StringBuilder sb, boolean structured, int level) {
         if (v instanceof List) {
             List<Object> lst = (List<Object>)v;
-            boolean first = true;
-            sb.append("List(");
-            for (Object e: lst) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append(", ");
+            for (int i = 0; i < level; ++i) sb.append("|  ");
+            if (lst.isEmpty()) {
+                sb.append("List()");
+            } else {
+                sb.append(structured ? "List(\n" : "List(");
+                boolean first = true;
+                for (Object e: lst) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append(structured ? ",\n" : ", ");
+                    }
+                    dumpValue(e, sb, structured, structured ? level + 1 : level);
                 }
-                dumpValue(e, sb);
+                if (structured) sb.append("\n");
+                for (int i = 0; i < level; ++i) sb.append("|  ");
+                sb.append(")");
             }
-            sb.append(")");
         } else if (v instanceof Object[]) {
             Object[] arr = (Object[])v;
-            boolean first = true;
-            sb.append("Array(");
-            for (Object e: arr) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append(", ");
+            for (int i = 0; i < level; ++i) sb.append("|  ");
+            if (arr.length == 0) {
+                sb.append("Array()");
+            } else {
+                sb.append(structured ? "Array(\n" : "Array(");
+                boolean first = true;
+                for (Object e: arr) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append(structured ? ",\n" : ", ");
+                    }
+                    dumpValue(e, sb, structured, structured ? level + 1 : level);
                 }
-                dumpValue(e, sb);
+                if (structured) sb.append("\n");
+                for (int i = 0; i < level; ++i) sb.append("|  ");
+                sb.append(")");
             }
-            sb.append(")");
         } else {
+            for (int i = 0; i < level; ++i) sb.append("|  ");
             sb.append((v == null) ? "null" : v.toString());
         }
     }
