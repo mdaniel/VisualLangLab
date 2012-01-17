@@ -33,7 +33,7 @@ public class PanelAstDisplay extends JPanel {
     
     PanelAstDisplay(Vll4jGui gui) {
         this.gui = gui;
-        visitorAstGeneration = new VisitorAstGeneration(gui);
+        visitorAstGeneration = new VisitorAstDescription(gui);
         setLayout(new BorderLayout());
         add(new JLabel("Parse Tree (AST) Structure", SwingConstants.CENTER), BorderLayout.NORTH);
         astArea.setEditable(false);
@@ -143,7 +143,7 @@ public class PanelAstDisplay extends JPanel {
     private JRadioButton btnRule = new JRadioButton("Rule");
     private JRadioButton btnFull = new JRadioButton("Full");
     private JButton helpButton = null;
-    private VisitorAstGeneration visitorAstGeneration;
+    private VisitorAstDescription visitorAstGeneration;
     private Vll4jGui gui;
     private Thread myThread = null;
 }

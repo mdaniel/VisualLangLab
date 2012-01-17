@@ -23,9 +23,9 @@ package vll4j.gui;
 import java.util.*;
 import vll4j.tree.*;
 
-public class VisitorAstGeneration extends VisitorBase {
+public class VisitorAstDescription extends VisitorBase {
     
-    public VisitorAstGeneration(Vll4jGui gui) {
+    public VisitorAstDescription(Vll4jGui gui) {
         this.gui = gui;
     }
     
@@ -188,11 +188,11 @@ public class VisitorAstGeneration extends VisitorBase {
         StringBuilder sb = new StringBuilder();
         if (n.multiplicity == Multiplicity.ZeroOrOne) {
             if (ast.contains("\n")) {
-                sb.append(getSpaces(n)).append("ArOpt(\n");
+                sb.append(getSpaces(n)).append("Option(\n");
                 sb.append(pad(ast)).append("\n");
                 sb.append(getSpaces(n)).append(")");
             } else {
-                sb.append(getSpaces(n)).append("ArOpt(").append(stripSpaces(ast)).append(")");
+                sb.append(getSpaces(n)).append("Option(").append(stripSpaces(ast)).append(")");
             }
         } else if (n.multiplicity == Multiplicity.OneOrMore || 
                 n.multiplicity == Multiplicity.ZeroOrMore) {
