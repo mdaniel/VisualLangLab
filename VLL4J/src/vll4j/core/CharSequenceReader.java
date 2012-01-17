@@ -29,6 +29,7 @@ package vll4j.core;
 public class CharSequenceReader extends Reader {
 
     public CharSequenceReader(CharSequence source, int offset) {
+        assert offset >= 0;
         this.source = source;
         this.offset = offset;
     }

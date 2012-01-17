@@ -228,6 +228,7 @@ public class ManagerTesting {
                     t1 = System.currentTimeMillis();
                     appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
                 } else {
+System.out.printf("pr.next().offset()=%d%n", pr.next().offset());
                     System.err.printf("%s%n", gui.regexParsers.dumpResult(pr));
                 }
             } catch (Throwable t) {

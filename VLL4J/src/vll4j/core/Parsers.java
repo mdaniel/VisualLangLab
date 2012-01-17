@@ -323,7 +323,7 @@ public class Parsers {
             NoSuccess f = (NoSuccess)pr;
             while (f != null) {
                 Reader str = f.next;
-                String sample = str.source().subSequence(str.offset(), Math.min(str.source().length(), 20)).toString();
+                String sample = str.source().subSequence(str.offset(), Math.min(str.source().length(), str.offset() + 20)).toString();
                 sb.append(String.format("%s(%d, %d): %s <%s>%n", f.getClass().getSimpleName(), 
                         f.next().line(), f.next().column(), f.msg, sample));
                 f = f.reason;
