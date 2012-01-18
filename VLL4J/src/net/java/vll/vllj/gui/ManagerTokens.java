@@ -18,7 +18,7 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vll4j.gui;
+package net.java.vll.vllj.gui;
 
 import java.awt.event.ActionEvent;
 import java.util.Map;

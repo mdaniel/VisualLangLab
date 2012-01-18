@@ -18,7 +18,7 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vll4j.gui;
+package net.java.vll.vllj.gui;
 
 import net.java.vll.vllj.tree.NodeRoot;
 import net.java.vll.vllj.tree.VisitorBase;
@@ -33,10 +33,11 @@ import net.java.vll.vllj.tree.NodeRepSep;
 import net.java.vll.vllj.tree.NodeReference;
 import java.util.TreeSet;
 
-public class VisitorRuleSearch extends VisitorBase {
+public class VisitorTokenSearch extends VisitorBase {
     
-    public VisitorRuleSearch(String ruleToFind) {
-        this.ruleToFind = ruleToFind;
+    public VisitorTokenSearch(String tokenToFind) {
+        super();
+        this.tokenToFind = tokenToFind;
     }
     
     private String getRuleName(NodeBase node) {
@@ -54,18 +55,20 @@ public class VisitorRuleSearch extends VisitorBase {
     
     @Override
     public Object visitLiteral(NodeLiteral n) {
-        return null;
-    }
-    
-    @Override
-    public Object visitReference(NodeReference n) {
-        if (n.refRuleName.equals(ruleToFind))
+        if (n.literalName.equals(tokenToFind))
             ruleSet.add(getRuleName(n));
         return null;
     }
     
     @Override
+    public Object visitReference(NodeReference n) {
+        return null;
+    }
+    
+    @Override
     public Object visitRegex(NodeRegex n) {
+        if (n.regexName.equals(tokenToFind))
+            ruleSet.add(getRuleName(n));
         return null;
     }
     
@@ -98,5 +101,5 @@ public class VisitorRuleSearch extends VisitorBase {
     }
     
     TreeSet<String> ruleSet = new TreeSet<String>();
-    private String ruleToFind;
+    private String tokenToFind;
 }

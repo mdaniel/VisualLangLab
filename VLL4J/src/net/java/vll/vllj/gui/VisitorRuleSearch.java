@@ -18,25 +18,32 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vll4j.gui;
+package net.java.vll.vllj.gui;
 
 import net.java.vll.vllj.tree.NodeRoot;
 import net.java.vll.vllj.tree.VisitorBase;
 import net.java.vll.vllj.tree.NodeSemPred;
 import net.java.vll.vllj.tree.NodeWildCard;
 import net.java.vll.vllj.tree.NodeLiteral;
+import net.java.vll.vllj.tree.NodeBase;
 import net.java.vll.vllj.tree.NodeChoice;
 import net.java.vll.vllj.tree.NodeRegex;
 import net.java.vll.vllj.tree.NodeSequence;
 import net.java.vll.vllj.tree.NodeRepSep;
 import net.java.vll.vllj.tree.NodeReference;
-import java.util.ArrayList;
+import java.util.TreeSet;
 
-public class VisitorRuleRenaming extends VisitorBase {
+public class VisitorRuleSearch extends VisitorBase {
     
-    public VisitorRuleRenaming(String currentName, String newName) {
-        this.currentName = currentName;
-        this.newName = newName;
+    public VisitorRuleSearch(String ruleToFind) {
+        this.ruleToFind = ruleToFind;
+    }
+    
+    private String getRuleName(NodeBase node) {
+        while (!(node instanceof NodeRoot)) {
+            node = (NodeBase)node.getParent();
+        }
+        return ((NodeRoot)node).ruleName;
     }
     
     @Override
@@ -52,8 +59,8 @@ public class VisitorRuleRenaming extends VisitorBase {
     
     @Override
     public Object visitReference(NodeReference n) {
-        if (n.refRuleName.equals(currentName))
-            n.refRuleName = newName;
+        if (n.refRuleName.equals(ruleToFind))
+            ruleSet.add(getRuleName(n));
         return null;
     }
     
@@ -71,8 +78,6 @@ public class VisitorRuleRenaming extends VisitorBase {
     @Override
     public Object visitRoot(NodeRoot n) {
         visitAllChildNodes(n);
-        if (n.ruleName.equals(currentName))
-            n.ruleName = newName;
         return null;
     }
     
@@ -92,6 +97,6 @@ public class VisitorRuleRenaming extends VisitorBase {
         return null;
     }
     
-    ArrayList<String> ruleList = new ArrayList<String>();
-    private String currentName, newName;
+    TreeSet<String> ruleSet = new TreeSet<String>();
+    private String ruleToFind;
 }

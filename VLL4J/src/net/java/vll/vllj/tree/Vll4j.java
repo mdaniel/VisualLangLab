@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 import net.java.vll.vllj.core.PackratParsers;
 import net.java.vll.vllj.core.Parsers.ParseResult;
 import net.java.vll.vllj.core.Parsers.Parser;
-import vll4j.gui.ReaderFile;
+import net.java.vll.vllj.gui.ReaderFile;
 import net.java.vll.vllj.tree.Forest;
 import net.java.vll.vllj.tree.NodeBase;
 import net.java.vll.vllj.tree.VisitorParserGeneration;
