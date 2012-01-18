@@ -13,8 +13,8 @@
 <h1 id="AQuickTour">VisualLangLab - A Quick Tour</h1>
 
 <p>
-This tutorial uses <a href="http://vll.java.net/">VisualLangLab</a> to create a parser 
-like the one discussed in chapter 3 (<i>A Quick Tour for the Impatient</i>) of the book 
+This tutorial uses <a href="http://vll.java.net/">VisualLangLab</a> to explore 
+the scenarios and examples in chapter 3 (<i>A Quick Tour for the Impatient</i>) of the book 
 <a href="http://pragprog.com/book/tpantlr/the-definitive-antlr-reference">
 The Definitive ANTLR Reference</a>. 
 The grammars used can be found online at this link: 
@@ -427,16 +427,16 @@ If you see error messages or find other problems, verify the following:
 
 <table border="1" style="border: 1px solid black;">
 <tr><th align="center" colspan="3">Token Definitions</th></tr>
-<tr><td align="center">Name</td><td align="center">Type</td><td align="center">Pattern</td></tr>
-<tr><td align="center">EQUALS</td><td align="center">L</td><td align="center">=</td></tr>
-<tr><td align="center">ID</td><td align="center">R</td><td align="center">[a-zA-Z]+</td></tr>
-<tr><td align="center">INT</td><td align="center">R</td><td align="center">\\d+</td></tr>
-<tr><td align="center">LPAREN</td><td align="center">L</td><td align="center">(</td></tr>
-<tr><td align="center">MINUS</td><td align="center">L</td><td align="center">-</td></tr>
-<tr><td align="center">MULT</td><td align="center">L</td><td align="center">*</td></tr>
-<tr><td align="center">NEWLINE</td><td align="center">R</td><td align="center">\\r?\\n</td></tr>
-<tr><td align="center">PLUS</td><td align="center">L</td><td align="center">+</td></tr>
-<tr><td align="center">RPAREN</td><td align="center">L</td><td align="center">)</td></tr>
+<tr><th align="center">Name</th><th align="center">Type</th><th align="center">Pattern</th></tr>
+<tr><td align="center">EQUALS</td><td align="center">Literal</td><td align="center">=</td></tr>
+<tr><td align="center">ID</td><td align="center">Regex</td><td align="center">[a-zA-Z]+</td></tr>
+<tr><td align="center">INT</td><td align="center">Regex</td><td align="center">\\d+</td></tr>
+<tr><td align="center">LPAREN</td><td align="center">Literal</td><td align="center">(</td></tr>
+<tr><td align="center">MINUS</td><td align="center">Literal</td><td align="center">-</td></tr>
+<tr><td align="center">MULT</td><td align="center">Literal</td><td align="center">*</td></tr>
+<tr><td align="center">NEWLINE</td><td align="center">Regex</td><td align="center">\\r?\\n</td></tr>
+<tr><td align="center">PLUS</td><td align="center">Literal</td><td align="center">+</td></tr>
+<tr><td align="center">RPAREN</td><td align="center">Literal</td><td align="center">)</td></tr>
 </table>
 
 <p>
@@ -470,7 +470,7 @@ but you can learn more details at
 <a href="../ASTAndActionCode.html#ActionCodeDesign">Action Code Design</a>. 
 </p>
 
-<h3 id="SomeBasics">Some Basics</h3>
+<h3 id="ActionCodeBasics">Action Code Basics</h3>
 
 <p>
 Action code in VisualLangLab is written not as a <i>code snippet</i> 
@@ -626,6 +626,16 @@ The text of the action-code for this parser-rule is given below.
 </tr></table>
 
 
+<p>
+If you're still wondering why the <code>intValue()</code> and <code>doubleValue()</code> calls 
+are required, here's the secret: Since the argument to the function is (in this case) 
+an array of Java <code>Object</code>s, all primitive Java types are autoboxed. So a Java 
+<code>int</code> and <code>double</code> become a <code>java.lang.Integer</code> and 
+<code>java.lang.Double</code> respectively, and JavaScript has to extract the original 
+values using <code>intValue()</code> and <code>doubleValue()</code> explicitly as it 
+does not know about <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/language/autoboxing.html">auto unboxing</a>. 
+</p>
+
 <h3 id="ActionForAtom">Action for 'atom'</h3>
 
 <p>
@@ -755,7 +765,7 @@ Proceed as follows.
 <ul style="list-style-type: disc;">
   <li>select <i>Prog</i> in the toolbar's dropdown list</li>
   <li>enter the test input string into the text area under <i>Parser Test Input</i>. 
-      Remember to end the string with a final NEWLINE (use the ENTER or RETURN key)</li>
+      <u>Remember to end the string with a final NEWLINE (use the ENTER or RETURN key)</u></li>
   <li>click the <i>Parse input</i> button. The result appears in the text area under 
       <i>Parser Log</i></li>
 </ul>
