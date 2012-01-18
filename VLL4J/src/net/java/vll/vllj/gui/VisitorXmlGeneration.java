@@ -20,9 +20,20 @@
 
 package net.java.vll.vllj.gui;
 
+import net.java.vll.vllj.api.Multiplicity;
+import net.java.vll.vllj.api.NodeRepSep;
+import net.java.vll.vllj.api.NodeChoice;
+import net.java.vll.vllj.api.NodeWildCard;
+import net.java.vll.vllj.api.NodeLiteral;
+import net.java.vll.vllj.api.NodeRoot;
+import net.java.vll.vllj.api.NodeReference;
+import net.java.vll.vllj.api.NodeRegex;
+import net.java.vll.vllj.api.NodeSemPred;
+import net.java.vll.vllj.api.NodeSequence;
+import net.java.vll.vllj.api.VisitorBase;
+import net.java.vll.vllj.api.NodeBase;
 import java.io.PrintWriter;
-import net.java.vll.vllj.core.Utils;
-import net.java.vll.vllj.tree.*;
+import net.java.vll.vllj.combinator.Utils;
 
 public class VisitorXmlGeneration extends VisitorBase {
     

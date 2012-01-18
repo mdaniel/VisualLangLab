@@ -24,9 +24,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
-import net.java.vll.vllj.core.PackratParsers;
-import net.java.vll.vllj.tree.Forest;
-import net.java.vll.vllj.tree.NodeRoot;
+import net.java.vll.vllj.combinator.PackratParsers;
+import net.java.vll.vllj.api.Forest;
+import net.java.vll.vllj.api.NodeRoot;
 
 public class Vll4jGui extends JFrame {
 

@@ -25,7 +25,7 @@ import javax.swing.ImageIcon;
 public class Resources {
     static ClassLoader cl = ClassLoader.getSystemClassLoader();
     static ImageIcon getIcon(String name) {
-        return new ImageIcon(cl.getResource("vll4j/gui/resources/" + name));
+        return new ImageIcon(cl.getResource("net/java/vll/vllj/gui/resources/" + name));
     }
     static ImageIcon alignLeft16 = getIcon("AlignLeft16.gif");
     static ImageIcon back16 = getIcon("Back16.gif");

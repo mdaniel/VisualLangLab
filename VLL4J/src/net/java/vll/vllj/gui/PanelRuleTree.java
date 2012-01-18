@@ -20,6 +20,17 @@
 
 package net.java.vll.vllj.gui;
 
+import net.java.vll.vllj.api.NodeRepSep;
+import net.java.vll.vllj.api.Multiplicity;
+import net.java.vll.vllj.api.NodeChoice;
+import net.java.vll.vllj.api.NodeWildCard;
+import net.java.vll.vllj.api.NodeLiteral;
+import net.java.vll.vllj.api.NodeRoot;
+import net.java.vll.vllj.api.NodeReference;
+import net.java.vll.vllj.api.NodeSemPred;
+import net.java.vll.vllj.api.NodeRegex;
+import net.java.vll.vllj.api.NodeSequence;
+import net.java.vll.vllj.api.NodeBase;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -30,7 +41,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import net.java.vll.vllj.tree.*;
 
 public class PanelRuleTree extends JPanel implements TreeSelectionListener {
 

@@ -20,7 +20,7 @@
 
 package net.java.vll.vllj.gui;
 
-import net.java.vll.vllj.tree.NodeBase;
+import net.java.vll.vllj.api.NodeBase;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;

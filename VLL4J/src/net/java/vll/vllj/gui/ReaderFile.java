@@ -24,7 +24,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import net.java.vll.vllj.core.Reader;
+import net.java.vll.vllj.combinator.Reader;
 
 public class ReaderFile extends Reader {
     public ReaderFile(File theFile) {

@@ -20,7 +20,7 @@
 
 package net.java.vll.vllj.gui;
 
-import net.java.vll.vllj.tree.ActionFunction;
+import net.java.vll.vllj.api.ActionFunction;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,7 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
-import net.java.vll.vllj.tree.NodeRoot;
+import net.java.vll.vllj.api.NodeRoot;
 
 public class PanelActionCode extends JPanel {
     

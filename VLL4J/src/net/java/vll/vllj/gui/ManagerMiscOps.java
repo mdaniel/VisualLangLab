@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
-import net.java.vll.vllj.core.Utils;
+import net.java.vll.vllj.combinator.Utils;
 
 public class ManagerMiscOps {
 

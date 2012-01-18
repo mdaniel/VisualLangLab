@@ -2,9 +2,9 @@ package tests;
 
 import java.util.List;
 import java.util.regex.Pattern;
-import net.java.vll.vllj.core.Parsers.ParseResult;
-import net.java.vll.vllj.core.Parsers.Parser;
-import net.java.vll.vllj.core.RegexParsers;
+import net.java.vll.vllj.combinator.Parsers.ParseResult;
+import net.java.vll.vllj.combinator.Parsers.Parser;
+import net.java.vll.vllj.combinator.RegexParsers;
 
 public class TestRegexParsers {
     public static void main(String args[]) {

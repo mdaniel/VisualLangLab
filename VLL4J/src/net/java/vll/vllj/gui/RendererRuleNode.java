@@ -20,18 +20,18 @@
 
 package net.java.vll.vllj.gui;
 
-import net.java.vll.vllj.tree.NodeRoot;
-import net.java.vll.vllj.tree.NodeSemPred;
-import net.java.vll.vllj.tree.NodeWildCard;
-import net.java.vll.vllj.tree.NodeLiteral;
-import net.java.vll.vllj.tree.NodeChoice;
-import net.java.vll.vllj.tree.NodeRegex;
-import net.java.vll.vllj.tree.NodeSequence;
-import net.java.vll.vllj.tree.NodeRepSep;
-import net.java.vll.vllj.tree.NodeReference;
+import net.java.vll.vllj.api.NodeRoot;
+import net.java.vll.vllj.api.NodeSemPred;
+import net.java.vll.vllj.api.NodeWildCard;
+import net.java.vll.vllj.api.NodeLiteral;
+import net.java.vll.vllj.api.NodeChoice;
+import net.java.vll.vllj.api.NodeRegex;
+import net.java.vll.vllj.api.NodeSequence;
+import net.java.vll.vllj.api.NodeRepSep;
+import net.java.vll.vllj.api.NodeReference;
 import java.awt.Color;
-import net.java.vll.vllj.tree.VisitorValidation;
-import net.java.vll.vllj.tree.NodeBase;
+import net.java.vll.vllj.api.VisitorValidation;
+import net.java.vll.vllj.api.NodeBase;
 import java.awt.Component;
 import java.awt.Graphics;
 import javax.swing.Icon;

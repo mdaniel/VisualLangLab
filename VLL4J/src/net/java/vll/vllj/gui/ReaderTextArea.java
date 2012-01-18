@@ -21,7 +21,7 @@
 package net.java.vll.vllj.gui;
 
 import javax.swing.JTextArea;
-import net.java.vll.vllj.core.Reader;
+import net.java.vll.vllj.combinator.Reader;
 
 public class ReaderTextArea extends Reader {
     public ReaderTextArea(JTextArea textArea) {
