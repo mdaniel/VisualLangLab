@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
 
-<project name="VLL4J" default="default" basedir=".">
-    <description>Builds, tests, and runs VLL4J</description>
+<project name="VLLJ" default="default" basedir=".">
+    <description>Builds, tests, and runs VLLJ</description>
     <import file="nbproject/build-impl.xml"/>
     <property environment="env"/>
     <target name="-post-compile">
         <tstamp/>
-        <jar destfile="VLL4J.jar" compress="true" manifest="manifest.mf">
+        <jar destfile="VLLJ.jar" compress="true" manifest="manifest.mf">
             <fileset dir="build/classes" includes="**/*.*" />
-            <fileset dir="." includes="changes.txt"/>
+            <fileset dir="." includes="readme.txt, copying.txt, changes.txt"/>
             <fileset dir="." includes="licenses/*.*" />
         </jar>
-        <jar destfile="VLL4J-API.jar" compress="true">
-            <fileset dir="build/classes" includes="vll4j/core/*.*, vll4j/tree/*.*, vll4j/*.class" />
-            <fileset dir="." includes="changes.txt"/>
+        <jar destfile="VLLJ-API.jar" compress="true" manifest="manifest.mf">
+            <fileset dir="build/classes" includes="net/java/vll/vllj/combinator/*.*, net/java/vll/vllj/api/*.*" />
+            <fileset dir="." includes="readme.txt, copying.txt, changes.txt"/>
             <fileset dir="." includes="licenses/*.*" />
         </jar>
-        <zip zipfile="VLL4J-${DSTAMP}-${TSTAMP}.zip" compress="true">
+        <zip zipfile="VLLJ-${DSTAMP}-${TSTAMP}.zip" compress="true">
             <fileset dir="src" includes="**/*.*"/>
-            <fileset dir="." includes="manifest.mf, build.xml, todo.txt, changes.txt"/>
+            <fileset dir="." includes="readme.txt, copying.txt, manifest.mf, build.xml, todo.txt, changes.txt"/>
         </zip>
     </target>
 </project>
