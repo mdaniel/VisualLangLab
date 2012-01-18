@@ -30,8 +30,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import vll4j.core.Utils;
-import vll4j.tree.NodeBase;
+import net.java.vll.vllj.core.Utils;
+import net.java.vll.vllj.tree.NodeBase;
 
 public class ManagerFileOps {
 

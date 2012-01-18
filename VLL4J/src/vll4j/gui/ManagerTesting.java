@@ -25,10 +25,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
-import vll4j.core.Parsers.ParseResult;
-import vll4j.core.Parsers.Parser;
-import vll4j.tree.NodeBase;
-import vll4j.tree.VisitorParserGeneration;
+import net.java.vll.vllj.core.Parsers.ParseResult;
+import net.java.vll.vllj.core.Parsers.Parser;
+import net.java.vll.vllj.tree.NodeBase;
+import net.java.vll.vllj.tree.VisitorParserGeneration;
 
 public class ManagerTesting {
 

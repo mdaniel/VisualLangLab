@@ -18,18 +18,18 @@
  along with VisualLangLab.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vll4j;
+package net.java.vll.vllj.tree;
 
 import java.io.*;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import vll4j.core.PackratParsers;
-import vll4j.core.Parsers.ParseResult;
-import vll4j.core.Parsers.Parser;
+import net.java.vll.vllj.core.PackratParsers;
+import net.java.vll.vllj.core.Parsers.ParseResult;
+import net.java.vll.vllj.core.Parsers.Parser;
 import vll4j.gui.ReaderFile;
-import vll4j.tree.Forest;
-import vll4j.tree.NodeBase;
-import vll4j.tree.VisitorParserGeneration;
+import net.java.vll.vllj.tree.Forest;
+import net.java.vll.vllj.tree.NodeBase;
+import net.java.vll.vllj.tree.VisitorParserGeneration;
 
 public class Vll4j extends PackratParsers {
 

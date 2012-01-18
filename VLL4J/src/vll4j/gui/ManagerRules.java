@@ -26,8 +26,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import vll4j.tree.NodeBase;
-import vll4j.tree.NodeRoot;
+import net.java.vll.vllj.tree.NodeBase;
+import net.java.vll.vllj.tree.NodeRoot;
 
 public class ManagerRules {
     

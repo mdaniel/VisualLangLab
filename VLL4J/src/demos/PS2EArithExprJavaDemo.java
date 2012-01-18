@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import vll4j.Vll4j;
+import net.java.vll.vllj.tree.Vll4j;
 
 public class PS2EArithExprJavaDemo {
 

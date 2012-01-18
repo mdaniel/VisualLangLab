@@ -27,7 +27,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import vll4j.tree.NodeBase;
+import net.java.vll.vllj.tree.NodeBase;
 
 public class PanelAstDisplay extends JPanel {
     

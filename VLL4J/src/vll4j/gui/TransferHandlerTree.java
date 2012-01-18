@@ -20,7 +20,7 @@
 
 package vll4j.gui;
 
-import vll4j.tree.NodeBase;
+import net.java.vll.vllj.tree.NodeBase;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;

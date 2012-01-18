@@ -20,16 +20,24 @@
 
 package vll4j.gui;
 
+import net.java.vll.vllj.tree.NodeRoot;
+import net.java.vll.vllj.tree.NodeSemPred;
+import net.java.vll.vllj.tree.NodeWildCard;
+import net.java.vll.vllj.tree.NodeLiteral;
+import net.java.vll.vllj.tree.NodeChoice;
+import net.java.vll.vllj.tree.NodeRegex;
+import net.java.vll.vllj.tree.NodeSequence;
+import net.java.vll.vllj.tree.NodeRepSep;
+import net.java.vll.vllj.tree.NodeReference;
 import java.awt.Color;
-import vll4j.tree.VisitorValidation;
-import vll4j.tree.NodeBase;
+import net.java.vll.vllj.tree.VisitorValidation;
+import net.java.vll.vllj.tree.NodeBase;
 import java.awt.Component;
 import java.awt.Graphics;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import vll4j.tree.*;
 
 public class RendererRuleNode extends DefaultTreeCellRenderer {
     

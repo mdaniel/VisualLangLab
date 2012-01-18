@@ -21,8 +21,8 @@
 package vll4j.gui;
 
 import java.io.PrintWriter;
-import vll4j.core.Utils;
-import vll4j.tree.*;
+import net.java.vll.vllj.core.Utils;
+import net.java.vll.vllj.tree.*;
 
 public class VisitorXmlGeneration extends VisitorBase {
     

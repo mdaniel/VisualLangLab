@@ -20,7 +20,7 @@
 
 package vll4j.gui;
 
-import vll4j.tree.ActionFunction;
+import net.java.vll.vllj.tree.ActionFunction;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,7 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
-import vll4j.tree.NodeRoot;
+import net.java.vll.vllj.tree.NodeRoot;
 
 public class PanelActionCode extends JPanel {
     

@@ -21,7 +21,7 @@
 package vll4j.gui;
 
 import java.util.*;
-import vll4j.tree.*;
+import net.java.vll.vllj.tree.*;
 
 public class VisitorAstDescription extends VisitorBase {
     

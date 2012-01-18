@@ -20,7 +20,7 @@
 
 package vll4j.gui;
 
-import vll4j.tree.NodeBase;
+import net.java.vll.vllj.tree.NodeBase;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.tree.TreePath;

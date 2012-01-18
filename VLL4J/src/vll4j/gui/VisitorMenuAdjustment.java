@@ -20,7 +20,7 @@
 
 package vll4j.gui;
 
-import vll4j.tree.*;
+import net.java.vll.vllj.tree.*;
 
 public class VisitorMenuAdjustment extends VisitorBase {
     

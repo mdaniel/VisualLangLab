@@ -22,7 +22,6 @@ package vll4j.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -31,7 +30,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import vll4j.tree.*;
+import net.java.vll.vllj.tree.*;
 
 public class PanelRuleTree extends JPanel implements TreeSelectionListener {
 
