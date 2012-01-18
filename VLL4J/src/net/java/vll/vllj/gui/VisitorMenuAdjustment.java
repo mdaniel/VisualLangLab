@@ -20,18 +20,7 @@
 
 package net.java.vll.vllj.gui;
 
-import net.java.vll.vllj.api.Multiplicity;
-import net.java.vll.vllj.api.NodeRepSep;
-import net.java.vll.vllj.api.NodeChoice;
-import net.java.vll.vllj.api.NodeWildCard;
-import net.java.vll.vllj.api.NodeLiteral;
-import net.java.vll.vllj.api.NodeRoot;
-import net.java.vll.vllj.api.NodeReference;
-import net.java.vll.vllj.api.NodeRegex;
-import net.java.vll.vllj.api.NodeSemPred;
-import net.java.vll.vllj.api.NodeSequence;
-import net.java.vll.vllj.api.VisitorBase;
-import net.java.vll.vllj.api.NodeBase;
+import net.java.vll.vllj.api.*;
 
 public class VisitorMenuAdjustment extends VisitorBase {
     
@@ -54,9 +43,11 @@ public class VisitorMenuAdjustment extends VisitorBase {
         theMenu.commitMenu.setEnabled(setting);
         theMenu.packratMenuItem.setEnabled(false);
         theMenu.multiplicityOneItem.setEnabled(true); 
-        theMenu.multiplicityZeroOneItem.setEnabled(true); 
-        theMenu.multiplicityNotItem.setEnabled(true); 
-        theMenu.multiplicityGuardItem.setEnabled(true); 
+        theMenu.multiplicityZeroOneItem.setEnabled(parent == null || !(parent instanceof NodeChoice)); 
+        theMenu.multiplicityZeroMoreItem.setEnabled(parent == null || !(parent instanceof NodeChoice)); 
+        theMenu.multiplicityOneMoreItem.setEnabled(true); 
+        theMenu.multiplicityNotItem.setEnabled(parent == null || !(parent instanceof NodeChoice)); 
+        theMenu.multiplicityGuardItem.setEnabled(parent == null || !(parent instanceof NodeChoice)); 
         theMenu.multiplicityMenu.setEnabled(true);
         theMenu.traceMenuItem.setSelected(n.isTraced);
         theMenu.dropMenuItem.setSelected(n.isDropped);
