@@ -1,0 +1,31 @@
+<html>
+    This panel displays the AST (Abstract Syntax Tree) produced by a parser. <br/>
+    A specific, predictable AST structure exists for any rule-tree, and is <br/>
+    defined by applying the following principles recursively to each node in the <br/>
+    rule:<br/>
+    <ul>
+        <li>A <i>Sequence</i> yields an "Array" (Object[]) of the child sub-rule ASTs. <br/>
+        If there is effectively just one child node, that node's AST itself is <br/>
+        returned (without the array encapsulation). An effectively empty <br/>
+        <i>Sequence</i> returns an empty array</li>
+        <li>A <i>Choice</i> yields a 2-element array. The first element is a 0-based <br/>
+        integer index of the matching alternative sub-rule, and the second <br/>
+        element is the AST of the matching alternative itself</li>
+        <li>A <i>RepSep</i> yields a "List" (java.util.List) containing the ASTs <br/>
+        from repeated applications of the RepSep's first child sub-rule. <br/>
+        A <i>RepSep</i> with multiplicity * (0 or more) may return an empty List</li>
+    </ul>
+    The basic structure described above is further modified as follows:
+    <ul>
+        <li>A multiplicity of * or + yields a "List" containing ASTs obtained from <br/>
+        repeated applications of the basic sub-rule</li>
+        <li>A multiplicity of ? yields an "Option" which is actually a 1-element <br/> 
+        array (new Object[1]) holding a (possibly null) reference to an AST </li>
+        <li>A multiplicity of 0 (not) or = (guard) causes the adorned sub-rule <br/>
+        to be dropped from the AST structure (these <i>multiplicities</i> <br/>
+        in fact produce <i>syntactic predicates</i>) </li>
+        <li>A <i>drop</i> attribute, obviously, causes the adorned sub-rule to be <br/>
+        ignored in the AST's structure</li>
+    </ul>
+    <br/><b>Click the OK button for more details</b>
+</html>

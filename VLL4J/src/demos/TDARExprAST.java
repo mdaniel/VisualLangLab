@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
+import net.java.vll.vll4j.api.Vll4j;
 import org.xml.sax.SAXException;
-import net.java.vll.vllj.api.Vll4j;
 
 public class TDARExprAST {
 

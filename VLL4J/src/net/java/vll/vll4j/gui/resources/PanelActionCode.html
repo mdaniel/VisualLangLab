@@ -1,0 +1,22 @@
+<html>
+    This panel allows entry of an optional action-code (or <i>action</i>) function. <br/>
+    Action-Code is a JavaScript function optionally attached to any rule-tree node, <br/>
+    used to modify the native AST of a sub-rule on the fly. <br/>
+    A function used as Action-code has the following characteristics:<br/>
+    <ul>
+        <li>Takes one argument, used as described below.</li>
+        <li>Is called twice: first unconditionally before parsing of the <br/>
+            associated node begins, and again (only if parsing was successful) <br/>
+            after parsing has been completed. The first call receives an argument  <br/>
+            of null, while during the second call the argument refers to the <br/>
+            AST. </li>
+        <li>The AST passed in is a native Java object (e.g. an "Array" will be a <br/>
+        Java Object[], not a JavaScript array). The function's code must <br/>
+        therefore apply explicit unboxing wherever applicable. </li>
+        <li>Must return the modified AST. The returned value becomes part of the <br/>
+        larger containing AST (of the associated node's parent node)</li>
+        <li>Examples can be seen in the <i>PS2E-ArithExpr-Action</i> sample grammar <br/>
+            (click on the nodes with the <i>action</i> attribute)</li>
+    </ul>
+        <br/><b>Click the OK button for more details</b>
+</html>
