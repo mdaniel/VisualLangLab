@@ -268,7 +268,8 @@ public class ManagerHelp {
         @Override
         public void actionPerformed(ActionEvent e) {
             JLabel hlpLabel = new JLabel(getHtml("PanelRuleTree.html"));
-            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, 
+                    "Rule Tree - " + title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                 try {
                     URI webLink = new URL("http://vll.java.net/EditingTheGrammarTree.html").toURI();
                     desktop.browse(webLink);
@@ -282,7 +283,8 @@ public class ManagerHelp {
         @Override
         public void actionPerformed(ActionEvent e) {
             JLabel hlpLabel = new JLabel(getHtml("PanelAST.html"));
-            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, 
+                    "Parse Tree (AST) Structure - " + title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                 try {
                     URI webLink = new URL("http://vll.java.net/ASTAndActionCode.html").toURI();
                     desktop.browse(webLink);
@@ -296,7 +298,8 @@ public class ManagerHelp {
         @Override
         public void actionPerformed(ActionEvent e) {
             JLabel hlpLabel = new JLabel(getHtml("PanelActionCode.html"));
-            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, 
+                    "Action Code - " + title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                 try {
                     URI webLink = new URL("http://vll.java.net/ASTAndActionCode.html#ActionCodeDesign").toURI();
                     desktop.browse(webLink);
@@ -310,7 +313,8 @@ public class ManagerHelp {
         @Override
         public void actionPerformed(ActionEvent e) {
             JLabel hlpLabel = new JLabel(getHtml("PanelTestInput.html"));
-            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, 
+                    "Parser Test Input - " + title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                 try {
                     URI webLink = new URL("http://vll.java.net/TestingParsers.html").toURI();
                     desktop.browse(webLink);
@@ -324,7 +328,8 @@ public class ManagerHelp {
         @Override
         public void actionPerformed(ActionEvent e) {
             JLabel hlpLabel = new JLabel(getHtml("PanelTestLog.html"));
-            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, title + " Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(gui, hlpLabel, 
+                    "Parser Log - " + title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                 try {
                     URI webLink = new URL("http://vll.java.net/TestingParsers.html").toURI();
                     desktop.browse(webLink);
