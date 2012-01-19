@@ -26,6 +26,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
 import javax.swing.*;
 import net.java.vll.vll4j.api.ActionFunction;
 import net.java.vll.vll4j.api.NodeRoot;
@@ -62,12 +63,16 @@ public class PanelActionCode extends JPanel {
         if (gui.theTreePanel.selectedNode instanceof NodeRoot) {
             codeArea.setEnabled(false);
             codeArea.setText("");
+            codeArea.setBackground(Color.gray.brighter());
+            codeArea.removeMouseListener(mouseListeners[mouseListeners.length-1]);
         } else {
             codeArea.setEnabled(true);
+            codeArea.setBackground(normalBackgroundColor);
             String at = gui.theTreePanel.selectedNode.actionText;
             ActionFunction af = gui.theTreePanel.selectedNode.actionFunction;
             codeArea.setText(at);
             codeArea.setForeground(at.trim().isEmpty() == (af == null) ? normalTextColor : Color.red);
+            codeArea.addMouseListener(mouseListeners[mouseListeners.length-1]);
         }
         saveButton.setEnabled(false);
     }
@@ -96,7 +101,8 @@ public class PanelActionCode extends JPanel {
     };
     
     TextAreaCustom codeArea = new TextAreaCustom();
-    private Color normalTextColor;
+    private MouseListener mouseListeners[] = codeArea.getMouseListeners();
+    private Color normalTextColor, normalBackgroundColor = codeArea.getBackground();
     private JButton saveButton = new JButton(saveAction);
     private JButton helpButton = null;
     Vll4jGui gui;

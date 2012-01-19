@@ -40,6 +40,7 @@ public class Resources {
     static ImageIcon export16 = getIcon("Export16.gif");
     static ImageIcon fastForward16 = getIcon("FastForward16.gif");
     static ImageIcon help16 = getIcon("Help16.gif");
+    static ImageIcon home16 = getIcon("Home16.gif");
     static ImageIcon host16 = getIcon("Host16.gif");
     static ImageIcon icon = getIcon("Icon.gif");
     static ImageIcon import16 = getIcon("Import16.gif");
