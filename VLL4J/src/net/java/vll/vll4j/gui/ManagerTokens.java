@@ -54,14 +54,16 @@ public class ManagerTokens {
                     "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        // ToDo: need to check if regular expression is valid and matches empry string
-        // ToDo: where should un-escaping happen?
         boolean ok = true;
         for (Map.Entry<String,String> e: gui.theForest.tokenBank.entrySet()) {
             if (e.getValue().substring(1).equals(m.group(2))) {
                 JOptionPane.showMessageDialog(gui, String.format("Pattern conflict\nToken '%s' uses the same pattern", e.getKey()), "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
                 ok = false;
             }
+        }
+        if (isRegex && "".matches(Utils.unEscape(m.group(2)))) {
+            JOptionPane.showMessageDialog(gui, "Bad pattern\nPattern matches empty string", "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
+            return null;
         }
         String pattern = (isRegex ? "R" : "L") + m.group(2);
         return ok ? new String[] {name, pattern} : null;
