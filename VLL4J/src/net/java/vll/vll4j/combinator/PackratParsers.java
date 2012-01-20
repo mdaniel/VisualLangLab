@@ -19,9 +19,9 @@
  */
 
 /*
- The design of this class is inspired by the element of the same 
- name in the Scala (http://scala-lang.org/) standard library. 
- The Java code is also based on the corresponding Scala source.
+ The design and code of this class is inspired by the element of the 
+ same name in the Scala (http://scala-lang.org/) standard library. 
+ The Scala license is reproduced in the ZIP and JAR distributions.
  */
 
 package net.java.vll.vll4j.combinator;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class PackratParsers extends RegexParsers {
+public class PackratParsers extends SimpleLexingParsers {
     
     static String sn(Object obj) {
         String name = obj.toString();
