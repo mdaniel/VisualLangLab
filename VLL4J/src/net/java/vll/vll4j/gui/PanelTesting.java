@@ -118,20 +118,10 @@ public class PanelTesting extends JPanel {
     
     PrintStream getOutStream() {
         OutputStream os = new OutputStream() {
-            StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
             @Override
             public void write(int b) {
                 sb.append((char)b);
-                if (b == '\n' || sb.length() >= 1024) {
-                    logArea.setSelectionStart(logArea.getDocument().getLength());
-                    logArea.setSelectionEnd(logArea.getDocument().getLength());
-                    try {
-                        logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), blackFont);
-                    } catch (BadLocationException ex) {}
-//                    logArea.setSelectionStart(logArea.getDocument().getLength());
-//                    logArea.setSelectionEnd(logArea.getDocument().getLength());
-                    sb.setLength(0);
-                }
             }
             @Override
             public void write(byte b[], int off, int len) throws IOException {
@@ -143,30 +133,35 @@ public class PanelTesting extends JPanel {
                 } else if (len == 0) {
                     return;
                 }
-                String s = new String(b, off, len);
+                for (int i = 0; i < len; ++i) {
+                    sb.append((char)b[off + i]);
+                }
+            }
+            @Override
+            public void flush() {
+                try {
+                    logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), blackFont);
+                } catch (BadLocationException ex) {}
                 logArea.setSelectionStart(logArea.getDocument().getLength());
                 logArea.setSelectionEnd(logArea.getDocument().getLength());
-                try {
-                    logArea.getDocument().insertString(logArea.getDocument().getLength(), s, blackFont);
-                } catch (BadLocationException ex) {}
+                sb.setLength(0);
             }
         };
-        return new PrintStream(os, true);
+        return new PrintStream(os, false);
     }
     
     PrintStream getErrStream() {
         OutputStream os = new OutputStream() {
             StringBuilder sb = new StringBuilder();
             public void write(int b) {
+                System.out.flush();
                 sb.append((char)b);
                 if (b == '\n' || sb.length() >= 1024) {
-//                    logArea.setSelectionStart(logArea.getDocument().getLength());
-//                    logArea.setSelectionEnd(logArea.getDocument().getLength());
                     try {
                         logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), redFont);
                     } catch (BadLocationException ex) {}
-//                    logArea.setSelectionStart(logArea.getDocument().getLength());
-//                    logArea.setSelectionEnd(logArea.getDocument().getLength());
+                    logArea.setSelectionStart(logArea.getDocument().getLength());
+                    logArea.setSelectionEnd(logArea.getDocument().getLength());
                     sb.setLength(0);
                 }
             }

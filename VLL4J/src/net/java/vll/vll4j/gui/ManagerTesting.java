@@ -47,6 +47,7 @@ public class ManagerTesting {
                     runner(false);
                     setEnabled(true);
                     parseStopAction.setEnabled(false);
+                    System.out.flush();
                 }
             };
             myThread.start();
@@ -76,6 +77,7 @@ public class ManagerTesting {
                     }
                     setEnabled(true);
                     parseStopAction.setEnabled(false);
+                    System.out.flush();
                 }
             };
             myThread.start();
@@ -192,17 +194,15 @@ public class ManagerTesting {
                     t2 = System.currentTimeMillis();
                     if (pr.successful()) {
                         ++countOk;
-                        System.out.printf("%s: OK: %d bytes %d ms%n", f.getAbsolutePath(), 
-                                f.length(), t2 - t1);
+                        System.out.printf("%s (%d bytes %d ms): OK%n", 
+                                f.getAbsolutePath(), f.length(), t2 - t1);
                     } else {
                         ++countNotOk;
-                        System.err.printf("%s: ERROR (%d,%d): %d bytes %d: ms%n", f.getAbsolutePath(), 
-                                pr.next().line(), pr.next().column(), f.length(), t2 - t1);
+                        System.err.printf("%s (%d bytes %d ms): ERROR (line=%d, col=%d)%n", 
+                                f.getAbsolutePath(), f.length(), t2 - t1, 
+                                pr.next().line(), pr.next().column());
                     }
                 } catch (Throwable t) {
-//                    long maxMemory = Runtime.getRuntime().maxMemory();
-//                    long totalMemory = Runtime.getRuntime().totalMemory();
-//                    System.out.printf("Memory: %d/%d%n", totalMemory, maxMemory);
                     ++countNotOk;
                     t.printStackTrace();
                     break;
@@ -212,6 +212,7 @@ public class ManagerTesting {
                     System.err.println("User-Requested STOP");
                     break;
                 }
+                System.out.flush();
             }
         } else {
             t0 = System.currentTimeMillis();

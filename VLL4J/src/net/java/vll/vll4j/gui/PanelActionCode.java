@@ -64,7 +64,12 @@ public class PanelActionCode extends JPanel {
             codeArea.setEnabled(false);
             codeArea.setText("");
             codeArea.setBackground(Color.gray.brighter());
-            codeArea.removeMouseListener(mouseListeners[mouseListeners.length-1]);
+            for (MouseListener ml: codeArea.getMouseListeners()) {
+                if (ml instanceof PopupListenerText) {
+                    mouseListener = ml;
+                    codeArea.removeMouseListener(ml);
+                }
+            }
         } else {
             codeArea.setEnabled(true);
             codeArea.setBackground(normalBackgroundColor);
@@ -72,7 +77,7 @@ public class PanelActionCode extends JPanel {
             ActionFunction af = gui.theTreePanel.selectedNode.actionFunction;
             codeArea.setText(at);
             codeArea.setForeground(at.trim().isEmpty() == (af == null) ? normalTextColor : Color.red);
-            codeArea.addMouseListener(mouseListeners[mouseListeners.length-1]);
+            codeArea.addMouseListener(mouseListener);
         }
         saveButton.setEnabled(false);
     }
@@ -101,7 +106,7 @@ public class PanelActionCode extends JPanel {
     };
     
     TextAreaCustom codeArea = new TextAreaCustom();
-    private MouseListener mouseListeners[] = codeArea.getMouseListeners();
+    private MouseListener mouseListener = null;
     private Color normalTextColor, normalBackgroundColor = codeArea.getBackground();
     private JButton saveButton = new JButton(saveAction);
     private JButton helpButton = null;
