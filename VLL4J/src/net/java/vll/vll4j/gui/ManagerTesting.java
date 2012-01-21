@@ -231,6 +231,8 @@ public class ManagerTesting {
                     System.out.println();
                     t1 = System.currentTimeMillis();
                     appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
+                    if (ast.length() > 50000)
+                        JOptionPane.showMessageDialog(gui, "Large ASTs are slow to appear, please wait", "Print Delay Warning", JOptionPane.WARNING_MESSAGE);
                 } else {
                     System.err.printf("%s%n", gui.regexParsers.dumpResult(pr));
                 }

@@ -159,12 +159,12 @@ public class Forest {
         final CompiledScript cs = compilable.compile(String.format("(function %s)(vllARG)", script));
         return new ActionFunction() {
             @Override
-            public Object run(Object arg, Reader r) throws ScriptException {
+            public Object run(Object arg, Reader input, int endOffset) throws ScriptException {
                 cs.getEngine().put("vllARG", arg);
-                cs.getEngine().put("vllLine", r.line());
-                cs.getEngine().put("vllCol", r.column());
-                cs.getEngine().put("vllOffset", r.offset());
-                cs.getEngine().put("vllInput", r.source().subSequence(r.offset(), r.source().length()));
+                cs.getEngine().put("vllLine", input.line());
+                cs.getEngine().put("vllCol", input.column());
+                cs.getEngine().put("vllOffset", input.offset());
+                cs.getEngine().put("vllInput", input.source().subSequence(input.offset(), endOffset));
                 cs.getEngine().put("vllLastNoSuccess", PackratParsers.lastNoSuccess);
                 for (String k : bindings.keySet()) {
                     cs.getEngine().put(k, bindings.get(k));

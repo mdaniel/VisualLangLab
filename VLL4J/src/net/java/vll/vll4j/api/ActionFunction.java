@@ -24,6 +24,6 @@ import javax.script.ScriptException;
 import net.java.vll.vll4j.combinator.Reader;
 
 public interface ActionFunction {
-    public Object run(Object o, Reader r) throws ScriptException;
+    public Object run(Object o, Reader input, int endOffset) throws ScriptException;
 }
     

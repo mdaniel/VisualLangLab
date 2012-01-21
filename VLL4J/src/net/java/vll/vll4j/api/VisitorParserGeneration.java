@@ -72,16 +72,15 @@ public class VisitorParserGeneration extends VisitorBase {
     }
     
     Parser<? extends Object> withAction(final Parser<? extends Object> p, final NodeBase node) {
-        Parser<? extends Object> pm = p;
         if (!(node instanceof NodeSemPred) && node.actionFunction != null) {
-            pm = new Parser() {
+            Parser<? extends Object> pm = new Parser() {
                 @Override
                 public ParseResult<? extends Object> apply(Reader input) {
                     try {
-                        node.actionFunction.run(null, input);
+                        node.actionFunction.run(null, input, input.source().length());
                         ParseResult<? extends Object> res = p.apply(input);
                         if (res.successful()) {
-                            Object r2 = node.actionFunction.run(res.get(), res.next());
+                            Object r2 = node.actionFunction.run(res.get(), input, res.next().offset());
                             return new Success(r2, res.next());
                         } else 
                             return res;
@@ -90,29 +89,34 @@ public class VisitorParserGeneration extends VisitorBase {
                     }
                 }
             };
+            return pm;
+        } else {
+            return p;
         }
-        return pm;
     }
     
     Parser<? extends Object> withTrace(final Parser<? extends Object> p, final NodeBase node) {
-        Parser<? extends Object> pm = p;
         if (node.isTraced || ((node instanceof NodeRoot) && traceAll)) {
-            pm = new Parser() {
+            Parser<? extends Object> pm = new Parser() {
                 @Override
                 public ParseResult<? extends Object> apply(Reader input) {
                     traceIndent();
-                    System.out.print(String.format(">> %s (%d, %d)%n", node.nodeName(), input.line(), input.column()));
+                    System.out.print(String.format(">> %s (line=%d, col=%d)%n", node.nodeName(), input.line(), input.column()));
                     ++traceLevel;
+                    String sample = Utils.reEscape(input.source().subSequence(input.offset(), 
+                            Math.min(input.source().length(), input.offset() + 20)).toString());
                     ParseResult<? extends Object> res = p.apply(input);
                     --traceLevel;
                     traceIndent();
-                    System.out.print(String.format("<< %s : %s (%d, %d)%n", node.nodeName(), res.getClass().getSimpleName(),
-                            res.next().line(), res.next().column()));
+                    System.out.print(String.format("<< %s: %s (line=%d, col=%d, input=%s)%n", node.nodeName(), res.getClass().getSimpleName(),
+                            res.next().line(), res.next().column(), sample));
                     return res;
                 }
             };
+            return withAction(pm, node);
+        } else {
+            return withAction(p, node);
         }
-        return withAction(pm, node);
     }
     
     Parser<? extends Object> withMultiplicity(Parser<? extends Object> p, NodeBase node) {
@@ -243,7 +247,7 @@ public class VisitorParserGeneration extends VisitorBase {
                 public ParseResult<? extends Object> apply(Reader input) {
                     Object result = null;
                     try {
-                        result = n.actionFunction.run(null, input);
+                        result = n.actionFunction.run(null, input, input.source().length());
                     } catch (ScriptException ex) {
                     }
                     if (result == Boolean.TRUE) {

@@ -140,11 +140,19 @@ public class PanelTesting extends JPanel {
             @Override
             public void flush() {
                 try {
-                    logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), blackFont);
-                } catch (BadLocationException ex) {}
-                logArea.setSelectionStart(logArea.getDocument().getLength());
-                logArea.setSelectionEnd(logArea.getDocument().getLength());
-                sb.setLength(0);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            try {
+                                logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), blackFont);
+                            } catch (BadLocationException ex) {}
+                            logArea.setSelectionStart(logArea.getDocument().getLength());
+                            logArea.setSelectionEnd(logArea.getDocument().getLength());
+                            sb.setLength(0);
+                        }
+                    });
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         };
         return new PrintStream(os, false);
