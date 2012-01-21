@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import javax.script.ScriptException;
-import net.java.vll.vll4j.combinator.PackratParsers;
 import net.java.vll.vll4j.combinator.Parsers.Failure;
 import net.java.vll.vll4j.combinator.Parsers.ParseResult;
 import net.java.vll.vll4j.combinator.Parsers.Parser;
@@ -34,10 +33,10 @@ import net.java.vll.vll4j.combinator.Utils;
 
 public class VisitorParserGeneration extends VisitorBase {
     
-    public VisitorParserGeneration(Forest theForest, PackratParsers regexParsers, boolean traceAll) {
-        regexParsers.reset();
+    public VisitorParserGeneration(Forest theForest, ApiParsers parsersInstance, boolean traceAll) {
+        parsersInstance.reset();
         this.theForest = theForest;
-        this.parsersInstance = regexParsers;
+        this.parsersInstance = parsersInstance;
         this.traceAll = traceAll;
         createTokenParsers();
         visitorNodeValidation = new VisitorValidation();
@@ -103,8 +102,9 @@ public class VisitorParserGeneration extends VisitorBase {
                     traceIndent();
                     System.out.print(String.format(">> %s (line=%d, col=%d)%n", node.nodeName(), input.line(), input.column()));
                     ++traceLevel;
-                    String sample = Utils.reEscape(input.source().subSequence(input.offset(), 
-                            Math.min(input.source().length(), input.offset() + 20)).toString());
+                    int postWhitespace = parsersInstance.handleWhiteSpace(input.source(), input.offset());
+                    String sample = Utils.reEscape(input.source().subSequence(postWhitespace, 
+                            Math.min(input.source().length(), postWhitespace + 20)).toString());
                     ParseResult<? extends Object> res = p.apply(input);
                     --traceLevel;
                     traceIndent();
@@ -298,7 +298,7 @@ public class VisitorParserGeneration extends VisitorBase {
         }
     }
 
-    private PackratParsers parsersInstance;
+    private ApiParsers parsersInstance;
     private boolean traceAll;
     private Map<String, Parser<? extends Object>[]> parserCache = new HashMap<String, Parser<? extends Object>[]>();
     public boolean parserGeneratedOk;

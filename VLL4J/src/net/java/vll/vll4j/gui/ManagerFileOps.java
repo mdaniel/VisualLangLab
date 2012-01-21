@@ -52,9 +52,9 @@ public class ManagerFileOps {
         try {
             gui.theForest.openInputStream(is, tokensOnly);
             if (!tokensOnly) {
-                gui.regexParsers.whiteSpaceRegex = gui.theForest.whiteSpace;
-                gui.regexParsers.commentSpecRegex = gui.theForest.comment;
-                gui.regexParsers.resetWhitespace();
+                gui.apiParsers.whiteSpaceRegex = gui.theForest.whiteSpace;
+                gui.apiParsers.commentSpecRegex = gui.theForest.comment;
+                gui.apiParsers.resetWhitespace();
                 gui.theRuleManager.theComboBox.setAction(null);
                 gui.theRuleManager.theComboBox.removeAllItems();
                 for (String ruleName : gui.theForest.ruleBank.keySet()) {
@@ -141,9 +141,9 @@ public class ManagerFileOps {
         pw.println("  </Tokens>");
         if (!tokensOnly) {
             pw.printf("  <Whitespace>%s</Whitespace>%n", 
-                    Utils.encode4xml(gui.regexParsers.whiteSpaceRegex));
+                    Utils.encode4xml(gui.apiParsers.whiteSpaceRegex));
             pw.printf("  <Comments>%s</Comments>%n", 
-                    Utils.encode4xml(gui.regexParsers.commentSpecRegex));
+                    Utils.encode4xml(gui.apiParsers.commentSpecRegex));
             pw.println("  <Parsers>");
             VisitorXmlGeneration xmlWriter = new VisitorXmlGeneration(pw);
             for (Map.Entry<String, NodeBase> me : gui.theForest.ruleBank.entrySet()) {

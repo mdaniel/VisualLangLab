@@ -67,6 +67,7 @@ public class ManagerTesting {
                         fileChooser = new JFileChooser();
                         fileChooser.setDialogTitle("Open");
                         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
                     }
                     if (fileChooser.showOpenDialog(gui) == JFileChooser.APPROVE_OPTION) {
                         try {
@@ -168,7 +169,7 @@ public class ManagerTesting {
     private void runner(boolean fromFile) {
         NodeBase apex = gui.theTreePanel.rootNode;
         long t0 = System.currentTimeMillis(), t1, t2;
-        visitorParserGenerator = new VisitorParserGeneration(gui.theForest, gui.regexParsers, traceAll);
+        visitorParserGenerator = new VisitorParserGeneration(gui.theForest, gui.apiParsers, traceAll);
         Parser<? extends Object> parser = (Parser<? extends Object>) apex.accept(visitorParserGenerator);
         if (!visitorParserGenerator.parserGeneratedOk) {
             JOptionPane.showMessageDialog(gui, "Can't generate parser\nReview rule definitions", 
@@ -190,7 +191,7 @@ public class ManagerTesting {
             for (File f: dredgeFiles(inFile)) {
                 t1 = System.currentTimeMillis();
                 try {
-                    ParseResult pr = gui.regexParsers.parseAll(parser, new ReaderFile(f));
+                    ParseResult pr = gui.apiParsers.parseAll(parser, new ReaderFile(f));
                     t2 = System.currentTimeMillis();
                     if (pr.successful()) {
                         ++countOk;
@@ -217,13 +218,13 @@ public class ManagerTesting {
         } else {
             t0 = System.currentTimeMillis();
             try {
-                ParseResult pr = gui.regexParsers.parseAll(parser, fromFile ? new ReaderFile(inFile) : 
+                ParseResult pr = gui.apiParsers.parseAll(parser, fromFile ? new ReaderFile(inFile) : 
                     new ReaderTextArea(gui.theTestingPanel.inputArea));
                 t1 = System.currentTimeMillis();
                 appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
                 if (pr.successful()) {
                     t0 = System.currentTimeMillis();
-                    String ast = gui.regexParsers.dumpValue(pr.get(), printStructured);
+                    String ast = gui.apiParsers.dumpValue(pr.get(), printStructured);
                     t1 = System.currentTimeMillis();
                     appendStatus(String.format(", AST->String: %d ms", t1 - t0), false);
                     t0 = System.currentTimeMillis();
@@ -234,7 +235,7 @@ public class ManagerTesting {
                     if (ast.length() > 50000)
                         JOptionPane.showMessageDialog(gui, "Large ASTs are slow to appear, please wait", "Print Delay Warning", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    System.err.printf("%s%n", gui.regexParsers.dumpResult(pr));
+                    System.err.printf("%s%n", gui.apiParsers.dumpResult(pr));
                 }
             } catch (Throwable t) {
                 long maxMemory = Runtime.getRuntime().maxMemory();

@@ -24,9 +24,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
+import net.java.vll.vll4j.api.ApiParsers;
 import net.java.vll.vll4j.api.Forest;
 import net.java.vll.vll4j.api.NodeRoot;
-import net.java.vll.vll4j.combinator.PackratParsers;
 
 public class Vll4jGui extends JFrame {
 
@@ -132,11 +132,8 @@ public class Vll4jGui extends JFrame {
         testTreeHandlerMenu.add(testTreeHandlerBasic);
         testTreeHandlerStructured = new JRadioButtonMenuItem(theTestManager.treeHandlerStructuredAction);
         testTreeHandlerMenu.add(testTreeHandlerStructured);
-        testTreeHandlerCustom = new JRadioButtonMenuItem(theTestManager.treeHandlerCustomAction);
-        testTreeHandlerMenu.add(testTreeHandlerCustom);
         bg.add(testTreeHandlerBasic);
         bg.add(testTreeHandlerStructured);
-        bg.add(testTreeHandlerCustom);
         testTraceAllItem = new JCheckBoxMenuItem(theTestManager.traceAllAction);
         testMenu.add(testTraceAllItem);
         menuBar.add(helpMenu);
@@ -239,7 +236,7 @@ public class Vll4jGui extends JFrame {
     ManagerMiscOps theMiscFunctionsManager = null;
     ManagerHelp theHelpFunctionsManager = null;
     
-    PackratParsers regexParsers = new PackratParsers();
+    ApiParsers apiParsers = new ApiParsers();
     Forest theForest = new Forest();
     
     JMenu fileMenu = new JMenu("File");
@@ -252,7 +249,6 @@ public class Vll4jGui extends JFrame {
     JMenu testTreeHandlerMenu = new JMenu("Tree handler");
     JMenuItem testTreeHandlerBasic = null;
     JMenuItem testTreeHandlerStructured = null;
-    JMenuItem testTreeHandlerCustom = null;
     JMenuItem testTraceAllItem = null;
     JMenu helpMenu = new JMenu("Help");
     JMenuItem helpHelp = null;
