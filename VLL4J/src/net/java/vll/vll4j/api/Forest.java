@@ -31,7 +31,6 @@ import javax.script.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import net.java.vll.vll4j.combinator.PackratParsers;
 import net.java.vll.vll4j.combinator.Reader;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -165,7 +164,7 @@ public class Forest {
                 cs.getEngine().put("vllCol", input.column());
                 cs.getEngine().put("vllOffset", input.offset());
                 cs.getEngine().put("vllInput", input.source().subSequence(input.offset(), endOffset));
-                cs.getEngine().put("vllLastNoSuccess", PackratParsers.lastNoSuccess);
+                cs.getEngine().put("vllLastNoSuccess", ApiParsers.lastNoSuccess);
                 for (String k : bindings.keySet()) {
                     cs.getEngine().put(k, bindings.get(k));
                 }

@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.script.ScriptException;
 import javax.swing.*;
 import net.java.vll.vll4j.api.NodeBase;
 import net.java.vll.vll4j.api.VisitorParserGeneration;
@@ -204,6 +205,10 @@ public class ManagerTesting {
                                 pr.next().line(), pr.next().column());
                     }
                 } catch (Throwable t) {
+                    if (t.getCause() instanceof ScriptException) {
+                        JOptionPane.showMessageDialog(gui, "Error in user-provided action-code\nDetails in stack-trace", 
+                                "Action-code error", JOptionPane.ERROR_MESSAGE);
+                    }
                     ++countNotOk;
                     t.printStackTrace();
                     break;
@@ -238,9 +243,10 @@ public class ManagerTesting {
                     System.err.printf("%s%n", gui.apiParsers.dumpResult(pr));
                 }
             } catch (Throwable t) {
-                long maxMemory = Runtime.getRuntime().maxMemory();
-                long totalMemory = Runtime.getRuntime().totalMemory();
-                System.out.printf("Memory: %d/%d%n", totalMemory, maxMemory);
+                if (t.getCause() instanceof ScriptException) {
+                    JOptionPane.showMessageDialog(gui, "Error in user-provided action-code\nSee details in stack-trace", 
+                          "Action-code error", JOptionPane.ERROR_MESSAGE);
+                  }
                 t.printStackTrace();
             }
         }

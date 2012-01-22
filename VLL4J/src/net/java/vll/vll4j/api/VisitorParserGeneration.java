@@ -79,12 +79,16 @@ public class VisitorParserGeneration extends VisitorBase {
                         node.actionFunction.run(null, input, input.source().length());
                         ParseResult<? extends Object> res = p.apply(input);
                         if (res.successful()) {
-                            Object r2 = node.actionFunction.run(res.get(), input, res.next().offset());
+                            int postWhitespace = parsersInstance.handleWhiteSpace(input.source(), input.offset());
+                            Reader forAction = input.drop(postWhitespace - input.offset());
+                            Object r2 = node.actionFunction.run(res.get(), forAction, res.next().offset());
                             return new Success(r2, res.next());
                         } else 
                             return res;
-                    } catch (Exception exc) {
-                        return new Failure(exc.getMessage(), input);
+                    } catch (ScriptException exc) {
+                        throw new IllegalArgumentException(String.format("Error in action-code @ %s", node.nodeName()), exc);
+                    } catch (IllegalArgumentException exc) {
+                        throw exc;
                     }
                 }
             };
