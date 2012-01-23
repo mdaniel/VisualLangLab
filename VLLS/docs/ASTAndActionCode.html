@@ -329,18 +329,25 @@ below.
     </tr>
     <tr>
       <td align="center"><code>VLL</code></td>
-      <td>Recommended global <i>container</i> variable for parser state.
-          See description below.</td>
-    </tr>
-    <tr>
-      <td align="center"><code>vllLine</code></td>
-      <td>The line number of the input position at which the action-code 
-          function is called</td>
+      <td>Recommended global <i>container</i> variable for parser state</td>
     </tr>
     <tr>
       <td align="center"><code>vllCol</code></td>
-      <td>The column number of the input position at which the action-code 
-          function is called</td>
+      <td>The column number of the input position at which <strike>the action-code 
+          function is called</strike> <u>the text in <i>vllInput</i> is found 
+          (wef 10.20)</u></td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllInput</code></td>
+      <td>A <code>java.lang.CharSequence</code> containing the 
+        input text matching this node <u>after removal of all preceding 
+        whitespace characters (wef 10.20)</u></td>
+    </tr>
+    <tr>
+      <td align="center"><code>vllLine</code></td>
+      <td>The line number of the input position at which <strike>the action-code 
+          function is called</strike> <u>the text in <i>vllInput</i> is found 
+          (wef 10.20)</u></td></td>
     </tr>
     <tr>
       <td align="center"><code>vllOffset</code></td>
@@ -348,10 +355,11 @@ below.
           function is called</td>
     </tr>
     <tr>
-      <td align="center"><code>vllInput</code></td>
-      <td>A <code>java.lang.CharSequence</code> containing the 
-        input text matching this node</td>
+      <td align="center"><code>vllSource</code></td>
+      <td>The entire source text presented to the parser as a 
+          <code>java.lang.CharSequence</code> <u>(wef 10.20)</u></td>
     </tr>
+
 
     <tr>
       <td align="center"><code>vllLastNoSuccess</code></td>
