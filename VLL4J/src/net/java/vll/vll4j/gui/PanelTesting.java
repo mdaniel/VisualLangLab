@@ -122,7 +122,7 @@ public class PanelTesting extends JPanel {
         logArea.setSelectionEnd(selectionEnd);
     }
     
-    PrintStream getOutStream() {
+    /*PrintStream getOutStream() {
         OutputStream os = new OutputStream() {
         StringBuilder sb = new StringBuilder();
             @Override
@@ -162,6 +162,25 @@ public class PanelTesting extends JPanel {
             }
         };
         return new PrintStream(os, false);
+    }*/
+    
+    PrintStream getOutStream() {
+        OutputStream os = new OutputStream() {
+            StringBuilder sb = new StringBuilder();
+            public void write(int b) {
+                System.out.flush();
+                sb.append((char)b);
+                if (b == '\n' || sb.length() >= 1024) {
+                    try {
+                        logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), blackFont);
+                    } catch (BadLocationException ex) {}
+                    logArea.setSelectionStart(logArea.getDocument().getLength());
+                    logArea.setSelectionEnd(logArea.getDocument().getLength());
+                    sb.setLength(0);
+                }
+            }
+        };
+        return new PrintStream(os, true);
     }
     
     PrintStream getErrStream() {

@@ -81,8 +81,6 @@ public class Vll4jGui extends JFrame {
         sp2.setDividerLocation(screenSize.width / 4);
         JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sp2, theTestingPanel);
         add(sp, BorderLayout.CENTER);
-        theForest.bindings.put("vllParserTestInput", theTestingPanel.inputArea);
-        theForest.bindings.put("vllParserLog", theTestingPanel.logArea);
     }
 
     private void addMenuBar() {
@@ -260,5 +258,5 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    String version = "10.19";
+    String version = "10.20";
 }

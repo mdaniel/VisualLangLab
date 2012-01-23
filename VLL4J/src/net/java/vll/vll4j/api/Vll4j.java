@@ -22,6 +22,7 @@ package net.java.vll.vll4j.api;
 
 import java.io.*;
 import javax.xml.parsers.ParserConfigurationException;
+import net.java.vll.vll4j.combinator.CharSequenceReader;
 import net.java.vll.vll4j.combinator.Parsers.ParseResult;
 import net.java.vll.vll4j.combinator.Parsers.Parser;
 import net.java.vll.vll4j.gui.ReaderFile;
@@ -62,6 +63,18 @@ public class Vll4j extends ApiParsers {
         return (Parser<T>) top.accept(vpg);
     }
 
+    @Override
+    public ParseResult<? extends Object> parseAll(Parser<? extends Object> p, CharSequence cs) {
+        forest.bindings.put("vllSource", cs);
+        return phrase(p).apply(new CharSequenceReader(cs));
+    }
+    
+    @Override
+    public ParseResult<? extends Object> parseAll(Parser<? extends Object> p, net.java.vll.vll4j.combinator.Reader rdr) {
+        forest.bindings.put("vllSource", rdr.source());
+        return phrase(p).apply(rdr);
+    }
+    
     public static void main(String args[]) {
         if (args.length != 3 && args.length != 2) {
             System.err.println("usage: java vll4j.Vll4j grammar [parser-name] file/data");

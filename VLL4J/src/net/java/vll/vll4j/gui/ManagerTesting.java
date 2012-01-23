@@ -30,6 +30,7 @@ import net.java.vll.vll4j.api.NodeBase;
 import net.java.vll.vll4j.api.VisitorParserGeneration;
 import net.java.vll.vll4j.combinator.Parsers.ParseResult;
 import net.java.vll.vll4j.combinator.Parsers.Parser;
+import net.java.vll.vll4j.combinator.Reader;
 
 public class ManagerTesting {
 
@@ -171,6 +172,8 @@ public class ManagerTesting {
         NodeBase apex = gui.theTreePanel.rootNode;
         long t0 = System.currentTimeMillis(), t1, t2;
         visitorParserGenerator = new VisitorParserGeneration(gui.theForest, gui.apiParsers, traceAll);
+        gui.theForest.bindings.put("vllParserTestInput", gui.theTestingPanel.inputArea);
+        gui.theForest.bindings.put("vllParserLog", gui.theTestingPanel.logArea);
         Parser<? extends Object> parser = (Parser<? extends Object>) apex.accept(visitorParserGenerator);
         if (!visitorParserGenerator.parserGeneratedOk) {
             JOptionPane.showMessageDialog(gui, "Can't generate parser\nReview rule definitions", 
@@ -192,7 +195,9 @@ public class ManagerTesting {
             for (File f: dredgeFiles(inFile)) {
                 t1 = System.currentTimeMillis();
                 try {
-                    ParseResult pr = gui.apiParsers.parseAll(parser, new ReaderFile(f));
+                    ReaderFile readerFile = new ReaderFile(f);
+                    gui.theForest.bindings.put("vllSource", readerFile.source());
+                    ParseResult pr = gui.apiParsers.parseAll(parser, readerFile);
                     t2 = System.currentTimeMillis();
                     if (pr.successful()) {
                         ++countOk;
@@ -223,22 +228,24 @@ public class ManagerTesting {
         } else {
             t0 = System.currentTimeMillis();
             try {
-                ParseResult pr = gui.apiParsers.parseAll(parser, fromFile ? new ReaderFile(inFile) : 
-                    new ReaderTextArea(gui.theTestingPanel.inputArea));
+                Reader reader = fromFile ? new ReaderFile(inFile) : 
+                        new ReaderTextArea(gui.theTestingPanel.inputArea);
+                gui.theForest.bindings.put("vllSource", reader.source());
+                ParseResult pr = gui.apiParsers.parseAll(parser, reader);
                 t1 = System.currentTimeMillis();
                 appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
                 if (pr.successful()) {
                     t0 = System.currentTimeMillis();
                     String ast = gui.apiParsers.dumpValue(pr.get(), printStructured);
                     t1 = System.currentTimeMillis();
+                    if (ast.length() > 50000)
+                        JOptionPane.showMessageDialog(gui, "Large ASTs are slow to appear, please wait", "Print Delay Warning", JOptionPane.WARNING_MESSAGE);
                     appendStatus(String.format(", AST->String: %d ms", t1 - t0), false);
                     t0 = System.currentTimeMillis();
                     System.out.println(ast);
                     System.out.println();
                     t1 = System.currentTimeMillis();
                     appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
-                    if (ast.length() > 50000)
-                        JOptionPane.showMessageDialog(gui, "Large ASTs are slow to appear, please wait", "Print Delay Warning", JOptionPane.WARNING_MESSAGE);
                 } else {
                     System.err.printf("%s%n", gui.apiParsers.dumpResult(pr));
                 }
