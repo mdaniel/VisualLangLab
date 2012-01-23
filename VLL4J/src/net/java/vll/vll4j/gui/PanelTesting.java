@@ -113,7 +113,13 @@ public class PanelTesting extends JPanel {
     }
     
     void logCopy() {
+        int selectionStart = logArea.getSelectionStart();
+        int selectionEnd = logArea.getSelectionEnd();
+        logArea.setSelectionStart(0);
+        logArea.setSelectionEnd(logArea.getDocument().getLength());
         logArea.copy();
+        logArea.setSelectionStart(selectionStart);
+        logArea.setSelectionEnd(selectionEnd);
     }
     
     PrintStream getOutStream() {
