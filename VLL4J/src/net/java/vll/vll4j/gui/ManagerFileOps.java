@@ -30,6 +30,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import net.java.vll.vll4j.api.NodeBase;
 import net.java.vll.vll4j.combinator.Utils;
 
@@ -221,9 +222,18 @@ public class ManagerFileOps {
             fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setFileFilter(new FileFilter() {
+                public String getDescription() {
+                    return "VisualLangLab grammar";
+                }
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().endsWith(".vll") || f.getName().endsWith(".VLL");
+                }
+            });
         }
         fileChooser.setDialogTitle(title);
-        fileChooser.setApproveButtonText(title.charAt(0) == 'S' ? "Save" : "Open");
+        fileChooser.setApproveButtonText((title.charAt(0) == 'S' || title.charAt(0) == 'E') 
+                ? "Save" : "Open");
         return fileChooser;
     }
     
