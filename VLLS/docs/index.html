@@ -17,19 +17,18 @@
        (Episode 364)
       </p>
 
-<table border="1" style="border: 1px solid blue;" width="100%">
+<table border="1" style="border: 1px solid black;" width="100%">
 <tr>
   <th colspan="2" style="text-align: center;"><span  style="font-size: larger;">Lightweight Java version Available now!</span></th>
 </tr><tr>
-  <th style="text-align: center;">Java Version 
-      <a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a></th>
-  <th style="text-align: center;">Scala Version
-      <a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a></th>
+  <td style="text-align: center;">Java Version 
+      (<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>) 
+      supports only JavaScript for action-code</td>
+  <td style="text-align: center;">Scala Version
+      (<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>) 
+      supports Scala & JavaScript for action-code</td>
 </tr><tr>
-  <td style="text-align: center;">Only JavaScript for action-code</td>
-  <td style="text-align: center;">Scala & JavaScript for action-code</td>
-</tr><tr>
-  <td colspan="2" style="text-align: center;">Both support parsers in <u>all</u> 
+  <td colspan="2" style="text-align: center;">Both versions support parsers in <u>all</u> 
       JVM languages (including Scala). 
       GUI and grammar-file format virtually identical.</td>
 </table>
@@ -71,7 +70,7 @@ the figures below. These example grammars are included with the
   <a href="http://en.wikipedia.org/wiki/Left_recursion">left recursion</a>. 
   They are also <i>executable</i>, and can be run at any time at the 
   click of a button. No additional code, skills, or tools are needed. 
-  Input for the parser can be entered into the IDE or obtained from user-nominated files. 
+  Input for running the parser can be entered into the IDE or obtained from user-nominated files. 
   This simplifies <a href="TestingParsers.html">testing</a>, and promotes an 
   <a href="http://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative-incremental</a> 
   development process that accelerates development.
@@ -102,21 +101,17 @@ the figures below. These example grammars are included with the
   <a href="EditingTheGrammarTree.html">editing</a> or <a href="TestingParsers.html">testing</a>.</p>
  
   <p>An <a href="UsingTheAPI.html">API</a> enables client programs in any JVM language 
-  to load the XML file and regenerate the parser. Scala's parser combinators 
+  to load the XML file and regenerate the parser. Parser combinators 
   are used to turn tree (or XML) data directly into a 
-  <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">
-  Parser</a> at run-time without code-generation, so parser regeneration is very fast. 
+  parser at run-time without code-generation, so parser regeneration is very fast. 
   </p>
 
-  <p id="ParserType"><a href="http://vll.java.net/">VisualLangLab</a> is written in 
-  <a href="http://www.scala-lang.org/">Scala</a>, and leverages its 
-  <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">
-  parser combinators</a> to produce 
+  <p id="ParserType"><a href="http://vll.java.net/">VisualLangLab</a> is available in Java and 
+  <a href="http://www.scala-lang.org/">Scala</a> versions, and leverages 
+  parser combinators to produce 
   <a href="http://en.wikipedia.org/wiki/Backtracking">backtracking</a>, 
   <a href="http://en.wikipedia.org/wiki/Recursive_descent_parser">recursive-descent</a> parsers. 
-  But the user does not have to know Scala, and a Scala installation is not required for running it.
-  VisualLangLab's dependence on Scala is described 
-  <a href="RelationshipWithScalaParserCombinators.html">here</a>.</p>
+</p>
 
   <h2 id="FAQDocumentsAndForum">FAQ, Documents and Forum</h2>
 
@@ -164,30 +159,32 @@ the figures below. These example grammars are included with the
   <h2 id="DownloadInstallationAndRunning">Download, Installation, and Running</h2>
 
 <p>
-You only need the <i>all-inclusive</i> jar file  
-<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
-to run VisualLangLab. Double-clicking this file starts the VisualLangLab GUI. 
-This jar file includes all libraries required, so you do not have to install Scala or 
-any other software. It also includes the <a href="SampleGrammars.html">Sample Grammars</a>, 
-but not the HTML documentation (which are in the <i>VLLS.zip</i> file described below. 
+For all practical purposes, you only need one of the two file described below. 
 </p> 
 
+<table border="1" style="border: 1px solid black;" width="100%">
+<tr>
+  <td style="text-align: center;">Java Version 
+      (<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>) 
+      supports only JavaScript for action-code</td>
+  <td style="text-align: center;">Scala Version
+      (<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>) 
+      supports Scala & JavaScript for action-code</td>
+</tr></table>
+
 <p>
-The <i>latest-release</i> file 
-(<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">VLLS.zip</a>) contains 
-all the VisualLangLab class files and the HTML documentation, but not the Scala libraries. 
-You can use this file to run VisualLangLab only if you have a Scala installation. 
+For more details, see <a href="http://vll.java.net/DownloadInstallAndRun.html">
+Download Install and Run</a>. 
 </p>
 
   <h2 id="Prerequisites">Prerequisites</h2>
 
-  <p>If you are using <i>VLLS-All.jar</i> the only prerequisite is a 6.0+ JRE. 
-  You can create, test, and run parsers within the IDE without having to install 
-  Scala&mdash;not even if the grammars contain Scala functions in their action-code</p> 
+  <p>The only prerequisite is a 6.0+ JRE. You can create, test, and run parsers 
+  within the IDE without having to install Scala&mdash;not even if the grammars contain 
+  Scala action-code (in case you are using the Scala version)</p> 
 
   <p>Scala 2.9.0+ is required only for separately developing and/or running 
-  application programs that <a href="UsingTheAPI.html">use the API</a>. 
-  You can download Scala from <a href="http://www.scala-lang.org/downloads">here</a>. 
+  Scala programs that <a href="UsingTheAPI.html">use the API</a>. 
   </p>
 
   <h2 id="License">License</h2>
@@ -211,5 +208,8 @@ Any grammars and token-libraries you create using VisualLangLab are of course yo
   and a Scala version was published under this java.net project on 10th March 2010.
   Although all of the code was re-written (in Scala), the essential character of the GUI
   remains the same.</p>
+
+  <p>A Java version with the same internal design as the Scala version but independent 
+  of Scala was released in January 2012. </p>
 </body>
 </html>
