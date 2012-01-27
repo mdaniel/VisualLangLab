@@ -100,6 +100,11 @@ passes on the AST produced by its one contributing child node</li>
 
 </ul>
 
+<p>All primitive values in the AST are subject to <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/language/autoboxing.html">autoboxing</a>, 
+so explicit unboxing may have to be done if the language used for processing the AST does not 
+know about autoboxing/unboxing. This is particularly the case when using JavaScript in action-code 
+functions (see below).</p>
+
 <p>The examples below illustrate these principles using grammar trees from the built-in
 parser for <i>SimpleJSON</i>. Remember that the AST shown in the figures is the AST of
 the <i>selected</i> node. Also, remember that the root-node of a grammar-tree merely
@@ -273,7 +278,8 @@ This section assumes that the reader understands JavaScript reasonably well.
 An action-code function takes one argument that is used in two different ways 
 (explained below). The value returned by the function depends on the overall 
 design of the parser, but in general should be an object that becomes a part of 
-the AST of the parent parser-node.
+the AST of the parent parser-node. If nothing is returned by any code branch 
+of the action function, <code>null</code> is assumed to have been returned.
 </p>
 
 <p>
@@ -297,6 +303,10 @@ action-code has the <i>action</i> annotation near the icon (see red arrow
 in the figure). The sample grammar <i>PSWP-Payroll-Parser-Combinators</i> 
 has a more extensive example that includes setup (null-argument invocations) 
 as well.
+</p>
+
+<p>All primitive values in the AST are subject to <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/language/autoboxing.html">autoboxing</a>, 
+so explicit unboxing has to be done as JavaScript does not know about this Java concept. 
 </p>
 
 <p>
@@ -328,36 +338,38 @@ below.
       <th style="text-align: center; font-weight: bold;">Description</th>
     </tr>
     <tr>
-      <td align="center"><code>VLL</code></td>
-      <td>Recommended global <i>container</i> variable for parser state</td>
-    </tr>
-    <tr>
       <td align="center"><code>vllCol</code></td>
       <td>The column number of the input position at which <strike>the action-code 
           function is called</strike> <u>the text in <i>vllInput</i> is found 
-          (wef 10.20)</u></td>
+          (wef 10.20).</u> 
+          The value is a 
+          <a href="http://www.w3schools.com/jsref/jsref_obj_number.asp">JavaScript Number</a></td>
     </tr>
     <tr>
       <td align="center"><code>vllInput</code></td>
-      <td>A <code>java.lang.CharSequence</code> containing the 
-        input text matching this node <u>after removal of all preceding 
+      <td>A <a href ="http://www.w3schools.com/jsref/jsref_obj_string.asp">JavaScript String</a> 
+        containing the input text matching this node <u>after removal of all preceding 
         whitespace characters (wef 10.20)</u></td>
     </tr>
     <tr>
       <td align="center"><code>vllLine</code></td>
       <td>The line number of the input position at which <strike>the action-code 
           function is called</strike> <u>the text in <i>vllInput</i> is found 
-          (wef 10.20)</u></td></td>
+          (wef 10.20)</u>. 
+          The value is a 
+          <a href="http://www.w3schools.com/jsref/jsref_obj_number.asp">JavaScript Number</a></td>
     </tr>
     <tr>
       <td align="center"><code>vllOffset</code></td>
       <td>The offset of the input position at which the action-code 
-          function is called</td>
+          function is called. 
+          The value is a 
+          <a href="http://www.w3schools.com/jsref/jsref_obj_number.asp">JavaScript Number</a></td>
     </tr>
     <tr>
       <td align="center"><code>vllSource</code></td>
       <td>The entire source text presented to the parser as a 
-          <code>java.lang.CharSequence</code> <u>(wef 10.20)</u></td>
+      <a href ="http://www.w3schools.com/jsref/jsref_obj_string.asp">JavaScript String</a> <u>(wef 10.20)</u></td>
     </tr>
 
 
