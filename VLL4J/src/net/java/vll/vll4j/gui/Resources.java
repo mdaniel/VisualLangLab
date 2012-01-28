@@ -61,6 +61,7 @@ public class Resources {
     static ImageIcon repSep = getIcon("RepSep.gif");
     static ImageIcon replace16 = getIcon("Replace16.gif");
     static ImageIcon root = getIcon("Root.gif");
+    static ImageIcon rule = getIcon("Rule.gif");
     static ImageIcon save16 = getIcon("Save16.gif");
     static ImageIcon saveAs16 = getIcon("SaveAs16.gif");
     static ImageIcon search16 = getIcon("Search16.gif");

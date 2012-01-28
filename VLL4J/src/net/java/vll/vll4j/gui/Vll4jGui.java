@@ -46,6 +46,7 @@ public class Vll4jGui extends JFrame {
         theRuleManager = new ManagerRules(this);
         theRuleManager.theComboBox = new JComboBox<String>();
         theRuleManager.theComboBox.setToolTipText("Select rule");
+        theRuleManager.theComboBox.setRenderer(theCellRenderer);
         theMiscFunctionsManager = new ManagerMiscOps(this);
         reset(true);
     }
@@ -259,4 +260,5 @@ public class Vll4jGui extends JFrame {
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
     String version = "10.20";
+    private ListCellRenderer theCellRenderer = new RendererRuleComboBox(this);
 }
