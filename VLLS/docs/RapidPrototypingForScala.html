@@ -190,7 +190,7 @@ Clicking the dialog's <i>OK</i> button creates a new rule with just a
 Now right-click the Root node, and select <i>Add -> Token</i> from the popup 
 context-menu. Another dialog with the names of available tokens is presented 
 as shown on the left side of Figure-4 below. 
-Select <i>decimalNumber_</i> and click the <i>OK</i> button. Your almost-complete 
+Select <i>floatingPointNumber_</i> and click the <i>OK</i> button. Your almost-complete 
 parser-rule should look like the right side of Figure-4 below. 
 </p>
 
@@ -206,7 +206,9 @@ and paste the code
 given below into the text area under <i>Action Code</i> as in Figure-5 
 below. Click the <i>Save</i> button (enabled when the content of the action-code area 
 changes). Observe that this adds the <i>action</i> annotation 
-(near red arrow) to the <i>decimalNumber</i> token. 
+(near red arrow) to the <i>decimalNumber</i> token. From version 10.21, the rule-name 
+(<i>doubleNumber</i>) in the toolbar's dropdown list also has a small green arrow-icon 
+placed near it. 
 </p>
 
 <pre><code>function (a) {
@@ -652,6 +654,8 @@ Figure-17 below shows details of the wrapper rule <i>PaycheckTester</i> used for
 To display the <i>before</i> and <i>after</i> scripts (actually 
 parts of a single action-code function) you must select (click on)
 the <i>Reference</i> node that points to the <i>Paycheck</i> parser-rule. 
+From version 10.21 onwards, parser-rules designed for testing using this technique 
+are automatically distinguished with a special icon in the toolbar's dropdown list.
 </p>
 
 <p>
