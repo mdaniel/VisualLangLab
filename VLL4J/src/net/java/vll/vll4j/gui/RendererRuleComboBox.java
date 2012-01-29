@@ -50,21 +50,18 @@ public class RendererRuleComboBox extends BasicComboBoxRenderer {
         visitorRuleInfo.visitRoot(rootNode);
         if (visitorRuleInfo.hasErrors) {
             g.setColor(Color.red);
-            g.drawRect(0, 0, 8, 8);
-            g.fillRect(0, 0, 8, 8);
-            g.setColor(Color.white);
-            g.drawLine(1, 1, 7, 7);
-            g.drawLine(1, 7, 7, 1);
+            g.drawRect(2, 2, 12, 12);
+            g.drawRect(1, 1, 14, 14);
         }
         if (visitorRuleInfo.hasActions) {
-            g.setColor(Color.green.darker());
-            g.drawRect(8, 0, 8, 8);
-            g.fillRect(8, 0, 8, 8);
+            g.setColor(visitorRuleInfo.isTester ? Color.magenta : Color.green.darker());
+            g.drawRect(4, 4, 8, 8);
+            g.fillRect(4, 4, 8, 8);
             g.setColor(Color.white);
-            g.drawLine(10, 1, 13, 4);
-            g.drawLine(13, 4, 10, 7);
-            g.drawLine(11, 1, 14, 4);
-            g.drawLine(14, 4, 11, 7);
+            g.drawLine(6, 5, 9, 8);
+            g.drawLine(9, 8, 6, 11);
+            g.drawLine(7, 5, 10, 8);
+            g.drawLine(10, 8, 7, 11);
         }
     }
     

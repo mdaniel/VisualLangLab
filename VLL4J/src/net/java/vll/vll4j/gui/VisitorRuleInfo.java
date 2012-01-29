@@ -73,11 +73,19 @@ public class VisitorRuleInfo extends VisitorBase {
     
     @Override
     public Object visitRoot(NodeRoot n) {
-        hasErrors = hasActions = false;
+        hasErrors = hasActions = isTester = false;
         if (!n.actionText.trim().isEmpty())
             hasActions = true;
         if (visitorValidation.visitRoot(n) != null)
             hasErrors = true;
+        if (n.getChildCount() != 0) {
+            NodeBase c = (NodeBase)n.getChildAt(0);
+            String action = c.actionText.trim();
+            if (!action.isEmpty()) {
+                if (action.contains("vllParserTestInput") || action.contains("vllParserLog"))
+                    isTester = true;
+            }
+        }
         visitAllChildNodes(n);
         return null;
     }
@@ -108,6 +116,6 @@ public class VisitorRuleInfo extends VisitorBase {
         return null;
     }
     
-    public boolean hasErrors = false, hasActions = false;
+    public boolean hasErrors = false, hasActions = false, isTester;
     private VisitorValidation visitorValidation = new VisitorValidation();
 }
