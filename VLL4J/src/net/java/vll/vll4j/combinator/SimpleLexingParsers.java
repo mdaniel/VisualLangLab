@@ -110,11 +110,15 @@ public class SimpleLexingParsers extends RegexParsers {
     private Parser<String> lexer2parser(final Lexer lexer, final String errMsg) {
         return new Parser<String>() {
             public ParseResult apply(Reader in) {
+                try {
                 Object lexRes[] = lexer.apply(in);
                 if (lexRes == null)
                     return new Failure(errMsg, in);
                 else 
                     return new Success(lexRes[0], in.drop((Integer)lexRes[2]));
+                } catch (StackOverflowError soe) {
+                    return new Failure("Java bug 5050507", in);
+                }
             }
         };
     }

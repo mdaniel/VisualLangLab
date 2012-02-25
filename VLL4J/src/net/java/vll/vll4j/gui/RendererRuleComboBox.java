@@ -40,6 +40,7 @@ public class RendererRuleComboBox extends BasicComboBoxRenderer {
         Object value, int index, boolean isSelected, boolean cellHasFocus) {
         ruleName = value.toString();
         rootNode = (NodeRoot)gui.theForest.ruleBank.get(ruleName);
+        visitorRuleInfo.visitRoot(rootNode);
         setText(ruleName);
         setIcon(myIcon);
         return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);

@@ -1,3 +1,16 @@
+10.22 2012-FEB-25
+  Added recovery from StackOverflow error from Pattern.matches() 
+  (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5050507).
+10.21 2012-JAN-29
+  Added renderer for rule-dropdown list to indicate errors, actions, etc.
+10.20 2012-JAN-23
+  Added predefined variable "vllSource" for action-code
+  Corrected "Log -> Copy log" (was not working earlier)
+  The File dialogs now display only .vll (or .VLL) files by default
+10.19 2012-JAN-22
+  Errors while executing user-provided action-code reported and handlded correctly
+  Predefined variables vllInput, vllLine, vllCol, vllOffset report the location 
+      after skipping leading whitespace characters (different from parser's values)
 10.02 2012-JAN-06 
   Parsers.opt(): return Array(null) instead of Array() when item is not found.
   vllInput, vllLine, vllCol, vllOffset: predefined variables removed, but a new 
