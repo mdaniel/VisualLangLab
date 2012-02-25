@@ -1,3 +1,5 @@
+10.23 2012-FEB-25
+  Improved error-reporting for previous (10.22) feature.
 10.22 2012-FEB-25
   Added recovery from StackOverflow error from Pattern.matches() 
   (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5050507).

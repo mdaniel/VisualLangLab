@@ -210,13 +210,16 @@ public class ManagerTesting {
                                 pr.next().line(), pr.next().column());
                     }
                 } catch (Throwable t) {
+                    ++countNotOk;
                     if (t.getCause() instanceof ScriptException) {
+                        t.printStackTrace();
                         JOptionPane.showMessageDialog(gui, "Error in user-provided action-code\nDetails in stack-trace", 
                                 "Action-code error", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    } else if (t.getCause() instanceof StackOverflowError) {
+                        System.err.printf("%s: ERROR: %s%n", 
+                                f.getAbsolutePath(), t.getMessage());
                     }
-                    ++countNotOk;
-                    t.printStackTrace();
-                    break;
                 }
                 appendStatus(String.format(" %d Ok, %d NOk in %d ms", countOk, countNotOk, t1 - t0), true);
                 if (stopRequested) {

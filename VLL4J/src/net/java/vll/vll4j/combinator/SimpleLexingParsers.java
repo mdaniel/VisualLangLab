@@ -117,7 +117,7 @@ public class SimpleLexingParsers extends RegexParsers {
                 else 
                     return new Success(lexRes[0], in.drop((Integer)lexRes[2]));
                 } catch (StackOverflowError soe) {
-                    return new Failure("Java bug 5050507", in);
+                    throw new RuntimeException(String.format("Java bug 5050507 at (%d, %d)", in.line(), in.column()), soe);
                 }
             }
         };
