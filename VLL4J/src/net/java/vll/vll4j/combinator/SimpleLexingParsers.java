@@ -84,7 +84,6 @@ public class SimpleLexingParsers extends RegexParsers {
 
     public Parser<String> literal2(String errMsg, String lit) {
         String litKey = "L" + Utils.escapeMetachars(lit);
-        Lexer lexer = null;
         if (tokenLexerMap.containsKey(litKey)) {
             return lexer2parser(tokenLexerMap.get(litKey), errMsg);
         } else {
@@ -111,11 +110,11 @@ public class SimpleLexingParsers extends RegexParsers {
         return new Parser<String>() {
             public ParseResult apply(Reader in) {
                 try {
-                Object lexRes[] = lexer.apply(in);
-                if (lexRes == null)
-                    return new Failure(errMsg, in);
-                else 
-                    return new Success(lexRes[0], in.drop((Integer)lexRes[2]));
+                    Object[] lexRes = lexer.apply(in);
+                    if (lexRes == null)
+                        return new Failure(errMsg, in);
+                    else
+                        return new Success(lexRes[0], in.drop((Integer)lexRes[2]));
                 } catch (StackOverflowError soe) {
                     throw new RuntimeException(String.format("Java bug 5050507 at (%d, %d)", in.line(), in.column()), soe);
                 }

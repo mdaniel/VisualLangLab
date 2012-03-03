@@ -171,7 +171,7 @@ public class VisitorParserGeneration extends VisitorBase {
     @Override
     public Parser<? extends Object> visitReference(NodeReference n) {
         if (n.accept(visitorNodeValidation) == null) {
-            String referredRuleName = n.refRuleName;
+            final String referredRuleName = n.refRuleName;
             NodeBase referredRule = theForest.ruleBank.get(referredRuleName);
             if (!parserCache.containsKey(referredRuleName)) {
                 referredRule.accept(this);
@@ -180,7 +180,11 @@ public class VisitorParserGeneration extends VisitorBase {
             Parser<? extends Object> p = new Parser() {
                 @Override
                 public ParseResult<? extends Object> apply(Reader input) {
-                    return holder[0].apply(input);
+                    try {
+                        return holder[0].apply(input);
+                    } catch (StackOverflowError soe) {
+                        throw new RuntimeException(String.format("Possible left-recursion in '%s'", referredRuleName), soe);
+                    }
                 }
             };
             return withMultiplicity(p, n);
