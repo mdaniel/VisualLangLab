@@ -60,7 +60,8 @@ public class SimpleLexingParsers extends RegexParsers {
             throw new IllegalStateException();
         String litKey = "L" + Utils.escapeMetachars(lit);
         if (tokenLexerMap.containsKey(litKey)) {
-            throw new IllegalArgumentException("Literal already defined");
+            throw new IllegalArgumentException(String.format("Literal '%s' already defined",
+                    litKey.substring(1)));
         } else {
             theLiterals.add(lit);
             int id = -theLiterals.size(); // -1, -2, -3, etc.
@@ -74,7 +75,9 @@ public class SimpleLexingParsers extends RegexParsers {
         String regString = pat.toString();
         String regKey = "R" + regString;
         if (tokenLexerMap.containsKey(regKey)) {
-            throw new IllegalStateException();
+            throw new IllegalArgumentException(String.format("Regex '%s' already defined",
+                    regKey.substring(1)));
+
         } else {
             theRegexs.add(regString);
             int id = theRegexs.size() - 1; // 0, 1, 2, etc.

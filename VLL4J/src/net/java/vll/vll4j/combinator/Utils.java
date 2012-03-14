@@ -97,23 +97,31 @@ System.out.println(sb.toString());
         if (!s.contains("\\"))
             return s;
         else {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(), octals = new StringBuilder();
             boolean escaping = false;
             for (int i = 0; i < s.length(); ++i) {
                 char ch = s.charAt(i);
                 if (escaping) {
-                    escaping = false;
-                    switch(s.charAt(i)) {
-                        case 'b' : sb.append('\b'); break;
-                        case 'f' : sb.append('\f'); break;
-                        case 'n' : sb.append('\n'); break;
-                        case 'r' : sb.append('\r'); break;
-                        case 't' : sb.append('\t'); break;
-                        case '\\' : sb.append('\\'); break;
-                        case '\'' : sb.append('\''); break;
-                        case '\"' : sb.append('\"'); break;
-                        default: throw new IllegalArgumentException(
-                                String.format("Bad escape at offset %d -> %s", i, s));
+                    if (ch >= '0' && ch <= '7') {
+                        octals.append(ch);
+                    } else {
+                        if (octals.length() > 0) {
+                            sb.append((char)(Integer.parseInt(octals.toString(), 8) & 0x0ff));
+                            octals.setLength(0);
+                        }
+                        escaping = false;
+                        switch(ch) {
+                            case 'b' : sb.append('\b'); break;
+                            case 'f' : sb.append('\f'); break;
+                            case 'n' : sb.append('\n'); break;
+                            case 'r' : sb.append('\r'); break;
+                            case 't' : sb.append('\t'); break;
+                            case '\\' : sb.append('\\'); break;
+                            case '\'' : sb.append('\''); break;
+                            case '\"' : sb.append('\"'); break;
+                            default: throw new IllegalArgumentException(
+                                    String.format("Bad escape at offset %d -> %s", i, s));
+                        }
                     }
                 } else {
                     if (ch == '\\')
