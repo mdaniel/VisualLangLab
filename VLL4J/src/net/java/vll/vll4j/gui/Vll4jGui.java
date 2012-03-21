@@ -259,6 +259,6 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    String version = "10.27";
+    String version = "10.28";
     private ListCellRenderer theCellRenderer = new RendererRuleComboBox(this);
 }
