@@ -1,3 +1,5 @@
+10.27 2012-MAR-20
+  Added net.java.vll.vll4j.VLL4J "runner" with only main().
 10.26 2012-MAR-14
   Utils.unEscape() handles octal character escapes.
   Error messages for duplicate token patterns improved.
