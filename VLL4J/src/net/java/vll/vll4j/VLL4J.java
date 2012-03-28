@@ -41,9 +41,7 @@ public class VLL4J {
             File dataFile = new File(args[args.length - 1]);
             Parsers.ParseResult pr = dataFile.exists() ? vll4j.parseAll(p, new ReaderFile(dataFile)) :
                     vll4j.parseAll(p, args[args.length - 1]);
-            if (pr.successful())
-                System.out.println(vll4j.dumpValue(pr.get(), true));
-            else
+            if (!pr.successful())
                 System.out.println(vll4j.dumpResult(pr));
         } catch (Exception e) {
             System.err.println(e);

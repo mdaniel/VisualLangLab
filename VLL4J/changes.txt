@@ -1,3 +1,6 @@
+10.29 2012-MAR-28
+  The (net.java.vll.vll4j.VLL4J) "runner" must not print the AST.
+  Refactored "dumpValue(...)" functions out of "Parsers.java" to "Utils.java".
 10.28 2012-MAR-21
   Changed "readme.txt" to remove references to Scala.
 10.27 2012-MAR-20

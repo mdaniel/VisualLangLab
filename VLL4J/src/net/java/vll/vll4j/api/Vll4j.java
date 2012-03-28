@@ -27,6 +27,7 @@ import net.java.vll.vll4j.combinator.Parsers.ParseResult;
 import net.java.vll.vll4j.combinator.Parsers.Parser;
 import net.java.vll.vll4j.gui.ReaderFile;
 import org.xml.sax.SAXException;
+import net.java.vll.vll4j.combinator.Utils;
 
 public class Vll4j extends ApiParsers {
 
@@ -88,7 +89,7 @@ public class Vll4j extends ApiParsers {
             ParseResult pr = dataFile.exists() ? vll4j.parseAll(p, new ReaderFile(dataFile)) : 
                     vll4j.parseAll(p, args[args.length - 1]);
             if (pr.successful())
-                System.out.println(vll4j.dumpValue(pr.get(), true));
+                System.out.println(Utils.dumpValue(pr.get(), true));
             else
                 System.out.println(vll4j.dumpResult(pr));
         } catch (Exception e) {

@@ -21,6 +21,7 @@
 package net.java.vll.vll4j.combinator;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Utils {
     
@@ -52,7 +53,7 @@ public class Utils {
     }
     
     public static String decode4xml(String s) {
-System.out.printf("decode(%s)=", s);
+//System.out.printf("decode(%s)=", s);
         StringBuilder sb = new StringBuilder();
         StringBuilder esc = new StringBuilder();
         boolean escaping = false;
@@ -74,7 +75,7 @@ System.out.printf("decode(%s)=", s);
                 }
             }
         }
-System.out.println(sb.toString());
+//System.out.println(sb.toString());
         return sb.toString();
     }
     
@@ -150,4 +151,58 @@ System.out.println(sb.toString());
         }
         return sb.toString();
     }
+
+    public static void dumpValue(Object v, StringBuilder sb, boolean structured, int level) {
+        if (v instanceof List) {
+            List<Object> lst = (List<Object>)v;
+            for (int i = 0; i < level; ++i) sb.append("|  ");
+            if (lst.isEmpty()) {
+                sb.append("List()");
+            } else {
+                sb.append(structured ? "List(\n" : "List(");
+                boolean first = true;
+                for (Object e: lst) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append(structured ? ",\n" : ", ");
+                    }
+                    dumpValue(e, sb, structured, structured ? level + 1 : level);
+                }
+                if (structured) sb.append("\n");
+                for (int i = 0; i < level; ++i) sb.append("|  ");
+                sb.append(")");
+            }
+        } else if (v instanceof Object[]) {
+            Object[] arr = (Object[])v;
+            for (int i = 0; i < level; ++i) sb.append("|  ");
+            if (arr.length == 0) {
+                sb.append("Array()");
+            } else {
+                sb.append(structured ? "Array(\n" : "Array(");
+                boolean first = true;
+                for (Object e: arr) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append(structured ? ",\n" : ", ");
+                    }
+                    dumpValue(e, sb, structured, structured ? level + 1 : level);
+                }
+                if (structured) sb.append("\n");
+                for (int i = 0; i < level; ++i) sb.append("|  ");
+                sb.append(")");
+            }
+        } else {
+            for (int i = 0; i < level; ++i) sb.append("|  ");
+            sb.append((v == null) ? "null" : v.toString());
+        }
+    }
+
+    public static String dumpValue(Object v, boolean structured) {
+        StringBuilder sb = new StringBuilder();
+        Utils.dumpValue(v, sb, structured, 0);
+        return sb.toString();
+    }
+
 }

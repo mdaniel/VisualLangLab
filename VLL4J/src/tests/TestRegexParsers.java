@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import net.java.vll.vll4j.combinator.Parsers.ParseResult;
 import net.java.vll.vll4j.combinator.Parsers.Parser;
 import net.java.vll.vll4j.combinator.RegexParsers;
+import net.java.vll.vll4j.combinator.Utils;
 
 public class TestRegexParsers {
     public static void main(String args[]) {
@@ -16,10 +17,10 @@ public class TestRegexParsers {
         Parser<Object[]> line = me.sequence(0, name, nbr, semi);
         ParseResult pr = me.parseAll(line, "sanjay \t\r\n  100   ;  ");
         me.dumpResult(pr);
-        System.out.println(me.dumpValue(pr.get(), true));
+        System.out.println(Utils.dumpValue(pr.get(), true));
         Parser<List<Object[]/*<Object>*/>> choice = me.rep(me.choice(nbr, name, semi));
         pr = me.parseAll(choice, "sanjay \t\r\n  100   ;  ");
         me.dumpResult(pr);
-        System.out.println(me.dumpValue(pr.get(), true));
+        System.out.println(Utils.dumpValue(pr.get(), true));
     }
 }

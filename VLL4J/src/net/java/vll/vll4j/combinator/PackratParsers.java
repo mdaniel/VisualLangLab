@@ -308,7 +308,7 @@ public class PackratParsers extends SimpleLexingParsers {
         Parser expr = pp.sequence(0, nbr, suffix);
         ParseResult pr = pp.parseAll(expr, "123 + 5 - 7 + 23 - 567");
         if (pr.successful())
-            System.out.println(pp.dumpValue(pr.get(), true));
+            System.out.println(Utils.dumpValue(pr.get(), true));
         else 
             System.out.println(pp.dumpResult(pr));
     }

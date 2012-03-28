@@ -31,6 +31,7 @@ import net.java.vll.vll4j.api.VisitorParserGeneration;
 import net.java.vll.vll4j.combinator.Parsers.ParseResult;
 import net.java.vll.vll4j.combinator.Parsers.Parser;
 import net.java.vll.vll4j.combinator.Reader;
+import net.java.vll.vll4j.combinator.Utils;
 
 public class ManagerTesting {
 
@@ -239,7 +240,7 @@ public class ManagerTesting {
                 appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
                 if (pr.successful()) {
                     t0 = System.currentTimeMillis();
-                    String ast = gui.apiParsers.dumpValue(pr.get(), printStructured);
+                    String ast = Utils.dumpValue(pr.get(), printStructured);
                     t1 = System.currentTimeMillis();
                     if (ast.length() > 50000)
                         JOptionPane.showMessageDialog(gui, "Large ASTs are slow to appear, please wait", "Print Delay Warning", JOptionPane.WARNING_MESSAGE);
