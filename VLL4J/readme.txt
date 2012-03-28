@@ -18,13 +18,18 @@ iterative development process.
 
 Parser development is reduced to editing the tree's structure, 
 using the mouse for menu-bar and context-menu operations. 
-Textual input from the keyboard is required only for naming parsers and tokens, 
-and for specifying regular expression patterns for tokens. 
+Textual input from the keyboard is required only for naming parsers
+and tokens, and for specifying regular expression patterns for tokens.
 
-The grammar is saved as a XML file that can be loaded again 
-for further editing and/or testing. An API is also available for client programs 
+The grammar is saved as a XML file that can be loaded again for further
+editing and/or testing. An API is also available for client programs
 (in any JVM language) to load the saved XML file and regenerate the parser.
 Parser regeneration does not require generation or compilation of code.
+
+A command-line 'runner' is available that can load a grammar file,
+create a parser on the fly, and parse a string (or the contents of
+a file). The grammar file as well as the string (or file) to parse
+are taken from the command line.
 
 This software is released under the GNU General Public License.
 See the file "copying.txt" for further details.
