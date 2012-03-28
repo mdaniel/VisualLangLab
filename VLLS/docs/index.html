@@ -23,10 +23,10 @@
 </tr><tr>
   <td style="text-align: center;">Java Version 
       (<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>) 
-      supports only JavaScript for action-code</td>
+      recommended for general use</td>
   <td style="text-align: center;">Scala Version
       (<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>) 
-      supports Scala & JavaScript for action-code</td>
+      use only if actions must be in Scala</td>
 </tr><tr>
   <td colspan="2" style="text-align: center;">Both versions support parsers in <u>all</u> 
       JVM languages (including Scala). 
@@ -75,8 +75,6 @@ the figures below. These example grammars are included with the
   <a href="http://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative-incremental</a> 
   development process that accelerates development.
   Optional <a href="http://en.wikipedia.org/wiki/Semantic_action_routine">semantic actions</a> 
-  written as <a href="http://en.wikipedia.org/wiki/JavaScript">Javascript</a> or 
-  <a href="http://en.wikipedia.org/wiki/Scala_(programming_language)">Scala</a> functions 
   can also be associated with the grammar-tree's nodes.   </p>
 
   <h2 id="SeeVisualLangLabInAction">See VisualLangLab in Action</h2>
@@ -106,8 +104,7 @@ the figures below. These example grammars are included with the
   parser at run-time without code-generation, so parser regeneration is very fast. 
   </p>
 
-  <p id="ParserType"><a href="http://vll.java.net/">VisualLangLab</a> is available in Java and 
-  <a href="http://www.scala-lang.org/">Scala</a> versions, and leverages 
+  <p id="ParserType"><a href="http://vll.java.net/">VisualLangLab</a> leverages 
   parser combinators to produce 
   <a href="http://en.wikipedia.org/wiki/Backtracking">backtracking</a>, 
   <a href="http://en.wikipedia.org/wiki/Recursive_descent_parser">recursive-descent</a> parsers. 
@@ -146,7 +143,7 @@ the figures below. These example grammars are included with the
         <a href="ASTAndActionCode.html">AST and Action Code</a><br />
         <a href="TestingParsers.html">Testing Parsers</a><br />
         <a href="UsingTheAPI.html">Using the API</a><br />
-        <a href="RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a><br />
+        <strike><a href="RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a><br /></strike>
         <a href="RapidPrototypingForScala.html">Rapid Prototyping for Scala</a><br />
         <a href="examples/a-quick-tour.html">A Quick Tour</a><br />
       </td>
@@ -159,18 +156,8 @@ the figures below. These example grammars are included with the
   <h2 id="DownloadInstallationAndRunning">Download, Installation, and Running</h2>
 
 <p>
-For all practical purposes, you only need one of the two file described below. 
+For all practical purposes, you only need <a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
 </p> 
-
-<table border="1" style="border: 1px solid black;" width="100%">
-<tr>
-  <td style="text-align: center;">Java Version 
-      (<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>) 
-      supports only JavaScript for action-code</td>
-  <td style="text-align: center;">Scala Version
-      (<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>) 
-      supports Scala & JavaScript for action-code</td>
-</tr></table>
 
 <p>
 For more details, see <a href="http://vll.java.net/DownloadInstallAndRun.html">
@@ -179,13 +166,8 @@ Download Install and Run</a>.
 
   <h2 id="Prerequisites">Prerequisites</h2>
 
-  <p>The only prerequisite is a 6.0+ JRE. You can create, test, and run parsers 
-  within the IDE without having to install Scala&mdash;not even if the grammars contain 
-  Scala action-code (in case you are using the Scala version)</p> 
-
-  <p>Scala 2.9.0+ is required only for separately developing and/or running 
-  Scala programs that <a href="UsingTheAPI.html">use the API</a>. 
-  </p>
+  <p>The only prerequisite is a 6.0+ JRE. You can create, modify, run, and test parsers 
+  within the IDE without any other software or tool.</p> 
 
   <h2 id="License">License</h2>
 

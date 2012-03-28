@@ -14,26 +14,23 @@
 <li><a href="EditingTheGrammarTree.html#AssociatingActionCode">How is action-code added to a grammar?</a></li>
 <li><a href="ASTAndActionCode.html#ActionCodeDesign">How are action-code functions designed?</a></li>
 <li><a href="ASTAndActionCode.html#CodeStructureAndInvocation">How are action-code functions invoked?</a></li>
-<li><a href="ASTAndActionCode.html#PredefinedGlobalVariables">Can action-code functions access environmental information?</a></li>
-<li><a href="ASTAndActionCode.html#ActionCodeScalaExample">Is there a Scala action-code example?</a></li>
-<li><a href="ASTAndActionCode.html#ActionCodeJavascriptExample">Is there a Javascript action-code example?</a></li>
+<li><a href="ASTAndActionCode.html#PredefinedVariables">Can action-code functions access environmental information?</a></li>
+<li><a href="ASTAndActionCode.html#CodeStructureAndInvocation">Is there an action-code example?</a></li>
 </ul>
 
 <h2>The API</h2>
 
 <ul style="list-style-type: disc;">
 <li><a href="UsingTheAPI.html">What is the API used for?</a></li>
-<li><a href="UsingTheAPI.html#ScalaExample">Is there a Scala Example?</a></li>
-<li><a href="UsingTheAPI.html#JavaExample">Is there a Java Example?</a></li>
+<li><a href="UsingTheAPI.html">Is there a code Example?</a></li>
 <li><a href="UsingTheAPI.html#CodeWithEmbeddedGrammar">Can the grammar be embedded in the program?</a></li>
-<li><a href="TheGUI.html#TheMenuBar">How do I get a saved-grammar file?</a></li>
+<li><a href="EditingTheGrammarTree.html#SavingGrammar">How do I get a saved-grammar file?</a></li>
 </ul>
 
 <h2>AST, Abstract Syntax Tree, Parse-Tree</h2>
 
 <ul style="list-style-type: disc;">
 <li><a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">What is an AST or parse-tree?</a></li>
-<li><a href="ASTAndActionCode.html#SmatteringOfScala">Must I know Scala to understand the AST?</a></li>
 <li><a href="ASTAndActionCode.html#ASTStructure">What is the AST structure for my parser?</a></li>
 <li><a href="ASTAndActionCode.html#SequenceNodeExample">Is there an example AST for a Sequence node?</a></li>
 <li><a href="ASTAndActionCode.html#ChoiceNodeExample">Is there an example AST for a Choice node?</a></li>
@@ -44,10 +41,9 @@
 <h2>Downloading, Installation and Running</h2>
 
 <ul style="list-style-type: disc;">
-<li><a href="DownloadInstallAndRun.html#SmatteringOfScala">Where can I download VisualLangLab?</a></li>
-<li><a href="DownloadInstallAndRun.html#ASTStructure">What does VLLS.zip contain?</a></li>
-<li><a href="DownloadInstallAndRun.html#SequenceNodeExample">What is the VLLS-All.jar file?</a></li>
-<li><a href="DownloadInstallAndRun.html#ChoiceNodeExample">Do I need a Scala Installation?</a></li>
+<li><a href="DownloadInstallAndRun.html">Where can I download VisualLangLab?</a></li>
+<li><a href="DownloadInstallAndRun.html">What are the prerequisites?</a></li>
+<li><a href="DownloadInstallAndRun.html">How do I run it?</a></li>
 </ul>
 
 <h2>Grammar Trees, Parser Rules, etc.</h2>
@@ -58,9 +54,10 @@
 <li><a href="EditingTheGrammarTree.html#Annotations">What annotations are used in a grammar tree?</a></li>
 <li><a href="EditingTheGrammarTree.html#CreatingNewParserRule">How is a new grammar tree created?</a></li>
 <li><a href="EditingTheGrammarTree.html#AddingRequiredAnnotations">How are node annotations added or changed?</a></li>
-<li><a href="EditingTheGrammarTree.html#Recursion">Can grammar trees be recursive, mutually recursive, and left recursive?</a></li>
+<li><a href="EditingTheGrammarTree.html#RecursionMutualLeft">Can grammar trees be recursive, mutually recursive, and left recursive?</a></li>
 <li><a href="EditingTheGrammarTree.html#GrammarErrors">Does the grammar tree indicate errors?</a></li>
 <li><a href="EditingTheGrammarTree.html#ModifyingGrammarTree">Can a grammar tree be modified?</a></li>
+<li><a href="EditingTheGrammarTree.html#SavingGrammar">How do save a grammar to a file?</a></li>
 </ul>
 
 <h2>Tokens, Whitespace, etc.</h2>
@@ -76,43 +73,45 @@
 <h2>Built-in Lexer, Reserved Keywords, etc.</h2>
 
 <ul style="list-style-type: disc;">
-<li><a href="RelationshipWithScalaParserCombinators.html#ClassSimpleLexing">What is VisualLangLab's built-in lexer?</a></li>
+<strike><li><a href="RelationshipWithScalaParserCombinators.html#ClassSimpleLexing">What is VisualLangLab's built-in lexer?</a></li></strike>
 <li><a href="EditingTheGrammarTree.html#WhitespaceAndComments">How are whitespace and comments specified?</a></li>
 <li><a href="EditingTheGrammarTree.html#LexingAndTokenScope">Are keywords reserved?</a></li>
 <li><a href="EditingTheGrammarTree.html#LexingAndTokenScope">Can a keyword be used as an ID?</a></li>
 </ul>
 
-<h2>Scala and Parser Combinators</h2>
+<h2>Parser Combinators (Incomplete)</h2>
 
+<strike>
 <ul style="list-style-type: disc;">
-<li><a href="RelationshipWithScalaParserCombinators.html">How is VisualLangLab related to Scala's parser combinators?</a></li>
-<li><a href="RelationshipWithScalaParserCombinators.html#ClassSimpleLexing">Does VisualLangLab use Scala's RegexParsers?</a></li>
-<li><a href="RelationshipWithScalaParserCombinators.html#TraitAggregates">Does VisualLangLab use Scala's "~" and "|" combinator functions?</a></li>
-<li><a href="RelationshipWithScalaParserCombinators.html#TraceAnnotation">How is the trace annotation implemented?</a></li>
-<li><a href="RelationshipWithScalaParserCombinators.html#NodeNames">How are node names defined for grammar tree nodes?</a></li>
-<li><a href="RelationshipWithScalaParserCombinators.html#ErrorChecking">What error checks are implemented?</a></li>
+<li><a href="">How is VisualLangLab related to Scala's parser combinators?</a></li>
+<li><a href="">Does VisualLangLab use Scala's RegexParsers?</a></li>
+<li><a href="">Does VisualLangLab use Scala's "~" and "|" combinator functions?</a></li>
+<li><a href="">How is the trace annotation implemented?</a></li>
+<li><a href="">How are node names defined for grammar tree nodes?</a></li>
+<li><a href="">What error checks are implemented?</a></li>
 <li><a href="RapidPrototypingForScala.html">Is VisualLangLab a rapid prototyping environment for Scala parser combinators?</a></li>
 </ul>
+</strike>
 
 <h2>Sample Grammars</h2>
 
 <ul style="list-style-type: disc;">
 <li><a href="SampleGrammars.html">Are there any sample grammars?</a></li>
 <li><a href="SampleGrammars.html#TestRunning">Can a sample grammar be run?</a></li>
-<li><a href="SampleGrammars.html#TheArithExprParser">Is there a sample for arithmentic expressions?</a></li>
-<li><a href="SampleGrammars.html#TheSimpleJSONParser">Is there a sample for JSON?</a></li>
-<li><a href="SampleGrammars.html#ArithExprWithActionCode">Is there a sample with action-code?</a></li>
+<li><a href="SampleGrammars.html#ThePS2EArithExprParser">Is there a sample for arithmentic expressions?</a></li>
+<li><a href="SampleGrammars.html#ThePS2ESimpleJSONParser">Is there a sample for JSON?</a></li>
+<li><a href="SampleGrammars.html#ThePS2EArithExprActionParser">Is there a sample with action-code?</a></li>
 </ul>
 
 <h2>Testing</h2>
 
 <ul style="list-style-type: disc;">
 <li><a href="TestingParsers.html">What testing facilities exist?</a></li>
-<li><a href="TestingParsers.html#Validation">Is manual validation easy?</a></li>
-<li><a href="TestingParsers.html#Validation">How is input provided to the parser under test?</a></li>
+<li><a href="TestingParsers.html#ValidationIsEasy">Is manual validation possible?</a></li>
+<li><a href="TestingParsers.html#ValidationIsEasy">How is input provided to the parser under test?</a></li>
 <li><a href="TestingParsers.html#GettingTestInputFromFiles">Can test input come from files?</a></li>
-<li><a href="TestingParsers.html#Terminating">How is a long-running test terminated?</a></li>
-<li><a href="TestingParsers.html#Trace">Can rules be traced?</a></li>
+<li><a href="TestingParsers.html#TerminatingLongRunningTest">How is a long-running test terminated?</a></li>
+<li><a href="TestingParsers.html#TraceAndTraceAll">Can rules be traced?</a></li>
 <li><a href="TestingParsers.html#AutomatedTesting">What automated testing approaches exist?</a></li>
 <li><a href="TestingParsers.html#WrapperWithActionCode">Can a simple wrapper automatically check input and output?</a></li>
 <li><a href="TestingParsers.html#UsingJUnit">Can JUnit be used?</a></li>
@@ -123,7 +122,7 @@
 <ul style="list-style-type: disc;">
 <li><a href="TheGUI.html">How does the GUI look?</a></li>
 <li><a href="TheGUI.html#TheMenuBar">What operations does the menu-bar support?</a></li>
-<li><a href="TheGUI.html#TheToolBar">What does the tool-bar support?</a></li>
+<li><a href="TheGUI.html#TheToolBar">What operations does the tool-bar support?</a></li>
 <li><a href="TheGUI.html#TheGrammarTree">Where is the Grammar Tree?</a></li>
 <li><a href="TheGUI.html#TheAST">Where is the AST structure shown?</a></li>
 <li><a href="TheGUI.html#TheActionCodeArea">Where is action code entered?</a></li>
@@ -136,7 +135,6 @@
 <li><a href="index.html#ParserType">What kind of parser is produced by VisualLangLab?</a></li>
 <li><a href="index.html#History">What is the history of VisualLangLab?</a></li>
 <li><a href="index.html#Prerequisites">What are the Prerequisites?</a></li>
-<li><a href="UserGuide.html#WorkflowAndUserRoles">Do I have to know Scala to use VisualLangLab?</a></li>
 <li><a href="index.html#License">Which license is VisualLangLab distributed under?</a></li>
 </ul>
 
