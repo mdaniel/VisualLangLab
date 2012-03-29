@@ -17,6 +17,7 @@
        (Episode 364)
       </p>
 
+<!--
 <table border="1" style="border: 1px solid black;" width="100%">
 <tr>
   <th colspan="2" style="text-align: center;"><span  style="font-size: larger;">Lightweight Java version Available now!</span></th>
@@ -32,6 +33,7 @@
       JVM languages (including Scala). 
       GUI and grammar-file format virtually identical.</td>
 </table>
+-->
 
 <p>
 <a href="http://vll.java.net/">VisualLangLab</a> is a visual parser-generator IDE for
@@ -41,8 +43,8 @@ script or code. It is simple in use, and easy to learn.
 Unlike other parser-generators, VisualLangLab represents 
 <a href="http://en.wikipedia.org/wiki/Formal_grammar">parser rules</a> as visual 
 <i>grammar-trees</i> with distinct icons for the grammar-tree nodes as in 
-the figures below. These example grammars are included with the 
-<a href="#DownloadInstallationAndRunning">VisualLangLab download</a>. 
+the figures below. These example grammars are included with the VisualLangLab download 
+(<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>). 
 </p>
 
 <table border="1" style="border: 1px solid black;"><tbody>
@@ -77,6 +79,7 @@ the figures below. These example grammars are included with the
   Optional <a href="http://en.wikipedia.org/wiki/Semantic_action_routine">semantic actions</a> 
   can also be associated with the grammar-tree's nodes.   </p>
 
+<!--
   <h2 id="SeeVisualLangLabInAction">See VisualLangLab in Action</h2>
 
   <p>The YouTube video embedded below shows the <i>expr</i> parser-rule (see above) being created. 
@@ -87,6 +90,7 @@ the figures below. These example grammars are included with the
     <iframe width="590" height="430" src="http://www.youtube.com/embed/4BkriQZBQ9A" 
       frameborder="0" allowfullscreen></iframe>
   </td></tr></table>
+-->
 
   <h2 id="ParserDevelopmentAndUse">Parser Development and Use</h2>
 
@@ -97,13 +101,23 @@ the figures below. These example grammars are included with the
   for naming the parser rules and tokens, and for specifying regular expression patterns for
   tokens. The grammar is saved as a XML file that can be reloaded for review, further 
   <a href="EditingTheGrammarTree.html">editing</a> or <a href="TestingParsers.html">testing</a>.</p>
- 
+
   <p>An <a href="UsingTheAPI.html">API</a> enables client programs in any JVM language 
-  to load the XML file and regenerate the parser. Parser combinators 
+  to load the XML file and regenerate the parser. 
+<a href="http://en.wikipedia.org/wiki/Parser_combinator">Parser combinators</a> 
   are used to turn tree (or XML) data directly into a 
   parser at run-time without code-generation, so parser regeneration is very fast. 
   </p>
 
+<p>
+Applications that have all their logic within the grammar (as actions) can be run without 
+additional effort or coding by using the <a href="TestingParsers.html#TheCommandLineRunner">
+command-line runner</a>. The runner is activated with a <a href="EditingTheGrammarTree.html#SavingGrammar">
+saved grammar</a> file and the user-provided input-data. 
+It instantiates a parser from the grammar, and then runs it to process the input-data. 
+The parser's output is printed to the console.
+</p>
+ 
   <p id="ParserType"><a href="http://vll.java.net/">VisualLangLab</a> leverages 
   parser combinators to produce 
   <a href="http://en.wikipedia.org/wiki/Backtracking">backtracking</a>, 
