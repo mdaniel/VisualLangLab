@@ -29,6 +29,79 @@ The latest jar file can be downloaded here:
     </p>
 
 
+<h2 id="RunningParser">Running a Parser</h2>
+
+<p>
+There are two ways of running a VisualLangLab parser as described below.
+</p>
+
+<h3 id="WithinTheIDE">Within the IDE</h3>
+
+<p>
+The IDE's testing facilities are built on top of a framework that can 
+create a parser from the currently loaded grammar and run it at the click 
+of a button as described under <a href="#ValidationIsEasy">
+Validation is Easy as A-B-C</a> below. 
+To run the current grammar, use the toolbar's dropdown list to select the 
+top-level grammar-tree, and click the <i>Parse text</i> button as described 
+in greater detail under <i>Validation is Easy as A-B-C</i>. 
+</p>
+
+<p>
+Text input for the parser can be typed directly into the IDE, or obtained from a 
+user-designated file as described under 
+<a href="#GettingTestInputFromFiles">Getting Test Input from Files</a> below. 
+</p>
+
+<h3 id="TheCommandLineRunner">The Command-Line Runner</h3>
+
+<p>
+VisualLangLab has a command-line <i>runner</i> that can create a parser from 
+a saved grammar file, and run it to process user-provided input data as illustrated below.
+</p>
+
+<pre><code>&gt; java -cp VLL4J.jar net.java.vll.vll4j.VLL4J ArithExprAction.vll Expr "2 + 3"
+5.0</code></pre>
+
+<p>
+The class <code>net.java.vll.vll4j.VLL4J</code> is the command-line runner, and the "5" 
+on the next line is the AST (the parser's output). The arguments 
+to the command are described in the following table.
+</p>
+
+<table border="1" style="border: 1px solid black;">
+  <tr>
+    <td style="text-align: center; font-weight: bold;">Argument</td>
+    <td style="text-align: center; font-weight: bold;">Description</td>
+  </tr>
+  <tr>
+    <td >"-a" (optional)</td>
+    <td >do not print AST (default: print AST)</td>
+  </tr>
+  <tr>
+    <td >grammar_file</td>
+    <td >the *.vll file from VisualLangLab GUI</td>
+  </tr>
+  <tr>
+    <td >parser_name (optional)</td>
+    <td >the top-level parser-name (default: Main)</td>
+  </tr>
+  <tr>
+    <td >data/file</td>
+    <td >literal data or file-name for parser input</td>
+  </tr>
+</table>
+
+
+<p>
+In the example shown above, <i>ArithExprAction.vll</i> is the grammar_file, <i>Expr</i> 
+is the parser_name, "2 + 3" is the literal data, and the option "-a" has not been used 
+(as we want to see the result printed). The file <i>ArithExprAction.vll</i> is obtained 
+by invoking <i>Help -> Sample grammars -> PS2E-ArithExpr-Action</i> from the VisualLangLab 
+main-menu, then invoking <i>File -> Save As</i>, entering <i>ArithExprAction.vll</i> 
+into the file-chooser presented and clicking the <i>Save</i> button.
+</p>
+
     <h2 id="ValidationIsEasy">Validation is Easy as A-B-C</h2>
 
     <p>
