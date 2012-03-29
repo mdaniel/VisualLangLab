@@ -1,3 +1,5 @@
+10.30 2012-MAR-29
+  The "runner" prints the AST unless "-a" is the first command-line argument.
 10.29 2012-MAR-28
   The (net.java.vll.vll4j.VLL4J) "runner" must not print the AST.
   Refactored "dumpValue(...)" functions out of "Parsers.java" to "Utils.java".
