@@ -10,39 +10,31 @@
 </head>
 
 <body>
-<!-- article title
-     enter your title in an <h2> tag, a blank line, and your name 
-     as you wish it to be displayed on java.net
--->
 <h2>VisualLangLab - Grammar without Tears</h2>
 <p>
 by <a href="http://today.java.net/pub/au/251">Sanjay Dasgupta</a>
 </p>
 
-  <p style="font-size: larger;">VisualLangLab is "<a href="http://javaposse.com/java-posse-364-newscast-for-sept-24th-2011">Project of the week</a>" on Java Posse for 24th Sept!</p>
+<p style="font-size: larger;">VisualLangLab is "<a href="http://javaposse.com/java-posse-364-newscast-for-sept-24th-2011">Project of the week</a>" on Java Posse for 24th Sept!</p>
 
 <table width="100%" border="1" style="border: 1px solid black;"><tr>
 <td><a href="http://vll.java.net/GrammarWithoutTears2/GrammarWithoutTears2.html">This</a> 
 is a periodically revised version of an 
 <a href="http://today.java.net/article/2011/09/14/visuallanglab-grammar-without-tears">article published on java.net</a> on 14th September 2011. 
-These revisions (last on 04-DEC-2011 for Version-7.01) keep the contents compatible with the current version of 
-<a href="http://vll.java.net/">VisualLangLab</a>. 
+These revisions (last on 09-MAR-2012 for Version-10.25) keep the contents compatible with the current version of <a href="http://vll.java.net/">VisualLangLab</a>. 
 A history of the revisions can be seen <a href="#RevisionHistory">here</a>.</td>
 </tr></table>
 
 <p>
 In the world of computing a grammar is a somewhat different thing 
-from the object implied in 
-<a href="http://www.google.co.in/search?sourceid=chrome&amp;ie=UTF-8&amp;q=%22grammar+without+tears%22">grammar without tears</a>. 
+from the object implied in the phrase <i>grammar without tears</i>. 
 But in terms of the misery caused to those 
 who have to deal with them, the two grammars appear to be closely related.
 This article describes a no tears approach to parser development 
-using the free, open-source parser-generator <a href="http://vll.java.net">VisualLangLab</a>. 
-It has an 
-<a href="http://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a> that represents grammar rules 
-(or <a href="http://en.wikipedia.org/wiki/Top-down_parsing">productions</a>) 
-as intuitive trees, like those in Figure-1 below, 
-without code or scripts of any kind. 
+using <a href="http://vll.java.net">VisualLangLab</a>, a free open-source parser-generator. 
+VisualLangLab has an 
+<a href="http://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a> that represents grammar rules (or <a href="http://en.wikipedia.org/wiki/Top-down_parsing">productions</a>) 
+as intuitive trees, like those in Figure-1 below, without code or scripts of any kind. 
 </p>
 
 <p id="Figure1">
@@ -52,13 +44,13 @@ without code or scripts of any kind.
 
 <p>
 The grammar-trees are also <i>executable</i>, and can be run directly 
-at the click of a button. 
-This encourages the use of tight 
+at the click of a button. This encourages the use of tight 
 <a href="http://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative-incremental</a> 
-development cycles, and improves the pace of development manyfold. 
+development cycles, and greatly improves the pace of development. 
 These features also make it an effective prototyping environment and a training tool.
 </p>
 
+<!--
 <p>
 VisualLangLab is itself written in 
 <a href="http://www.scala-lang.org/">Scala</a>, a 
@@ -66,6 +58,7 @@ JVM language that supports object-orientation as well as
 <a href="http://en.wikipedia.org/wiki/Functional_programming">functional-programming</a>, 
 but you don't have to know much Scala to use VisualLangLab.
 </p>
+-->
 
 <p>
 Parsing techniques and parser-generator tools are a great addition 
@@ -86,12 +79,10 @@ And there is no generated code.
 </p>
 
 <p>
-VisualLangLab uses Scala's parser 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">combinator</a> 
-functions to turn grammar-trees (or XML from a 
-<a href="#SavingTheGrammar">saved grammar-file</a>) directly into a 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">parser</a> 
-at run-time without producing or compiling source-code. 
+VisualLangLab uses 
+<a href="http://en.wikipedia.org/wiki/Parser_combinator">parser combinator</a> functions to 
+turn grammar-trees (or XML from a <a href="#SavingTheGrammar">saved grammar-file</a>) <u>directly</u> 
+into a parser at run-time without producing or compiling source-code. 
 But users of the <a href="#TheGUI">GUI</a> and the <a href="#UsingTheAPI">API</a> 
 do not have to know anything about combinators to use these capabilities. 
 </p>
@@ -99,40 +90,12 @@ do not have to know anything about combinators to use these capabilities.
 <h3 id="DownloadAndRun">Download and Run VisualLangLab</h3>
 
 <p>
-The VisualLangLab <a href="http://vll.java.net/">web-site</a> has a 
-<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">zip file</a> 
-that includes everything you need. The only prerequisite is a 1.6+ JDK or JRE. 
-To run the tool, proceed as follows.
-</p>
-
-<h4>No Scala Installation</h4>
-
-<p>
-A Scala installation is not a mandatory prerequisite. 
-If you do not have Scala (or just want to avoid version issues), 
-download the executable JAR file 
-<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a> 
-(which bundles the required Scala libraries). 
-VisualLangLab is started by double-clicking <i>VLLS-All.jar</i> 
-in a file browser, or by issuing the following command at a system prompt: 
-</p>
-
-<pre><code>    java -jar VLL-All.jar</code></pre>
-
-<p>
-Linux or UNIX users will, of course, have to enable execution (<code>chmod +x ...</code>) 
-to have it start by double-clicking. 
-</p>
-
-<h4 id="HaveScalaInstallation">Have a Scala Installation</h4>
-
-<p>
-To run VisualLangLab with your installed version of Scala 
-use one of the launchers included in the zip file 
-(<i>vlls.bat</i> for Windows, <i>vlls</i> for Linux).
-Under Linux or UNIX users will need to enable execution (<code>chmod +x ...</code>) 
-of the launcher script, and the the SCALA_HOME environment variable must be 
-accessible. 
+The VisualLangLab <a href="http://vll.java.net/">web-site</a> has a JAR file
+<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a> 
+that includes everything you need. The only other prerequisite is a 1.6+ JRE. 
+To start the <a href="http://vll.java.net/TheGUI.html">VisualLangLab GUI</a>, 
+just double-click the file <i>VLL4J.jar</i>. Users on Linux, Mac OS, or other UNIX-like 
+systems may first have to enable execution (<code>chmod +x VLL4J.jar</code>).
 </p>
 
 <h3 id="TheGUI">The GUI</h3>
@@ -185,11 +148,9 @@ We create 2 literals and 1 regex that are
 
 <p>
 To create a literal token select <i>Tokens -> New literal</i> from the main 
-menu as in Figure-3 below. Enter the literal's name (<i>PLUS</i>), 
-a comma, and the pattern (<i>+</i>) into the popped up dialog box and click 
-the <i>OK</i> button. 
-A token's name is used to refer to it from 
-rules, while the pattern describes its contents. 
+menu as in Figure-3 below. Enter the literal's name (<i>PLUS</i>), a space, 
+and the pattern (<i>+</i>) into the dialog box and click the <i>OK</i> button. 
+A token's name is used to refer to it from rules, while the pattern describes its contents. 
 All instances of a particular literal token (during the parser's run) 
 have the same fixed content.
 </p>
@@ -198,12 +159,6 @@ have the same fixed content.
 Now create another <i>literal</i> token 
 named <i>MINUS</i> with a <i>-</i> pattern (as in the second dialog box 
 in Figure-3). 
-</p>
-
-<p>
-<font color="red"><u>Change in Version 7.01</u>: The dialogs in Figure-3 below 
-do not accept the comma. The name and pattern are just separated by one or more 
-space (and/or tab) characters</font>
 </p>
 
 <p>
@@ -216,17 +171,11 @@ space (and/or tab) characters</font>
 <p>
 Figure-4 below shows how you can create a <i>regex</i> token. 
 Select <i>Tokens -> New regex</i> from the main menu, 
-and enter the token's name (<i>NUMBER</i>), a comma, and the 
+and enter the token's name (<i>NUMBER</i>), a space, and the 
 pattern (<i>\\d+</i>) into the dialog box and click <i>OK</i>. 
 You probably recognize the pattern as a Java  
 <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">regular-expression</a> 
 that matches numbers.
-</p>
-
-<p>
-<font color="red"><u>Change in Version 7.01</u>: The dialog in Figure-4 below 
-does not accept the comma. The name and pattern are just separated by one or more 
-space (and/or tab) characters</font>
 </p>
 
 <p>
@@ -360,8 +309,9 @@ Multiplicity has one of the following values:
 and have no influence on the information gathered by the parser (into to 
 <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a> or parse-tree). 
 The names <i>not</i> and <i>guard</i> are inspired by functions of the same name in 
-the Scala <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">
-Parsers</a> class.
+the Scala Parser combinator 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">
+library</a> class.
 </p>
 
     <p>
@@ -391,7 +341,7 @@ Parsers</a> class.
           its use in the built-in <i>ArithExpr</i> <a href="SampleGrammars.html">Sample Grammars</a></li>
       <li>message - the node has an associated error-message</li>
       <li>packrat - the parser-rule is a 
-          <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/PackratParsers$PackratParser.html">packrat parser</a> 
+          <a href="http://pdos.csail.mit.edu/~baford/packrat/thesis/">packrat parser</a> 
           (applicable only to a root-node)</li>
       <li>trace - the parser's use of the node will be logged at run-time</li>
     </ul>
@@ -544,21 +494,23 @@ the section <i>ArithExpr with action-code</i> in
 <p>
 The terms <i>parse-tree</i> and 
 <a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">Abstract Syntax Tree</a> 
-(or just <i>AST</i>) are used interchangeably to mean the 
+(or just <i>AST</i>) are used interchangeably to mean the 
+
 structure of information gathered during the parsing process. 
 VisualLangLab displays the AST of the selected grammar-tree node in the text area 
 under <i>Parse Tree (AST) Structure</i> as seen in Figure-7 above. 
-ASTs are constructed from mutually nested instances of certain standard Scala types, 
-so a rudimentary understanding of their main features is useful. 
+ASTs are constructed from mutually nested instances of standard Java types. 
 Examples and more details can be found online at 
 <a href="http://vll.java.net/ASTAndActionCode.html">AST and Action Code</a> or 
 in the downloaded zip.
-</p>
-
+</p>
+
+
+
 <h3 id="ActionCode">Action Code</h3>
 
 <p>
-Action-code (or just <i>actions</i>) are Scala or Javascript 
+Action-code (or just <i>actions</i>) are Javascript 
 functions associated with grammar-tree nodes, and entered into the text 
 area under <i>Action Code</i> ("C" in <a href="#Figure2">Figure-2</a> above). 
 It is <i>never</i> necessary to have action code embedded in the 
@@ -569,13 +521,15 @@ You can see examples of action-code in the <i>ArithExpr with action-code</i>
 <a href="#SampleGrammars">sample grammar</a>, and more details can be found online at 
 <a href="http://vll.java.net/ASTAndActionCode.html">AST and Action Code</a> 
 or in the downloaded zip.
-</p>
-
+</p>
+
+
+
 <h3 id="UsingTheAPI">Using the API</h3>
 
 <p>
-The VisualLangLab API enables applications written in Scala (and Java with 
-some awkwardness) to use parsers created with the GUI. The API is very small, 
+The VisualLangLab API enables applications written in any JVM language 
+to use parsers created with the GUI. The API is very small, 
 and contains the types and functions required to perform the following 
 operations.
 </p>
@@ -612,41 +566,6 @@ More information about these samples can be found online at
 in the downloaded zip file. 
 </p>
 
-<h3 id="DifferencesFromScala">Differences from Scala's Combinators</h3>
-
-<p>
-The <a href="http://en.wikipedia.org/wiki/Class_diagram">class diagram</a> 
-in Figure-10 below shows VisualLangLab's relationship with Scala's parser combinators.  
-</p>
-
-<p id="Figure10">
-<img src="images/RelationshipWithScalaParserCombinators.png" alt="Relationship With Scala parser combinators" /><br/>
-<em>Figure 10. Relationship With Scala parser combinators</em>
-</p>
-
-<p>
-However, the tool's classes override and augment a few key functionalities of the 
-underlying Scala classes, so the behavior and AST of VisualLangLab's parsers 
-is significantly different in certain ways. 
-</p>
-
-<ul style="list-style-type: disc;">
-  <li>The <i>Literal</i> and <i>Regex</i> node types use an internal 
-      <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexical analyzer</a>, 
-      and do not match input text in the same way 
-      as <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>'s 
-      <code>literal()</code> and <code>regex()</code> methods</li>
-  <li>The <i>Sequence</i> and <i>Choice</i> node types use 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>'s 
-      <code>~</code> and <code>|</code> combinators internally, but have different return types</li>
-</ul>
-
-<p>
-More details can be found online 
-at <a href="http://vll.java.net/RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a>, 
-or in the downloaded zip. 
-</p>
-
 <h3>Conclusion</h3>
 
 <p>
@@ -663,6 +582,7 @@ and will hopefully be a useful addition to any developer's skills.
 </ul>
 
 <table id="RevisionHistory" width="100%" border="1" style="border: 1px solid black;"><tr><th>Revision History</th><tr><td>
+<li>09-MAR-2012 - Updated to be compatible with version 10.25 (the pure Java version). </li>
 <li>04-DEC-2011 - Version 7.01 change warnings added under <a href="#RegexTokenCreation">
     Regex Token Creation</a> and <a href="#LiteralTokenCreation">Literal Token Creation</a>. 
     The new (from 7.01) WildCard pseudo-token is described in the table under <a href="#NodeIcons">Node Icons</a>.</li>
