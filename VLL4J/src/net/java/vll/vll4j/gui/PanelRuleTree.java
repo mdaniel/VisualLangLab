@@ -92,11 +92,20 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
         statusLabel.setText(String.format(" %s/%s", selectedNode.nodeType(), selectedNode.nodeName()));
     }
 
-    void resetNodeDisplay(NodeBase node) {
-        theModel.nodeChanged(selectedNode);
-        theTree.expandPath(new TreePath(selectedNode.getPath()));
-        theTree.scrollPathToVisible(new TreePath(node));
-        gui.theAstPanel.resetView();
+    void resetNodeDisplay(final NodeBase node) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                theModel.nodeChanged(selectedNode);
+                if (associatedNode != null) {
+                    theModel.nodeChanged(associatedNode);
+                    associatedNode = null;
+                }
+                theTree.expandPath(new TreePath(selectedNode.getPath()));
+                theTree.scrollPathToVisible(new TreePath(node));
+                gui.theAstPanel.resetView();
+            }
+        });
     }
     
     Action addChoiceAction = new AbstractAction("Choice", Resources.choice) {
@@ -168,13 +177,13 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
                 JOptionPane.showMessageDialog(treePopupMenu, "No tokens defined yet", "ERROR - Add token", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            Object token = JOptionPane.showInputDialog(gui, "Select token", "Add token", JOptionPane.QUESTION_MESSAGE, 
+            String token = (String)JOptionPane.showInputDialog(gui, "Select token", "Add token", JOptionPane.QUESTION_MESSAGE,
                 null, names, names[0]);
             if (token == null)
                 return;
             String pattern = gui.theForest.tokenBank.get(token);
             boolean isRegex = pattern.charAt(0) == 'R';
-            NodeBase newNode = isRegex ? new NodeRegex((String)token) : new NodeLiteral((String)token);
+            NodeBase newNode = isRegex ? new NodeRegex(token) : new NodeLiteral(token);
             theModel.insertNodeInto(newNode, selectedNode, selectedNode.getChildCount());
             resetNodeDisplay(newNode);
         }
@@ -309,7 +318,24 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
             resetNodeDisplay(selectedNode);
         }
     };
-    
+
+    Action commitAction = new AbstractAction("Commit") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            NodeSequence parent = (NodeSequence) selectedNode.getParent();
+            int myIndex = parent.getIndex(selectedNode);
+            int oldIndex = parent.commitIndex;
+            if (parent.commitIndex == myIndex) {
+                parent.commitIndex = Integer.MAX_VALUE;
+            } else {
+                parent.commitIndex = myIndex;
+            }
+            associatedNode = (myIndex == oldIndex || oldIndex >= parent.getChildCount()) ? null :
+                    (NodeBase)parent.getChildAt(oldIndex);
+            resetNodeDisplay(selectedNode);
+       }
+    };
+
     Action descriptionAction = new AbstractAction("Description") {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -347,7 +373,7 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
     private DefaultTreeModel theModel;
     Vll4jGui gui;
     JTree theTree;
-    NodeBase selectedNode = null;
+    NodeBase selectedNode = null, associatedNode = null;
     PopupListenerTree treePopupListener = new PopupListenerTree(this);
     NodeBase theClipBoard = null;
     private JButton helpButton = null;

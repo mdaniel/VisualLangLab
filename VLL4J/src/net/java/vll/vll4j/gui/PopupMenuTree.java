@@ -77,7 +77,8 @@ public class PopupMenuTree extends JPopupMenu {
         add(new JSeparator());
         dropMenuItem = new JCheckBoxMenuItem(treePanel.dropAction);
         add(dropMenuItem);
-        add(commitMenu);
+        commitMenuItem = new JCheckBoxMenuItem(treePanel.commitAction);
+        add(commitMenuItem);
         packratMenuItem = new JCheckBoxMenuItem(treePanel.packratAction);
         add(packratMenuItem);
         errorMessageItem = new JMenuItem(treePanel.errorMessageAction);
@@ -111,7 +112,7 @@ public class PopupMenuTree extends JPopupMenu {
     JMenuItem pasteMenuItem;
     JMenuItem deleteMenuItem;
     JMenuItem dropMenuItem;
-    JMenuItem commitMenu = new JCheckBoxMenuItem("Commit");
+    JMenuItem commitMenuItem;
     JMenuItem packratMenuItem;
     JMenuItem errorMessageItem;
     JMenuItem descriptionMenuItem;

@@ -120,7 +120,10 @@ public class VisitorXmlGeneration extends VisitorBase {
     @Override
     public Object visitSequence(NodeSequence n) {
         space();
-        printWriter.printf("<Sequence ");
+        if (n.commitIndex != Integer.MAX_VALUE)
+            printWriter.printf("<Sequence Commit=\"%s\" ", n.commitIndex);
+        else
+            printWriter.printf("<Sequence ");
         commonAttributes(n, false);
         visitAllChildNodes(n);
         space();

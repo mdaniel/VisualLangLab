@@ -1,3 +1,7 @@
+10.31 2012-APR-01
+  Implemented commit-point (choice - Error interaction)
+  Minor corrections in rule-tree display and AST display
+  Changed "Rule" and "Full" for AST depth settings to symbols.
 10.30 2012-MAR-29
   The "runner" prints the AST unless "-a" is the first command-line argument.
 10.29 2012-MAR-28

@@ -304,8 +304,8 @@ public class PackratParsers extends SimpleLexingParsers {
         Parser plus = pp.literal2("PLUS", "+");
         Parser minus = pp.literal2("MINUS", "-");
         Parser plusOrMinus = pp.choice("plusOrMinus", plus, minus);
-        Parser suffix = pp.rep(pp.sequence(0, plusOrMinus, nbr));
-        Parser expr = pp.sequence(0, nbr, suffix);
+        Parser suffix = pp.rep(pp.sequence(Integer.MAX_VALUE, 0, plusOrMinus, nbr));
+        Parser expr = pp.sequence(Integer.MAX_VALUE, 0, nbr, suffix);
         ParseResult pr = pp.parseAll(expr, "123 + 5 - 7 + 23 - 567");
         if (pr.successful())
             System.out.println(Utils.dumpValue(pr.get(), true));

@@ -91,6 +91,9 @@ public class Parsers {
         public Error(String msg, Reader next) {
             super(msg, next);
         }
+        public Error(String msg, Reader next, NoSuccess reason) {
+            super(msg, next, reason);
+        }
     }
     
 /*    public static class Choice { //<T> {
@@ -111,7 +114,7 @@ public class Parsers {
                 if (pr.next().atEnd())
                     return pr;
                 else 
-                    return new Failure("expected end of input", input);
+                    return new Failure<T>("expected end of input", input);
             }
         };
     }
@@ -120,7 +123,7 @@ public class Parsers {
         return new Parser<Object>() {
             @Override
             public ParseResult<Object> apply(Reader input) {
-                return new Failure(msg, input);
+                return new Failure<Object>(msg, input);
             }
         };
     }
@@ -129,7 +132,7 @@ public class Parsers {
         return new Parser<T>() {
             @Override
             public ParseResult<T> apply(Reader input) {
-                return new Success(value, input);
+                return new Success<T>(value, input);
             }
         };
     }
@@ -142,7 +145,7 @@ public class Parsers {
                 if (pr.successful()) 
                     return new Success<T>(pr.get(), input);
                 else
-                    return new Failure("??guard??", input);
+                    return new Failure<T>("??guard??", input);
             }
         };
     }
@@ -153,7 +156,7 @@ public class Parsers {
             public ParseResult<T> apply(Reader input) {
                 ParseResult<T> pr = p.apply(input);
                 if (pr.successful()) 
-                    return new Failure("??not??", input);
+                    return new Failure<T>("??not??", input);
                 else
                     return new Success<T>(pr.get(), input);
             }
@@ -166,9 +169,9 @@ public class Parsers {
             public ParseResult<Object[]> apply(Reader input) {
                 ParseResult<T> pr = p.apply(input);
                 if (pr.successful())
-                    return new Success(new Object[]{pr.get()}, pr.next());
+                    return new Success<Object[]>(new Object[]{pr.get()}, pr.next());
                 else
-                    return new Success(new Object[]{null}, input);
+                    return new Success<Object[]>(new Object[]{null}, input);
             }
         };
     }
@@ -178,12 +181,12 @@ public class Parsers {
             @Override
             public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
-                ParseResult<T> pr = null;
+                ParseResult<T> pr;
                 while ((pr = p.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
                 }
-                return new Success(list, input);
+                return new Success<List<T>>(list, input);
             }
         };
     }
@@ -193,7 +196,7 @@ public class Parsers {
             @Override
             public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
-                ParseResult<T> pr = null;
+                ParseResult<T> pr;
                 if ((pr = rep.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
@@ -203,7 +206,7 @@ public class Parsers {
                         input = pr.next();
                     }
                 }
-                return new Success(list, input);
+                return new Success<List<T>>(list, input);
             }
         };
     }
@@ -217,15 +220,15 @@ public class Parsers {
             @Override
             public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
-                ParseResult<T> pr = null;
+                ParseResult<T> pr;
                 while ((pr = p.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
                 }
                 if (list.isEmpty())
-                    return new Failure(errMsg, input, (NoSuccess<T>)pr);
+                    return new Failure<List<T>>(errMsg, input, (NoSuccess<T>)pr);
                 else
-                    return new Success(list, input);
+                    return new Success<List<T>>(list, input);
             }
         };
     }
@@ -239,7 +242,7 @@ public class Parsers {
             @Override
             public ParseResult<List<T>> apply(Reader input) {
                 List<T> list = new ArrayList<T>();
-                ParseResult<T> pr = null;
+                ParseResult<T> pr;
                 if ((pr = rep.apply(input)).successful()) {
                     list.add(pr.get());
                     input = pr.next();
@@ -250,64 +253,70 @@ public class Parsers {
                     }
                 }
                 if (list.isEmpty())
-                    return new Failure(errMsg, input, (NoSuccess<T>)pr);
+                    return new Failure<List<T>>(errMsg, input, (NoSuccess<T>)pr);
                 else
-                    return new Success(list, input);
+                    return new Success<List<T>>(list, input);
             }
         };
     }
     
-    public Parser<Object[]> sequence(int dropMap, Parser<? extends Object>  ...p) {
-        return sequence("??sequence??", dropMap, p);
+    public Parser<? extends Object> sequence(int commitIndex, int dropMap, Parser<Object>  ...p) {
+        return sequence("??sequence??", commitIndex, dropMap, p);
     }
     
-    public Parser<Object[]> sequence(final String errMsg, final int dropMap, final Parser<? extends Object>  ...p) {
-        return new Parser<Object[]>() {
+    public Parser<? extends Object> sequence(final String errMsg, final int commitIndex, final int dropMap, final Parser<? extends Object>  ...p) {
+        return new Parser<Object>() {
             @Override
-            public ParseResult<Object[]> apply(Reader input) {
+            public ParseResult<Object> apply(Reader input) {
                 int bc = Integer.bitCount(dropMap);
                 Object res[] = new Object[p.length - bc];
                 Reader inputOriginal = input;
                 ParseResult<? extends Object> pr = null;
-                for (int i = 0, j = 0, mask = 1; i < p.length; ++i, mask <<= 1) {
+                int j = 0;
+                for (int i = 0, mask = 1; i < p.length; ++i, mask <<= 1) {
                     pr = p[i].apply(input);
-                    if (!pr.successful())
+                    if (!pr.successful()) {
+                        if (i > commitIndex) {
+                            NoSuccess<? extends Object> ns = (NoSuccess<? extends Object>) pr;
+                        }
                         break;
+                    }
                     if ((dropMap & mask) == 0) {
                         res[j++] = pr.get();
                     }
                     input = pr.next();
                 }
-                if (pr.successful()) {
+                if (pr != null && pr.successful()) {
                     if (res.length == 1)
-                        return new Success(res[0], input);
+                        return new Success<Object>(res[0], input);
                     else
-                        return new Success(res, input);
+                        return new Success<Object>(res, input);
                 } else
-                    return new Failure(errMsg, inputOriginal, (NoSuccess<? extends Object>)pr);
+                    return (j > commitIndex) ? new Error(errMsg, inputOriginal, (NoSuccess<Object>)pr) :
+                            new Failure<Object>(errMsg, inputOriginal, (NoSuccess<Object>)pr);
             }
         };
     }
     
-    public Parser<Object[]/*<Object>*/> choice(final Parser<? extends Object>  ...p) {
+    public Parser<Object[]> choice(final Parser<? extends Object>  ...p) {
         return choice("??choice??", p);
     }
     
-    public Parser<Object[]/*<Object>*/> choice(final String errMsg, final Parser<? extends Object>  ...p) {
-        return new Parser<Object[]/*<Object>*/>() {
+    public Parser<Object[]> choice(final String errMsg, final Parser<? extends Object>  ...p) {
+        return new Parser<Object[]>() {
             @Override
-            public ParseResult<Object[]/*<Object>*/> apply(Reader input) {
+            public ParseResult<Object[]> apply(Reader input) {
                 ParseResult<? extends Object> pr = null;
-                int n = 0;
+                int n;
                 for (n = 0; n < p.length; ++n) {
                     pr = p[n].apply(input);
-                    if (pr.successful())
+                    if (pr.successful() || (pr instanceof Error))
                         break;
                 }
-                if (pr.successful())
-                    return new Success<Object[]/*<Object>*/>(new Object[] {n, pr.get()}, pr.next());
+                if (pr != null && pr.successful())
+                    return new Success<Object[]>(new Object[] {n, pr.get()}, pr.next());
                 else
-                    return new Failure(errMsg, input, (NoSuccess<? extends Object>)pr);
+                    return new Failure<Object[]>(errMsg, input, (NoSuccess<Object>)pr);
             }
         };
     }

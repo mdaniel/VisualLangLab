@@ -80,6 +80,9 @@ public class Forest {
                 ((NodeRoot) pn).isPackrat = true;
             }
         } else if (pn instanceof NodeSequence) {
+            if (attr.getNamedItem("Commit") != null) {
+                ((NodeSequence) pn).commitIndex = Integer.parseInt(attr.getNamedItem("Commit").getTextContent());
+            }
         }
         NodeList clist = xn.getChildNodes();
         for (int i = 0; i < clist.getLength(); ++i) {

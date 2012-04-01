@@ -47,12 +47,20 @@ public abstract class NodeBase extends DefaultMutableTreeNode {
     }
 
     public String getAttributes() {
-        if (isTraced || isDropped || !errorMessage.trim().isEmpty() || !actionText.trim().isEmpty() || 
-                (this instanceof NodeRoot && (((NodeRoot)this).isPackrat))) {
+        NodeBase parent = (NodeBase)getParent();
+        boolean isCommitted = (parent != null) && (parent instanceof NodeSequence) &&
+                (((NodeSequence)parent).commitIndex == parent.getIndex(this));
+        if (isTraced || isDropped || !errorMessage.trim().isEmpty() || !actionText.trim().isEmpty() ||
+                isCommitted || (this instanceof NodeRoot && (((NodeRoot)this).isPackrat))) {
             StringBuilder sb = new StringBuilder();
             sb.append("[");
             if (!actionText.trim().isEmpty())
                 sb.append("action");
+            if (isCommitted) {
+                if (sb.length() != 1)
+                    sb.append(" ");
+                sb.append("commit");
+            }
             if (isDropped) {
                 if (sb.length() != 1)
                     sb.append(" ");

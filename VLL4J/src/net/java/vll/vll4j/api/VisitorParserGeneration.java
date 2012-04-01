@@ -287,7 +287,7 @@ public class VisitorParserGeneration extends VisitorBase {
                     dropMap |= mask;
             }
             return withMultiplicity(parsersInstance.sequence(n.errorMessage.isEmpty() ?
-                    String.format("sequence(%s)", n.nodeName()) : n.errorMessage, dropMap, cp), n);
+                    String.format("sequence(%s)", n.nodeName()) : n.errorMessage, n.commitIndex, dropMap, cp), n);
         } else {
             parserGeneratedOk = false;
             return null;

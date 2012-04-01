@@ -60,9 +60,9 @@ public class RegexParsers extends Parsers {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
                 CharSequence cs = input.source();
                 if (cs.subSequence(offset2, cs.length()).toString().startsWith(lit))
-                    return new Success(lit, input.drop(offset2 - input.offset() + lit.length()));
+                    return new Success<String>(lit, input.drop(offset2 - input.offset() + lit.length()));
                 else
-                    return new Failure(errMsg, input);
+                    return new Failure<String>(errMsg, input);
             }
         };
     }
@@ -80,9 +80,9 @@ public class RegexParsers extends Parsers {
                 CharSequence cs = input.source();
                 Matcher m = p.matcher(cs.subSequence(offset2, cs.length()));
                 if (m.lookingAt()) {
-                    return new Success(m.group(), input.drop(offset2 - input.offset() + m.group().length()));
+                    return new Success<String>(m.group(), input.drop(offset2 - input.offset() + m.group().length()));
                 } else {
-                    return new Failure(errMsg, input);
+                    return new Failure<String>(errMsg, input);
                 }
             }
         };
@@ -96,24 +96,24 @@ public class RegexParsers extends Parsers {
                 ParseResult<T> pr = p.apply(input);
 //System.out.printf("%s: %s%n", p, pr);
                 if (!pr.successful())
-                    return new Failure("phrase", input, (Failure)pr);
+                    return new Failure<T>("phrase", input, (Failure)pr);
                 else if (pr.next().atEnd())
                     return pr;
                 int step = handleWhiteSpace(pr.next().source(), pr.next().offset());
                 if (pr.next().drop(step - pr.next().offset()).atEnd())
                     return pr;
                 else
-                    return new Failure(String.format("expected end of input at [%d, %d]", 
+                    return new Failure<T>(String.format("expected end of input at [%d, %d]",
                             pr.next().line(), pr.next().column()), input);
             }
         };
     }
     
-    public ParseResult<? extends Object> parseAll(Parser<? extends Object> p, CharSequence cs) {
+    public <T> ParseResult<T> parseAll(Parser<T> p, CharSequence cs) {
         return phrase(p).apply(new CharSequenceReader(cs));
     }
     
-    public ParseResult<? extends Object> parseAll(Parser<? extends Object> p, Reader rdr) {
+    public <T> ParseResult<T> parseAll(Parser<T> p, Reader rdr) {
         return phrase(p).apply(rdr);
     }
     

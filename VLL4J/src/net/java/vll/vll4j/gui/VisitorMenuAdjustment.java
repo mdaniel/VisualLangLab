@@ -30,17 +30,11 @@ public class VisitorMenuAdjustment extends VisitorBase {
     
     void commonSetting(NodeBase n) {
         NodeBase parent = (NodeBase)n.getParent();
-        boolean setting;
-        if (parent == null) {
-            setting = false;
-        } else {
-            if (parent instanceof NodeSequence)
-                setting = true;
-            else
-                setting = false;
-        }
-        theMenu.dropMenuItem.setEnabled(setting);
-        theMenu.commitMenu.setEnabled(setting);
+        boolean isInSequene = (parent != null) && (parent instanceof NodeSequence);
+        theMenu.dropMenuItem.setEnabled(isInSequene);
+        theMenu.commitMenuItem.setEnabled(isInSequene);
+        theMenu.commitMenuItem.setSelected(isInSequene &&
+                ((NodeSequence)parent).commitIndex == parent.getIndex(n));
         theMenu.packratMenuItem.setEnabled(false);
         theMenu.multiplicityOneItem.setEnabled(true); 
         theMenu.multiplicityZeroOneItem.setEnabled(parent == null || !(parent instanceof NodeChoice)); 
@@ -52,7 +46,6 @@ public class VisitorMenuAdjustment extends VisitorBase {
         theMenu.traceMenuItem.setSelected(n.isTraced);
         theMenu.dropMenuItem.setSelected(n.isDropped);
         theMenu.packratMenuItem.setSelected(false);
-        theMenu.commitMenu.setSelected(false);
         if (n.multiplicity == Multiplicity.One) {
             theMenu.multiplicityOneItem.setSelected(true); 
         } else if (n.multiplicity == Multiplicity.ZeroOrOne) {

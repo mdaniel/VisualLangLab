@@ -47,6 +47,6 @@ public class NodeSequence extends NodeBase {
                 multiplicity, getAttributes(), description);
     }
     
-    int commitIndex;
+    public int commitIndex = Integer.MAX_VALUE;
     long dropMap;
 }

@@ -23,8 +23,6 @@ package net.java.vll.vll4j.api;
 import java.io.*;
 import javax.xml.parsers.ParserConfigurationException;
 import net.java.vll.vll4j.combinator.CharSequenceReader;
-import net.java.vll.vll4j.combinator.Parsers.ParseResult;
-import net.java.vll.vll4j.combinator.Parsers.Parser;
 import net.java.vll.vll4j.gui.ReaderFile;
 import org.xml.sax.SAXException;
 import net.java.vll.vll4j.combinator.Utils;
@@ -65,13 +63,13 @@ public class Vll4j extends ApiParsers {
     }
 
     @Override
-    public ParseResult<? extends Object> parseAll(Parser<? extends Object> p, CharSequence cs) {
+    public <T> ParseResult<T> parseAll(Parser<T> p, CharSequence cs) {
         forest.bindings.put("vllSource", cs);
         return phrase(p).apply(new CharSequenceReader(cs));
     }
     
     @Override
-    public ParseResult<? extends Object> parseAll(Parser<? extends Object> p, net.java.vll.vll4j.combinator.Reader rdr) {
+    public <T> ParseResult<T> parseAll(Parser<T> p, net.java.vll.vll4j.combinator.Reader rdr) {
         forest.bindings.put("vllSource", rdr.source());
         return phrase(p).apply(rdr);
     }
@@ -84,7 +82,7 @@ public class Vll4j extends ApiParsers {
         try {
             FileInputStream fis = new FileInputStream(args[0]);
             Vll4j vll4j = Vll4j.fromStream(fis);
-            Parser p = vll4j.getParserFor(args.length == 2 ? "Main" : args[1]);
+            Parser<Object> p = vll4j.getParserFor(args.length == 2 ? "Main" : args[1]);
             File dataFile = new File(args[args.length - 1]);
             ParseResult pr = dataFile.exists() ? vll4j.parseAll(p, new ReaderFile(dataFile)) : 
                     vll4j.parseAll(p, args[args.length - 1]);

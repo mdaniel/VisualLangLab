@@ -48,9 +48,11 @@ public class PanelAstDisplay extends JPanel {
         bg.add(btnThree);
         btnPanel.add(btnRule);
         bg.add(btnRule);
+        btnRule.setToolTipText("Rule");
         btnRule.setSelected(true);
         btnPanel.add(btnFull);
         bg.add(btnFull);
+        btnFull.setToolTipText("Infinite");
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BorderLayout());
         helpButton = new JButton(gui.theHelpFunctionsManager.displayHelpAST) {
@@ -140,8 +142,8 @@ public class PanelAstDisplay extends JPanel {
     private JTextArea astArea = new JTextArea();
     private JRadioButton btnOne = new JRadioButton("1");
     private JRadioButton btnThree = new JRadioButton("3");
-    private JRadioButton btnRule = new JRadioButton("Rule");
-    private JRadioButton btnFull = new JRadioButton("Full");
+    private JRadioButton btnRule = new JRadioButton("\u00a7");
+    private JRadioButton btnFull = new JRadioButton("\u221e");
     private JButton helpButton = null;
     private VisitorAstDescription visitorAstGeneration;
     private Vll4jGui gui;

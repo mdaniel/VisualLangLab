@@ -111,13 +111,13 @@ public class SimpleLexingParsers extends RegexParsers {
     
     private Parser<String> lexer2parser(final Lexer lexer, final String errMsg) {
         return new Parser<String>() {
-            public ParseResult apply(Reader in) {
+            public ParseResult<String> apply(Reader in) {
                 try {
                     Object[] lexRes = lexer.apply(in);
                     if (lexRes == null)
-                        return new Failure(errMsg, in);
+                        return new Failure<String>(errMsg, in);
                     else
-                        return new Success(lexRes[0], in.drop((Integer)lexRes[2]));
+                        return new Success<String>((String)lexRes[0], in.drop((Integer)lexRes[2]));
                 } catch (StackOverflowError soe) {
                     throw new RuntimeException(String.format("Java bug 5050507 at (%d, %d)", in.line(), in.column()), soe);
                 }
@@ -183,7 +183,7 @@ public class SimpleLexingParsers extends RegexParsers {
         literalsMatcher.reset(cs);
         if (literalsMatcher.lookingAt()) {
             int k = 1;
-            String lexeme = null;
+            String lexeme;
             while ((lexeme = literalsMatcher.group(k)) == null) {
                 ++k;
             }
@@ -203,7 +203,7 @@ public class SimpleLexingParsers extends RegexParsers {
         CharSequence cs = input.source().subSequence(offset2, input.source().length());
 //System.out.printf("lexKnownRegexs(): CharSequence=%s%n", cs);
         int idx = -1;
-        String lexeme = "", newLexeme = null;
+        String lexeme = "", newLexeme;
         for (int i = 0; i < regexMatchers.length; ++i) {
             Matcher m = regexMatchers[i].reset(cs);
             if (m.lookingAt() && (newLexeme = m.group()).length() > lexeme.length()) {
@@ -231,7 +231,7 @@ public class SimpleLexingParsers extends RegexParsers {
             public int compare(Object a, Object b) {
                 String aa = ((String)(((Object[])a)[0]));
                 String bb = ((String)(((Object[])b)[0]));
-                return ((String)bb).length() - ((String)aa).length();
+                return bb.length() - aa.length();
             }
         };
         Arrays.sort(sortedLiterals, c);

@@ -14,13 +14,13 @@ public class TestRegexParsers {
         Parser<String> nbr = me.regex(Pattern.compile("\\d+"));
         Parser<String> name = me.regex(Pattern.compile("[a-z]+"));
         Parser<String> semi = me.literal(";");
-        Parser<Object[]> line = me.sequence(0, name, nbr, semi);
+/*        Parser<? extends Object> line = me.sequence(0, name, nbr, semi);
         ParseResult pr = me.parseAll(line, "sanjay \t\r\n  100   ;  ");
         me.dumpResult(pr);
         System.out.println(Utils.dumpValue(pr.get(), true));
-        Parser<List<Object[]/*<Object>*/>> choice = me.rep(me.choice(nbr, name, semi));
+        Parser<List<Object[]>> choice = me.rep(me.choice(nbr, name, semi));
         pr = me.parseAll(choice, "sanjay \t\r\n  100   ;  ");
         me.dumpResult(pr);
         System.out.println(Utils.dumpValue(pr.get(), true));
-    }
+*/    }
 }
