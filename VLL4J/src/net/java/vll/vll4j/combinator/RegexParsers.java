@@ -96,7 +96,7 @@ public class RegexParsers extends Parsers {
                 ParseResult<T> pr = p.apply(input);
 //System.out.printf("%s: %s%n", p, pr);
                 if (!pr.successful())
-                    return new Failure<T>("phrase", input, (Failure)pr);
+                    return new Failure<T>("phrase", input, (NoSuccess)pr);
                 else if (pr.next().atEnd())
                     return pr;
                 int step = handleWhiteSpace(pr.next().source(), pr.next().offset());

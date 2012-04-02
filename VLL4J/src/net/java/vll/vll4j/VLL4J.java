@@ -53,7 +53,7 @@ public class VLL4J {
             else
                 System.out.println(vll4j.dumpResult(pr));
         } catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 

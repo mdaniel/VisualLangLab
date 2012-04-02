@@ -1,3 +1,5 @@
+10.32 2012-APR-02
+  Corrected minor bug in RegexParsers.java
 10.31 2012-APR-01
   Implemented commit-point (choice - Error interaction)
   Minor corrections in rule-tree display and AST display
