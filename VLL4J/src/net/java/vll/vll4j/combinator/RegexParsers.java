@@ -76,7 +76,9 @@ public class RegexParsers extends Parsers {
             @Override
             public ParseResult<String> apply(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
-//                Reader newInput = input.drop(offset2 - input.offset());
+                if (p.toString().equals("\\\\z") && offset2 >= input.source().length()) {
+                    return new Success<String>("", input.drop(offset2 - input.offset()));
+                }
                 CharSequence cs = input.source();
                 Matcher m = p.matcher(cs.subSequence(offset2, cs.length()));
                 if (m.lookingAt()) {

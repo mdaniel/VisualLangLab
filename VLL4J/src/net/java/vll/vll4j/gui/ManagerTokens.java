@@ -61,8 +61,12 @@ public class ManagerTokens {
                 ok = false;
             }
         }
-        if (isRegex && "".matches(Utils.unEscape(m.group(2)))) {
+        if (isRegex && (!m.group(2).equals("\\\\z") && "".matches(Utils.unEscape(m.group(2))))) {
             JOptionPane.showMessageDialog(gui, "Bad pattern\nPattern matches empty string", "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (isRegex && m.group(2).equals("\\\\z") && !name.endsWith("_")) {
+            JOptionPane.showMessageDialog(gui, "Bad name\nEOF must be local token", "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
         String pattern = (isRegex ? "R" : "L") + m.group(2);

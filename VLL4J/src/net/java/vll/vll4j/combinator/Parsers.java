@@ -272,8 +272,8 @@ public class Parsers {
                 Object res[] = new Object[p.length - bc];
                 Reader inputOriginal = input;
                 ParseResult<? extends Object> pr = null;
-                int j = 0;
-                for (int i = 0, mask = 1; i < p.length; ++i, mask <<= 1) {
+                int i = 0, j = 0;
+                for (int mask = 1; i < p.length; ++i, mask <<= 1) {
                     pr = p[i].apply(input);
                     if (!pr.successful()) {
                         if (i > commitIndex) {
@@ -292,7 +292,7 @@ public class Parsers {
                     else
                         return new Success<Object>(res, input);
                 } else
-                    return (j > commitIndex) ? new Error(errMsg, inputOriginal, (NoSuccess<Object>)pr) :
+                    return (i > commitIndex) ? new Error(errMsg, inputOriginal, (NoSuccess<Object>)pr) :
                             new Failure<Object>(errMsg, inputOriginal, (NoSuccess<Object>)pr);
             }
         };

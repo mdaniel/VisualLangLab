@@ -127,6 +127,7 @@ public class ManagerTesting {
         @Override
         public void actionPerformed(ActionEvent e) {
             gui.theTestingPanel.logClear();
+            gui.theTestingPanel.logStatus.setText("");
         }
     };
 
