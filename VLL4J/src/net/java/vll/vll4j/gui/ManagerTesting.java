@@ -20,18 +20,20 @@
 
 package net.java.vll.vll4j.gui;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import javax.script.ScriptException;
-import javax.swing.*;
 import net.java.vll.vll4j.api.NodeBase;
 import net.java.vll.vll4j.api.VisitorParserGeneration;
 import net.java.vll.vll4j.combinator.Parsers.ParseResult;
 import net.java.vll.vll4j.combinator.Parsers.Parser;
 import net.java.vll.vll4j.combinator.Reader;
 import net.java.vll.vll4j.combinator.Utils;
+
+import javax.script.ScriptException;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagerTesting {
 
@@ -63,7 +65,6 @@ public class ManagerTesting {
             myThread = new Thread() {
                 @Override
                 public void run() {
-                    stopRequested = false;
                     parseStopAction.setEnabled(true);
                     setEnabled(false);
                     if (fileChooser == null) {
@@ -91,7 +92,7 @@ public class ManagerTesting {
     Action parseStopAction = new AbstractAction("Stop parsing", Resources.stop16) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            stopRequested = true;
+            visitorParserGenerator.stopFlag[0] = true;
         }
     };
 
@@ -221,14 +222,14 @@ public class ManagerTesting {
                     } else if (t.getCause() instanceof StackOverflowError) {
                         System.err.printf("%s: ERROR: %s%n", 
                                 f.getAbsolutePath(), t.getMessage());
+                    } else if (t.getCause() instanceof IOException) {
+                        System.err.printf("User-Requested STOP%n");
+                        break;
+                    } else {
+                        System.err.printf("%s(%s)%n", t.getClass().getName(), t.getMessage());
                     }
                 }
                 appendStatus(String.format(" %d Ok, %d NOk in %d ms", countOk, countNotOk, t1 - t0), true);
-                if (stopRequested) {
-                    System.err.println("User-Requested STOP");
-                    break;
-                }
-                System.out.flush();
             }
         } else {
             t0 = System.currentTimeMillis();
@@ -258,8 +259,12 @@ public class ManagerTesting {
                 if (t.getCause() instanceof ScriptException) {
                     JOptionPane.showMessageDialog(gui, "Error in user-provided action-code\nSee details in stack-trace", 
                           "Action-code error", JOptionPane.ERROR_MESSAGE);
-                  }
-                t.printStackTrace();
+                    t.printStackTrace();
+                } else if (t.getCause() instanceof IOException) {
+                    System.err.printf("User-Requested STOP%n");
+                } else {
+                    System.err.printf("%s(%s)%n", t.getClass().getName(), t.getMessage());
+                }
             }
         }
     }
@@ -269,6 +274,5 @@ public class ManagerTesting {
     private Thread myThread = null;
     private JFileChooser fileChooser = null;
     private boolean traceAll = false;
-    private boolean stopRequested = false;
     private boolean printStructured = false;
 }

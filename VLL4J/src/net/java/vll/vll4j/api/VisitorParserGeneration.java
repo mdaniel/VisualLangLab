@@ -20,6 +20,7 @@
 
 package net.java.vll.vll4j.api;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -33,7 +34,7 @@ import net.java.vll.vll4j.combinator.Utils;
 
 public class VisitorParserGeneration extends VisitorBase {
     
-    public VisitorParserGeneration(Forest theForest, ApiParsers parsersInstance, boolean traceAll) {
+    public VisitorParserGeneration(Forest theForest, ApiParsers parsersInstance, boolean traceAll, boolean stopFlag[]) {
         parsersInstance.reset();
         this.theForest = theForest;
         this.parsersInstance = parsersInstance;
@@ -41,8 +42,12 @@ public class VisitorParserGeneration extends VisitorBase {
         createTokenParsers();
         visitorNodeValidation = new VisitorValidation();
         parserGeneratedOk = true;
+        this.stopFlag = stopFlag;
     }
-    
+
+    public VisitorParserGeneration(Forest theForest, ApiParsers parsersInstance, boolean traceAll) {
+        this(theForest, parsersInstance, traceAll, new boolean[] {Boolean.FALSE});
+    }
 /*    void reset() {
         gui.regexParsers.reset();
         parserCache.clear();
@@ -138,7 +143,18 @@ public class VisitorParserGeneration extends VisitorBase {
         }
         return withTrace(pm, node);
     }
-    
+
+    Parser<String> withStopTest(final Parser<String> p) {
+        return new Parser<String>() {
+            @Override
+            public ParseResult<String> apply(Reader input) {
+                if (stopFlag[0])
+                    throw new IllegalArgumentException("User-Requested STOP", new IOException());
+                return p.apply(input);
+            }
+        };
+    }
+
     @Override
     public Parser<? extends Object> visitChoice(NodeChoice n) {
         int childCount = n.getChildCount();
@@ -161,7 +177,8 @@ public class VisitorParserGeneration extends VisitorBase {
             String litString = Utils.unEscape(theForest.tokenBank.get(n.literalName).substring(1));
             String errMsg = n.errorMessage.isEmpty() ? 
                     String.format("literal:%s(%s)", n.literalName, n.nodeName()) : n.errorMessage;
-            return withMultiplicity(n.literalName.endsWith("_") ? parsersInstance.literal(errMsg, litString) : parsersInstance.literal2(errMsg, litString), n);
+            return withMultiplicity(withStopTest(n.literalName.endsWith("_") ?
+                    parsersInstance.literal(errMsg, litString) : parsersInstance.literal2(errMsg, litString)), n);
         } else {
             parserGeneratedOk = false;
             return null;
@@ -200,9 +217,9 @@ public class VisitorParserGeneration extends VisitorBase {
             String regString = Utils.unEscape(theForest.tokenBank.get(n.regexName).substring(1));
             String errMsg = n.errorMessage.isEmpty() ? 
                     String.format("regex:%s(%s)", n.regexName, n.nodeName()) : n.errorMessage;
-            return withMultiplicity(n.regexName.endsWith("_") ? 
+            return withMultiplicity(withStopTest(n.regexName.endsWith("_") ?
                     parsersInstance.regex(errMsg, Pattern.compile(regString)) : 
-                    parsersInstance.regex2(errMsg, Pattern.compile(regString)), n);
+                    parsersInstance.regex2(errMsg, Pattern.compile(regString))), n);
         } else {
             parserGeneratedOk = false;
             return null;
@@ -313,4 +330,5 @@ public class VisitorParserGeneration extends VisitorBase {
     private int traceLevel = 0;
     private VisitorValidation visitorNodeValidation;
     private Forest theForest;
+    public boolean stopFlag[];
 }

@@ -1,3 +1,5 @@
+10.34 2012-APR-17
+  Corrected implementation of user-requested stop in ManagerTesting.java
 10.33 2012-APR-16
   Corrected bug in commit handling for sequence parser
   Allow "\\z" (EOF) as regex pattern (despite matching empty string)
