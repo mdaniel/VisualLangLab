@@ -23,6 +23,7 @@ package net.java.vll.vll4j.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.net.URL;
 import javax.swing.*;
 import net.java.vll.vll4j.api.ApiParsers;
 import net.java.vll.vll4j.api.Forest;
@@ -195,6 +196,25 @@ public class Vll4jGui extends JFrame {
     void setGrammarName(String grammarName) {
         setTitle(String.format("%s - %s", titleString, grammarName));
     }
+
+    void scalaNotice() {
+        String msg = "<html>" +
+            "If you followed a link in the article \"Grammar Without Tears\" <br/>" +
+            "to download this program, please read the updated version of <br/>" +
+            "the article at the following link: <br/><br/>" +
+            "http://vll.java.net/GrammarWithoutTears2/GrammarWithoutTears2.html<br/><br/>" +
+            "The current version of VisualLangLab is written in Java, and <br/> " +
+            "does not support actions written in Scala (as described in the<br/>" +
+            "original article). <br/><br/>" +
+            "A version of this program without this popup notice can be <br/>" +
+            "downloaded from the following link: <br/><br/>" +
+            "http://java.net/projects/vll/downloads/download/VLL4J.jar<br/><br/>" +
+            "For more information go to http://vll.java.net/";
+        URL is = ClassLoader.getSystemClassLoader().getResource("vlls.txt");
+        if (is != null)
+            JOptionPane.showMessageDialog(this, msg, "Important Notice",
+                    JOptionPane.PLAIN_MESSAGE, null);
+    }
     
     public static void main(String[] args) {
         if (System.getProperty("os.name").contains("Windows")) {
@@ -206,7 +226,7 @@ public class Vll4jGui extends JFrame {
         System.setOut(me.theTestingPanel.getOutStream());
         System.setErr(me.theTestingPanel.getErrStream());
         me.setVisible(true);
-//        me.warnPreview();
+        me.scalaNotice();
     }
     
     PanelRuleTree theTreePanel = null;
@@ -244,6 +264,6 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    public final String version = "10.34";
+    public final String version = "10.35";
     private ListCellRenderer theCellRenderer = new RendererRuleComboBox(this);
 }
