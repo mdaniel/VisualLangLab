@@ -87,8 +87,8 @@ as shown on the right side of Figure-1 below.
 VisualLangLab creates a parser-rule (or <i>grammar-tree</i>) called <i>Main</i> at startup. 
 You can create the grammar-rule <i>prog</i> by just renaming <i>Main</i>. 
 Click the toolbar's <i>Rename rule</i> 
-button (<img src="../images/ToolBarButtonRenameRule.gif" alt="The reference icon" 
-align="center" />) and enter <i>prog</i> into the dialog presented (lower left of Figure-1). 
+button <img src="../images/ToolBarButtonRenameRule.gif" alt="The reference icon" 
+align="center" /> and enter <i>prog</i> into the dialog presented (lower left of Figure-1). 
 The rule's name will be changed in the toolbar's dropdown list as well 
 at the rule-tree's root icon (see Figure-2 below). 
 </p>
@@ -101,8 +101,8 @@ The parser-rule <i>prog</i> is defined as follows.
 
 <p>
 So we must create the grammar-rule <i>stat</i> before we can complete <i>prog</i>. 
-Click the <i>New rule</i> button (<img src="../images/ToolBarButtonNewRule.gif" 
-alt="The reference icon" align="center" />), 
+Click the <i>New rule</i> button <img src="../images/ToolBarButtonNewRule.gif" 
+alt="The reference icon" align="center" />, 
 and enter <i>stat</i> into the dialog presented (left of Figure-2). 
 After the new rule has been created, click the <i>back</i> button 
 or select <i>stat</i> from the toolbar's drop-down list 
@@ -119,8 +119,8 @@ Right-click the root-node of <i>prog</i>, and select <i>Reference</i>
 (left of Figure-3 below). Select <i>stat</i> from the dropdown list of the 
 dialog presented, and click the <i>OK</i> button. The rule should now look 
 like that on the right side of Figure-3. Right-click the newly added 
-reference node (<img src="../images/GrammarIconReference.gif" alt="The reference icon" 
-align="center" />), and select "Multiplicity" -> "+ (1 or more)" from the context menu. 
+reference node <img src="../images/GrammarIconReference.gif" alt="The reference icon" 
+align="center" />, and select "Multiplicity" -> "+ (1 or more)" from the context menu. 
 A "+" sign next to the reference icon indicates that the multiplicity has been changed 
 (red circled at bottom right of Figure-3).
 </p>
@@ -144,16 +144,16 @@ using its complete definition shown below.
 
 <p>
 At the topmost level, the rule is a choice of three structures (or <i>sub-rules</i>). 
-Right-click the root-node (<img src="../images/GrammarIconRoot.gif" 
-alt="The reference icon" align="center" />), and select "Add" -> "Choice" 
+Right-click the root-node <img src="../images/GrammarIconRoot.gif" 
+alt="The reference icon" align="center" />, and select "Add" -> "Choice" 
 from the context menu (as at the top left of Figure-4 below). This should add 
-a choice icon (<img src="../images/GrammarIconChoice.gif" alt="The choice icon" align="center" />)
+a choice icon <img src="../images/GrammarIconChoice.gif" alt="The choice icon" align="center" />
 to the root node (bottom left of Figure-4). 
-Now right-click the newly created choice node (<img src="../images/GrammarIconChoice.gif" 
-alt="The reference icon" align="center" />), and select "Add" -> "Sequence" 
+Now right-click the newly created choice node <img src="../images/GrammarIconChoice.gif" 
+alt="The reference icon" align="center" />, and select "Add" -> "Sequence" 
 from the context menu (as at the top right of Figure-4). This should add 
-a sequence icon (<img src="../images/GrammarIconSequence.gif" alt="The choice icon" 
-align="center" />) to the choice node. Repeat this action once more, so you have two 
+a sequence icon <img src="../images/GrammarIconSequence.gif" alt="The choice icon" 
+align="center" /> to the choice node. Repeat this action once more, so you have two 
 sequence icons attached to the choice node (bottom right of Figure-4).
 </p>
 
@@ -172,14 +172,14 @@ what the problem is.
 Before you can proceed further, you need to create the entities (tokens and rules) that 
 <i>stat</i> uses. First create another parser-rule named <i>expr</i> following the 
 instructions used to create <i>stat</i> described around <a href="#Figure2">Figure-2</a> above. 
-Use the toolbar's dropdown list or the <i>Back</i> button (<img src="../images/ToolBarButtonBack.gif" 
-alt="The choice icon" align="center" />) as described before to display 
+Use the toolbar's dropdown list or the <i>Back</i> button <img src="../images/ToolBarButtonBack.gif" 
+alt="The choice icon" align="center" /> as described before to display 
 the <i>stat</i> parser-rule again (as in bottom right of Figure-4 above). 
 </p>
 
 <p>
 Next, create the tokens needed. Click the <i>New regex</i> toolbar button 
-(<img src="../images/ToolBarButtonNewRegex.gif" alt="The choice icon" align="center" />), 
+<img src="../images/ToolBarButtonNewRegex.gif" alt="The choice icon" align="center" />, 
 enter "<code>NEWLINE&nbsp;&nbsp;\\r?\\n</code>" into the dialog presented 
 (right of Figure-5 below), and click the <i>OK</i> button. 
 The text entered into the dialog contains the token's name and regular-expression 
@@ -203,17 +203,10 @@ following texts into the dialog: "<code>INT&nbsp;&nbsp;\\d+</code>" and
 
 <p>
 Then create a literal token by clicking the <i>New literal</i> toolbar button 
-(<img src="../images/ToolBarButtonNewLiteral.gif" alt="The choice icon" align="center" />), 
-enter "<code>EQUALS&nbsp;&nbsp;=</code>" into the dialog (left of Figure-5 above), 
+<img src="../images/ToolBarButtonNewLiteral.gif" alt="The choice icon" align="center" />, 
+enter "<code>=</code>" into the dialog (left of Figure-5 above), 
 and click the <i>OK</i> button. The pattern used for a literal token is just a literal, 
 not a regular-expression. 
-</p>
-
-<p>
-<u>Important</u>: The original PEG script does not have 
-a token definition for "=" as it is used directly as an <i>inline-defined literal token</i>. 
-VisualLangLab does not allow such inline anonymous token definitions, so all tokens must 
-be named and defined.
 </p>
 
 <p>
@@ -232,7 +225,7 @@ on the right side of Figure-6 below.
 
 <p>
 Now select the second sequence icon, and add the following entities to it: The token 
-<i>ID</i>, the token <i>EQUALS</i>, the reference <i>expr</i>, and the token <i>NEWLINE</i>. 
+<i>ID</i>, the token <i>"="</i>, the reference <i>expr</i>, and the token <i>NEWLINE</i>. 
 Now right-click the choice icon (just below the root), and add the token <i>NEWLINE</i>. 
 Your parser-rule should now look like the one on the left side of Figure-7 below. 
 This parser-rule is structurally similar to the original ANTLR parser-rule, although 
@@ -261,10 +254,8 @@ the logic. The rule's EBNF specification is shown below.
 <p>
 Most things you need to know about parser-rule editing has been covered above, so 
 we won't go into the details except to note a few prerequisites you need to complete 
-before proceeding: create the parser-rule <i>multExpr</i>, and the literal tokens 
-<i>PLUS</i> (with pattern "+") and <i>MINUS</i> (with pattern "-"). 
-The original PEG script does not have these token definitions as it uses them as 
-anonymous inline tokens.
+before proceeding: create the parser-rule <i>multExpr</i>, and two literal tokens 
+for the patterns "+" and "-" respectively. 
 When you've finished adding all elements to the parser-rule, it should look like the 
 one on the left of Figure-8 below. 
 </p>
@@ -292,8 +283,8 @@ the logic. The rule's EBNF specification is shown below.
 <pre><code>multExpr: atom ('*' atom)* ;</code></pre>
 
 <p>
-It should be obvious that the parser-rule <i>atom</i>, and a literal token <i>MULT</i> 
-(with pattern "*") must be created before proceeding. 
+It should be obvious that the parser-rule <i>atom</i>, and a literal token 
+with pattern "*" must be created before proceeding. 
 The finished parser-rule should look like the one in Figure-9 below. 
 </p>
 
@@ -315,9 +306,9 @@ the logic. The rule's EBNF specification is shown below.
 ;</code></pre>
 
 <p>
-There are a few prerequisites this time too: literal tokens 
-named <i>INT</i> (with pattern "\\d+"), <i>LPAREN</i> (with pattern "(") and 
-<i>RPAREN</i> (with pattern ")"). The finished parser-rule should look like the one in 
+There are a few prerequisites this time too: a regex token 
+named <i>INT</i> (with pattern "\\d+"), and two literal tokens with patterns "(" and 
+")" respectively. The finished parser-rule should look like the one in 
 Figure-10 below. 
 </p>
 
@@ -428,15 +419,15 @@ If you see error messages or find other problems, verify the following:
 <table border="1" style="border: 1px solid black;">
 <tr><th align="center" colspan="3">Token Definitions</th></tr>
 <tr><th align="center">Name</th><th align="center">Type</th><th align="center">Pattern</th></tr>
-<tr><td align="center">EQUALS</td><td align="center">Literal</td><td align="center">=</td></tr>
+<tr><td align="center">"="</td><td align="center">Literal</td><td align="center">=</td></tr>
 <tr><td align="center">ID</td><td align="center">Regex</td><td align="center">[a-zA-Z]+</td></tr>
 <tr><td align="center">INT</td><td align="center">Regex</td><td align="center">\\d+</td></tr>
-<tr><td align="center">LPAREN</td><td align="center">Literal</td><td align="center">(</td></tr>
-<tr><td align="center">MINUS</td><td align="center">Literal</td><td align="center">-</td></tr>
-<tr><td align="center">MULT</td><td align="center">Literal</td><td align="center">*</td></tr>
+<tr><td align="center">"("</td><td align="center">Literal</td><td align="center">(</td></tr>
+<tr><td align="center">"-"</td><td align="center">Literal</td><td align="center">-</td></tr>
+<tr><td align="center">"*"</td><td align="center">Literal</td><td align="center">*</td></tr>
 <tr><td align="center">NEWLINE</td><td align="center">Regex</td><td align="center">\\r?\\n</td></tr>
-<tr><td align="center">PLUS</td><td align="center">Literal</td><td align="center">+</td></tr>
-<tr><td align="center">RPAREN</td><td align="center">Literal</td><td align="center">)</td></tr>
+<tr><td align="center">"+"</td><td align="center">Literal</td><td align="center">+</td></tr>
+<tr><td align="center">")"</td><td align="center">Literal</td><td align="center">)</td></tr>
 </table>
 
 <p>

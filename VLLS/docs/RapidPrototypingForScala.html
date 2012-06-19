@@ -102,37 +102,61 @@ and double-click it in a file-browser. Linux, Mac OS, and UNIX users will have t
 Documentation for version 10 and higher is currently on the web-site only.
 </p>
 
-<p>
-When started, <a href="http://vll.java.net/">VisualLangLab</a> displays the GUI shown in Figure-2 below. 
-The menus and buttons are explained as needed, but a full 
-description can also be found at 
-<a href="TheGUI.html" target="_blank">The GUI</a>. 
-All toolbar buttons have tool-tip texts that explain their use. 
-</p>
-
+<p>
+
+When started, <a href="http://vll.java.net/">VisualLangLab</a> displays the GUI shown in Figure-2 below. 
+
+The menus and buttons are explained as needed, but a full 
+
+description can also be found at 
+
+<a href="TheGUI.html" target="_blank">The GUI</a>. 
+
+All toolbar buttons have tool-tip texts that explain their use. 
+
+</p>
+
+
+
 <p>
 <img src="images/GuiFull3.png" alt="The VisualLangLab GUI" /><br />
 <i>Figure-2. The VisualLangLab GUI</i>
 </p>
 
-<p>
-The display areas of the GUI are used as described below.
-</p>
-
-<ul style="list-style-type: disc;">
-  <li>A is used for the grammar-tree as described in 
-      <a href="#CreatingParserRules">Creating the Parser-Rules</a> below</li>
-  <li>B displays the <a href="ASTAndActionCode.html#ASTStructure" target="_blank">AST structure</a> 
-      of the selected grammar-tree node</li>
-  <li>C is where the selected node's <a href="#ActionCode">action-code</a> 
+<p>
+
+The display areas of the GUI are used as described below.
+
+</p>
+
+
+
+<ul style="list-style-type: disc;">
+
+  <li>A is used for the grammar-tree as described in 
+
+      <a href="#CreatingParserRules">Creating the Parser-Rules</a> below</li>
+
+  <li>B displays the <a href="ASTAndActionCode.html#ASTStructure" target="_blank">AST structure</a> 
+
+      of the selected grammar-tree node</li>
+
+  <li>C is where the selected node's <a href="#ActionCode">action-code</a> 
+
       (<i>semantic action</i>, or just <i>action</i>) is displayed and edited. 
-      If this appears to break the 
-      <i>no code, no script</i> promise, rest assured that action-code 
-      is always optional</li>
-  <li>D and E are used for <a href="#Testing">testing the parser</a> 
-      as described below</li>
+      If this appears to break the 
+
+      <i>no code, no script</i> promise, rest assured that action-code 
+
+      is always optional</li>
+
+  <li>D and E are used for <a href="#Testing">testing the parser</a> 
+
+      as described below</li>
+
 </ul>
-
+
+
 <p>
 The only prerequisite for running <a href="http://vll.java.net/">VisualLangLab</a> as described above is a 
 <a href="http://www.oracle.com/technetwork/java/javase/overview/index-jsp-136246.html" target="_blank">6.0+ JRE</a>. 
@@ -196,7 +220,7 @@ parser-rule should look like the right side of Figure-4 below.
 
 <p>
 <img src="images/AddToken-decimalNumber.png" alt="Selecting the decimalNumber token" /><br />
-<i>Figure-4. Selecting the </i>decimalNumber<i> token</i>
+<i>Figure-4. Selecting the </i>floatingPointNumber_<i> token</i>
 </p>
 
 <p>
@@ -206,7 +230,7 @@ and paste the code
 given below into the text area under <i>Action Code</i> as in Figure-5 
 below. Click the <i>Save</i> button (enabled when the content of the action-code area 
 changes). Observe that this adds the <i>action</i> annotation 
-(near red arrow) to the <i>decimalNumber</i> token. From version 10.21, the rule-name 
+(near red arrow) to the <i>floatingPontNumber_</i> token. From version 10.21, the rule-name 
 (<i>doubleNumber</i>) in the toolbar's dropdown list also has a small green arrow-icon 
 placed near it. 
 </p>
@@ -240,17 +264,15 @@ first. Proceed as follows.
 <ul style="list-style-type: disc;">
   <li>click the <i>New literal</i> button 
     (the <img src="images/ToolBarButtonNewLiteral.gif" align="center" alt="The New-literal button" /> icon), 
-    enter "<code>IS  is</code>" into the dialog presented, and click the <i>OK</i> button 
+    enter "<code>is</code>" into the dialog presented, and click the <i>OK</i> button 
     (as in Figure-6 below)</li>
-  <li>repeat the preceding action once more, but enter "<code>ARE  are</code>" instead</li>
+  <li>repeat the preceding action once more, but enter "<code>are</code>" instead</li>
 </ul>
 
 <p>
-The information entered into the dialog when creating a literal contains the 
-literal's <i>name</i>, and its <i>pattern</i> separated by a comma.
-You can optionally add spaces around the comma for clarity if required. 
-The <i>name</i> is used to refer to the literal in rules (as 
-seen in <a href="#Figure7">Figure-7</a> below), while the <i>pattern</i> is it's literal definition. 
+The above actions create two literal tokens with names "is" and "are" respectively. 
+These names will be used to refer to the tokens from rules as seen in 
+<a href="#Figure7">Figure-7</a> below.
 </p>
 
 <p>
@@ -277,8 +299,8 @@ To create the parser, perform the following steps.
     (as in the left and middle parts of Figure-7 below)</li>
   <li>right-click the newly created choice node and select <i>Add -> Token</i> from the context menu. 
     A dialog box with a dropdown list containing known token names is popped up. 
-    Select <i>IS</i> from the dropdown list, and click the <i>OK</i> button</li>
-  <li>repeat the prceding action, but select the token <i>ARE</i> instead</li>
+    Select <i>"is"</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>repeat the prceding action, but select the token <i>"are"</i> instead</li>
 </ul>
 
 <p>
@@ -327,9 +349,9 @@ To create this parser, perform the following steps.
   <li>repeat the preceding action once more, selecting the reference <i>doubleNumber</i> instead</li>
   <li>right-click the sequence node and select <i>Add -> Token</i> from the context menu. 
     A dialog box with a dropdown list containing known token names is presented. 
-    Select <i>PERCENT</i> from the dropdown list, and click the <i>OK</i> button</li>
-  <li>repeat the preceding action two more times, and add the tokens <i>OF</i> 
-    and <i>GROSS</i> to the sequence node</li>
+    Select <i>"percent"</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>repeat the preceding action two more times, and add the tokens <i>"of"</i> 
+    and <i>"gross"</i> to the sequence node</li>
 </ul>
 
 <p>
@@ -338,7 +360,7 @@ we can deduce that only the result of matching <i>doubleNumber</i> is desired to
 be retained. All other tokens are to be dropped from the AST. You can <i>drop</i> 
 tokens from the sequence's AST by right-clicking each node's icon and selecting 
 <i>drop</i> from the context menu (as shown on the left side of the figure). 
-Remember not to <i>drop</i> the <i>doubleNumber</i> token. 
+Remember not to <i>drop</i> the <i>doubleNumber</i> node. 
 Your finished parser-rule should now look like the right side of Figure-8 below.
 </p>
 
@@ -398,7 +420,7 @@ first. Proceed as follows.
 
 <p>
 <img src="images/NewRegex-days.png" alt="Creating the is and are tokens" /><br />
-<i>Figure-9. Creating the </i>is<i> and </i>are<i> tokens</i>
+<i>Figure-9. Creating the </i>DAYS<i> tokens</i>
 </p>
 
 <p>
@@ -539,7 +561,7 @@ To create this rule proceed as follows.
     A dialog with known parser-rule names is presented. 
     Select <i>deductItem</i> from the dropdown, and click the <i>OK</i> button</li>
   <li>right-click the RepSep node again and select <i>Add -> Token</i> from the context menu. 
-    Select <i>COMMA</i> from the dropdown, and click the <i>OK</i> button</li>
+    Select <i>","</i> from the dropdown, and click the <i>OK</i> button</li>
 </ul>
 
 <p>

@@ -92,16 +92,24 @@ VisualLangLab supports two kinds of <a href="http://en.wikipedia.org/wiki/Lexica
 <h4 id="LiteralTokenCreation">Literal Token Creation</h4>
 
 <p>
-To create a literal token select <i>Tokens -> New literal</i> from the main menu as in Figure-3 below. Enter the literal's name (<i>PLUS</i>), a space, and the pattern (<i>+</i>) into the dialog box and click the <i>OK</i> button. A token's name is used to refer to it from rules, while the pattern describes its contents. All instances of a particular literal token (during the parser's run) have the same fixed content.
+In the following description we create two literal tokens to match the text "+" and "-" respectively.
 </p>
 
 <p>
-Now create another <i>literal</i> token named <i>MINUS</i> with a <i>-</i> pattern (as in the second dialog box in Figure-3). 
+To create the first token select <i>Tokens -> New literal</i> from the main menu (left of Figure-3 below). Enter the literal's pattern (<i>+</i>) into the dialog box presented, and click the <i>OK</i> button. This creates a token with the same name as the pattern (enclosed in quote marks). A token's name is used to refer to it from rules, while the pattern describes its contents.
+</p>
+
+<p>
+Now create the second <i>literal</i> token with <i>-</i> as the pattern (right of Figure-3). 
 </p>
 
 <p>
 <img src="images/literal-creation.png" alt="Creating a literal token" /><br/>
 <em>Figure 3. Creating a literal token</em>
+</p>
+
+<p>
+Having literal tokens named after their text-pattern is often convenient and intuitive (as you will see below). But there are cases where a name different from the pattern is needed. For these cases, you should enter the token's name and its pattern (space-separated) into the dialog.
 </p>
 
 <h4 id="RegexTokenCreation">Regex Token Creation</h4>

@@ -58,11 +58,6 @@ The latest jar file can be downloaded here:
       are used to create or edit the grammar tree.
     </p>
 
-    <p>
-      <b>If you have not done so already, please review the section <i>Some Essential Jargon</i> 
-      near the top of the <a href="UserGuide.html">User Guide</a>.</b>
-    </p>
-
     <h2 id="GrammarTreeIconsAndAnnotations">Grammar Tree Icons and Annotations</h2>
 
     <p>
@@ -75,43 +70,22 @@ The latest jar file can be downloaded here:
 
     <h3 id="Icons">Icons</h3>
 
-    <table border="1" style="border: 1px solid black;">
-      <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Non-terminals</b></td></tr>
-      <tr><td><img src="images/GrammarIconReference.gif" alt="The Reference icon" /></td><td>Reference - invokes another 
-          named parser</td></tr>
-      <tr><td colspan="2"  style="text-align: center; font-weight: bold;">
-          <b>Internal Nodes (Combinator Functions)</b></td></tr>
-      <tr><td><img src="images/GrammarIconChoice.gif" alt="The Choice icon" /></td><td>Choice (or <i>Alternation</i>) - 
-          parent node of 2 or more alternatives of which any one occurs in the input</td></tr>
-      <tr><td><img src="images/GrammarIconSequence.gif" alt="The Sequence icon" /></td><td>Sequence (or <i>Concatenation</i>) - 
-          parent node of 2 or more items which should occur in the order specified</td></tr>
-      <tr><td><img src="images/GrammarIconRepSep.gif" alt="The RepSep icon" /></td><td>RepSep - placeholder for a sequence 
-          of items (specified by first child) alternating with instances of a separator 
-          (specified by second child). For details, see descriptions of the 
-          <code>repsep()</code> and <code>rep1sep()</code> combinators in the Scala API's 
-          <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> class. 
-          Depending on the multiplicity setting (either "*" or "+"), a <i>RepSep</i> behaves like a 
-          <code>repsep()</code> or a <code>rep1sep()</code> respectively. </td></tr>
-      <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Terminals</b></td></tr>
-      <tr><td><img src="images/GrammarIconLiteral.gif" alt="The Literal icon" /></td><td>Literal (or <i>keyword</i> / 
-          <i>reserved word</i>) - a token that matches a specified pattern literally</td></tr>
-      <tr><td><img src="images/GrammarIconRegex.gif" alt="The Regex icon" /></td><td>Regexp (vanilla <i>token</i>) - 
-          a token that matches a specified regular-expression</td></tr>
-      <tr><td><img src="images/GrammarIconWildCard.gif" alt="The WildCard icon" /></td><td>WildCard - 
-          a pseudo-token that matches any other defined token (literal or regex). A WildCard 
-          is useful in implementing strategies for recovering from syntax errors</td></tr>
-      <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Others</b></td></tr>
-      <tr><td><img src="images/GrammarIconRoot.gif" alt="The Root icon" /></td><td>Root - this icon is used for the root 
-          node of every grammar tree (as in Figure-1 above)</td></tr>
-      <tr><td><img src="images/GrammarIconSemPred.gif" alt="The SemPred icon" /></td><td>Semantic predicate - 
-          used as a child of a <i>Sequence</i>, succeeds or fails depending on the run-time value of a 
-          user-provided expression</td></tr>
-      <tr><td colspan="2"  style="text-align: center; font-weight: bold;"><b>Icon overlays</b></td></tr>
-      <tr><td><img src="images/GrammarIconCommitMark.gif" alt="The CommitOverlay icon" /></td><td>Commit - displayed on top 
-          of a parser-rule node that has the <i>commit</i> annotation</td></tr>
-      <tr><td><img src="images/GrammarIconErrorMark.gif" alt="The ErrorOverlay icon" /></td><td>Error: indicates that an error 
-          is present in the associated parser</td></tr>
-    </table>
+<table border="1" style="border: 1px solid black;">
+  <tr><td colspan="2" align="center"><b>Non-terminals</b></td></tr>
+  <tr><td><img src="images/GrammarIconRoot.gif" alt="The Root icon" /></td><td>Root - used for the root node of every grammar tree</td></tr>
+  <tr><td><img src="images/GrammarIconChoice.gif" alt="The Choice icon" /></td><td>Choice - used as the parent of a group of alternatives</td></tr>
+  <tr><td><img src="images/GrammarIconSequence.gif" alt="The Sequence icon" /></td><td>Sequence - used as the parent of a sequence of items</td></tr>
+  <tr><td><img src="images/GrammarIconRepSep.gif" alt="The RepSep icon" /></td><td>RepSep - parent of a sequence of similar items (specified by first child node) separated by text specified by the second child node. For more details, see descriptions of the <code>repsep()</code> and <code>rep1sep()</code> combinators in the Scala API's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> class. </td></tr>
+  <tr><td><img src="images/GrammarIconReference.gif" alt="The Reference icon" /></td><td>Reference - invokes another named parser</td></tr>
+  <tr><td colspan="2" align="center"><b>Terminals</b></td></tr>
+  <tr><td><img src="images/GrammarIconLiteral.gif" alt="The Literal icon" /></td><td>Literal - matches a specified literal token</td></tr>
+  <tr><td><img src="images/GrammarIconRegex.gif" alt="The Regex icon" /></td><td>Regexp - matches a specified regex token</td></tr>
+  <tr><td><img src="images/GrammarIconWildCard.gif" alt="The WildCard icon" /></td><td>Token wildcard - a pseudo-token that matches any other defined token, useful for error handling strategies</td></tr>
+  <tr><td colspan="2" align="center"><b>Utility nodes & Icon overlays</b></td></tr>
+  <tr><td><img src="images/GrammarIconSemPred.gif" alt="The SemPred icon" /></td><td>Semantic predicate - succeeds or fails depending on the run-time value of an expression</td></tr>
+  <tr><td><img src="images/GrammarIconCommitMark.gif" alt="The Commit-mark icon" /></td><td>Commit - displayed on top of a node that has the <i>commit</i> annotation</td></tr>
+  <tr><td><img src="images/GrammarIconErrorMark.gif" alt="The Error-mark icon" /></td><td>Error: indicates an error in the associated node or rule</td></tr>
+</table>
 
     <h3 id="Annotations">Annotations</h3>
 
@@ -278,30 +252,6 @@ Parsers</a> class.
       action-code can be found in <a href="ASTAndActionCode.html">AST and Action Code</a>. 
     </p>
 
-    <h3 id="WhitespaceAndComments">Whitespace and Comments</h3>
-
-    <p>
-      Whitespace and comment speciifications are, strictly speaking, not 
-      part of a specific grammar-tree, but apply uniformly to all the 
-      parser-rules in a parser. Because of this, management of 
-      whitespace and comment specifications are handled via procedures 
-      launched from <i>Globals -> Whitespace</i> and <i>Globals -> Comment</i> 
-      in the main menu as shown in Figure-5 below.
-    </p>
-
-    <p>
-      <img src="images/GrammarWhitespaceComment.png" alt="Editing specifications for whitespace and comments" /><br/>
-      <i>Figure-5. Editing specifications for whitespace and comments</i>
-    </p>
-
-    <p>
-      The figure shows the menus displayed under <i>Globals</i>, and also the 
-      dialog box that is presented when <i>Whitespace</i> is chosen. 
-      The dialog box for <i>Comment</i> is similar, except that the default value 
-      is an empty string. The default value for <i>Whitespace</i>, shown in 
-      Figure-5 above, is the regular expression <i>\\s+</i>.
-    </p>
-
     <h3 id="RecursionMutualLeft">Recursion, Mutual Recursion, and Left Recursion</h3>
 
     <p>
@@ -367,10 +317,9 @@ This is described in <a href="UsingTheAPI.html">Using the API</a>.
       effected by using the <i>Edit</i> menu shown in Figure-7 below.
     </p>
 
-    <p>
+    <p id="figure7">
       <img src="images\GrammarEditMenu.png" alt="The grammar-tree Edit menu" /><br/>
       <i>Figure-7. The grammar-tree Edit menu</i>
-
     </p>
 
     <p>
@@ -382,40 +331,75 @@ This is described in <a href="UsingTheAPI.html">Using the API</a>.
       select <i>File -> Save</i> from the main menu. 
     </p>
 
-    <h2 id="CreatingTokens">Creating Tokens for the Grammar</h2>
+<h2 id="CreatingTokens">Creating Tokens for the Grammar</h2>
 
-    <p>
-      Every parser uses a well-defined set of <i>tokens</i> to represent its 
-      <a href="http://en.wikipedia.org/wiki/Terminal_symbol">terminal symbols</a>. 
-      You create tokens in VisualLangLab by invoking <i>Tokens -> New literal</i> or 
-      <i>Tokens -> New regex</i> from the main menu. Alternately, you can also just 
-      click the toolbar's <i>New literal</i> 
-      (<img src="images/ToolBarButtonNewLiteral.gif" align="center" alt="The New-literal button" />) or <i>New regex</i> 
-      (<img src="images/ToolBarButtonNewRegex.gif" align="center" alt="The New-regex button" />) buttons. 
-      One of the dialogs shown in Figure-8 below is posted when you select these menus 
-      or click the buttons.
-    </p>
+<p>
+Every parser uses a well-defined set of <i>tokens</i> to represent its 
+<a href="http://en.wikipedia.org/wiki/Terminal_symbol">terminal symbols</a>. 
+VisualLangLab's tokens are of two sorts: <i>literal</i>s and <i>regex</i>s.
+A literal token is specified with (and matches) a literal text pattern, 
+while a regex token is specified with a regular-expression pattern, 
+and matches any text that matches that pattern.
+</p>
 
-    <p>
-      <img src="images\GrammarNewLiteralDialog.png" alt="The New-literal dialog" /> 
-      <img src="images\GrammarNewRegexDialog.png" alt="The New-regex dialog" /><br/>
-      <i>Figure-8. Creating a new token</i>
-    </p>
+<h3 id="LiteralTokens">Literal Tokens</h3>
 
-    <p>
-      You should enter a token name and the token's pattern separated by a comma 
-      as shown above. You can also use additional space around the comma for clarity. 
-      The pattern is (obviously!) taken literally in the first case, but treated as a 
-      Java regular expression 
-      <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">pattern</a> 
-      in the second.
-      Regular expressions patterns should be formed as they would be if contained inside a 
-      <code>String</code> in a Java program (hence the two back-slash characters in the 
-      &quot;\\d+&quot; example above). 
-      Token names should ideally have high mnemonic value, and are conventionally in all upper case. 
-      Also, empty strings (as literal patterns), and regular-expressions that match 
-      empty strings are not accepted. 
-    </p>
+<p>
+You create a literal token by invoking <i>Tokens -> New literal</i> from the main menu 
+(or clicking the toolbar's <i>New literal</i> 
+<img src="images/ToolBarButtonNewLiteral.gif" align="center" 
+alt="The New-literal button" /> button), entering the token's literal pattern into the 
+dialog presented (as in Figure-8 below), and clicking the <i>OK</i> button.
+</p>
+
+<p>
+<img src="images\GrammarNewLiteralDialog.png" alt="The New-literal dialog" /><br/> 
+<i>Figure-8. Creating a literal token</i>
+</p>
+
+<p>
+The action depicted in the figure above results in the creation of a literal with 
+the name "+", and matches a literal plus sign. The name is used to refer the token 
+in rules, as seen in <a href="#figure7">Figure-7</a> above.
+</p>
+
+<p>
+The convention of naming literal tokens after their pattern is common, 
+and is supported by all parser-generators that use a script 
+(BNF, EBNF, etc.) to define their grammar. However, you can also choose 
+not to use this default naming convention by providing a different name. 
+To explicitly name a token, you should enter the token's name before its 
+pattern in the dialog. The name and token should be separated by one 
+or more spaces. An explicitly provided name should follow the convention 
+of Java names.
+</p>
+
+<h3 id="RegexTokens">Regex Tokens</h3>
+
+<p>
+You create a regex token by invoking <i>Tokens -> New regex</i> from the main menu 
+(or clicking the toolbar's <i>New regex</i> 
+(<img src="images/ToolBarButtonNewRegex.gif" align="center" alt="The New-regex button" />) button), 
+entering the token's name and pattern into the dialog presented (as in Figure-9 below), 
+and clicking the <i>OK</i> button. Unlike literal tokens, regex tokens must have a 
+user-provided name.
+</p>
+
+<p>
+<img src="images\GrammarNewRegexDialog.png" alt="The New-regex dialog" /><br/>
+<i>Figure-9. Creating a regex token</i>
+</p>
+
+<p>
+You should enter a token name and the token's pattern separated by one or more spaces  
+as shown above. 
+The pattern is treated as a Java regular expression 
+<a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">pattern</a>. 
+Note that the pattern should be written as it would be in a literal  
+<code>String</code> in a Java program (hence the two back-slash characters in the 
+&quot;\\d+&quot; example above). Patterns that match the empty string (e.g. "A*") are not accepted. 
+Token names should ideally have high mnemonic value, and are conventionally in all upper case. 
+</p>
 
     <p>
       Two tokens may obviously not have the same name. 
@@ -439,8 +423,8 @@ and an integer to the token's name as in Figure-9 below.
 
 <p>
 When two or more tokens match the same input, the lexer selects the token with 
-the numerically highest priority. A token without an explicitly 
-defined priority has a priority of 0. So explicitly assigned priority values can be 
+the numerically highest priority. A token without an explicit 
+priority has a priority value of 0. So explicitly assigned priority values can be 
 higher or lower than the default value (positive or negative priority values). 
 Only <i>Regex</i> tokens can have a priority value. 
 </p>
@@ -457,6 +441,10 @@ Only <i>Regex</i> tokens can have a priority value.
       with a text field containing the pattern text. Edit the pattern as needed 
       and click the <i>OK</i> button. 
     </p>
+
+<p>
+Literal tokens with a default name may not be edited as described here. 
+</p>
 
     <h3 id="TokenLibraries">Token Libraries</h3>
 
@@ -509,6 +497,29 @@ Only <i>Regex</i> tokens can have a priority value.
       (_) places it in its own private scope. When the parser tests for such a token, the 
       lexer does not come into play, so other token definitions (in the global scope) are 
       not considered.
+    </p>
+
+    <h3 id="WhitespaceAndComments">Whitespace and Comments</h3>
+
+    <p>
+Management of whitespace and comment specifications are handled via procedures 
+launched from <i>Globals -> Whitespace</i> and <i>Globals -> Comment</i> 
+in the main menu as shown in Figure-5 below.
+    </p>
+
+    <p>
+      <img src="images/GrammarWhitespaceComment.png" alt="Editing specifications for whitespace and comments" /><br/>
+      <i>Figure-5. Editing specifications for whitespace and comments</i>
+    </p>
+
+    <p>
+      The figure shows the menus displayed under <i>Globals</i>, and also the 
+      dialog box that is presented when <i>Whitespace</i> is chosen. 
+      The dialog box for <i>Comment</i> is similar, except that the default value 
+      is an empty string. The default value for <i>Whitespace</i>, shown in 
+      Figure-5 above, is the regular expression <i>\\s+</i>.
+As for regex tokens, the pattern specified for whitespace or comment should be 
+written as though inside a Java literal <code>String</code>.
     </p>
 
   </body>
