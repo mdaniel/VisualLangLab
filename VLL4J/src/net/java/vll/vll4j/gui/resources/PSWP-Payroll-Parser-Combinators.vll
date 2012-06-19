@@ -5,32 +5,32 @@
 <!-- *****************  Do not edit  ***************** -->
 <VLL-Grammar>
   <Tokens>
-    <Literal Name="ARE" Pattern="are" />
-    <Literal Name="COMMA" Pattern="," />
-    <Literal Name="CONTRIBUTIONS" Pattern="contributions" />
-    <Literal Name="CURRENCY" Pattern="currency" />
+    <Literal Name="&quot;,&quot;" Pattern="," />
+    <Literal Name="&quot;are&quot;" Pattern="are" />
+    <Literal Name="&quot;contributions&quot;" Pattern="contributions" />
+    <Literal Name="&quot;currency&quot;" Pattern="currency" />
+    <Literal Name="&quot;deductions&quot;" Pattern="deductions" />
+    <Literal Name="&quot;employee&quot;" Pattern="employee" />
+    <Literal Name="&quot;federal&quot;" Pattern="federal" />
+    <Literal Name="&quot;for&quot;" Pattern="for" />
+    <Literal Name="&quot;fund&quot;" Pattern="fund" />
+    <Literal Name="&quot;gross&quot;" Pattern="gross" />
+    <Literal Name="&quot;in&quot;" Pattern="in" />
+    <Literal Name="&quot;income&quot;" Pattern="income" />
+    <Literal Name="&quot;insurance&quot;" Pattern="insurance" />
+    <Literal Name="&quot;is&quot;" Pattern="is" />
+    <Literal Name="&quot;minus&quot;" Pattern="minus" />
+    <Literal Name="&quot;of&quot;" Pattern="of" />
+    <Literal Name="&quot;paycheck&quot;" Pattern="paycheck" />
+    <Literal Name="&quot;percent&quot;" Pattern="percent" />
+    <Literal Name="&quot;premiums&quot;" Pattern="premiums" />
+    <Literal Name="&quot;retirement&quot;" Pattern="retirement" />
+    <Literal Name="&quot;salary&quot;" Pattern="salary" />
+    <Literal Name="&quot;state&quot;" Pattern="state" />
+    <Literal Name="&quot;tax&quot;" Pattern="tax" />
+    <Literal Name="&quot;{&quot;" Pattern="{" />
+    <Literal Name="&quot;}&quot;" Pattern="}" />
     <Regex Name="DAYS" Pattern="days?" />
-    <Literal Name="DEDUCTIONS" Pattern="deductions" />
-    <Literal Name="EMPLOYEE" Pattern="employee" />
-    <Literal Name="FEDERAL" Pattern="federal" />
-    <Literal Name="FOR" Pattern="for" />
-    <Literal Name="FUND" Pattern="fund" />
-    <Literal Name="GROSS" Pattern="gross" />
-    <Literal Name="IN" Pattern="in" />
-    <Literal Name="INCOME" Pattern="income" />
-    <Literal Name="INSURANCE" Pattern="insurance" />
-    <Literal Name="IS" Pattern="is" />
-    <Literal Name="LCURLY" Pattern="{" />
-    <Literal Name="MINUS" Pattern="minus" />
-    <Literal Name="OF" Pattern="of" />
-    <Literal Name="PAYCHECK" Pattern="paycheck" />
-    <Literal Name="PERCENT" Pattern="percent" />
-    <Literal Name="PREMIUMS" Pattern="premiums" />
-    <Literal Name="RCURLY" Pattern="}" />
-    <Literal Name="RETIREMENT" Pattern="retirement" />
-    <Literal Name="SALARY" Pattern="salary" />
-    <Literal Name="STATE" Pattern="state" />
-    <Literal Name="TAX" Pattern="tax" />
     <Regex Name="WEEKS" Pattern="weeks?" />
     <Regex Name="decimalNumber_" Pattern="(\\d+(\\.\\d*)?|\\d*\\.\\d+)" />
     <Regex Name="floatingPointNumber_" Pattern="-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?" />
@@ -55,9 +55,9 @@
       <Sequence >
         <Reference Ref="toBe" Drop="true" />
         <Reference Ref="doubleNumber" />
-        <Token Ref="IN" Drop="true" />
-        <Token Ref="GROSS" Drop="true" />
-        <Token Ref="CURRENCY" Drop="true" />
+        <Token Ref="&quot;in&quot;" Drop="true" />
+        <Token Ref="&quot;gross&quot;" Drop="true" />
+        <Token Ref="&quot;currency&quot;" Drop="true" />
       </Sequence>
     </Parser>
     <Parser Name="days" >
@@ -65,12 +65,12 @@
     </Parser>
     <Parser Name="deduct" >
       <Sequence >
-        <Token Ref="MINUS" Drop="true" />
-        <Token Ref="DEDUCTIONS" Drop="true" />
-        <Token Ref="FOR" Drop="true" />
-        <Token Ref="LCURLY" Drop="true" />
+        <Token Ref="&quot;minus&quot;" Drop="true" />
+        <Token Ref="&quot;deductions&quot;" Drop="true" />
+        <Token Ref="&quot;for&quot;" Drop="true" />
+        <Token Ref="&quot;{&quot;" Drop="true" />
         <Reference Ref="deductItems" />
-        <Token Ref="RCURLY" Drop="true" />
+        <Token Ref="&quot;}&quot;" Drop="true" />
       </Sequence>
     </Parser>
     <Parser Name="deductAmount" >
@@ -88,7 +88,7 @@
     <Parser Name="deductItems" >
       <RepSep Mult="*" ActionText="function (a) {&#xA;  if (a !== null) {&#xA;    var total = 0;&#xA;    for (var i = 0; i &lt; a.size(); ++i) {&#xA;      total += a.get(i).doubleValue();&#xA;    }&#xA;    return total;&#xA;  }&#xA;}" >
         <Reference Ref="deductItem" />
-        <Token Ref="COMMA" />
+        <Token Ref="&quot;,&quot;" />
       </RepSep>
     </Parser>
     <Parser Name="deductKind" >
@@ -109,9 +109,9 @@
     </Parser>
     <Parser Name="empl" >
       <Sequence >
-        <Token Ref="PAYCHECK" Drop="true" />
-        <Token Ref="FOR" Drop="true" />
-        <Token Ref="EMPLOYEE" Drop="true" />
+        <Token Ref="&quot;paycheck&quot;" Drop="true" />
+        <Token Ref="&quot;for&quot;" Drop="true" />
+        <Token Ref="&quot;employee&quot;" Drop="true" />
         <Reference Ref="employeeName" />
       </Sequence>
     </Parser>
@@ -120,54 +120,51 @@
     </Parser>
     <Parser Name="fedState" >
       <Choice >
-        <Token Ref="FEDERAL" />
-        <Token Ref="STATE" />
+        <Token Ref="&quot;federal&quot;" />
+        <Token Ref="&quot;state&quot;" />
       </Choice>
     </Parser>
     <Parser Name="gross" >
       <Sequence ActionText="function (a) {&#xA;  if (a !== null) {&#xA;    VLL.grossAmount = VLL.salaryForDays(a)&#xA;    return VLL.grossAmount;&#xA;  }&#xA;}" >
-        <Token Ref="IS" Drop="true" />
-        <Token Ref="SALARY" Drop="true" />
-        <Token Ref="FOR" Drop="true" />
+        <Token Ref="&quot;is&quot;" Drop="true" />
+        <Token Ref="&quot;salary&quot;" Drop="true" />
+        <Token Ref="&quot;for&quot;" Drop="true" />
         <Reference Ref="duration" />
       </Sequence>
     </Parser>
     <Parser Name="insurance" >
       <Sequence >
-        <Token Ref="INSURANCE" Drop="true" />
-        <Token Ref="PREMIUMS" Drop="true" />
+        <Token Ref="&quot;insurance&quot;" Drop="true" />
+        <Token Ref="&quot;premiums&quot;" Drop="true" />
       </Sequence>
     </Parser>
     <Parser Name="percentage" >
       <Sequence ActionText="function (arg) {&#xA;  if (arg !== null) {&#xA;    return VLL.grossAmount * (arg / 100);&#xA;  }&#xA;}" >
         <Reference Ref="toBe" Drop="true" />
         <Reference Ref="doubleNumber" />
-        <Token Ref="PERCENT" Drop="true" />
-        <Token Ref="OF" Drop="true" />
-        <Token Ref="GROSS" Drop="true" />
+        <Token Ref="&quot;percent&quot;" Drop="true" />
+        <Token Ref="&quot;of&quot;" Drop="true" />
+        <Token Ref="&quot;gross&quot;" Drop="true" />
       </Sequence>
     </Parser>
     <Parser Name="retirement" >
       <Sequence >
-        <Token Ref="RETIREMENT" Drop="true" />
-        <Token Ref="FUND" Drop="true" />
-        <Token Ref="CONTRIBUTIONS" Drop="true" />
+        <Token Ref="&quot;retirement&quot;" Drop="true" />
+        <Token Ref="&quot;fund&quot;" Drop="true" />
+        <Token Ref="&quot;contributions&quot;" Drop="true" />
       </Sequence>
     </Parser>
     <Parser Name="tax" >
       <Sequence >
         <Reference Ref="fedState" Drop="true" />
-        <Token Ref="INCOME" Drop="true" />
-        <Token Ref="TAX" Drop="true" />
+        <Token Ref="&quot;income&quot;" Drop="true" />
+        <Token Ref="&quot;tax&quot;" Drop="true" />
       </Sequence>
-    </Parser>
-    <Parser Name="testNow" >
-      <Reference Ref="amount" />
     </Parser>
     <Parser Name="toBe" >
       <Choice >
-        <Token Ref="IS" />
-        <Token Ref="ARE" />
+        <Token Ref="&quot;is&quot;" />
+        <Token Ref="&quot;are&quot;" />
       </Choice>
     </Parser>
     <Parser Name="weekDays" >

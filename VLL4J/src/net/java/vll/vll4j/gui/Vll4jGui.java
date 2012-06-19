@@ -203,12 +203,15 @@ public class Vll4jGui extends JFrame {
             "to download this program, please read the updated version of <br/>" +
             "the article at the following link: <br/><br/>" +
             "http://vll.java.net/GrammarWithoutTears2/GrammarWithoutTears2.html<br/><br/>" +
-            "The current version of VisualLangLab is written in Java, and <br/> " +
-            "does not support actions written in Scala (as described in the<br/>" +
+            "The current version of VisualLangLab (this program) does not <br/> " +
+            "support actions written in Scala (as described in the<br/>" +
             "original article). <br/><br/>" +
             "A version of this program without this popup notice can be <br/>" +
             "downloaded from the following link: <br/><br/>" +
             "http://java.net/projects/vll/downloads/download/VLL4J.jar<br/><br/>" +
+            "The original Scala version of VisualLangLab (<u>only</u> for those who <br/>" +
+            "must write actions in Scala) is available at the following link:<br/><br/>" +
+            "http://java.net/projects/vll/downloads/download/VLLS-Scala.jar<br/><br/>" +
             "For more information go to http://vll.java.net/";
         URL is = ClassLoader.getSystemClassLoader().getResource("vlls.txt");
         if (is != null)
@@ -264,6 +267,6 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    public final String version = "10.35";
+    public final String version = "10.36";
     private ListCellRenderer theCellRenderer = new RendererRuleComboBox(this);
 }

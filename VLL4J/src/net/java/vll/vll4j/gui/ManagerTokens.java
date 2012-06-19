@@ -21,6 +21,8 @@
 package net.java.vll.vll4j.gui;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,40 +39,45 @@ public class ManagerTokens {
     
     private String[] getTokenInfo(boolean isRegex) {
         String title = String.format("New %s", isRegex ? "regex" : "literal");
-        Pattern inPattern = Pattern.compile(isRegex ? "([a-zA-Z][a-zA-Z0-9$_]*(?::\\-?\\d+)?)\\s+(.+)" : 
-            "([a-zA-Z][a-zA-Z0-9$_]*)\\s+(.+)");
-        String input = JOptionPane.showInputDialog(gui, "Enter name, space(s), pattern", title, JOptionPane.QUESTION_MESSAGE);
-        if (input == null)
+        Pattern inPattern = Pattern.compile(isRegex ? "([a-zA-Z][a-zA-Z0-9$_]*(?::\\-?\\d+)?)\\s+(.+)" :
+            "([^\\s]+)|([a-zA-Z][a-zA-Z0-9$_]*)\\s+(.+)");
+        String input = JOptionPane.showInputDialog(gui, (isRegex ? "Enter: name, space(s), pattern" :
+                "Enter: name (optional), space, pattern"), title, JOptionPane.QUESTION_MESSAGE);
+        if (input == null || input.trim().length() == 0)
             return null;
-        Matcher m = inPattern.matcher(input);
+        Matcher m = inPattern.matcher(input.trim());
         if (!m.matches()) {
             JOptionPane.showMessageDialog(gui, "Bad format\nExpected name, space(s), pattern", 
                     "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        String name = m.group(1);
-        if (gui.theForest.tokenBank.containsKey(name)) {
+        String tokenName = isRegex ? m.group(1) : (m.group(1) == null ? m.group(2) : String.format("\"%s\"", m.group(0)));
+        if (gui.theForest.tokenBank.containsKey(tokenName)) {
             JOptionPane.showMessageDialog(gui, "Name conflict\nA token with this name already exists", 
                     "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
+        String tokenPattern = isRegex ? m.group(2) : (m.group(1) == null ? m.group(3) : m.group(0));
         boolean ok = true;
         for (Map.Entry<String,String> e: gui.theForest.tokenBank.entrySet()) {
-            if (e.getValue().substring(1).equals(m.group(2))) {
-                JOptionPane.showMessageDialog(gui, String.format("Pattern conflict\nToken '%s' uses the same pattern", e.getKey()), "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
+            if (e.getValue().substring(1).equals(tokenPattern)) {
+                JOptionPane.showMessageDialog(gui, String.format("Pattern conflict\nToken '%s' uses the same pattern",
+                        e.getKey()), "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
                 ok = false;
             }
         }
-        if (isRegex && (!m.group(2).equals("\\\\z") && "".matches(Utils.unEscape(m.group(2))))) {
-            JOptionPane.showMessageDialog(gui, "Bad pattern\nPattern matches empty string", "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
+        if (isRegex && (!tokenPattern.equals("\\\\z") && "".matches(Utils.unEscape(tokenPattern)))) {
+            JOptionPane.showMessageDialog(gui, "Bad pattern\nPattern matches empty string", "WARNING - " +
+                    title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        if (isRegex && m.group(2).equals("\\\\z") && !name.endsWith("_")) {
-            JOptionPane.showMessageDialog(gui, "Bad name\nEOF must be local token", "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
+        if (isRegex && tokenPattern.equals("\\\\z") && !tokenName.endsWith("_")) {
+            JOptionPane.showMessageDialog(gui, "Bad name\nEOF must be local token", "WARNING - " +
+                    title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        String pattern = (isRegex ? "R" : "L") + m.group(2);
-        return ok ? new String[] {name, pattern} : null;
+        String pattern = (isRegex ? "R" : "L") + tokenPattern;
+        return ok ? new String[] {tokenName, pattern} : null;
     }
     
     private String[] findTokenInRules(String token) {
@@ -145,11 +152,21 @@ public class ManagerTokens {
     Action editTokenAction = new AbstractAction("Edit token", Resources.edit16) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Object names[] = gui.theForest.tokenBank.keySet().toArray();
-            if (names.length == 0) {
-                JOptionPane.showMessageDialog(gui, "No tokens defined yet", "WARNING - Edit token", JOptionPane.WARNING_MESSAGE);
+            String names[] = gui.theForest.tokenBank.keySet().toArray(new String[gui.theForest.tokenBank.size()]);
+            List<String> editableNames = new ArrayList<String>();
+            for (String key: names) {
+                String val = gui.theForest.tokenBank.get(key);
+//System.out.printf("key: %s, val: %s%n", key, val);
+                if (val.length() == key.length() - 1 && val.startsWith("L") &&
+                        val.substring(1).equals(key.substring(1, key.length() - 1)))
+                    continue;
+                editableNames.add(key);
+            }
+            if (editableNames.size() == 0) {
+                JOptionPane.showMessageDialog(gui, "No editable tokens defined yet", "WARNING - Edit token", JOptionPane.WARNING_MESSAGE);
                 return;
             }
+            names = editableNames.toArray(new String[editableNames.size()]);
             String token = (String)JOptionPane.showInputDialog(gui, "Select token to edit", "Edit token", JOptionPane.QUESTION_MESSAGE, 
                 null, names, names[0]);
             if (token == null) 

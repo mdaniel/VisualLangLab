@@ -79,7 +79,7 @@ public class VisitorMenuAdjustment extends VisitorBase {
         commonSetting(n);
         theMenu.addMenu.setEnabled(false);
         theMenu.pasteMenuItem.setEnabled(false);
-        theMenu.goToItem.setEnabled(true);
+        theMenu.goToItem.setEnabled(false);
         return null;
     }
     

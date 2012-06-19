@@ -63,7 +63,7 @@ public class VisitorXmlGeneration extends VisitorBase {
     @Override
     public Object visitLiteral(NodeLiteral n) {
         space();
-        printWriter.printf("<Token Ref=\"%s\" ", n.literalName);
+        printWriter.printf("<Token Ref=\"%s\" ", Utils.encode4xml(n.literalName));
         commonAttributes(n, true);
         return null;
     }

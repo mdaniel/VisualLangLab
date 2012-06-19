@@ -88,7 +88,10 @@ public class PopupMenuTree extends JPopupMenu {
         add(new JSeparator());
         traceMenuItem = new JCheckBoxMenuItem(treePanel.traceAction);
         add(traceMenuItem);
-    }
+/*        add(new JSeparator());
+        firstsMenuItem = new JMenuItem(treePanel.firstsAction);
+        add(firstsMenuItem);
+*/    }
     
     void adjustMenu() {
         NodeBase selectedNode = treePanel.selectedNode;
@@ -117,5 +120,5 @@ public class PopupMenuTree extends JPopupMenu {
     JMenuItem errorMessageItem;
     JMenuItem descriptionMenuItem;
     JMenuItem traceMenuItem;
-    
+    JMenuItem firstsMenuItem;
 }

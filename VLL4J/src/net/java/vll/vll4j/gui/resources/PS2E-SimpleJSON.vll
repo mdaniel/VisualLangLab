@@ -5,15 +5,15 @@
 <!-- *****************  Do not edit  ***************** -->
 <VLL-Grammar>
   <Tokens>
-    <Literal Name="COLON" Pattern=":" />
-    <Literal Name="COMMA" Pattern="," />
-    <Literal Name="FALSE" Pattern="false" />
-    <Literal Name="LBKT" Pattern="[" />
-    <Literal Name="LCURLY" Pattern="{" />
-    <Literal Name="NULL" Pattern="null" />
-    <Literal Name="RBKT" Pattern="]" />
-    <Literal Name="RCURLY" Pattern="}" />
-    <Literal Name="TRUE" Pattern="true" />
+    <Literal Name="&quot;,&quot;" Pattern="," />
+    <Literal Name="&quot;:&quot;" Pattern=":" />
+    <Literal Name="&quot;[&quot;" Pattern="[" />
+    <Literal Name="&quot;]&quot;" Pattern="]" />
+    <Literal Name="&quot;false&quot;" Pattern="false" />
+    <Literal Name="&quot;null&quot;" Pattern="null" />
+    <Literal Name="&quot;true&quot;" Pattern="true" />
+    <Literal Name="&quot;{&quot;" Pattern="{" />
+    <Literal Name="&quot;}&quot;" Pattern="}" />
     <Regex Name="floatingPointNumber" Pattern="\\-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?" />
     <Regex Name="stringLiteral" Pattern="\&quot;[^&quot;]*\&quot;" />
   </Tokens>
@@ -26,36 +26,36 @@
         <Reference Ref="arr" />
         <Token Ref="stringLiteral" />
         <Token Ref="floatingPointNumber" />
-        <Token Ref="NULL" />
-        <Token Ref="TRUE" />
-        <Token Ref="FALSE" />
+        <Token Ref="&quot;null&quot;" />
+        <Token Ref="&quot;true&quot;" />
+        <Token Ref="&quot;false&quot;" />
       </Choice>
     </Parser>
     <Parser Name="arr" >
       <Sequence Description="A JSON array&apos;s structure " >
-        <Token Ref="LBKT" />
+        <Token Ref="&quot;[&quot;" />
         <RepSep Mult="*" >
           <Reference Ref="Value" />
-          <Token Ref="COMMA" />
+          <Token Ref="&quot;,&quot;" />
         </RepSep>
-        <Token Ref="RBKT" />
+        <Token Ref="&quot;]&quot;" />
       </Sequence>
     </Parser>
     <Parser Name="member" >
       <Sequence Description="A JSON member&apos;s structure" >
         <Token Ref="stringLiteral" />
-        <Token Ref="COLON" />
+        <Token Ref="&quot;:&quot;" />
         <Reference Ref="Value" />
       </Sequence>
     </Parser>
     <Parser Name="obj" >
       <Sequence Description="A JSON object&apos;s structure" >
-        <Token Ref="LCURLY" />
+        <Token Ref="&quot;{&quot;" />
         <RepSep Mult="*" >
           <Reference Ref="member" />
-          <Token Ref="COMMA" />
+          <Token Ref="&quot;,&quot;" />
         </RepSep>
-        <Token Ref="RCURLY" />
+        <Token Ref="&quot;}&quot;" />
       </Sequence>
     </Parser>
   </Parsers>

@@ -23,6 +23,7 @@ package net.java.vll.vll4j.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.util.Set;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -359,7 +360,29 @@ public class PanelRuleTree extends JPanel implements TreeSelectionListener {
             resetNodeDisplay(selectedNode);
         }
     };
-    
+
+    Action firstsAction = new AbstractAction("First-k-sets") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            VisitorFirstSets vfs = new VisitorFirstSets(gui.theForest);
+            Set<String>[] firsts = (Set<String>[])selectedNode.accept(vfs);
+            StringBuilder sb = new StringBuilder();
+            for (Set<String> ss: firsts) {
+                if (sb.length() > 0)
+                    sb.append(",\n");
+                sb.append('{');
+                for (String s: ss) {
+                    if (sb.charAt(sb.length() - 1) != '{')
+                        sb.append(", ");
+                    sb.append(s.equals("") ? "\u03B5" : s);
+                }
+                sb.append("}");
+            }
+            JOptionPane.showMessageDialog(gui, sb.toString(), "First-k-sets",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
+    };
+
     @Override
     public void valueChanged(TreeSelectionEvent e) {
         selectedNode = (NodeBase) e.getPath().getLastPathComponent();

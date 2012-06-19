@@ -5,12 +5,12 @@
 <!-- *****************  Do not edit  ***************** -->
 <VLL-Grammar>
   <Tokens>
-    <Literal Name="DIV" Pattern="/" />
-    <Literal Name="LPAREN" Pattern="(" />
-    <Literal Name="MINUS" Pattern="-" />
-    <Literal Name="MULT" Pattern="*" />
-    <Literal Name="PLUS" Pattern="+" />
-    <Literal Name="RPAREN" Pattern=")" />
+    <Literal Name="&quot;(&quot;" Pattern="(" />
+    <Literal Name="&quot;)&quot;" Pattern=")" />
+    <Literal Name="&quot;*&quot;" Pattern="*" />
+    <Literal Name="&quot;+&quot;" Pattern="+" />
+    <Literal Name="&quot;-&quot;" Pattern="-" />
+    <Literal Name="&quot;/&quot;" Pattern="/" />
     <Regex Name="floatingPointNumber" Pattern="(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?" />
   </Tokens>
   <Whitespace>\\s+</Whitespace>
@@ -21,11 +21,11 @@
         <Reference Ref="term" />
         <Choice Mult="*" >
           <Sequence >
-            <Token Ref="PLUS" Drop="true" />
+            <Token Ref="&quot;+&quot;" Drop="true" />
             <Reference Ref="term" />
           </Sequence>
           <Sequence >
-            <Token Ref="MINUS" Drop="true" />
+            <Token Ref="&quot;-&quot;" Drop="true" />
             <Reference Ref="term" />
           </Sequence>
         </Choice>
@@ -38,9 +38,9 @@
       <Choice ActionText="function (arg) {&#xA;  if (!arg) {&#xA;    return;&#xA;  }&#xA;  switch (arg[0].intValue()) {&#xA;    case 0: return parseFloat(arg[1]); &#xA;    case 1: return arg[1].doubleValue(); &#xA;  } &#xA;}" >
         <Token Ref="floatingPointNumber" />
         <Sequence >
-          <Token Ref="LPAREN" Drop="true" />
+          <Token Ref="&quot;(&quot;" Drop="true" />
           <Reference Ref="Expr" />
-          <Token Ref="RPAREN" Drop="true" />
+          <Token Ref="&quot;)&quot;" Drop="true" />
         </Sequence>
       </Choice>
     </Parser>
@@ -49,11 +49,11 @@
         <Reference Ref="factor" />
         <Choice Mult="*" >
           <Sequence >
-            <Token Ref="MULT" Drop="true" />
+            <Token Ref="&quot;*&quot;" Drop="true" />
             <Reference Ref="factor" />
           </Sequence>
           <Sequence >
-            <Token Ref="DIV" Drop="true" />
+            <Token Ref="&quot;/&quot;" Drop="true" />
             <Reference Ref="factor" />
           </Sequence>
         </Choice>

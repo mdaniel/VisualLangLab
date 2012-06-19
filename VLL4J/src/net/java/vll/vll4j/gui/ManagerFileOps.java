@@ -132,7 +132,7 @@ public class ManagerFileOps {
         for (Map.Entry<String, String> me : gui.theForest.tokenBank.entrySet()) {
             String value = me.getValue();
             if (value.startsWith("L")) {
-                pw.printf("    <Literal Name=\"%s\" Pattern=\"%s\" />%n", me.getKey(),
+                pw.printf("    <Literal Name=\"%s\" Pattern=\"%s\" />%n", Utils.encode4xml(me.getKey()),
                         Utils.encode4xml(value.substring(1)));
             } else {
                 pw.printf("    <Regex Name=\"%s\" Pattern=\"%s\" />%n", me.getKey(),
