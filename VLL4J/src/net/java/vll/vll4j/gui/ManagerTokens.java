@@ -39,10 +39,10 @@ public class ManagerTokens {
     
     private String[] getTokenInfo(boolean isRegex) {
         String title = String.format("New %s", isRegex ? "regex" : "literal");
-        Pattern inPattern = Pattern.compile(isRegex ? "([a-zA-Z][a-zA-Z0-9$_]*(?::\\-?\\d+)?)\\s+(.+)" :
+        Pattern inPattern = Pattern.compile(isRegex ? "([^\\s]+)|([a-zA-Z][a-zA-Z0-9$_]*(?::\\-?\\d+)?)\\s+(.+)" :
             "([^\\s]+)|([a-zA-Z][a-zA-Z0-9$_]*)\\s+(.+)");
-        String input = JOptionPane.showInputDialog(gui, (isRegex ? "Enter: name, space(s), pattern" :
-                "Enter: name (optional), space, pattern"), title, JOptionPane.QUESTION_MESSAGE);
+        String input = JOptionPane.showInputDialog(gui, "Enter: name & spaces (optional), pattern",
+                title, JOptionPane.QUESTION_MESSAGE);
         if (input == null || input.trim().length() == 0)
             return null;
         Matcher m = inPattern.matcher(input.trim());
@@ -51,13 +51,13 @@ public class ManagerTokens {
                     "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        String tokenName = isRegex ? m.group(1) : (m.group(1) == null ? m.group(2) : String.format("\"%s\"", m.group(0)));
+        String tokenName = (m.group(1) == null) ? m.group(2) : String.format("\"%s\"", m.group(0));
         if (gui.theForest.tokenBank.containsKey(tokenName)) {
             JOptionPane.showMessageDialog(gui, "Name conflict\nA token with this name already exists", 
                     "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        String tokenPattern = isRegex ? m.group(2) : (m.group(1) == null ? m.group(3) : m.group(0));
+        String tokenPattern = (m.group(1) == null) ? m.group(3) : m.group(0);
         boolean ok = true;
         for (Map.Entry<String,String> e: gui.theForest.tokenBank.entrySet()) {
             if (e.getValue().substring(1).equals(tokenPattern)) {
@@ -157,7 +157,7 @@ public class ManagerTokens {
             for (String key: names) {
                 String val = gui.theForest.tokenBank.get(key);
 //System.out.printf("key: %s, val: %s%n", key, val);
-                if (val.length() == key.length() - 1 && val.startsWith("L") &&
+                if (val.length() == key.length() - 1 &&
                         val.substring(1).equals(key.substring(1, key.length() - 1)))
                     continue;
                 editableNames.add(key);

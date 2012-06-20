@@ -1,5 +1,7 @@
+10.37 2012-JUN-20
+  Natural names for regex patterns (e.g. \\d+ is named "\\d+");
 10.36 2012-JUN-16
-  Natural names for token patterns (e.g. + is named "+");
+  Natural names for token (literal) patterns (e.g. + is named "+");
 10.35 2012-MAY-24
   Support deployment of Java and placeholder for (old) Scala version
 10.34 2012-APR-17
