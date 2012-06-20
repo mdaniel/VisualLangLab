@@ -66,32 +66,6 @@ A simpler tutorial is available at
 VisualLangLab - Grammar without Tears</a>.
 </p>
 
-<h3 id="EssentialJargon">Essential Jargon</h3>
-
-<ul style="list-style-type: disc;">
-  <li><i>parser</i> (with lower-case inital <i>p</i>) - in <a href="http://vll.java.net/">VisualLangLab</a> documentation, 
-    a parser is an <i>entire</i> program or function for 
-    <a href="http://en.wikipedia.org/wiki/Parsing#Parser" target="_blank">parsing and processing input</a> 
-     in a certain format. </li>
-  <li><i>parser-rule</i> - the 
-    <a href="http://en.wikipedia.org/wiki/Formation_rule" target="_blank">simpler units</a> 
-    into which a parser is normally broken down. 
-    In a Scala combinator-based parser, each <code>def ... : Parser[...] = ...</code> 
-    is a parser-rule. Parser-rule and grammar-tree are generally synonymous terms.</li>
-  <li><i>grammar-tree</i> - the visual tree used to represent each parser-rule 
-    in <a href="http://vll.java.net/">VisualLangLab</a>. Grammar-tree and 
-    parser-rule are generally synonymous terms.</li>
-  <li><i>Parser</i> (with upper-case inital <i>P</i>) - a 
-    <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html" target="_blank">Scala type</a> used to 
-    implement <i>parser-rule</i>s as well as the component nodes of parser-rules</li>
-</ul>
-
-<p>
-Version 10 is written in Java, and does not use Scala parser combinators. However, it 
-still uses Java translations of some elements of the <code>scala.util.parsing.combinator</code> 
-package. In that sense, VisualLangLab is still a <i>Scala combinator-based parser</i>.
-</p>
-
 <h2>Download and Run VisualLangLab</h2>
 
 <p>
