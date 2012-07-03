@@ -125,7 +125,7 @@ The purpose and use of the entities highlighted above is explained in the table 
     anything about these Scala concepts at all. The API user will only need the features 
     discussed below:<br/>
 
-<ul style="list-style-type: disc;">
+<ul>
   <li>It provides a set of utility (<code>static</code>) methods, like <code>fromFile()</code> used above, to load a grammar from various types of sources (File, String, etc.). These functions return a <code>net.java.vll.vll4j.api.Vll4j</code></li>
   <li>The method <code>getParserFor(java.lang.String)</code> is used to fetch a parser for a named rule. The above code uses it to fetch the parser for the rule <i>Expr</i>. This function returns a <code>net.java.vll.vll4j.api.Vll4j.Parser</code> explained further below</li>
   <li>The method <code>parseAll(Vll4j.Parser, java.lang.String)</code> is the API user's primary workhorse. The above code uses it to <i>apply</i> the parser for <i>Expr</i> to the string "(3 + 5) * (8 - 4)". There are also other overloaded versions of this method that take their input from different types of sources (File, JTextComponent, etc.). This function returns a <code>net.java.vll.vll4j.api.Vll4j.ParseResult</code> explained further below</li>
@@ -147,7 +147,7 @@ For all practical purposes, this class is the entry point to all of the API's ca
     <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$ParseResult.html">ParseResult</a>. 
     The API user only needs to be aware of the following methods:<br/>
 
-<ul style="list-style-type: disc;">
+<ul>
   <li>The method <code>successful()</code> tests the result of parsing. It returns a <code>boolean</code> value</li>
   <li>The method <code>get()</code> is used to extract the AST in case parsing succeeded. It returns and <code>Object</code> reference to the AST</li>
 </ul>
@@ -412,6 +412,49 @@ public class PS2EArithExpr {
     }
 
 }</code></pre>
+
+<h3>A Clojure Client</h3>
+
+<p>
+A Clojure version of the same program is given below. 
+</p>
+
+<pre><code>(letfn [
+  (evalFactorAST [ast]
+    (let [[p v] ast]
+      (if (= (.intValue p) 0) 
+        (Float/parseFloat v)
+        (evalExprAST v))))
+
+  (evalTermAST [ast]
+    (let [[t list] ast]
+      (loop [term (evalFactorAST t), series list] 
+        (if (seq series)
+          (let [[p v] (first series)] 
+            (if (= (.intValue p) 0)
+              (recur (* term (evalFactorAST v)) (rest series))
+              (recur (/ term (evalFactorAST v)) (rest series))))
+          term))))
+
+  (evalExprAST [ast]
+    (let [[t list] ast]
+      (loop [expr (evalTermAST t), series list] 
+        (if (seq series)
+          (let [[p v] (first series)] 
+            (if (= (.intValue p) 0)
+              (recur (+ expr (evalTermAST v)) (rest series))
+              (recur (- expr (evalTermAST v)) (rest series))))
+          expr))))]
+
+(def vll (net.java.vll.vll4j.api.Vll4j/fromFile (java.io.File. "PS2E-ArithExpr.vll")))
+(def exprParser (.getParserFor vll "Expr"))
+(def parseResult (.parseAll vll exprParser "(3 + 5) * (8 - 4)"))
+(if (.successful parseResult)
+  (do
+    (def ast (.get parseResult))
+    (def result (evalExprAST ast))
+    (println result))
+  (println parseResult)))</code></pre>
 
 <h2 id="CodeWithEmbeddedGrammar">Code with Embedded Grammar</h2>
 
