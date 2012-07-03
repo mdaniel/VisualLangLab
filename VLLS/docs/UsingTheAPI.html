@@ -23,11 +23,10 @@ The latest jar file can be downloaded here:
 <p>
 The VisualLangLab API is used by client programs to load a grammar file (created in 
 and saved by the <a href="TheGUI.html">VisualLangLab GUI</a>), and create a parser from it. 
-The API is written in Java, and may be used by client programs in any JVM language. 
+The API is written in Java, and may be used by client programs in <i>any</i> JVM language. 
 The API is quite small and simple, and is best understood in the 
 context of a real example. Using the API requires a good knowledge of the 
-<a href="ASTAndActionCode.html">AST Structure</a> and 
-<a href="ASTAndActionCode.html#ActionCodeDesign">action-code design</a>.
+<a href="ASTAndActionCode.html">AST Structure</a>.
 </p>
 
 <p>
@@ -40,8 +39,8 @@ Using an AST</a>.
 <h2 id="AnArithmeticExpressionParser">An Arithmetic Expression Parser</h2>
 
 <p>
-The following example uses the API to load the <i>PS2E-ArithExpr</i> sample grammar 
-(see <a href="SampleGrammars.html">Sample Grammars</a>) into a client Java program. 
+The following example uses the API to load and use the <i>PS2E-ArithExpr</i> sample grammar 
+(see <a href="SampleGrammars.html">Sample Grammars</a>) from a Java program. 
 The grammar's top-level rule <i>Expr</i> is then fetched and <i>applied</i> 
 to the string "(3 + 5) / (8 - 4)" to obtain an AST which is then interpreted 
 to obtain the value of the expression. 
@@ -50,12 +49,13 @@ For better clarity, the program is organized as 4 functions with distinct roles:
 
 <ul style="list-style-type: disc;">
 
-<li>The <code>main()</code> 
-function loads the grammar from a file, fetches the top-level rule, and <i>applies</i> the 
-parser to the string. It checks the result, and in case of success passes the AST 
-to the function <code>evalExprAST()</code></li>
+<li>The <code>main()</code> function loads the grammar from a file, 
+fetches the top-level rule's parser, and <i>applies</i> it 
+to the string "(3 + 5) / (8 - 4)". 
+It checks the result, and in case of success passes the resulting AST 
+to the function <code>evalExprAST()</code> for interpretation.</li>
 
-<li>The function <code>evalExprAST()</code> interprets the complete expression's AST</li>
+<li>The function <code>evalExprAST()</code> interprets the complete AST using the other functions to help interpret it's subsidiary parts</li>
 
 <li>The function <code>evalTermAST()</code> interprets the AST produced by the 
 <i>term</i> rule</li>
@@ -76,7 +76,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import <span style="color:red; font-weight: bold">vll4j.Vll4j</span>;
+import <span style="color:red; font-weight: bold">net.java.vll.vll4j.api.Vll4j</span>;
 
 public static void main(String[] args) throws 
     ParserConfigurationException, SAXException, IOException {
@@ -121,48 +121,46 @@ The purpose and use of the entities highlighted above is explained in the table 
     VisualLangLab's implementation of <code>RegexParsers</code> includes a simple 
     builtin lexical analyzer with sophisticated (although somewhat slow) 
     lexing capabilities far superior to those of the <code>literal()</code> and <code>regex()</code> 
-    methods of <code>RegexParsers</code>. However, the API user does not have to know 
+    methods of <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>. However, the API user does not have to know 
     anything about these Scala concepts at all. The API user will only need the features 
     discussed below:<br/>
-    It also provides a set of utility (<code>static</code>) methods, 
-    like <code>Vll4j fromFile(File)</code> used above, 
-    to load a grammar from various types of sources (File, String, etc.).<br/>
-    The method <code>Vll4j.Parser getParserFor(String)</code> is used to fetch a parser for 
-    a named rule. The above code uses it to fetch the parser for the rule <i>Expr</i><br/>
-    The method <code>Vll4j.ParseResult parseAll(Vll4j.Parser, String)</code> is the API 
-    user's primary workhorse. 
-    The above code uses it to <i>apply</i> the parser for <i>Expr</i> to the string. 
-    There are also other overloaded versions of this method that obtain input 
-    from different types of sources (File, JTextComponent, etc.).
+
+<ul>
+  <li>It provides a set of utility (<code>static</code>) methods, like <code>fromFile()</code> used above, to load a grammar from various types of sources (File, String, etc.). These functions return a <code>net.java.vll.vll4j.api.Vll4j</code></li>
+  <li>The method <code>getParserFor(java.lang.String)</code> is used to fetch a parser for a named rule. The above code uses it to fetch the parser for the rule <i>Expr</i>. This function returns a <code>net.java.vll.vll4j.api.Vll4j.Parser</code> explained further below</li>
+  <li>The method <code>parseAll(Vll4j.Parser, java.lang.String)</code> is the API user's primary workhorse. The above code uses it to <i>apply</i> the parser for <i>Expr</i> to the string "(3 + 5) * (8 - 4)". There are also other overloaded versions of this method that take their input from different types of sources (File, JTextComponent, etc.). This function returns a <code>net.java.vll.vll4j.api.Vll4j.ParseResult</code> explained further below</li>
+</ul>
+
+For all practical purposes, this class is the entry point to all of the API's capabilities.
   </td>
 </tr><tr>
   <td align="center" style="padding: 0px;">Vll4j.Parser</td>
   <td style="padding: 0px;">
     A class with capabilities like those of Scala's 
     <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$Parser.html">Parser</a>. 
-    The API user may need to be aware of its <code>Vll4j.ParseResult apply(Reader)</code> method, 
-    although responsibility for invoking it is usually relegated to <code>Vll4j</code>'s 
-    <code>parseAll()</code> method (as in the code above). 
-    Most API users may never need to use any of its methods.
+    An instance of this class can be used to parse any input by invoking its <code>apply(Reader)</code> method, but responsibility for invoking it is usually relegated to the <code>parseAll()</code> method (as in the <i>PS2E-ArithExpr</i> example code above). API users may never need to use any of its other methods.
   </td>
 </tr><tr>
   <td align="center" style="padding: 0px;">Vll4j.ParseResult</td>
   <td style="padding: 0px;">
     A class with capabilities like those of Scala's 
     <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers$ParseResult.html">ParseResult</a>. 
-    The API user only needs to be aware of the methods used in the code above<br/>
-    The method <code>boolean successful()</code> tests the result of parsing<br/>
-    The method <code>Object get()</code> is used to extract the AST in case parsing succeeded.
+    The API user only needs to be aware of the following methods:<br/>
+
+<ul>
+  <li>The method <code>successful()</code> tests the result of parsing. It returns a <code>boolean</code> value</li>
+  <li>The method <code>get()</code> is used to extract the AST in case parsing succeeded. It returns and <code>Object</code> reference to the AST</li>
+</ul>
   </td>
 </tr>
 </tbody></table>
 
 <p>
-Most API users will never need to use other features of the classes descrbed above. 
+Most API users will never need to use other features of the classes described above. 
 More detailed information about the design of these classes can be obtained from 
 the hyperlinks (to the Scala API) given above. 
 The Java source-code of these classes (and other utility classes like <code>Reader</code>) 
-can be found in the <code>vll4j.core</code> package.  
+can be found in the <code>net.java.vll.vll4j.api.Vll4j.api</code> and  <code>net.java.vll.vll4j.api.Vll4j.combinator</code> packages.  
 </p>
 
 <p>
@@ -193,18 +191,18 @@ understand the logic better.
 )</code></pre>
 </td>
 <td style="padding: 0px;">
-<pre><code>01 static Float evalExprAST(Object ast) {
-02     Object[] array = (Object[]) ast;
-03     Float term = evalTermAST(array[0]);
-04     for (Object pair[] : (List&lt;Object[]&gt;) array[1]) {
-05         if (pair[0].equals(0)) {
-06             term += evalTermAST(pair[1]);
-07         } else if (pair[0].equals(1)) {
-08             term -= evalTermAST(pair[1]);
-09         }
-10     }
-11     return term;
-12 }</code></pre>
+<pre><code>/*01*/ static Float evalExprAST(Object ast) {
+/*02*/     Object[] array = (Object[]) ast;
+/*03*/     Float term = evalTermAST(array[0]);
+/*04*/     for (Object pair[] : (List&lt;Object[]&gt;) array[1]) {
+/*05*/         if (pair[0].equals(0)) {
+/*06*/             term += evalTermAST(pair[1]);
+/*07*/         } else if (pair[0].equals(1)) {
+/*08*/             term -= evalTermAST(pair[1]);
+/*09*/         }
+/*10*/     }
+/*11*/     return term;
+/*12*/ }</code></pre>
 </td>
 </tr></table>
 
@@ -248,18 +246,18 @@ understand the logic better.
 )</code></pre>
 </td>
 <td style="padding: 0px;">
-<pre><code>01 static Float evalTermAST(Object ast) {
-02     Object[] array = (Object[]) ast;
-03     Float factor = evalFactorAST(array[0]);
-04     for (Object pair[] : (List&lt;Object[]&gt;) array[1]) {
-05         if (pair[0].equals(0)) {
-06             factor *= evalFactorAST(pair[1]);
-07         } else if (pair[0].equals(1)) {
-08             factor /= evalFactorAST(pair[1]);
-09         }
-10     }
-11     return factor;
-12 }</code></pre>
+<pre><code>/*01*/ static Float evalTermAST(Object ast) {
+/*02*/     Object[] array = (Object[]) ast;
+/*03*/     Float factor = evalFactorAST(array[0]);
+/*04*/     for (Object pair[] : (List&lt;Object[]&gt;) array[1]) {
+/*05*/         if (pair[0].equals(0)) {
+/*06*/             factor *= evalFactorAST(pair[1]);
+/*07*/         } else if (pair[0].equals(1)) {
+/*08*/             factor /= evalFactorAST(pair[1]);
+/*09*/         }
+/*10*/     }
+/*11*/     return factor;
+/*12*/ }</code></pre>
 </td>
 </tr></table>
 
@@ -290,16 +288,16 @@ understand the logic better.
 )</code></pre>
 </td>
 <td style="padding: 0px;">
-<pre><code>01 static Float evalFactorAST(Object ast) {
-02     Object[] pair = (Object[]) ast;
-03     Float factorResult = -1f;
-04     if (pair[0].equals(0)) {
-05         factorResult = Float.parseFloat((String) pair[1]);
-06     } else if (pair[0].equals(1)) {
-07         factorResult = evalExprAST(pair[1]);
-08     }
-09     return factorResult;
-10 }
+<pre><code>/*01*/ static Float evalFactorAST(Object ast) {
+/*02*/     Object[] pair = (Object[]) ast;
+/*03*/     Float factorResult = -1f;
+/*04*/     if (pair[0].equals(0)) {
+/*05*/         factorResult = Float.parseFloat((String) pair[1]);
+/*06*/     } else if (pair[0].equals(1)) {
+/*07*/         factorResult = evalExprAST(pair[1]);
+/*08*/     }
+/*09*/     return factorResult;
+/*10*/ }
 </code></pre>
 </td>
 </tr></table>
@@ -329,7 +327,7 @@ To compile and run the code, proceed as follows.
 </p>
 
 <ol style="list-style-type:decimal;">
-  <li>Assemble the functions and includes shown above into a single Java class</li>
+  <li>Assemble the functions and includes shown above into a single Java class (or copy the code given below)</li>
   <li>In the <a href="http://vll.java.net/">VisualLangLab</a> GUI, 
       save the <i>PS2E-ArithExpr</i> sample grammar to a file by invoking <i>File -> SaveAs</i>, 
       and enter <i>PS2E-ArithExpr.vll</i> as the file-name (this name is used in 
@@ -345,6 +343,75 @@ The program should print out <i>32</i> when run as-is. You should change the exp
 parsed by the program (assigned to the variable <code>input</code> in the <code>main()</code> 
 function) to check out the parser completely. 
 </p>
+
+<h3>Complete Source Code</h3>
+
+<p>
+The complete program is given below. 
+</p>
+
+<pre><code>import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+import net.java.vll.vll4j.api.Vll4j;
+
+public class PS2EArithExpr {
+
+    static Float evalFactorAST(Object ast) {
+        Object[] pair = (Object[]) ast;
+        Float factorResult = -1f;
+        if (pair[0].equals(0)) {
+           factorResult = Float.parseFloat((String) pair[1]);
+        } else if (pair[0].equals(1)) {
+            factorResult = evalExprAST(pair[1]);
+        }
+        return factorResult;
+    }
+
+    static Float evalTermAST(Object ast) {
+        Object[] array = (Object[]) ast;
+        Float factor = evalFactorAST(array[0]);
+        for (Object pair[] : (List<Object[]>) array[1]) {
+            if (pair[0].equals(0)) {
+                factor *= evalFactorAST(pair[1]);
+            } else if (pair[0].equals(1)) {
+                factor /= evalFactorAST(pair[1]);
+            }
+        }
+        return factor;
+    }
+
+    static Float evalExprAST(Object ast) {
+        Object[] array = (Object[]) ast;
+        Float term = evalTermAST(array[0]);
+        for (Object pair[] : (List<Object[]>) array[1]) {
+            if (pair[0].equals(0)) {
+                 term += evalTermAST(pair[1]);
+            } else if (pair[0].equals(1)) {
+                term -= evalTermAST(pair[1]);
+            }
+        }
+        return term;
+    }
+
+    public static void main(String[] args) throws 
+        ParserConfigurationException, SAXException, IOException {
+        String input = "(3 + 5) * (8 - 4)";
+        Vll4j vll = Vll4j.fromFile(new File("PS2E-ArithExpr.vll"));
+        Vll4j.Parser exprParser = vll.getParserFor("Expr");
+        Vll4j.ParseResult parseResult = vll.parseAll(exprParser, input);
+        if (parseResult.successful()) {
+            Object ast = parseResult.get();
+            Float result = evalExprAST(ast);
+            System.out.println(result);
+        } else {
+            System.out.println(parseResult);
+        }
+    }
+
+}</code></pre>
 
 <h2 id="CodeWithEmbeddedGrammar">Code with Embedded Grammar</h2>
 
