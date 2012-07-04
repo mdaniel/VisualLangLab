@@ -174,7 +174,7 @@ public class ManagerTesting {
     private void runner(boolean fromFile) {
         NodeBase apex = gui.theTreePanel.rootNode;
         long t0 = System.currentTimeMillis(), t1, t2;
-        visitorParserGenerator = new VisitorParserGeneration(gui.theForest, gui.apiParsers, traceAll);
+        visitorParserGenerator = new VisitorParserGeneration(gui.theForest, gui.packratParsers, traceAll);
         gui.theForest.bindings.put("vllParserTestInput", gui.theTestingPanel.inputArea);
         gui.theForest.bindings.put("vllParserLog", gui.theTestingPanel.logArea);
         Parser<? extends Object> parser = (Parser<? extends Object>) apex.accept(visitorParserGenerator);
@@ -200,7 +200,7 @@ public class ManagerTesting {
                 try {
                     ReaderFile readerFile = new ReaderFile(f);
                     gui.theForest.bindings.put("vllSource", readerFile.source());
-                    ParseResult pr = gui.apiParsers.parseAll(parser, readerFile);
+                    ParseResult pr = gui.packratParsers.parseAll(parser, readerFile);
                     t2 = System.currentTimeMillis();
                     if (pr.successful()) {
                         ++countOk;
@@ -226,7 +226,8 @@ public class ManagerTesting {
                         System.err.printf("User-Requested STOP%n");
                         break;
                     } else {
-                        System.err.printf("%s(%s)%n", t.getClass().getName(), t.getMessage());
+                        System.err.printf("Internal error: %s(%s)%n", t.getClass().getName(), t.getMessage());
+                        t.printStackTrace();
                     }
                 }
                 appendStatus(String.format(" %d Ok, %d NOk in %d ms", countOk, countNotOk, t1 - t0), true);
@@ -237,7 +238,7 @@ public class ManagerTesting {
                 Reader reader = fromFile ? new ReaderFile(inFile) : 
                         new ReaderTextArea(gui.theTestingPanel.inputArea);
                 gui.theForest.bindings.put("vllSource", reader.source());
-                ParseResult pr = gui.apiParsers.parseAll(parser, reader);
+                ParseResult pr = gui.packratParsers.parseAll(parser, reader);
                 t1 = System.currentTimeMillis();
                 appendStatus(String.format(", Parser: %d ms", t1 - t0), false);
                 if (pr.successful()) {
@@ -253,7 +254,7 @@ public class ManagerTesting {
                     t1 = System.currentTimeMillis();
                     appendStatus(String.format(", Printing: %d ms", t1 - t0), false);
                 } else {
-                    System.err.printf("%s%n", gui.apiParsers.dumpResult(pr));
+                    System.err.printf("%s%n", gui.packratParsers.dumpResult(pr));
                 }
             } catch (Throwable t) {
                 if (t.getCause() instanceof ScriptException) {
@@ -263,7 +264,8 @@ public class ManagerTesting {
                 } else if (t.getCause() instanceof IOException) {
                     System.err.printf("User-Requested STOP%n");
                 } else {
-                    System.err.printf("%s(%s)%n", t.getClass().getName(), t.getMessage());
+                    System.err.printf("Internal error: %s(%s)%n", t.getClass().getName(), t.getMessage());
+                    t.printStackTrace();
                 }
             }
         }

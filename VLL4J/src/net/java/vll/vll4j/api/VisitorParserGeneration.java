@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import javax.script.ScriptException;
+import net.java.vll.vll4j.combinator.PackratParsers;
 import net.java.vll.vll4j.combinator.Parsers.Failure;
 import net.java.vll.vll4j.combinator.Parsers.ParseResult;
 import net.java.vll.vll4j.combinator.Parsers.Parser;
@@ -34,7 +35,7 @@ import net.java.vll.vll4j.combinator.Utils;
 
 public class VisitorParserGeneration extends VisitorBase {
     
-    public VisitorParserGeneration(Forest theForest, ApiParsers parsersInstance, boolean traceAll, boolean stopFlag[]) {
+    public VisitorParserGeneration(Forest theForest, PackratParsers parsersInstance, boolean traceAll, boolean stopFlag[]) {
         parsersInstance.reset();
         this.theForest = theForest;
         this.parsersInstance = parsersInstance;
@@ -45,7 +46,7 @@ public class VisitorParserGeneration extends VisitorBase {
         this.stopFlag = stopFlag;
     }
 
-    public VisitorParserGeneration(Forest theForest, ApiParsers parsersInstance, boolean traceAll) {
+    public VisitorParserGeneration(Forest theForest, PackratParsers parsersInstance, boolean traceAll) {
         this(theForest, parsersInstance, traceAll, new boolean[] {Boolean.FALSE});
     }
 /*    void reset() {
@@ -323,7 +324,7 @@ public class VisitorParserGeneration extends VisitorBase {
         }
     }
 
-    private ApiParsers parsersInstance;
+    private PackratParsers parsersInstance;
     private boolean traceAll;
     private Map<String, Parser<? extends Object>[]> parserCache = new HashMap<String, Parser<? extends Object>[]>();
     public boolean parserGeneratedOk;

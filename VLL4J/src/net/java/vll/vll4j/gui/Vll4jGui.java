@@ -25,7 +25,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.net.URL;
 import javax.swing.*;
-import net.java.vll.vll4j.api.ApiParsers;
+import net.java.vll.vll4j.combinator.PackratParsers;
 import net.java.vll.vll4j.api.Forest;
 import net.java.vll.vll4j.api.NodeRoot;
 
@@ -243,7 +243,7 @@ public class Vll4jGui extends JFrame {
     ManagerMiscOps theMiscFunctionsManager = null;
     ManagerHelp theHelpFunctionsManager = null;
     
-    ApiParsers apiParsers = new ApiParsers();
+    PackratParsers packratParsers = new PackratParsers();
     Forest theForest = new Forest();
     
     JMenu fileMenu = new JMenu("File");
@@ -258,8 +258,6 @@ public class Vll4jGui extends JFrame {
     JMenuItem testTreeHandlerStructured = null;
     JMenuItem testTraceAllItem = null;
     JMenu helpMenu = new JMenu("Help");
-    JMenuItem helpHelp = null;
-    JMenuItem helpAbout = null;
     JMenu helpSamplesMenu = new JMenu("Sample grammars");
         
     Toolkit tk = Toolkit.getDefaultToolkit();
@@ -267,6 +265,6 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    public final String version = "10.37";
+    public final String version = "10.38";
     private ListCellRenderer theCellRenderer = new RendererRuleComboBox(this);
 }

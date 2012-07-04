@@ -23,11 +23,12 @@ package net.java.vll.vll4j.api;
 import java.io.*;
 import javax.xml.parsers.ParserConfigurationException;
 import net.java.vll.vll4j.combinator.CharSequenceReader;
+import net.java.vll.vll4j.combinator.PackratParsers;
 import net.java.vll.vll4j.gui.ReaderFile;
 import org.xml.sax.SAXException;
 import net.java.vll.vll4j.combinator.Utils;
 
-public class Vll4j extends ApiParsers {
+public class Vll4j extends PackratParsers {
 
     public static Vll4j fromStream(InputStream is) throws ParserConfigurationException, 
             SAXException, IOException {

@@ -180,7 +180,30 @@ public class SimpleLexingParsers extends RegexParsers {
         int offset2 = handleWhiteSpace(input.source(), offset);
 //System.out.printf("lexKnownLiterals(): offset=%d, offset2=%d%n", input.offset(), offset2);
         CharSequence cs = input.source().subSequence(offset2, input.source().length());
-        literalsMatcher.reset(cs);
+/*        int idx = Arrays.binarySearch(sortedLiterals, cs, literalsComparator2);
+        while (idx >= 0 && idx < sortedLiterals.length - 1) {
+            String t = (String)sortedLiterals[idx + 1][0];
+            if (cs.subSequence(0, Math.min(cs.length(), t.length())).equals(t))
+                ++idx;
+            else
+                break;
+        }
+        String token = (idx >= 0) ? (String)sortedLiterals[idx][0] : null;
+        return (idx >= 0) ?
+             new Object[] {token, (Integer)sortedLiterals[idx][1], offset2 - offset + token.length()} : null;
+*/        int k = -1, patLen = 0;
+        String pattern = null;
+        for (int i = 0; i < sortedLiterals.length; ++i) {
+            pattern = (String)sortedLiterals[i][0];
+            patLen = pattern.length();
+            if (cs.subSequence(0, Math.min(patLen, cs.length())).equals(pattern)) {
+                k = i;
+                break;
+            }
+        }
+        if (k >= 0) {
+            return new Object[] {pattern, (Integer)sortedLiterals[k][1], offset2 - offset + patLen};
+/*        literalsMatcher.reset(cs);
         if (literalsMatcher.lookingAt()) {
             int k = 1;
             String lexeme;
@@ -191,7 +214,7 @@ public class SimpleLexingParsers extends RegexParsers {
             int idx = (Integer)sortedLiterals[k - 1][1];
 //System.out.printf("lexKnownLiterals(): idx=%d%n", idx);
             return new Object[] {lexeme, idx, offset2 - offset + lexeme.length()};
-        } else {
+*/      } else {
 //System.out.printf("lexKnownLiterals(): Failed: lookingAt(%s)%n", cs);
             return null;
         }
@@ -226,18 +249,11 @@ public class SimpleLexingParsers extends RegexParsers {
             sortedLiterals[i][1] = (i + 1) * -1;
 //System.out.printf("setupLexerLiterals(): lit=%s id=%d%n", sortedLiterals[i][0], sortedLiterals[i][1]);
         }
-        Comparator c = new Comparator() {
-            @Override
-            public int compare(Object a, Object b) {
-                String aa = ((String)(((Object[])a)[0]));
-                String bb = ((String)(((Object[])b)[0]));
-                return bb.length() - aa.length();
-            }
-        };
-        Arrays.sort(sortedLiterals, c);
+        Arrays.sort(sortedLiterals, literalsComparator);
         StringBuilder sb = new StringBuilder();
         sb.append("(");
         for (int i = 0; i < sortedLiterals.length; ++i) {
+//System.out.println(sortedLiterals[i][0]);
             sb.append(Utils.escapeMetachars(Utils.unEscape((String)sortedLiterals[i][0])));
             if (i != sortedLiterals.length - 1)
                 sb.append(")|(");
@@ -265,5 +281,21 @@ public class SimpleLexingParsers extends RegexParsers {
     private Matcher literalsMatcher = null;
     private List<String> theRegexs = new ArrayList<String>();
     private Matcher regexMatchers[] = null;
+    private Comparator literalsComparator = new Comparator() {
+        @Override
+        public int compare(Object a, Object b) {
+            String aa = ((String)(((Object[])a)[0]));
+            String bb = ((String)(((Object[])b)[0]));
+            return bb.compareTo(aa);
+        }
+    };
+    private Comparator literalsComparator2 = new Comparator() {
+        @Override
+        public int compare(Object a, Object b) {
+            String aa = ((String)(((Object[])a)[0]));
+            String bb = (String)b;
+            return bb.substring(0, Math.min(aa.length(), bb.length())).compareTo(aa);
+        }
+    };
 
 }

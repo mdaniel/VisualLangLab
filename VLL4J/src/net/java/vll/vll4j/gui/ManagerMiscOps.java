@@ -36,8 +36,8 @@ public class ManagerMiscOps {
     Action globalsWhitespaceAction = new AbstractAction("Whitespace") {
         public void actionPerformed(ActionEvent e) {
             String ws = (String)JOptionPane.showInputDialog(gui, "Enter whitespace pattern", "WhiteSpace", 
-                    JOptionPane.QUESTION_MESSAGE, null, null, gui.apiParsers.whiteSpaceRegex);
-            if (ws == null || ws.equals(gui.apiParsers.whiteSpaceRegex))
+                    JOptionPane.QUESTION_MESSAGE, null, null, gui.packratParsers.whiteSpaceRegex);
+            if (ws == null || ws.equals(gui.packratParsers.whiteSpaceRegex))
                 return;
             try {
                 Pattern.compile(Utils.unEscape(ws));
@@ -45,16 +45,16 @@ public class ManagerMiscOps {
                 JOptionPane.showMessageDialog(gui, ex.toString(), "ERROR - WhiteSpace", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            gui.apiParsers.whiteSpaceRegex = ws;
-            gui.apiParsers.resetWhitespace();
+            gui.packratParsers.whiteSpaceRegex = ws;
+            gui.packratParsers.resetWhitespace();
         }
     };
 
     Action globalsCommentAction = new AbstractAction("Comment") {
         public void actionPerformed(ActionEvent e) {
             String cmts = (String)JOptionPane.showInputDialog(gui, "Enter comment pattern", "Comments", 
-                    JOptionPane.QUESTION_MESSAGE, null, null, gui.apiParsers.commentSpecRegex);
-            if (cmts == null || cmts.equals(gui.apiParsers.commentSpecRegex))
+                    JOptionPane.QUESTION_MESSAGE, null, null, gui.packratParsers.commentSpecRegex);
+            if (cmts == null || cmts.equals(gui.packratParsers.commentSpecRegex))
                 return;
             try {
                 Pattern.compile(Utils.unEscape(cmts));
@@ -62,8 +62,8 @@ public class ManagerMiscOps {
                 JOptionPane.showMessageDialog(gui, ex.toString(), "ERROR - WhiteSpace", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            gui.apiParsers.commentSpecRegex = cmts;
-            gui.apiParsers.resetWhitespace();
+            gui.packratParsers.commentSpecRegex = cmts;
+            gui.packratParsers.resetWhitespace();
         }
     };
 

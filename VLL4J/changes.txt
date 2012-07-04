@@ -1,3 +1,6 @@
+10.38 2012-JUL-04
+  Dropped class ApiParsers, moved functions to PackratParsers
+  Experimental performance improvements for SimpleLexingParsers
 10.37 2012-JUN-20
   Natural names for regex patterns (e.g. \\d+ is named "\\d+");
 10.36 2012-JUN-16

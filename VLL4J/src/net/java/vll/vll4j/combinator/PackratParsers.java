@@ -297,7 +297,12 @@ public class PackratParsers extends SimpleLexingParsers {
             return oldRes;
         }
     }
-    
+
+    @Override
+    public int handleWhiteSpace(CharSequence cs, int offset) {
+        return super.handleWhiteSpace(cs, offset);
+    }
+
     public static void main(String args[]) {
         PackratParsers pp = new PackratParsers();
         Parser nbr = pp.regex2("nbr", Pattern.compile("[0-9]+"));
