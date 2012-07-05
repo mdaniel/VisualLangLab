@@ -476,33 +476,6 @@ Literal tokens with a default name may not be edited as described here.
       maintain the contents of token libraries. 
     </p>
 
-    <h3 id="LexingAndTokenScope">Lexing, Reserved Keywords, Token Scope, etc.</h3>
-
-    <p>
-      As explained in <a href="RelationshipWithScalaParserCombinators.html">Relationship 
-      with Scala Parser Combinators</a>, literal and regex tokens defined in 
-      VisualLangLab are not based on Scala's 
-      <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> 
-      class. A simple but effective 
-      <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexer</a> is used, and 
-      the behavior of the parser (in matching tokens with the input) is quite different 
-      from that of <code>RegexParsers.literal()</code> and <code>RegexParsers.regex()</code>.
-    </p>
-
-    <p>
-      All <i>Literal</i> tokens are effectively <i>reserved symbols</i> (or <i>keywords</i>), 
-      and take precedence over <i>Regex</i> tokens.  
-    </p>
-
-    <p>
-      All tokens exist in a single global scope, and VisualLangLab does not support scoped 
-      tokens. However most scoping needs can be served by a rudimentary, 
-      sledgehammer-strength  mechanism: Ending a token's name with an underscore 
-      (_) places it in its own private scope. When the parser tests for such a token, the 
-      lexer does not come into play, so other token definitions (in the global scope) are 
-      not considered.
-    </p>
-
     <h3 id="WhitespaceAndComments">Whitespace and Comments</h3>
 
     <p>
