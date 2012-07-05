@@ -112,31 +112,31 @@ Repeat the same procedure twice more to create the tokens <i>floatingPointNumber
 This is a very simple parser-rule, and just matches one token unconditionally. 
 To create the new rule click the <i>New rule</i> button 
 (<img src="images/NewReference.gif" align="center" alt="The New-rule button" />), 
-and enter <i>doubleNumber</i> into the dialog box presented as in Figure-3 below. 
+and enter <i>doubleNumber</i> into the dialog box presented as in Figure-4 below. 
 Clicking the dialog's <i>OK</i> button creates a new rule with just a 
 <i>Root</i> node (<img src="images/GrammarIconRoot.gif" align="center" alt="The Root node" />).
 </p>
 
 <p>
 <img src="images/CreateRule-doubleNumber.png" alt="Creating the doubleNumber parser-rule" /><br />
-<i>Figure-3. Creating the </i>doubleNumber<i> parser-rule</i>
+<i>Figure-4. Creating the </i>doubleNumber<i> parser-rule</i>
 </p>
 
 <p>
 Now right-click the Root node, and select <i>Add -> Token</i> from the popup 
 context-menu. Another dialog with the names of available tokens is presented 
-as shown on the left side of Figure-4 below. 
+as shown on the left side of Figure-5 below. 
 Select <i>floatingPointNumber_</i> and click the <i>OK</i> button. Your almost-complete 
-parser-rule should look like the right side of Figure-4 below. 
+parser-rule should look like the right side of Figure-5 below. 
 </p>
 
 <p>
 <img src="images/AddToken-decimalNumber.png" alt="Selecting the decimalNumber token" /><br />
-<i>Figure-4. Selecting the </i>floatingPointNumber_<i> token</i>
+<i>Figure-5. Selecting the </i>floatingPointNumber_<i> token</i>
 </p>
 
 <p>
-Finally, we need to add some action-code. Select (click) the <i>floatingPointNumber_</i> token (<img src="images/GrammarIconRegex.gif" align="center" alt="The Regex icon" />), and paste the code given below into the text area under <i>Action Code</i> as in Figure-5 below. Click the <i>Save</i> button (enabled when the content of the action-code area changes). Observe that this adds the <i>action</i> annotation (near red arrow) to the <i>floatingPontNumber_</i> token. The rule-name (<i>doubleNumber</i>) in the toolbar's dropdown list is also given a small green arrow-icon to indicate that the rule has an action function. 
+Finally, we need to add some action-code. Select (click) the <i>floatingPointNumber_</i> token (<img src="images/GrammarIconRegex.gif" align="center" alt="The Regex icon" />), and paste the code given below into the text area under <i>Action Code</i> as in Figure-6 below. Click the <i>Save</i> button (enabled when the content of the action-code area changes). Observe that this adds the <i>action</i> annotation (near red arrow) to the <i>floatingPontNumber_</i> token. The rule-name (<i>doubleNumber</i>) in the toolbar's dropdown list is also given a small green arrow-icon to indicate that the rule has an action function. 
 </p>
 
 <pre><code>function (a) {
@@ -151,7 +151,7 @@ Action-code functions are explained further in <a href="#ActionCode">Action Code
 
 <p>
 <img src="images/Action-doubleNumber.png" alt="Adding action-code to the doubleNumber rule" /><br />
-<i>Figure-5. Adding action-code to the </i>doubleNumber<i> rule</i>
+<i>Figure-6. Adding action-code to the </i>doubleNumber<i> rule</i>
 </p>
 
 <h3>def toBe = "is" | "are"</h3>
@@ -165,19 +165,19 @@ first. Proceed as follows.
   <li>click the <i>New literal</i> button 
     (the <img src="images/ToolBarButtonNewLiteral.gif" align="center" alt="The New-literal button" /> icon), 
     enter "<code>is</code>" into the dialog presented, and click the <i>OK</i> button 
-    (as in Figure-6 below)</li>
+    (as in Figure-7 below)</li>
   <li>repeat the preceding action once more, but enter "<code>are</code>" instead</li>
 </ul>
 
 <p>
 The above actions create two literal tokens with names "is" and "are" respectively. 
 These names will be used to refer to the tokens from rules as seen in 
-<a href="#Figure7">Figure-7</a> below.
+<a href="#Figure8">Figure-8</a> below.
 </p>
 
 <p>
 <img src="images/NewLiteral-IsAre.png" alt="Creating the is and are tokens" /><br />
-<i>Figure-6. Creating the </i>is<i> and </i>are<i> tokens</i>
+<i>Figure-7. Creating the </i>is<i> and </i>are<i> tokens</i>
 </p>
 
 <p>
@@ -193,7 +193,7 @@ To create the parser, perform the following steps.
 <ul style="list-style-type: disc;">
   <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center" alt="The New-reference button" />), 
     enter <i>toBe</i> into the dialog presented, and click its <i>OK</i> button</li>
-  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center" alt="The Root icon" />) of the new rule, and select <i>Add -> Choice</i> from the context menu. A <i>Choice</i> node (<img src="images/GrammarIconChoice.gif" align="center" alt="The Choice icon" />) is added to the root node (as in the left and middle parts of Figure-7 below)</li>
+  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center" alt="The Root icon" />) of the new rule, and select <i>Add -> Choice</i> from the context menu. A <i>Choice</i> node (<img src="images/GrammarIconChoice.gif" align="center" alt="The Choice icon" />) is added to the root node (as in the left and middle parts of Figure-8 below)</li>
   <li>right-click the newly created choice node and select <i>Add -> Token</i> from the context menu. 
     A dialog box with a dropdown list containing known token names is popped up. 
     Select <i>"is"</i> from the dropdown list, and click the <i>OK</i> button</li>
@@ -201,12 +201,12 @@ To create the parser, perform the following steps.
 </ul>
 
 <p>
-Your <i>toBe</i> parser-rule should now look like the one on the right side of Figure-7 below. 
+Your <i>toBe</i> parser-rule should now look like the one on the right side of Figure-8 below. 
 </p>
 
-<p id="Figure7">
+<p id="Figure8">
 <img src="images/CreateRule-toBe.png" alt="The toBe parser" /><br />
-<i>Figure-7. The </i>toBe<i> parser</i>
+<i>Figure-8. The </i>toBe<i> parser</i>
 </p>
 
 <p>
@@ -250,12 +250,12 @@ be retained. All other tokens are to be dropped from the AST. You can <i>drop</i
 tokens from the sequence's AST by right-clicking each node's icon and selecting 
 <i>drop</i> from the context menu (as shown on the left side of the figure). 
 Remember not to <i>drop</i> the <i>doubleNumber</i> node. 
-Your finished parser-rule should now look like the right side of Figure-8 below.
+Your finished parser-rule should now look like the right side of Figure-9 below.
 </p>
 
 <p>
 <img src="images/Rule-percentage.png" alt="The percentage parser-rule" /><br />
-<i>Figure-8. The </i>percentage<i> parser-rule</i>
+<i>Figure-9. The </i>percentage<i> parser-rule</i>
 </p>
 
 <p>
@@ -280,7 +280,7 @@ given below into the text area under <i>Action Code</i>. Then click the <i>Save<
 <p>
 Though different from the original text, this action function is actually functionally 
 equivalent, as explained in <a href="#ActionCode">Action Code</a> below. 
-Your finished parser-rule should look like the one in Figure-8 above. 
+Your finished parser-rule should look like the one in Figure-9 above. 
 </p>
 
 <h3>def days = "days?".r ...</h3>
@@ -294,7 +294,7 @@ first. Proceed as follows.
   <li>click the <i>New regex</i> button 
     (the <img src="images/ToolBarButtonNewRegex.gif" align="center" alt="The New-regex button" /> icon), 
     enter "<code>DAYS  days?</code>" into the dialog presented, and click the <i>OK</i> button 
-    (as in Figure-9 below). Here <i>days?</i> is a regular-expression 
+    (as in Figure-10 below). Here <i>days?</i> is a regular-expression 
     <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html" >Pattern</a></li>
   <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center" alt="The New-rule button" />), 
     enter <i>days</i> into the dialog presented, and click its <i>OK</i> button</li>
@@ -305,7 +305,7 @@ first. Proceed as follows.
 
 <p>
 <img src="images/NewRegex-days.png" alt="Creating the is and are tokens" /><br />
-<i>Figure-9. Creating the </i>DAYS<i> tokens</i>
+<i>Figure-10. Creating the </i>DAYS<i> tokens</i>
 </p>
 
 <p>
@@ -323,7 +323,7 @@ given below into the text area under <i>Action Code</i>. Then click the <i>Save<
 
 <p>
 Action-code function design and use is explained in <a href="#ActionCode">Action Code</a> below. 
-Your finished parser-rule should look like the one on the right side of Figure-9 above. 
+Your finished parser-rule should look like the one on the right side of Figure-10 above. 
 </p>
 
 <h2 id="AdHocTesting">Ad Hoc Testing - A Short Detour</h2>
@@ -343,7 +343,7 @@ any other skills or tools.
 
 <p>
 To manually test <i>doubleNumber</i> proceed as follows. Use the toolbar's combo box 
-to select <i>doubleNumber</i> as in Figure-10 below.
+to select <i>doubleNumber</i> as in Figure-11 below.
 </p>
 
 <ul style="list-style-type: disc;">
@@ -353,15 +353,15 @@ to select <i>doubleNumber</i> as in Figure-10 below.
 </ul>
 
 <p>
-If you do not see any red text (as in <a href="#Figure12">Figure-12</a> below) in the 
+If you do not see any red text (as in <a href="#Figure13">Figure-13</a> below) in the 
 <i>Parser Log</i> area, your parser executed without errors. 
 But that alone is not enough, you should verify that the result returned 
-(the <i>25.0</i> in Figure-10, for example) is the value expected. 
+(the <i>25.0</i> in Figure-11, for example) is the value expected. 
 </p>
 
 <p>
 <img src="images/testing-doubleNumber.png" alt="Testing the doubleNumber parser" /><br />
-<i>Figure-10. Testing the </i>doubleNumber<i> parser</i>
+<i>Figure-11. Testing the </i>doubleNumber<i> parser</i>
 </p>
 
 <p>
@@ -377,17 +377,17 @@ the structure of its output. All parser-rules return an
 whose structure depends on the arrangement and properties of the grammar-tree's constituent nodes 
 as explained in <a href="ASTAndActionCode.html#ASTStructure" >AST Structure</a>. 
 The text area under <i>Parse Tree (AST) Structure</i> displays the expected AST 
-structure of the selected grammar-tree node. Figure-11 below tells you that the returned 
+structure of the selected grammar-tree node. Figure-12 below tells you that the returned 
 result is one of two array objects (depending on what was found in the input). 
 </p>
 
 <p>
 <img src="images/AST-toBe.png" alt="The AST of the toBe parser-rule" /><br />
-<i>Figure-11. The AST of the </i>toBe<i> parser-rule</i>
+<i>Figure-12. The AST of the </i>toBe<i> parser-rule</i>
 </p>
 
-<p id="Figure12">
-Figure-12 below shows the result of exercising <i>toBe</i> with three different 
+<p id="Figure13">
+Figure-13 below shows the result of exercising <i>toBe</i> with three different 
 inputs: <i>is</i>, <i>are</i>, and <i>other</i>. 
 </p>
 
@@ -395,7 +395,7 @@ inputs: <i>is</i>, <i>are</i>, and <i>other</i>.
   <tr><td style="padding: 2px"><img src="images/AST-toBe-is.png" alt="The AST of toBe with is" /></td></tr>
   <tr><td style="padding: 2px"><img src="images/AST-toBe-are.png" alt="The AST of toBe with are" /></td></tr>
   <tr><td style="padding: 2px"><img src="images/AST-toBe-other.png" alt="The AST of toBe with other" /></td></tr>
-  <tr><td style="padding: 2px"><i>Figure-12. Validating </i>toBe<i> with different inputs</i></td></tr>
+  <tr><td style="padding: 2px"><i>Figure-13. Validating </i>toBe<i> with different inputs</i></td></tr>
 </table>
 
 <p>
@@ -427,7 +427,7 @@ To create this rule proceed as follows.
   <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center" alt="The New-rule button" />), 
     enter <i>deductItems</i> into the dialog presented, and click its <i>OK</i> button</li>
   <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center" alt="The Root node" />) and select 
-    <i>Add -> RepSep</i> from the context menu (as on the left side of Figure-13 below). 
+    <i>Add -> RepSep</i> from the context menu (as on the left side of Figure-14 below). 
     A <i>RepSep</i> node 
     (<img src="images/GrammarIconRepSep.gif" align="center" alt="The RepSep icon" />) is added to the root node</li>
   <li>right-click the newly created RepSep node and select <i>Reference</i> from the context menu. 
@@ -438,12 +438,12 @@ To create this rule proceed as follows.
 </ul>
 
 <p>
-Your finished rule should look like the one on the right side of Figure-13 below. 
+Your finished rule should look like the one on the right side of Figure-14 below. 
 </p>
 
 <p>
 <img src="images/Rule-deductItems.png" alt="The deductItems parser-rule" /><br />
-<i>Figure-13. The </i>deductItems<i> parser-rule</i>
+<i>Figure-14. The </i>deductItems<i> parser-rule</i>
 </p>
 
 <h2 id="ActionCode">Action Code</h2>
@@ -479,19 +479,19 @@ AST structuring principles in general.
 
 <p>
 <img src="images/Action-weekDays.png" alt="The weekDays action-code function" /><br />
-<i>Figure-14. The weekDays action-code function</i>
+<i>Figure-15. The weekDays action-code function</i>
 </p>
 
 <p>
 The AST structure and action-code of the two subordinate rules used 
-by <i>weekDays</i> (<i>weeks</i> and <i>days</i>) is shown in Figure-15 below. 
+by <i>weekDays</i> (<i>weeks</i> and <i>days</i>) is shown in Figure-16 below. 
 </p>
 
 <table>
   <tr><td style="padding: 2px"><img src="images/Action-weeks.png" alt="Action function weeks" /></td></tr>
   <tr><td style="padding: 2px"><img src="images/Action-days.png" alt="Action function days" /></td></tr>
 </table>
-<i>Figure-15. Action functions of weeks and days rules</i>
+<i>Figure-16. Action functions of weeks and days rules</i>
 
 <p>
 Since <i>weekDays</i>' subordinate rules return the required values (5 and 1), 
@@ -505,7 +505,7 @@ So <i>weekDays</i> merely needs to return the second member of the array.
 <h3 id="ActionCodePercentage">Action-Code: percentage</h3>
 
 <p>
-Figure-16 below illustrates the action-code associated with the rule <i>percentage</i>. 
+Figure-17 below illustrates the action-code associated with the rule <i>percentage</i>. 
 This function uses a non-local reference <code>VLL.grossAmount</code>. 
 As described in <a href="ASTAndActionCode.html#ActionCodeDesign" >Action-Code Design</a>, 
 the symbol <code>VLL</code> refers to a common global object available to all action-code 
@@ -517,7 +517,7 @@ testing begins.
 
 <p>
 <img src="images/Action-percentage.png" alt="A Javascript action-code function" /><br />
-<i>Figure-16. A Javascript action-code function</i>
+<i>Figure-17. A Javascript action-code function</i>
 </p>
 
 <p>
@@ -545,7 +545,7 @@ This approach uses an additional parser-rule to <i>wrap</i> the main
 The <i>before</i> script sets up initial conditions before the main 
 parser-rule is invoked, and the <i>after</i> script validates the parse-tree 
 returned by the main parser-rule. 
-Figure-17 below shows details of the wrapper rule <i>PaycheckTester</i> used for testing this parser. 
+Figure-18 below shows details of the wrapper rule <i>PaycheckTester</i> used for testing this parser. 
 To display the <i>before</i> and <i>after</i> scripts (actually 
 parts of a single action-code function) you must select (click on)
 the <i>Reference</i> node that points to the <i>Paycheck</i> parser-rule. 
@@ -561,7 +561,7 @@ please do so now!</b>
 
 <p>
 <img src="images/Action-PaycheckTester.png" alt="Wrapper rule for automated testing" /><br />
-<i>Figure-17. Wrapper rule for automated testing</i>
+<i>Figure-18. Wrapper rule for automated testing</i>
 </p>
 
 <p>
@@ -681,28 +681,20 @@ Predefined Variables</a>.
 
 <h2 id="RegexParsersCompatibility">Scala Parser Combinator Compatibility</h2>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td>
-The following discussion is no longer (version 10 onwards) accurate. 
-However, the contents still have some relevance as VisualLangLab still 
-uses a Java translation of some elements of the <code>scala.util.parsing.combinator</code> 
-package. 
-</td></tr></table>
-
 <p>
-The class diagram in Figure-18 below depicts 
+The class diagram in Figure-19 below depicts 
 <a href="http://vll.java.net/" >VisualLangLab</a>'s relationship with Scala's 
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html" >
-parser combinators</a>. Although it depends on <code>RegexParsers</code>, it changes 
-most of the functionality by overriding many of the important methods.
+parser combinators</a>. 
 </p>
 
 <p>
 <img src="images/RelationshipWithScalaParserCombinators.png" alt="Relationship With Scala Parser Combinators" /><br />
-<i>Figure-18. Relationship With Scala Parser Combinators</i>
+<i>Figure-19. Relationship With Scala Parser Combinators</i>
 </p>
 
 <p>
-Full details of how VisualLangLab uses Scala's parser combinator library can be seen in 
+Full details of how VisualLangLab adapts the design of Scala's parser combinator library can be seen in 
 <a href="RelationshipWithScalaParserCombinators.html" >
 Relationship with Scala Parse rCombinators</a>. 
 </p> 
@@ -715,21 +707,16 @@ of Scala's
 <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >
 RegexParsers</a> with versions that work with a built-in lexer. The behavior of these 
 versions is similar to lexers in more sophisticated parser development tools, and is described in 
-<a href="RelationshipWithScalaParserCombinators.html#ClassSimpleLexingRegexParsers" >
-Simple Lexing RegexParsers</a>. 
+<a href="RelationshipWithScalaParserCombinators.html#BuiltInLexer" >
+Built-In Lexer</a>. 
 </p>
 
 <h3 id="JavaTokenParsers">JavaTokenParsers</h3>
 
 <p>
-Many example parsers in tutorials and other resources extend 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" >
-JavaTokenParsers</a>, so VisualLangLab provides a token library in it's place. 
-Those planning to use this token library should, however, note that the tokens defined in 
-it have names ending in an underscore (_). Ending the name of a token in an underscore causes 
-VisualLangLab's built-in lexer to be bypassed, in favor of the 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >RegexParsers</a> 
-capability. 
+Ending the name of a token in an underscore (_) causes 
+VisualLangLab's built-in lexer to be bypassed, in favor of a
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >RegexParsers</a>-like capability. 
 </p>
 
 <p>
