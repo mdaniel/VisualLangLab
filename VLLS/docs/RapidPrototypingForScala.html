@@ -12,21 +12,22 @@
 <h1>VisualLangLab - Rapid Prototyping for Scala Parser Combinators</h1>
 
 <table border="1" style="border: 1px solid red;" width="100%"><tr><td>
-<span style="font-size: larger;">For Ver-10.10 or higher only!</span><br/>
-If you are using an older version, follow 
-<a href="RapidPrototypingForScala-legacy.html">this tutorial</a> instead. 
-Beginning Ver-10.01, the title bar of the <i>About VisualLangLab</i> 
-dialog box displays the version number. 
-The latest jar file can be downloaded here: 
+<span style="font-size: larger;">For Ver-10.01 or higher only!</span><br/>
+If you are using an older version, follow <a href="RapidPrototypingForScala-legacy.html">this tutorial</a> instead. Beginning Ver-10.01, the title bar of the <i>About VisualLangLab</i> dialog box displays the version number. The latest jar file can be downloaded here: 
 <a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
 </td></tr></table>
 
 <p>
+The title of this article is a vestige from the time (version 7.x) when VisualLangLab was written in Scala, and was effectively a rapid development environment for parsers created with Scala's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>. The current version (10.xx) is written in pure Java, but still retains a strong design <a href="RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a>. A comparison of this approach with hand-coding of Scala parsers can be found in <a href="#ProsAndCons">Pros and Cons</a> below.
+
+</p>
+
+<p>
 This tutorial highlights 
 <a href="http://vll.java.net/">VisualLangLab</a>'s features by recreating the 
-<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#AScalaImplementationExternalDSLGrammar" target="_blank">
+<a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#AScalaImplementationExternalDSLGrammar">
 Payroll External DSL</a> described on page 240 of 
-<a href="http://programmingscala.com/" target="_blank">Programming Scala</a>. 
+<a href="http://programmingscala.com/">Programming Scala</a>. 
 The following figures show how it represents some rules of that parser. 
 </p>
 
@@ -47,50 +48,18 @@ The following figures show how it represents some rules of that parser.
 <i>Figure-1. Some VisualLangLab grammar-trees</i>
 
 <p>
-Earlier versions (before 10) of VisualLangLab were written in Scala, and made use of its 
-<a href="http://www.scala-lang.org/api/current/index.html#scala.util.parsing.combinator.package">
-parser combinators</a>. Although version 10 
-is written purely in Java it still uses Java translations of certain elements of the 
-Scala <code>scala.util.parsing.combinator</code> package. 
-A comparison between this approach and hand-coded Scala parsers can be found in 
-<a href="#ProsAndCons">Pros and Cons</a> below.
-</p>
-
-<p>
-Another tutorial that uses examples from 
-<a href="http://pragprog.com/book/tpantlr/the-definitive-antlr-reference">
-The Definitive ANTLR Reference</a> 
-can be found in <a href="http://vll.java.net/examples/a-quick-tour.html">A Quick Tour</a>.
-A simpler tutorial is available at  
-<a href="http://today.java.net/article/2011/09/14/visuallanglab-grammar-without-tears" target="_blank">
-VisualLangLab - Grammar without Tears</a>.
+Another tutorial that uses examples from the book <a href="http://pragprog.com/book/tpantlr/the-definitive-antlr-reference">The Definitive ANTLR Reference</a> can be found in <a href="http://vll.java.net/examples/a-quick-tour.html">A Quick Tour</a>. A simpler tutorial is available at <a href="GrammarWithoutTears2/GrammarWithoutTears2.html">Grammar without Tears2</a>.
 </p>
 
 <h2>Download and Run VisualLangLab</h2>
 
 <p>
-To run <a href="http://vll.java.net/">VisualLangLab</a>, just download 
-<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a> 
-and double-click it in a file-browser. Linux, Mac OS, and UNIX users will have to enable execution first 
-(<i>chmod +x VLL4J.jar</i>). 
-Documentation for version 10 and higher is currently on the web-site only.
+To run VisualLangLab, just download <a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a> and double-click it in a file-browser. Linux, Mac OS, and UNIX users may have to enable execution first (<i>chmod +x VLL4J.jar</i>). Alternatively, you can enter "<code>java -jar VLL4J.jar</code>" at a command prompt. 
 </p>
 
 <p>
-
-When started, <a href="http://vll.java.net/">VisualLangLab</a> displays the GUI shown in Figure-2 below. 
-
-The menus and buttons are explained as needed, but a full 
-
-description can also be found at 
-
-<a href="TheGUI.html" target="_blank">The GUI</a>. 
-
-All toolbar buttons have tool-tip texts that explain their use. 
-
+When started, VisualLangLab displays the GUI shown in Figure-2 below. The menus and buttons are explained as needed, but a full description can also be found at <a href="TheGUI.html">The GUI</a>. All toolbar buttons have tool-tip texts that explain their use. 
 </p>
-
-
 
 <p>
 <img src="images/GuiFull3.png" alt="The VisualLangLab GUI" /><br />
@@ -98,77 +67,46 @@ All toolbar buttons have tool-tip texts that explain their use.
 </p>
 
 <p>
-
 The display areas of the GUI are used as described below.
-
 </p>
 
-
-
 <ul style="list-style-type: disc;">
-
-  <li>A is used for the grammar-tree as described in 
-
-      <a href="#CreatingParserRules">Creating the Parser-Rules</a> below</li>
-
-  <li>B displays the <a href="ASTAndActionCode.html#ASTStructure" target="_blank">AST structure</a> 
-
-      of the selected grammar-tree node</li>
-
-  <li>C is where the selected node's <a href="#ActionCode">action-code</a> 
-
-      (<i>semantic action</i>, or just <i>action</i>) is displayed and edited. 
-      If this appears to break the 
-
-      <i>no code, no script</i> promise, rest assured that action-code 
-
-      is always optional</li>
-
-  <li>D and E are used for <a href="#Testing">testing the parser</a> 
-
-      as described below</li>
-
+  <li>A is used for the grammar-tree as described in <a href="#CreatingParserRules">Creating the Parser-Rules</a> below</li>
+  <li>B displays the <a href="ASTAndActionCode.html#ASTStructure">AST structure</a> of the selected grammar-tree node</li>
+  <li>C is where the selected node's <a href="#ActionCode">action-code</a> (<i>semantic action</i>, or just <i>action</i>) is displayed and edited. If this appears to break the <i>no code, no script</i> promise, rest assured that action-code is always optional</li>
+  <li>D and E are used for <a href="#Testing">testing the parser</a> as described below</li>
 </ul>
 
-
 <p>
-The only prerequisite for running <a href="http://vll.java.net/">VisualLangLab</a> as described above is a 
-<a href="http://www.oracle.com/technetwork/java/javase/overview/index-jsp-136246.html" target="_blank">6.0+ JRE</a>. 
-No other tool or software is required.</p>
+The only prerequisite for running VisualLangLab as described above is a 6.0+ JRE</a>. No other tool or software is required.
+</p>
 
 <h2 id="CreatingParserRules">Creating the Parser-Rules</h2>
 
 <p>
-In the book, the parser-rules are organized in top-down fashion. 
-But here, we start at the bottom with <i>doubleNumber</i>, and work our way up, 
-creating some of the parser-rules so as to demonstrate most of 
-<a href="http://vll.java.net/">VisualLangLab</a>'s features. The complete parser is also 
-included as a sample parser within the GUI (select "Help" -> "Sample grammers" ->
-"PSWP-Payroll-Parser-Combinators" from the main menu).
+In the book (<a href="http://programmingscala.com/">Programming Scala</a>), the parser-rules are organized in top-down fashion. But here, we start at the bottom with <i>doubleNumber</i>, and work our way up, creating some of the parser-rules and demonstrating most of VisualLangLab's features. The complete parser is also included as a sample grammar within the GUI (select "Help" -> "Sample grammers" -> "PSWP-Payroll-Parser-Combinators" from the main menu).
 </p>
 
-<h3>Import Required Tokens</h3>
+<h3>Substitute Imported Tokens</h3>
 
 <p>
-The book's code starts by importing 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" target="_blank">JavaTokenParsers</a> 
-and you can obtain the same effect in <a href="http://vll.java.net/">VisualLangLab</a> 
-by importing the corresponding <i>token library</i>. 
-Select <i>Tokens -> Import tokens</i> from the main menu, or click the <i>Import tokens</i> 
-(<img src="images/Import16.gif" align="center" alt="The import-tokens GUI" />) button, and choose the file 
-<i>TL-JavaTokenParsers.vll</i> from the the <i>grammars</i> directory of the 
-<a href="http://java.net/projects/vll/downloads/download/VLLS.zip">
-legacy-version zip distribution</a> (you do not need any other files from this zip file). 
-This token-library contains <i>regex</i> tokens with the same names and functionality. 
-However, for reasons explained in <a href="#JavaTokenParsers">JavaTokenParsers</a> 
-below, all the names have an underscore (_) suffix. 
+The book's code starts by importing <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html">JavaTokenParsers</a> to obtain required tokens. VisualLangLab has no <i>JavaTokenParsers</i> equivalent, so we will create the required tokens. For reasons explained in <a href="#JavaTokenParsers">JavaTokenParsers</a> below, all the token names will have an underscore (_) suffix. 
+</p>
+
+<p>
+Click the <i>New regex</i> toolbar button (<img src="images/ToolBarButtonNewRegex.gif" align="center" alt="The New-regex button" />), enter "<code>decimalNumber_&nbsp;&nbsp;(\\d+(\\.\\d*)?|\\d*\\.\\d+)</code>" into the dialog presented, and click the "OK" button as in Figure-3 below.
+</p>
+
+<p>
+<img src="images/create-token-decimalNumber.png" alt="Creating token decimalNumber" /><br />
+<i>Figure-3. Creating the </i>decimalNumber<i> token</i>
+</p>
+
+<p>
+Repeat the same procedure twice more to create the tokens <i>floatingPointNumber</i> (enter "<code>floatingPointNumber_&nbsp;&nbsp;-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?</code>" into the dialog) and <i>stringLiteral</i> (enter "<code>stringLiteral_&nbsp;&nbsp;\"([^\"\\p{Cntrl}\\\\]|\\[\\/bfnrt]|\\\\u[a-fA-F0-9]{4})*\"</code>" into the dialog) . 
 </p>
 
 <h3 id="DefDoubleNumber">def doubleNumber = floatingPointNumber ...</h3>
-
-<!--<p>
-<a href="http://www.youtube.com/watch?v=UCbbvJDoIpI">See it on YouTube</a>
-</p>-->
 
 <p>
 This is a very simple parser-rule, and just matches one token unconditionally. 
@@ -198,15 +136,7 @@ parser-rule should look like the right side of Figure-4 below.
 </p>
 
 <p>
-Finally, we need to add some action-code. Select (click) the <i>decimalNumber</i> token 
-(<img src="images/GrammarIconRegex.gif" align="center" alt="The Regex icon" />), 
-and paste the code 
-given below into the text area under <i>Action Code</i> as in Figure-5 
-below. Click the <i>Save</i> button (enabled when the content of the action-code area 
-changes). Observe that this adds the <i>action</i> annotation 
-(near red arrow) to the <i>floatingPontNumber_</i> token. From version 10.21, the rule-name 
-(<i>doubleNumber</i>) in the toolbar's dropdown list also has a small green arrow-icon 
-placed near it. 
+Finally, we need to add some action-code. Select (click) the <i>floatingPointNumber_</i> token (<img src="images/GrammarIconRegex.gif" align="center" alt="The Regex icon" />), and paste the code given below into the text area under <i>Action Code</i> as in Figure-5 below. Click the <i>Save</i> button (enabled when the content of the action-code area changes). Observe that this adds the <i>action</i> annotation (near red arrow) to the <i>floatingPontNumber_</i> token. The rule-name (<i>doubleNumber</i>) in the toolbar's dropdown list is also given a small green arrow-icon to indicate that the rule has an action function. 
 </p>
 
 <pre><code>function (a) {
@@ -225,10 +155,6 @@ Action-code functions are explained further in <a href="#ActionCode">Action Code
 </p>
 
 <h3>def toBe = "is" | "are"</h3>
-
-<!--<p>
-<a href="http://www.youtube.com/watch?v=2aIodvLeCVw">See it on YouTube</a>
-</p>-->
 
 <p>
 This parser-rule uses two custom literal tokens (<i>is</i> and <i>are</i>) which must be defined 
@@ -267,10 +193,7 @@ To create the parser, perform the following steps.
 <ul style="list-style-type: disc;">
   <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center" alt="The New-reference button" />), 
     enter <i>toBe</i> into the dialog presented, and click its <i>OK</i> button</li>
-  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center" alt="The Root icon" />) and select 
-    <i>Add -> Choice</i> from the context menu. A <i>Choice</i> node 
-    (<img src="images/GrammarIconChoice.gif" align="center" alt="The Choice icon" />) is added to the root node
-    (as in the left and middle parts of Figure-7 below)</li>
+  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center" alt="The Root icon" />) of the new rule, and select <i>Add -> Choice</i> from the context menu. A <i>Choice</i> node (<img src="images/GrammarIconChoice.gif" align="center" alt="The Choice icon" />) is added to the root node (as in the left and middle parts of Figure-7 below)</li>
   <li>right-click the newly created choice node and select <i>Add -> Token</i> from the context menu. 
     A dialog box with a dropdown list containing known token names is popped up. 
     Select <i>"is"</i> from the dropdown list, and click the <i>OK</i> button</li>
@@ -289,15 +212,11 @@ Your <i>toBe</i> parser-rule should now look like the one on the right side of F
 <p>
 The grammar-tree's node icons are designed to be intuitive, but you can find a 
 guide to all the icons in 
-<a href="EditingTheGrammarTree.html#GrammarTreeIconsAndAnnotations" target="_blank">
+<a href="EditingTheGrammarTree.html#GrammarTreeIconsAndAnnotations">
 Grammar Tree Icons and Annotations</a>
 </p>
 
 <h3>def percentage = toBe ~> doubleNumber <~ "percent" <~ "of" <~ "gross" ...</h3>
-
-<!--<p>
-<a href="http://www.youtube.com/watch?v=43SUBPL_kF0">See it on YouTube</a>
-</p>-->
 
 <p>
 This parser-rule uses a <i>Sequence</i> 
@@ -317,15 +236,11 @@ To create this parser, perform the following steps.
   <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center" alt="The Root icon" />) and select 
     <i>Add -> Sequence</i> from the context menu. A <i>Sequence</i> node 
     (<img src="images/GrammarIconSequence.gif" align="center" alt="The Sequence icon" />) is added to the root node</li>
-  <li>right-click the newly created sequence node and select <i>Add -> Reference</i> from the context menu. 
-    A dialog box with a dropdown list containing known parser-rule names is presented. 
-    Select <i>toBe</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>right-click the newly created sequence node and select <i>Add -> Reference</i> from the context menu. A dialog box with a dropdown list containing known parser-rule names is presented. Select <i>toBe</i> from the dropdown list, and click the <i>OK</i> button</li>
   <li>repeat the preceding action once more, selecting the reference <i>doubleNumber</i> instead</li>
-  <li>right-click the sequence node and select <i>Add -> Token</i> from the context menu. 
-    A dialog box with a dropdown list containing known token names is presented. 
-    Select <i>"percent"</i> from the dropdown list, and click the <i>OK</i> button</li>
-  <li>repeat the preceding action two more times, and add the tokens <i>"of"</i> 
-    and <i>"gross"</i> to the sequence node</li>
+  <li>before proceeding further create literal tokens "percent", "of", and "gross"</li>
+  <li>right-click the sequence node and select <i>Add -> Token</i> from the context menu. A dialog box with a dropdown list containing known token names is presented. Select <i>"percent"</i> from the dropdown list, and click the <i>OK</i> button</li>
+  <li>repeat the preceding action two more times, and add the tokens <i>"of"</i> and <i>"gross"</i> to the sequence node</li>
 </ul>
 
 <p>
@@ -346,7 +261,7 @@ Your finished parser-rule should now look like the right side of Figure-8 below.
 <p>
 Observe that the icons of <i>drop</i>ped nodes are overlaid with a black line 
 from the lower-left to the upper-right. The 
-<a href="EditingTheGrammarTree.html#Annotations" target="_blank">annotation</a> <i>drop</i> is also added 
+<a href="EditingTheGrammarTree.html#Annotations">annotation</a> <i>drop</i> is also added 
 after the name of the node.
 </p>
 
@@ -370,10 +285,6 @@ Your finished parser-rule should look like the one in Figure-8 above.
 
 <h3>def days = "days?".r ...</h3>
 
-<!--<p>
-<a href="http://www.youtube.com/watch?v=WFrv9UFcFWY">See it on YouTube</a>
-</p>-->
-
 <p>
 This parser-rule uses a custom regex token (<i>days?</i>) which must be defined 
 first. Proceed as follows.
@@ -384,10 +295,10 @@ first. Proceed as follows.
     (the <img src="images/ToolBarButtonNewRegex.gif" align="center" alt="The New-regex button" /> icon), 
     enter "<code>DAYS  days?</code>" into the dialog presented, and click the <i>OK</i> button 
     (as in Figure-9 below). Here <i>days?</i> is a regular-expression 
-    <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html" target="_blank">Pattern</a></li>
+    <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html" >Pattern</a></li>
   <li>click the <i>New rule</i> button (<img src="images/NewReference.gif" align="center" alt="The New-rule button" />), 
     enter <i>days</i> into the dialog presented, and click its <i>OK</i> button</li>
-  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center alt="The Root node" "/>) 
+  <li>right-click the root node (<img src="images/GrammarIconRoot.gif" align="center" alt="The Root node" "/>) 
     and select <i>Add -> Token</i> from the context menu. 
     Select <i>DAYS</i> from the dropdown list, and click the <i>OK</i> button</li>
 </ul>
@@ -418,8 +329,7 @@ Your finished parser-rule should look like the one on the right side of Figure-9
 <h2 id="AdHocTesting">Ad Hoc Testing - A Short Detour</h2>
 
 <p>
-A <a href="#Testing">full section</a> on testing comes later, 
-this section demonstrates the simplicity and power of <a href="http://vll.java.net/">VisualLangLab</a>'s 
+This section demonstrates the simplicity and power of <a href="http://vll.java.net/">VisualLangLab</a>'s 
 manual testing facilities. It shows how you can effortlessly 
 validate every little addition or change without using or learning 
 any other skills or tools. 
@@ -437,18 +347,16 @@ to select <i>doubleNumber</i> as in Figure-10 below.
 </p>
 
 <ul style="list-style-type: disc;">
-  <li>enter test input under <i>Parser Test Input</i> 
-    (red rectangle at bottom left)</li> 
+  <li>enter test input under <i>Parser Test Input</i> (bottom left)</li> 
   <li>click the <i>Parse input</i> button (<img src="images/ToolBarButtonParseInput.gif" align="center" alt="The Parse-input button" />)</li> 
-  <li>validate the parser's result printed under <i>Parser Log</i> 
-    (wide red rectangle at bottom right)</li> 
+  <li>validate the parser's result printed under <i>Parser Log</i> (bottom right)</li> 
 </ul>
 
 <p>
 If you do not see any red text (as in <a href="#Figure12">Figure-12</a> below) in the 
 <i>Parser Log</i> area, your parser executed without errors. 
 But that alone is not enough, you should verify that the result returned 
-(the <i>25</i> in Figure-10, for example) is the value expected. 
+(the <i>25.0</i> in Figure-10, for example) is the value expected. 
 </p>
 
 <p>
@@ -457,25 +365,17 @@ But that alone is not enough, you should verify that the result returned
 </p>
 
 <p>
-The parser's <i>result</i> or AST is on the third line (after the <i>result follows:</i>). 
-The previous two lines of output contain performance 
-information that should be ignored. 
-This test passes as <i>25</i> (last line under <i>Parser Log</i>) is the expected 
-result. 
+This test passes as <i>25.0</i> is the expected result. 
 </p>
 
 <h3>Validating toBe</h3>
 
-<!--<p>
-<a href="http://www.youtube.com/watch?v=89MQBpXKNlE">See it on YouTube</a>
-</p>-->
-
 <p>
 Before you start to enter test data for <i>toBe</i> take a moment to understand 
 the structure of its output. All parser-rules return an 
-<a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree" target="_blank">abstract syntax tree</a> (or AST) 
+<a href="http://en.wikipedia.org/wiki/Abstract_syntax_tree" >abstract syntax tree</a> (or AST) 
 whose structure depends on the arrangement and properties of the grammar-tree's constituent nodes 
-as explained in <a href="ASTAndActionCode.html#ASTStructure" target="_blank">AST Structure</a>. 
+as explained in <a href="ASTAndActionCode.html#ASTStructure" >AST Structure</a>. 
 The text area under <i>Parse Tree (AST) Structure</i> displays the expected AST 
 structure of the selected grammar-tree node. Figure-11 below tells you that the returned 
 result is one of two array objects (depending on what was found in the input). 
@@ -508,8 +408,7 @@ This set of tests too pass as all three test cases produce the expected result.
 The remaining parser-rules, except one that uses a <code>repsep</code> and 
 is described fully below, present no new difficulties and 
 we leave them as an exercise for the reader. 
-You can verify your creation by comparing it with the saved-grammar file 
-<i>payroll-parser-comb.vll</i> in the <i>grammars</i> directory of the zip distribution. 
+You can verify your parser by comparing it with the sample grammar. 
 </p>
 
 <h3>def deductItems = repsep(deductItem, ",")</h3>
@@ -552,7 +451,7 @@ Your finished rule should look like the one on the right side of Figure-13 below
 <p>
 Action-code is written as anonymous funtion literals in Javascript. 
 You can find detailed guidelines at 
-<a href="ASTAndActionCode.html#ActionCodeDesign" target="_blank">Action-Code Design</a>. 
+<a href="ASTAndActionCode.html#ActionCodeDesign" >Action-Code Design</a>. 
 </p>
 
 <h3 id="ActionCodeWeekDays">Action-Code: weekDays</h3>
@@ -574,7 +473,7 @@ To understand the logic of the action-code you must
 know the structure of the AST passed in (as the argument <i>a</i>). 
 The rule's AST structure is depicted in the text area under 
 <i>Parse Tree (AST) Structure</i>. 
-<a href="ASTAndActionCode.html#ASTStructure" target="_blank">AST Structure</a> describes 
+<a href="ASTAndActionCode.html#ASTStructure" >AST Structure</a> describes 
 AST structuring principles in general. 
 </p>
 
@@ -608,7 +507,7 @@ So <i>weekDays</i> merely needs to return the second member of the array.
 <p>
 Figure-16 below illustrates the action-code associated with the rule <i>percentage</i>. 
 This function uses a non-local reference <code>VLL.grossAmount</code>. 
-As described in <a href="ASTAndActionCode.html#ActionCodeDesign" target="_blank">Action-Code Design</a>, 
+As described in <a href="ASTAndActionCode.html#ActionCodeDesign" >Action-Code Design</a>, 
 the symbol <code>VLL</code> refers to a common global object available to all action-code 
 functions, and should be used as a repository for all parser-specific features (methods and 
 functions) and state (data). <a href="#WrapperWithActions">Wrapper with Actions</a> below 
@@ -650,13 +549,13 @@ Figure-17 below shows details of the wrapper rule <i>PaycheckTester</i> used for
 To display the <i>before</i> and <i>after</i> scripts (actually 
 parts of a single action-code function) you must select (click on)
 the <i>Reference</i> node that points to the <i>Paycheck</i> parser-rule. 
-From version 10.21 onwards, parser-rules designed for testing using this technique 
+Parser-rules designed for testing using this technique 
 are automatically distinguished with a special icon in the toolbar's dropdown list.
 </p>
 
 <p>
-<b>If you have not read <a href="ASTAndActionCode.html#ActionCodeDesign" target="_blank">
-Action-Code Design</a> and <a href="ASTAndActionCode.html#ASTStructure" target="_blank">AST Structure</a>, 
+<b>If you have not read <a href="ASTAndActionCode.html#ActionCodeDesign" >
+Action-Code Design</a> and <a href="ASTAndActionCode.html#ASTStructure" >AST Structure</a>, 
 please do so now!</b>
 </p>
 
@@ -676,7 +575,7 @@ The setup part of the function (<i>null</i>-argument part) performs two function
     (Javascript's dynamic nature allows it to add data and function members 
     to existing objects at run-time)</li>
   <li>deposits a few lines of test input (from 
-    <a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#c_para_let_s_try_it_out_here_is_a_sp" target="_blank">here</a> in 
+    <a href="http://ofps.oreilly.com/titles/9780596155957/DomainSpecificLanguages.html#c_para_let_s_try_it_out_here_is_a_sp" >here</a> in 
     the OFPS version of <i>Programming Scala</i>) into the <i>Parser Test Input</i> area. 
     These lines are processed as input when the main parser-rule (<i>Paycheck</i>) runs</li>
 </ul>
@@ -738,11 +637,10 @@ of the parse-tree returned by the main parser, and prints out an appropriate mes
 
 <p>
 To understand how this works, let's run it a few times with and 
-without changes to the test input as in the table below. The red text is the 
-changed part (in the table). To run the test after making changes 
-in the action-code click the <i>Save</i> button and wait for 
-a pop-up dialog to confirm that the change was accepted, click 
-the pop-up's <i>OK</i> button, and then click the <i>Parse input</i> 
+without changes to the test input as in the table below. The red text (in the table) is the 
+changed part. To run the test after making changes 
+in the action-code click the <i>Save</i> button, then click 
+the <i>Parse input</i> 
 (<img src="images/ToolBarButtonParseInput.gif" align="center" alt="The Parse-input button" />) button. 
 </p>
 
@@ -777,7 +675,7 @@ Near the top of the script, a value called <i>ParserTestInput</i> is
 used. This name is a reference to the GUI's <code>JTextArea</code> 
 from which the parser under test obtains input (and into 
 which test input is normally entered manually). More information about 
-this can be found under <a href="ASTAndActionCode.html#PredefinedVariables" target="_blank">
+this can be found under <a href="ASTAndActionCode.html#PredefinedVariables" >
 Predefined Variables</a>. 
 </p>
 
@@ -792,8 +690,8 @@ package.
 
 <p>
 The class diagram in Figure-18 below depicts 
-<a href="http://vll.java.net/" target="_blank">VisualLangLab</a>'s relationship with Scala's 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html" target="_blank">
+<a href="http://vll.java.net/" >VisualLangLab</a>'s relationship with Scala's 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html" >
 parser combinators</a>. Although it depends on <code>RegexParsers</code>, it changes 
 most of the functionality by overriding many of the important methods.
 </p>
@@ -805,7 +703,7 @@ most of the functionality by overriding many of the important methods.
 
 <p>
 Full details of how VisualLangLab uses Scala's parser combinator library can be seen in 
-<a href="RelationshipWithScalaParserCombinators.html" target="_blank">
+<a href="RelationshipWithScalaParserCombinators.html" >
 Relationship with Scala Parse rCombinators</a>. 
 </p> 
 
@@ -814,10 +712,10 @@ Relationship with Scala Parse rCombinators</a>.
 <p>
 VisualLangLab overrides the <code>literal(String)</code> and <code>regex(Regex)</code> methods 
 of Scala's 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" target="_blank">
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >
 RegexParsers</a> with versions that work with a built-in lexer. The behavior of these 
 versions is similar to lexers in more sophisticated parser development tools, and is described in 
-<a href="RelationshipWithScalaParserCombinators.html#ClassSimpleLexingRegexParsers" target="_blank">
+<a href="RelationshipWithScalaParserCombinators.html#ClassSimpleLexingRegexParsers" >
 Simple Lexing RegexParsers</a>. 
 </p>
 
@@ -825,12 +723,12 @@ Simple Lexing RegexParsers</a>.
 
 <p>
 Many example parsers in tutorials and other resources extend 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" target="_blank">
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" >
 JavaTokenParsers</a>, so VisualLangLab provides a token library in it's place. 
 Those planning to use this token library should, however, note that the tokens defined in 
 it have names ending in an underscore (_). Ending the name of a token in an underscore causes 
 VisualLangLab's built-in lexer to be bypassed, in favor of the 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" target="_blank">RegexParsers</a> 
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >RegexParsers</a> 
 capability. 
 </p>
 
@@ -838,7 +736,7 @@ capability.
 This change is required because the builtin lexer works best when the regex 
 definitions are distinct, and multiple regex tokens will not match the same lexeme. 
 But the regular expressions used in 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" target="_blank">
+<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" >
 JavaTokenParsers</a> are such that <code>floatingPointNumber</code> subsumes both <code>decimalNumber</code> 
 and <code>wholeNumber</code>, and <code>decimalNumber</code> itself subsumes <code>wholeNumber</code>. 
 </p>
@@ -870,32 +768,32 @@ a hand-written parser based on Scala parser combinators.
 
   <tr>
     <td rowspan="5" style="text-align: center; padding: 2px">Lexical Analyzer</td>
-    <td style="padding: 2px">The builtin lexer works like <a href="http://en.wikipedia.org/wiki/Lexical_analysis" target="_blank">
+    <td style="padding: 2px">The builtin lexer works like <a href="http://en.wikipedia.org/wiki/Lexical_analysis" >
         lexical analyzer generators</a>, but does not require any separate steps or tools</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
     <td style="padding: 2px">Token definitions may use the full regular-expression language of the JDK's 
-        <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html" target="_blank">Pattern</a></td>
+        <a href="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html" >Pattern</a></td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
     <td style="padding: 2px">Unlike 
-        <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" target="_blank">
+        <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >
         RegexParsers</a>, all literal tokens are treated as <i>reserved keywords</i> that have higher priority 
         than regex tokens. The next lexeme provided by the lexer is always the longest possible part of the 
         input that matches any known token</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
-    <td style="padding: 2px"><a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" target="_blank">
+    <td style="padding: 2px"><a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >
         RegexParsers</a> compatible behavior can also be obtained if required</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
     <td style="text-align: center; padding: 2px">-</td>
     <td style="padding: 2px">Performance is probably poorer than 
-        <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" target="_blank">
+        <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >
         RegexParsers</a> though no measurements have been made</td>
   </tr>
 
