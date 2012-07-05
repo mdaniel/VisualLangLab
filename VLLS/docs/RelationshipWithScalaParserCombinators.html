@@ -21,7 +21,7 @@ The latest jar file can be downloaded here:
 </td></tr></table>
 
 <p>
-Parsers produced by VisualLangLab are based on the <a href="http://en.wikipedia.org/wiki/Parser_combinator">parser combinator</a> principle, and the implementation used is inspired by the design of classes in the Scala API's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">combinator</a> package (with changes needed to suit the Java language and the GUI-IDE environment). 
+Parsers produced by VisualLangLab are based on the <a href="http://en.wikipedia.org/wiki/Parser_combinator">parser combinator</a> principle, and the implementation used adapts many design elements of classes in the Scala API's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">combinator</a> package (with changes needed to suit the Java language and the GUI-IDE environment). 
 </p>
 
 <h2 id="CombinatorClasses">Combinator Classes</h2>
@@ -36,7 +36,7 @@ The class diagram in Figure-1 below shows the organization of VisualLangLab's pa
 </p>
 
 <p>
-The class <code>SimpleLexingRegexParsers</code> is however unique to VisualLangLab, and is its built-in <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexical analyzer</a> (or just <i>lexer</i>). The built-in lexer improves upon the very simple functionality of <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>' <code>literal()</code> and <code>regex()</code> functions, and provides characteristics similar to those seen in full-fledged lexers.
+The class <code>SimpleLexingRegexParsers</code> (lightly shaded in the figure) is however unique to VisualLangLab, and is its built-in <a href="http://en.wikipedia.org/wiki/Lexical_analysis">lexical analyzer</a> (or just <i>lexer</i>). The built-in lexer improves upon the very simple functionality of <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a>' <code>literal()</code> and <code>regex()</code> functions, and provides characteristics similar to those seen in full-fledged lexers.
 </p> 
 
 <h2 id="BuiltInLexer">Built-In Lexer</h2>
@@ -46,25 +46,26 @@ VisualLangLab's built-in lexer has the following characteristics:
 </p> 
 
 <ul style="list-style-type: disc;">
-  <li>literal tokens take precedence over regex tokens, so if a literal and a regex match some input, the lexer will return the literal not the regex. This is useful for creating <i>reserved keywords</i></li>
+  <li>tokens are of two kinds, <i>literal</i> and <i>regex</i>, as in <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a></li>
+  <li>literal tokens have precedence over regex tokens. So if both, a literal and a regex, match the same input, the lexer will return the literal not the regex. This is useful for creating <i>reserved keywords</i></li>
   <li>the token that matches the longest piece of input always wins. Literals have precedence over regexs (previous rule) only when the matched lengths are equal</li>
-  <li>there are not <i>scoped</i> tokens, but a workaround (see below) can be used in most situations requiring them</li>
-  <li>all tokens, literals and regexs, have to be declared before use. Tokens are defined as described in <a href="EditingTheGrammarTree.html#CreatingTokens">Creating Tokens</a></li>
+  <li>there are no <i>scoped tokens</i>, but a workaround (see below) is available for most situations requiring them</li>
+  <li>all tokens, literal and regex, have to be declared before use as described in <a href="EditingTheGrammarTree.html#CreatingTokens">Creating Tokens</a></li>
 </ul>
 
 <p>
-The parser and test-run shown in Figure-2 below illustrate these ideas. The rule-tree shown contains a <i>Choice</i> element that attempts to match its input to one of the following tokens:
+Figure-2 below shows a parser and a test-run illustrating these concepts. The rule-tree shown contains a <i>Choice</i> element that attempts to match its input to one of the following tokens (the quote marks are not part of the token specification):
 </p> 
 
 <ul style="list-style-type: disc;">
-  <li>the literal <i>and</i></li>
-  <li>the literal <i>android</i></li>
-  <li>the regex <i>\\d+</i> (a number)</li>
-  <li>the regex <i>[a-z][a-z0-9]*</i> (an identifier)</li>
+  <li>the literal "<i>and</i>"</li>
+  <li>the literal "<i>android</i>"</li>
+  <li>the regex "<i>\\d+</i>" (a number)</li>
+  <li>the regex "<i>[a-z][a-z0-9]*</i>" (an identifier)</li>
 </ul>
 
 <p>
-The <i>Choice</i> element has a multiplicity of <i>1 or more</i>, and we run it (see <a href="TestingParsers.html#ValidationIsEasy">Validation Is Easy</a>) against the following input: <code>and123 android123 and 123 android 123</code>. As the text under <i>Parser Log</i> shows, the words in the input match the expected tokens (the log format is explained in <a href="ASTAndActionCode.html#ASTStructure">AST Structure</a>).
+The <i>Choice</i> element has a multiplicity of "+" (<i>1 or more</i>), and we run the parser (see <a href="TestingParsers.html#ValidationIsEasy">Validation Is Easy</a>) against the following input: "<i>and123 android123 and 123 android 123</i>" (again, the quote marks are not part of the input). As the parser's output (the text under <i>Parser Log</i>) shows, the words in the input are correctly matched to the expected tokens (the output format is explained in <a href="ASTAndActionCode.html#ASTStructure">AST Structure</a>).
 </p> 
 
 <p>
@@ -73,11 +74,11 @@ The <i>Choice</i> element has a multiplicity of <i>1 or more</i>, and we run it 
 </p>
 
 <p>
-The corresponding Scala parser created with <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> would behave in a different way. That parser would break up words like <i>and123</i> and <i>android123</i> into two separate tokens (<i>and</i> or <i>android</i> respectively followed by <i>123</i>). This can be solved by using a parser based on <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html">JavaTokenParsers</a> instead of <i>RegexParsers</i>.
+The corresponding Scala parser created with <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> would behave in a different way. That parser would break up words like "<i>and123</i>" and "<i>android123</i>" into two separate tokens ("<i>and</i>" or "<i>android</i>" respectively followed by "<i>123</i>"). This particular problem can be solved by using a parser based on <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html">JavaTokenParsers</a> instead of <i>RegexParsers</i>, but even <i>JavaTokenParsers</i> is not a fully capable generic lexer suitable for all applications.
 </p>
 
 <p>
-The built-in lexer's characteristics shown above are independent of the ordering of the tokens within the <i>Choice</i> element as demonstrated in Figure-3 below. The regex <i>[a-z][a-z0-9]*</i> has, in this case, been moved up to be the choice element's first child node.
+The built-in lexer's characteristics shown above are independent of the ordering of the tokens within the <i>Choice</i> element as demonstrated in Figure-3 below. The regex token "<i>[a-z][a-z0-9]*</i>" has, in this case, been moved up to become the choice element's first child node.
 </p> 
 
 <p>
@@ -86,7 +87,7 @@ The built-in lexer's characteristics shown above are independent of the ordering
 </p>
 
 <p>
-Again, a Scala parser created with <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> would interpret the inputs <i>and</i> and <i>android</i> as instances of the regex <i>[a-z][a-z0-9]*</i>, not as the corresponding literal tokens.
+In this case, a Scala parser created with <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> would interpret the input words "<i>and</i>" and "<i>android</i>" as instances of the regex "<i>[a-z][a-z0-9]*</i>", not as the corresponding literal tokens.
 </p>
 
 <h3 id="TokenScopes">Token Scopes</h3>
@@ -94,6 +95,10 @@ Again, a Scala parser created with <a href="http://www.scala-lang.org/api/curren
 <p>
 The built-in lexer does not support scoped tokens, and all tokens exist in a single global scope. However most scoping needs can be served by a rudimentary, sledgehammer-strength mechanism: ending a token's name with an underscore (_) places it in its own private scope. When the parser tests for such a token, the lexer does not come into play, so any other token definitions (in the global scope and other private scopes) are not considered. In effect, the lexer falls back to using the <code>literal()</code> and <code>regex()</code> methods of <code>RegexParsers</code> for these tokens.
 </p> 
+
+<p>
+Tokens in private scopes may use the same pattern specification as any other non-private token. Among other uses, such tokens may be used to allow keywords to be used as identifiers in limited contexts.
+</p>
 
 <h3 id="WhitspaceAndComments">Whitespace and Comments</h3>
 
