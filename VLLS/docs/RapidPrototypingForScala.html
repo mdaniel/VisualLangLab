@@ -18,7 +18,7 @@ If you are using an older version, follow <a href="RapidPrototypingForScala-lega
 </td></tr></table>
 
 <p>
-The title of this article is a vestige from the time (version 7.x) when VisualLangLab was written in Scala, and was effectively a rapid development environment for parsers created with Scala's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>. The current version (10.xx) is written in pure Java, but still retains a strong design <a href="RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a>. A comparison of this approach with hand-coding of Scala parsers can be found in <a href="#ProsAndCons">Pros and Cons</a> below.
+The title of this article is a vestige from the time (version 7.x) when VisualLangLab was written in Scala, and was effectively a rapid development environment for parsers created with Scala's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html">parser combinators</a>. The current version (10.xx) is written in pure Java, but retains a strong design <a href="RelationshipWithScalaParserCombinators.html">Relationship with Scala Parser Combinators</a>. Parsers created with the two technologies therefore have strong similarities, and VisualLangLab is still an effective exploratory tool for someone planning a parser written in Scala. A comparison of the two approaches can be found in <a href="#ProsAndCons">Pros and Cons</a> below.
 
 </p>
 
@@ -87,7 +87,7 @@ The only prerequisite for running VisualLangLab as described above is a 6.0+ JRE
 In the book (<a href="http://programmingscala.com/">Programming Scala</a>), the parser-rules are organized in top-down fashion. But here, we start at the bottom with <i>doubleNumber</i>, and work our way up, creating some of the parser-rules and demonstrating most of VisualLangLab's features. The complete parser is also included as a sample grammar within the GUI (select "Help" -> "Sample grammers" -> "PSWP-Payroll-Parser-Combinators" from the main menu).
 </p>
 
-<h3>Imported Elements</h3>
+<h3 id="ImportedElements">Imported Elements</h3>
 
 <p>
 The book's code starts by importing <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html">JavaTokenParsers</a>. VisualLangLab has no <i>JavaTokenParsers</i> equivalent, but we can simulate the effect of the <code>import</code> by creating three regex tokens (<i>decimalNumber</i>, <i>floatingPointNumber</i>, and <i>stringLiteral</i>). 
@@ -638,20 +638,25 @@ of the parse-tree returned by the main parser, and prints out an appropriate mes
 }</code></pre>
 
 <p>
-To understand how this works, let's run it a few times with different inputs (shown in the table below). The first row of the table is a success case, while the remaining lines show error case. The red text in some rows of the table represents changes to the input that will make the parser fail. To run the test after making changes to the input text, click the <i>Save</i> button, then click the <i>Parse input</i> (<img src="images/ToolBarButtonParseInput.gif" align="center" alt="The Parse-input button" />) button. 
+To run this test just click the <i>Parse input</i> (<img src="images/ToolBarButtonParseInput.gif" align="center" alt="The Parse-input button" />) button. You should see the text shown below appear under <i>Parser Test Input</i>, and then "OK" appears in the <i>Parser Log</i> area.
+</p>
+
+<pre><code>paycheck for employee "Buck Trends"
+is salary for 2 weeks minus deductions for {
+  federal income tax is 25. percent of gross,
+  state income tax is 5. percent of gross,
+  insurance premiums are 500. in gross currency,
+  retirement fund contributions are 10. percent of gross
+}</code></pre>
+
+<p>
+You can also try some error cases. The table below shows some changes (in red) you can make to the input, and the corresponding result messages you should see. To change the input given to the parser (when the <i>Parse input</i> button <img src="images/ToolBarButtonParseInput.gif" align="center" alt="The Parse-input button" /> is clicked) you need to change the input-string in the action code shown above. The input string is the argument to the <code>vllParserTestInput.setText(...)</code> function just after the comment <code>// Input text for parser ...</code>.
 </p>
 
 <table border="1" style="border: 1px solid black;">
   <tr>
-    <th colspan="2" style="text-align: center; font-weight: bold;">Sample Inputs for Rule Paycheck</th>
-  </tr>
-  <tr>
     <th style="text-align: center; font-weight: bold;">Input</th>
     <th style="text-align: center; font-weight: bold;">Result</th>
-  </tr>
-  <tr>
-    <td style="padding: 2px">No changes</td>
-    <td style="padding: 2px">OK</td>
   </tr>
   <tr>
     <td style="padding: 2px">... employee &quot;<span style="color: red; font-weight: bold;">D</span>uck Trends&quot; ...</td>
@@ -668,61 +673,30 @@ To understand how this works, let's run it a few times with different inputs (sh
 </table>
 
 <p>
-Near the top of the script, a value called <i>ParserTestInput</i> is 
-used. This name is a reference to the GUI's <code>JTextArea</code> 
-from which the parser under test obtains input (and into 
-which test input is normally entered manually). More information about 
-this can be found under <a href="ASTAndActionCode.html#PredefinedVariables" >
+The variable <i>vllParserTestInput</i> is a reference to the GUI's <code>JTextArea</code> from which the parser under test obtains input (and into which test input is normally entered manually). More information about this can be found under <a href="ASTAndActionCode.html#PredefinedVariables" >
 Predefined Variables</a>. 
 </p>
 
-<h2 id="RegexParsersCompatibility">Scala Parser Combinator Compatibility</h2>
+<h3 id="JUnitTesting">JUnit Testing</h3>
 
 <p>
-The class diagram in Figure-19 below depicts 
-<a href="http://vll.java.net/" >VisualLangLab</a>'s relationship with Scala's 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/package.html" >
-parser combinators</a>. 
+It is possible to use JUnit (or any of its successors) to create a test suite for a parser. An description and example of the approach can be found in <a href="TestingParsers.html#UsingJUnit">Using JUnit</a>.
 </p>
 
-<p>
-<img src="images/RelationshipWithScalaParserCombinators.png" alt="Relationship With Scala Parser Combinators" /><br />
-<i>Figure-19. Relationship With Scala Parser Combinators</i>
-</p>
+<h2 id="BuiltinLexicalAnalyzer">Builtin Lexical Analyzer</h2>
 
 <p>
-Full details of how VisualLangLab adapts the design of Scala's parser combinator library can be seen in 
-<a href="RelationshipWithScalaParserCombinators.html" >
-Relationship with Scala Parse rCombinators</a>. 
-</p> 
-
-<h3 id="BuiltinLexicalAnalyzer">Builtin Lexical Analyzer</h3>
-
-<p>
-VisualLangLab overrides the <code>literal(String)</code> and <code>regex(Regex)</code> methods 
-of Scala's 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >
-RegexParsers</a> with versions that work with a built-in lexer. The behavior of these 
-versions is similar to lexers in more sophisticated parser development tools, and is described in 
-<a href="RelationshipWithScalaParserCombinators.html#BuiltInLexer" >
-Built-In Lexer</a>. 
+VisualLangLab uses a custom builtin lexer that is significantly more effective than the <code>literal(String)</code> and <code>regex(Regex)</code> methods of Scala's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html">RegexParsers</a> class. The behavior of this lexer is similar to those in more sophisticated parser development tools, and is described in <a href="RelationshipWithScalaParserCombinators.html#BuiltInLexer">Built-In Lexer</a>. 
 </p>
 
 <h3 id="JavaTokenParsers">JavaTokenParsers</h3>
 
 <p>
-Ending the name of a token in an underscore (_) causes 
-VisualLangLab's built-in lexer to be bypassed, in favor of a
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >RegexParsers</a>-like capability. 
+The builtin lexer can however be <i>too powerful</i> for some applications -- such as this one. For these cases, ending the name of tokens in an underscore (_) is recommended. In handling these tokens, the parser bypasses the builtin lexer and falls back to a <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >RegexParsers</a>-like capability. 
 </p>
 
 <p>
-This change is required because the builtin lexer works best when the regex 
-definitions are distinct, and multiple regex tokens will not match the same lexeme. 
-But the regular expressions used in 
-<a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html" >
-JavaTokenParsers</a> are such that <code>floatingPointNumber</code> subsumes both <code>decimalNumber</code> 
-and <code>wholeNumber</code>, and <code>decimalNumber</code> itself subsumes <code>wholeNumber</code>. 
+This approach is required (for the <a href="#ImportedElements">three imported tokens</a>) here because the builtin lexer works best when the regex definitions are distinct, and multiple regex tokens do not match the same lexeme. But the regular expressions used in <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html">JavaTokenParsers</a> are such that <code>floatingPointNumber</code> subsumes both <code>decimalNumber</code> and <code>wholeNumber</code>, and <code>decimalNumber</code> itself subsumes <code>wholeNumber</code>. 
 </p>
 
 <h2 id="ProsAndCons">Pros and Cons</h2>
@@ -776,41 +750,29 @@ a hand-written parser based on Scala parser combinators.
   </tr>
   <tr>
     <td style="text-align: center; padding: 2px">-</td>
-    <td style="padding: 2px">Performance is probably poorer than 
+    <td style="padding: 2px">Performance is poorer than 
         <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/RegexParsers.html" >
         RegexParsers</a> though no measurements have been made</td>
   </tr>
 
   <tr bgcolor="#dddddd">
-    <td rowspan="3" style="text-align: center; padding: 2px">AST</td>
+    <td rowspan="2" style="text-align: center; padding: 2px">AST</td>
     <td style="padding: 2px">Defined and created automatically following a well-defined and documented 
-        convention for AST structure. The AST is complete and unambiguous, and captures 
-        every detail of how the input matched the grammar</td>
+        convention for AST structure. The AST is complete and unambiguous</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr bgcolor="#dddddd">
-    <td style="padding: 2px">The AST is defined using common types from the Scala API, so no specialized 
-        knowledge is needed when using AST from Scala. Programs in other JVM languages can obtain a 
-        version of the AST constructed from JVM types only (release 6.01+). </td>
-    <td style="text-align: center; padding: 2px">-</td>
-  </tr>
-  <tr bgcolor="#dddddd">
-    <td style="padding: 2px">All elements in the AST are amenable to Scala pattern matching, 
-        so AST processing is simple. Programs in other JVM languages have to deal with a mutually 
-        nested structure of arrays and lists. </td>
+    <td style="padding: 2px">The AST is defined using common Java types, so no specialized 
+        knowledge is needed. Programs in any JVM language can use the AST. </td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
 
   <tr>
-    <td rowspan="4" style="text-align: center; padding: 2px">Action Code</td>
+    <td rowspan="3" style="text-align: center; padding: 2px">Action Code</td>
     <td style="padding: 2px">Completely separated from grammar text. Written as function literals 
         invoked in a well-defined and documented protocol. 
         Action code functions may access their environment via a defined and 
         documented set of predefined <i>global</i> variables.</td>
-    <td style="text-align: center; padding: 2px">-</td>
-  </tr>
-  <tr>
-    <td style="padding: 2px">Option of languages: Scala and Javascript</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
@@ -825,15 +787,11 @@ a hand-written parser based on Scala parser combinators.
   </tr>
 
   <tr bgcolor="#dddddd">
-    <td rowspan="4" style="text-align: center; padding: 2px">RegexParsers Compatibility</td>
-    <td style="padding: 2px">Provides token libraries for JavaTokenParsers</td>
+    <td rowspan="3" style="text-align: center; padding: 2px">RegexParsers Compatibility</td>
+    <td style="padding: 2px">Defines new layer (SimpleLexingRegexParsers) 
+        that adds value to RegexParsers's capabilities</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr bgcolor="#dddddd">
-  <tr bgcolor="#dddddd">
-    <td style="padding: 2px">Defines two layers (SimpleLexingRegexParsers an Aggregates) 
-        which value-add to RegexParsers's capabilities</td>
-    <td style="text-align: center; padding: 2px">-</td>
-  </tr>
   <tr bgcolor="#dddddd">
     <td style="padding: 2px">The usual RegexParses interface is exposed to API users</td>
     <td style="text-align: center; padding: 2px">-</td>
@@ -850,7 +808,7 @@ a hand-written parser based on Scala parser combinators.
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
-    <td style="padding: 2px">API usable from any JVM language (release 6.01+)</td>
+    <td style="padding: 2px">API usable from <i>any</i> JVM language</td>
     <td style="text-align: center; padding: 2px">-</td>
   </tr>
   <tr>
