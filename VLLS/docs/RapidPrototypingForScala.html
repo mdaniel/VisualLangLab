@@ -87,15 +87,17 @@ The only prerequisite for running VisualLangLab as described above is a 6.0+ JRE
 In the book (<a href="http://programmingscala.com/">Programming Scala</a>), the parser-rules are organized in top-down fashion. But here, we start at the bottom with <i>doubleNumber</i>, and work our way up, creating some of the parser-rules and demonstrating most of VisualLangLab's features. The complete parser is also included as a sample grammar within the GUI (select "Help" -> "Sample grammers" -> "PSWP-Payroll-Parser-Combinators" from the main menu).
 </p>
 
-<h3>Substitute Imported Tokens</h3>
+<h3>Imported Elements</h3>
 
 <p>
-The book's code starts by importing <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html">JavaTokenParsers</a> to obtain required tokens. VisualLangLab has no <i>JavaTokenParsers</i> equivalent, so we will create the required tokens. For reasons explained in <a href="#JavaTokenParsers">JavaTokenParsers</a> below, all the token names will have an underscore (_) suffix. 
+The book's code starts by importing <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/JavaTokenParsers.html">JavaTokenParsers</a>. VisualLangLab has no <i>JavaTokenParsers</i> equivalent, but we can simulate the effect of the <code>import</code> by creating three regex tokens (<i>decimalNumber</i>, <i>floatingPointNumber</i>, and <i>stringLiteral</i>). 
 </p>
 
 <p>
-Click the <i>New regex</i> toolbar button (<img src="images/ToolBarButtonNewRegex.gif" align="center" alt="The New-regex button" />), enter "<code>decimalNumber_&nbsp;&nbsp;(\\d+(\\.\\d*)?|\\d*\\.\\d+)</code>" into the dialog presented, and click the "OK" button as in Figure-3 below.
+To create the token <i>decimalNumber</i> click the <i>New regex</i> toolbar button (<img src="images/ToolBarButtonNewRegex.gif" align="center" alt="The New-regex button" />), enter the text shown below into the dialog presented, and click the "OK" button as in Figure-3. Token creation is explained in greater detail in <a href="EditingTheGrammarTree.html#CreatingTokens">Creating Tokens</a>.
 </p>
+
+<pre><code>decimalNumber_&nbsp;&nbsp;(\\d+(\\.\\d*)?|\\d*\\.\\d+)</code></pre>
 
 <p>
 <img src="images/create-token-decimalNumber.png" alt="Creating token decimalNumber" /><br />
@@ -103,7 +105,14 @@ Click the <i>New regex</i> toolbar button (<img src="images/ToolBarButtonNewRege
 </p>
 
 <p>
-Repeat the same procedure twice more to create the tokens <i>floatingPointNumber</i> (enter "<code>floatingPointNumber_&nbsp;&nbsp;-?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?</code>" into the dialog) and <i>stringLiteral</i> (enter "<code>stringLiteral_&nbsp;&nbsp;\"([^\"\\p{Cntrl}\\\\]|\\[\\/bfnrt]|\\\\u[a-fA-F0-9]{4})*\"</code>" into the dialog) . 
+Repeat the same procedure twice more to create <i>floatingPointNumber</i> and <i>stringLiteral</i>. The strings to be entered into the <i>New regex</i> dialog are given below.
+</p>
+
+<pre><code>floatingPointNumber_  -?(\\d+(\\.\\d*)?|\\d*\\.\\d+)([eE][+-]?\\d+)?[fFdD]?
+stringLiteral_  \"([^\"\\p{Cntrl}\\\\]|\\[\\/bfnrt]|\\\\u[a-fA-F0-9]{4})*\"</code></pre>
+
+<p>
+Observer that in all three cases described above, an underscore (_) has been appended to the token name. The reason for this is explained at <a href="#BuiltinLexicalAnalyzer">Builtin Lexical Analyzer</a> below.
 </p>
 
 <h3 id="DefDoubleNumber">def doubleNumber = floatingPointNumber ...</h3>
@@ -405,17 +414,10 @@ This set of tests too pass as all three test cases produce the expected result.
 <h2>The Remaining Parser-Rules</h2>
 
 <p>
-The remaining parser-rules, except one that uses a <code>repsep</code> and 
-is described fully below, present no new difficulties and 
-we leave them as an exercise for the reader. 
-You can verify your parser by comparing it with the sample grammar. 
+The remaining parser-rules, except one that uses a <code>repsep</code> and is described fully below, present no new difficulties and we leave them as an exercise for the reader. You can verify the parser you create by comparing it with the bundled sample grammar  (select "Help" -> "Sample grammers" -> "PSWP-Payroll-Parser-Combinators" from the main menu). 
 </p>
 
 <h3>def deductItems = repsep(deductItem, ",")</h3>
-
-<!--<p>
-<a href="http://www.youtube.com/watch?v=hyTeuBskfIo">See it on YouTube</a>
-</p>-->
 
 <p>
 This parser-rule uses a <i>RepSep</i> 
@@ -434,7 +436,7 @@ To create this rule proceed as follows.
     A dialog with known parser-rule names is presented. 
     Select <i>deductItem</i> from the dropdown, and click the <i>OK</i> button</li>
   <li>right-click the RepSep node again and select <i>Add -> Token</i> from the context menu. 
-    Select <i>","</i> from the dropdown, and click the <i>OK</i> button</li>
+    Select <i>","</i> from the dropdown, and click the <i>OK</i> button (the literal token for "," must have been created earlier)</li>
 </ul>
 
 <p>
@@ -636,12 +638,7 @@ of the parse-tree returned by the main parser, and prints out an appropriate mes
 }</code></pre>
 
 <p>
-To understand how this works, let's run it a few times with and 
-without changes to the test input as in the table below. The red text (in the table) is the 
-changed part. To run the test after making changes 
-in the action-code click the <i>Save</i> button, then click 
-the <i>Parse input</i> 
-(<img src="images/ToolBarButtonParseInput.gif" align="center" alt="The Parse-input button" />) button. 
+To understand how this works, let's run it a few times with different inputs (shown in the table below). The first row of the table is a success case, while the remaining lines show error case. The red text in some rows of the table represents changes to the input that will make the parser fail. To run the test after making changes to the input text, click the <i>Save</i> button, then click the <i>Parse input</i> (<img src="images/ToolBarButtonParseInput.gif" align="center" alt="The Parse-input button" />) button. 
 </p>
 
 <table border="1" style="border: 1px solid black;">
