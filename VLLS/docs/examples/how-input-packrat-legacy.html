@@ -12,24 +12,19 @@
 
 <h1>How do I feed input to a packrat parser?</h1>
 
-<table border="1" style="border: 1px solid red;" width="100%"><tr><td>
-<span style="font-size: larger;">For Ver-10.01 or higher only!</span><br/>
-If you are using an older version, follow 
-<a href="how-input-packrat-legacy.html">this tutorial</a> instead. 
-Beginning Ver-10.01, the title bar of the <i>About VisualLangLab</i> 
-dialog box displays the version number. 
-The latest jar file can be downloaded here: 
-<a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>. 
-</td></tr></table>
-
 <p>
-This example uses <a href="http://vll.java.net/">VisualLangLab</a> to create a parser like the one discussed in <a href="http://groups.google.com/group/scala-user/browse_thread/thread/f9c112bf65f4a449">this scala-user thread</a>. 
+This example uses <a href="http://vll.java.net/">VisualLangLab</a> to create a parser like the one discussed in 
+<a href="http://groups.google.com/group/scala-user/browse_thread/thread/f9c112bf65f4a449">this scala-user thread</a>. 
 </p>
 
 <h2>Download &amp; Start VisualLangLab</h2>
 
 <p>
-Download the executable JAR file <a href="http://java.net/projects/vll/downloads/download/VLL4J.jar">VLL4J.jar</a>, and start VisualLangLab by double-clicking the file. The only pre-requisite is a 6.0+ JRE. If using MacOS, Linux, or UNIX, you may need to enable execution ("<code>chmod +x VLL4J.jar</code>") first. Alternatively, enter "<code>java -jar VLL4J.jar</code>" at a command prompt.
+Download the all-inclusive JAR file 
+<a href="http://java.net/projects/vll/downloads/download/VLLS-All.jar">VLLS-All.jar</a>, 
+and start VisualLangLab by double-clicking <i>VLLS-All.jar</i>. 
+The only pre-requisite is a 6.0+ JRE. 
+If using MacOS, Linux, or UNIX, you will need to run "<code>chmod +x VLLS-All.jar</code>" first.
 </p>
 
 <h2>Rename Default Parser-Rule</h2>
@@ -40,34 +35,45 @@ Rename this parser-rule to <i>ones</i> as follows:
 </p>
 
 <ul style="list-style-type: disc;">
-  <li>Click the <i>Rename rule</i> button (<img src="images/ToolBarButtonRenameRule.gif" alt="ToolBarButtonRenameRule" align="center"/>)</li>
-  <li>Enter <code>ones</code> into the <i>Rename rule</i> dialog (seen in Figure-1 below), and click the <i>OK</i> button</li>
+  <li>Click the <i>Rename rule</i> button (A in Figure-1 below)</li>
+  <li>Enter <code>ones</code> into the <i>Rename rule</i> dialog (B in the figure), 
+      and click the <i>OK</i> button</li>
 </ul>
 
 <p>
-This step (renaming the default parser-rule) is optional, but helps to better align things with the example code.
+This step (renaming the default parser-rule) is optional, 
+but helps to better align things with the example code.
 </p>
 
 <p>
-  <img src="images/Rename-Parser.png" alt="Renaming the default parser-rule to ones" /><br />
+  <img src="images/Rename-Parser-legacy.png" alt="Renaming the default parser-rule to ones" /><br />
   <i>Figure-1. Renaming the default parser-rule to "ones"</i>
 </p>
 
 <h2>Create Literal Token for "1"</h2>
 
 <p>
-Create a <i>literal token</i> to represent "1" as follows:
+Since <i>in-line</i> literals can not be used in <a href="http://vll.java.net/">VisualLangLab</a>, 
+create a named <i>literal token</i> to represent "1" as follows:
 </p>
 
 <ul style="list-style-type: disc;">
-  <li>Click the <i>New literal</i> button (<img src="images/ToolBarButtonNewLiteral.gif" alt="ToolBarButtonNewLiteral" align="center"/>)</li>
-  <li>Enter "<code>1</code>" (without the quote marks) into the <i>New literal</i> dialog (as in the figure), and click the <i>OK</i> button</li>
+  <li>Click the <i>New literal</i> button (under red box in Figure-2 below)</li>
+  <li>Enter <code>ONE, 1</code> into the <i>New literal</i> dialog (red oval in the figure), 
+      and click the <i>OK</i> button</li>
 </ul>
 
 <p>
-  <img src="images/Create-Token-ONE.png" alt="Create literal token \"1\"" /><br />
-  <i>Figure-2. Create literal token "1"</i>
+<font color="red"><u>Change in Version 7.01</u>: The dialog in Figure-2 below 
+does not accept the comma. The name and pattern are just separated by one or more 
+space (and/or tab) characters</font>
 </p>
+
+<p>
+  <img src="images/Create-Token-ONE-legacy.png" alt="Create literal token ONE" /><br />
+  <i>Figure-2. Create literal token "ONE"</i>
+</p>
+
 
 <p>
 The text entered into the <i>New literal</i> dialog contains a <i>token-name</i> and <i>token-pattern</i> 
@@ -91,23 +97,23 @@ proceed as follows:
 </ul>
 
 <p>
-  <img src="images/Add-Choice-Node.png" alt="Adding a choice node" /><br />
+  <img src="images/Add-Choice-Node-legacy.png" alt="Adding a choice node" /><br />
   <i>Figure-3. Adding a choice node</i>
 </p>
 
 
 <ul style="list-style-type: disc;">
-  <li>Add a <i>"1"</i> token to the newly created <i>Choice node</i> 
+  <li>Add a <i>ONE</i> token to the newly created <i>Choice node</i> 
       (<img src="../images/GrammarIconChoice.gif" alt="The Choice icon" align="center" />) 
       by right-clicking it and choosing <i>Add -> Token</i> from the popup menu 
-      as on the left side of Figure-4 below. Select <i>"1"</i> from the popped-up dialog, 
+      as on the left side of Figure-4 below. Select <i>ONE</i> from the popped-up dialog, 
       and click the dialog's <i>OK</i> button</li>
   <li>The grammar-tree should now look like the right side of Figure-4</li>
 </ul>
 
 <p>
-  <img src="images/Add-First-ONE.png" alt="Adding first \"1\" token" /><br />
-  <i>Figure-4. Adding first "1" token</i>
+  <img src="images/Add-First-ONE-legacy.png" alt="Adding first ONE token" /><br />
+  <i>Figure-4. Adding first ONE token</i>
 </p>
 
 
@@ -120,7 +126,7 @@ proceed as follows:
 </ul>
 
 <p>
-  <img src="images/Add-Sequence-Node.png" alt="Adding a sequence node" /><br />
+  <img src="images/Add-Sequence-Node-legacy.png" alt="Adding a sequence node" /><br />
   <i>Figure-5. Adding a sequence node</i>
 </p>
 
@@ -135,23 +141,23 @@ proceed as follows:
 </ul>
 
 <p>
-  <img src="images/Add-Reference-Node.png" alt="Adding a reference node" /><br />
+  <img src="images/Add-Reference-Node-legacy.png" alt="Adding a reference node" /><br />
   <i>Figure-6. Adding a reference node</i>
 </p>
 
 
 <ul style="list-style-type: disc;">
-  <li>Add a <i>"1"</i> token to the <i>Sequencece node</i> 
+  <li>Add a <i>ONE</i> token to the <i>Sequencece node</i> 
       (<img src="../images/GrammarIconSequence.gif" alt="The Sequence icon" align="center" />) 
       by right-clicking it and choosing <i>Add -> Token</i> from the popup menu 
-      as on the left side of Figure-7 below. Select <i>"1"</i> from the popped-up dialog, 
+      as on the left side of Figure-7 below. Select <i>ONE</i> from the popped-up dialog, 
       and click the dialog's <i>OK</i> button</li>
   <li>The grammar-tree should now look like the right side of Figure-7</li>
 </ul>
 
 <p>
-  <img src="images/Add-Second-ONE.png" alt="Adding second \"1\" token" /><br />
-  <i>Figure-7. Adding second "1" token</i>
+  <img src="images/Add-Second-ONE-legacy.png" alt="Adding second ONE token" /><br />
+  <i>Figure-7. Adding second ONE token</i>
 </p>
 
 <p>
@@ -170,7 +176,7 @@ under <i>Parser Log</i>).
 </p>
 
 <p>
-  <img src="images/Testing-01.png" alt="Ad hoc testing in 3 simple steps" /><br />
+  <img src="images/Testing-01-legacy-legacy.png" alt="Ad hoc testing in 3 simple steps" /><br />
   <i>Figure-8. Ad hoc testing in 3 simple steps</i>
 </p>
 
@@ -189,7 +195,7 @@ below.
 </p>
 
 <p>
-  <img src="images/Testing-02.png" alt="Parsing error with two 1s in input" /><br />
+  <img src="images/Testing-02-legacy.png" alt="Parsing error with two 1s in input" /><br />
   <i>Figure-9. Parsing error with two "1"s in input</i>
 </p>
 
@@ -207,7 +213,7 @@ Structure</i>, to the right of the grammar-tree).
 </p>
 
 <p>
-  <img src="images/Testing-03.png" alt="Rearranged choice element" /><br />
+  <img src="images/Testing-03-legacy.png" alt="Rearranged choice element" /><br />
   <i>Figure-10. Rearranged choice element</i>
 </p>
 
@@ -217,7 +223,7 @@ precipitates the catastrophe in Figure-11 below.
 </p>
 
 <p>
-  <img src="images/Testing-04.png" alt="StackOverflowError due to left-recursion" /><br />
+  <img src="images/Testing-04-legacy.png" alt="StackOverflowError due to left-recursion" /><br />
   <i>Figure-11. StackOverflowError due to left-recursion</i>
 </p>
 
@@ -230,7 +236,7 @@ The grammar-tree should now look like the one on the right of Figure-12.
 </p>
 
 <p>
-  <img src="images/Setting-Packrat-Flag.png" alt="Setting the Packrat flag" /><br />
+  <img src="images/Setting-Packrat-Flag-legacy.png" alt="Setting the Packrat flag" /><br />
   <i>Figure-12. Setting the Packrat flag</i>
 </p>
 
@@ -239,7 +245,7 @@ Clicking the <i>Parse input</i> button again now produces the happy result in Fi
 </p>
 
 <p>
-  <img src="images/Packrat-Parser-Result.png" alt="Result with Packrat flag set" /><br />
+  <img src="images/Packrat-Parser-Result-legacy.png" alt="Result with Packrat flag set" /><br />
   <i>Figure-13. Result with Packrat flag set</i>
 </p>
 
