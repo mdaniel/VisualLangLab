@@ -70,9 +70,7 @@ Create a <i>literal token</i> to represent "1" as follows:
 </p>
 
 <p>
-The text entered into the <i>New literal</i> dialog contains a <i>token-name</i> and <i>token-pattern</i> 
-separated by a comma. Additional spaces are permitted around the comma for clarity. 
-The token-name is used in parser-rules as will be seen below. 
+The action described above creates a token named <i>"1"</i> (with the quote marks) with a literal pattern of <i>"1"</i> (<i>without</i> the quote marks). The token-name is used in parser-rules as will be seen below. Token creation is described in <a href="../EditingTheGrammarTree.html#CreatingTokens">Creating Tokens</a>.
 </p>
 
 <h2>Complete the Parser-Rule</h2>
@@ -126,17 +124,13 @@ proceed as follows:
 
 
 <ul style="list-style-type: disc;">
-  <li>Add a <i>Reference node</i> to the newly created <i>Sequence node</i> 
-      (<img src="../images/GrammarIconSequence.gif" alt="The Sequence icon" align="center" />) 
-      by right-clicking it and choosing <i>Add -> Reference</i> from the popup menu 
-      as on the left side of Figure-6 below. Select <i>ones</i> from the popped-up dialog, 
-      and click the dialog's <i>OK</i> button</li>
+  <li>Add a <i>Reference</i> to <i>ones</i> (the rule itself) to the newly created <i>Sequence node</i> (<img src="../images/GrammarIconSequence.gif" alt="The Sequence icon" align="center" />) by right-clicking it and choosing <i>Add -> Reference</i> from the popup menu (as on the left side of Figure-6 below). Select <i>ones</i> from the popped-up dialog, and click the dialog's <i>OK</i> button</li>
   <li>The grammar-tree should now look like the right side of Figure-6</li>
 </ul>
 
 <p>
   <img src="images/Add-Reference-Node.png" alt="Adding a reference node" /><br />
-  <i>Figure-6. Adding a reference node</i>
+  <i>Figure-6. Adding a reference to the rule itself</i>
 </p>
 
 
@@ -151,22 +145,17 @@ proceed as follows:
 
 <p>
   <img src="images/Add-Second-ONE.png" alt="Adding second \"1\" token" /><br />
-  <i>Figure-7. Adding second "1" token</i>
+  <i>Figure-7. Adding second "1" token to the rule</i>
 </p>
 
 <p>
 We're done. The parser is now ready for testing!
 </p>
 
-
 <h2>Testing the Parser</h2>
 
 <p>
-Figure-8 below demonstrates the ease of testing in <a href="http://vll.java.net/">VisualLangLab</a>. 
-Enter your parser test input under <i>Parser Test Input</i> ("1" in the red box 
-at lower left), click the <i>Parser input</i> button (under red circle), 
-and validate the output (in blue box following the "<i>result follows:</i>" 
-under <i>Parser Log</i>).
+Figure-8 below demonstrates the ease of testing in <a href="http://vll.java.net/">VisualLangLab</a>. Enter the test input (a single "1" without the quotes) under <i>Parser Test Input</i> (lower left of GUI), click the <i>Parse input</i> toolbar button (<img src="images/ToolBarButtonParseInput.gif" alt="ToolBarButtonParseInput" align="center"/>), and validate the parser's output under <i>Parser Log</i> (lower right of GUI).
 </p>
 
 <p>
@@ -176,16 +165,14 @@ under <i>Parser Log</i>).
 
 <p>
 To interpret the output (<i>Pair(0, 1)</i>) you must understand the 
-<a href="../ASTAndActionCode.html">AST structure</a>, but suffice it 
+<a href="../ASTAndActionCode.html#ASTStructure">AST structure</a>, but suffice it 
 to say that your parser successfully handled the solitary "1" in the 
 test input. So, let's move on to something 100% more complex: 
 a pair of "1"s in the input!
 </p>
 
 <p>
-Adding another "1" to the <i>Parser Test Input</i> box, and clicking the 
-<i>Parse input</i> button again, however, produces the unhappy result in Figure-9 
-below.
+Adding another "1" to the <i>Parser Test Input</i> box, and clicking the <i>Parse input</i> button again, however, produces the unhappy result in Figure-9 below.
 </p>
 
 <p>
@@ -194,16 +181,8 @@ below.
 </p>
 
 <p>
-What did we do to deserve this? <a href="http://vll.java.net/">VisualLangLab</a>'s visual grammars (being based on 
-Scala's parser combinators) implement ordered alternation, so the second 
-branch of the choice is not used if the first branch matches part of the input. 
-The solution in this case is obvious -- just switch the two branches by dragging 
-the sequence icon (<img src="../images/GrammarIconSequence.gif" alt="The Choice icon" align="center" />) 
-up above its sibling "<i>ONE</i>" token 
-(<img src="../images/GrammarIconLiteral.gif" alt="The Choice icon" align="center" />). 
-The resulting grammar-tree should look like the one in Figure-10 below. 
-Observe that the change also influences the structure of the AST (under <i>Parse Tree (AST) 
-Structure</i>, to the right of the grammar-tree). 
+What did we do to deserve this? <a href="http://vll.java.net/">VisualLangLab</a>'s visual grammars (being based on the design of Scala's parser combinators) implement ordered alternation, so the second 
+branch of the choice is not executed if the first branch returns successful (having matched a part of the input). The solution in this case is obvious -- just switch the two branches by dragging the sequence icon (<img src="../images/GrammarIconSequence.gif" alt="The Choice icon" align="center" />) up above its sibling <i>"1"</i> token (<img src="../images/GrammarIconLiteral.gif" alt="The Choice icon" align="center" />). The resulting grammar-tree should look like the one in Figure-10 below. Observe that the change also influences the structure of the AST (under <i>Parse Tree (AST) Structure</i>, to the right of the grammar-tree). 
 </p>
 
 <p>
@@ -212,8 +191,7 @@ Structure</i>, to the right of the grammar-tree).
 </p>
 
 <p>
-But clicking the <i>Parse input</i> button again (with two "1"s still in the <i>Parser Test Input</i> box) 
-precipitates the catastrophe in Figure-11 below. 
+But clicking the <i>Parse input</i> button again (with two "1"s still in the <i>Parser Test Input</i> box) precipitates the catastrophe in Figure-11 below. 
 </p>
 
 <p>
@@ -222,11 +200,7 @@ precipitates the catastrophe in Figure-11 below.
 </p>
 
 <p>
-A careful review of the structure of the parser-rule (or grammar-tree) quickly reveals that the 
-parser includes a left-recursive reference. This calls for the use of packrat parsing, and 
-you can endow <i>ones</i> appropriately by right-clicking the root-node and selecting 
-<i>Packrat</i> from the popup menu as in Figure-12 below. 
-The grammar-tree should now look like the one on the right of Figure-12. 
+A careful review of the error message and the structure of the parser-rule (or grammar-tree) quickly reveals that the parser includes a left-recursive reference. This calls for the use of packrat parsing, and you can endow <i>ones</i> appropriately by right-clicking the root-node and selecting <i>Packrat</i> from the popup menu (as on the left of Figure-12 below). The grammar-tree should now look like the one on the right of Figure-12. 
 </p>
 
 <p>
@@ -235,22 +209,17 @@ The grammar-tree should now look like the one on the right of Figure-12.
 </p>
 
 <p>
-Clicking the <i>Parse input</i> button again now produces the happy result in Figure-13 below. 
+Clicking the <i>Parse input</i> button now produces the expected result (bottom right of Figure-12 above). Adding more "1"s to the input (Figure-13 below) produces ever more deeply nested AST structures as expected. 
+
 </p>
 
 <p>
   <img src="images/Packrat-Parser-Result.png" alt="Result with Packrat flag set" /><br />
-  <i>Figure-13. Result with Packrat flag set</i>
+  <i>Figure-13. Testing with longer input strings</i>
 </p>
 
 <p>
-Adding more "1"s to the input produces ever more deeply nested AST structures as expected. 
-</p>
-
-<p>
-For more information about <a href="http://vll.java.net/">VisualLangLab</a> check out the tutorials 
-<a href="http://today.java.net/article/2011/09/14/visuallanglab-grammar-without-tears">Grammar without Tears</a> 
-and <a href="../RapidPrototypingForScala.html">Rapid Prototyping for Scala</a>. 
+For more information about <a href="http://vll.java.net/">VisualLangLab</a> check out the introduction at <a href="../GrammarWithoutTears2/GrammarWithoutTears2.html">Grammar without Tears2</a> and the tutorials <a href="../RapidPrototypingForScala.html">Rapid Prototyping for Scala</a> and <a href="../examples/a-quick-tour.html">A Quick Tour</a>. 
 </p>
 
 </body>
