@@ -79,7 +79,7 @@ public class VisitorXmlGeneration extends VisitorBase {
     @Override
     public Object visitRegex(NodeRegex n) {
         space();
-        printWriter.printf("<Token Ref=\"%s\" ", n.regexName);
+        printWriter.printf("<Token Ref=\"%s\" ", Utils.encode4xml(n.regexName));
         commonAttributes(n, true);
         return null;
     }
