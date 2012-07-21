@@ -72,19 +72,19 @@ The latest jar file can be downloaded here:
 
 <table border="1" style="border: 1px solid black;">
   <tr><td colspan="2" align="center"><b>Non-terminals</b></td></tr>
-  <tr><td><img src="images/GrammarIconRoot.gif" alt="The Root icon" /></td><td>Root - used for the root node of every grammar tree</td></tr>
-  <tr><td><img src="images/GrammarIconChoice.gif" alt="The Choice icon" /></td><td>Choice - used as the parent of a group of alternatives</td></tr>
-  <tr><td><img src="images/GrammarIconSequence.gif" alt="The Sequence icon" /></td><td>Sequence - used as the parent of a sequence of items</td></tr>
-  <tr><td><img src="images/GrammarIconRepSep.gif" alt="The RepSep icon" /></td><td>RepSep - parent of a sequence of similar items (specified by first child node) separated by text specified by the second child node. For more details, see descriptions of the <code>repsep()</code> and <code>rep1sep()</code> combinators in the Scala API's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> class. </td></tr>
-  <tr><td><img src="images/GrammarIconReference.gif" alt="The Reference icon" /></td><td>Reference - invokes another named parser</td></tr>
+  <tr><td><img src="images/GrammarIconRoot.gif" align="center" alt="The Root icon" /></td><td>Root - used for the root node of every grammar tree</td></tr>
+  <tr><td><img src="images/GrammarIconChoice.gif" align="center" alt="The Choice icon" /></td><td>Choice - used as the parent of a group of alternatives</td></tr>
+  <tr><td><img src="images/GrammarIconSequence.gif" align="center" alt="The Sequence icon" /></td><td>Sequence - used as the parent of a sequence of items</td></tr>
+  <tr><td><img src="images/GrammarIconRepSep.gif" align="center" alt="The RepSep icon" /></td><td>RepSep - parent of a sequence of similar items (specified by first child node) separated by text specified by the second child node. For more details, see descriptions of the <code>repsep()</code> and <code>rep1sep()</code> combinators in the Scala API's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a> class. </td></tr>
+  <tr><td><img src="images/GrammarIconReference.gif" align="center" alt="The Reference icon" /></td><td>Reference - invokes another named parser</td></tr>
   <tr><td colspan="2" align="center"><b>Terminals</b></td></tr>
-  <tr><td><img src="images/GrammarIconLiteral.gif" alt="The Literal icon" /></td><td>Literal - matches a specified literal token</td></tr>
-  <tr><td><img src="images/GrammarIconRegex.gif" alt="The Regex icon" /></td><td>Regexp - matches a specified regex token</td></tr>
-  <tr><td><img src="images/GrammarIconWildCard.gif" alt="The WildCard icon" /></td><td>Token wildcard - a pseudo-token that matches any other defined token, useful for error handling strategies</td></tr>
+  <tr><td><img src="images/GrammarIconLiteral.gif" align="center" alt="The Literal icon" /></td><td>Literal - matches a specified literal token. A private-scoped literal (see <a href="RelationshipWithScalaParserCombinators.html#TokenScopes">Token Scopes</a>) is depicted like this: <img src="images/GrammarIconLiteralLocal.gif" align="center" alt="The Literal-Local icon" /></td></tr>
+  <tr><td><img src="images/GrammarIconRegex.gif" align="center" alt="The Regex icon" /></td><td>Regexp - matches a specified regex token. A private-scoped regex (see <a href="RelationshipWithScalaParserCombinators.html#TokenScopes">Token Scopes</a>) is depicted like this: <img src="images/GrammarIconRegexLocal.gif" align="center" alt="The Regex-Local icon" /></td></tr>
+  <tr><td><img src="images/GrammarIconWildCard.gif" align="center" alt="The WildCard icon" /></td><td>Token wildcard - a pseudo-token that matches any other defined token, useful for error handling strategies</td></tr>
   <tr><td colspan="2" align="center"><b>Utility nodes & Icon overlays</b></td></tr>
-  <tr><td><img src="images/GrammarIconSemPred.gif" alt="The SemPred icon" /></td><td>Semantic predicate - succeeds or fails depending on the run-time value of an expression</td></tr>
-  <tr><td><img src="images/GrammarIconCommitMark.gif" alt="The Commit-mark icon" /></td><td>Commit - displayed on top of a node that has the <i>commit</i> annotation</td></tr>
-  <tr><td><img src="images/GrammarIconErrorMark.gif" alt="The Error-mark icon" /></td><td>Error: indicates an error in the associated node or rule</td></tr>
+  <tr><td><img src="images/GrammarIconSemPred.gif" align="center" alt="The SemPred icon" /></td><td>Semantic predicate - succeeds or fails depending on the run-time value of an expression</td></tr>
+  <tr><td><img src="images/GrammarIconCommitMark.gif" align="center" alt="The Commit-mark icon" /></td><td>Commit - displayed on top of a node that has the <i>commit</i> annotation</td></tr>
+  <tr><td><img src="images/GrammarIconErrorMark.gif" align="center" alt="The Error-mark icon" /></td><td>Error: indicates an error in the associated node or rule</td></tr>
 </table>
 
     <h3 id="Annotations">Annotations</h3>
