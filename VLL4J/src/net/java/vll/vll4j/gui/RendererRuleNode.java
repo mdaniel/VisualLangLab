@@ -58,11 +58,13 @@ public class RendererRuleNode extends DefaultTreeCellRenderer {
         if (theNode instanceof NodeChoice) {
             return Resources.choice;
         } else if (theNode instanceof NodeLiteral) {
-            return Resources.literal;
+            String litName = ((NodeLiteral)theNode).literalName;
+            return litName.endsWith("_") ? Resources.literalLocal : Resources.literal;
         } else if (theNode instanceof NodeReference) {
             return Resources.reference;
         } else if (theNode instanceof NodeRegex) {
-            return Resources.regex;
+            String regName = ((NodeRegex)theNode).regexName;
+            return regName.endsWith("_") ? Resources.regexLocal : Resources.regex;
         } else if (theNode instanceof NodeRepSep) {
             return Resources.repSep;
         } else if (theNode instanceof NodeRoot) {

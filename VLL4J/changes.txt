@@ -1,3 +1,5 @@
+10.40 2012-JUL-22
+  Private-scoped tokens now have distinct icons (gray versions)
 10.39 2012-JUL-08
   Fixed bug in saving regex tokens with default names
 10.38 2012-JUL-04
