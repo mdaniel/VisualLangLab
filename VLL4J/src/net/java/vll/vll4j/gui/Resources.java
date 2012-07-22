@@ -46,7 +46,7 @@ public class Resources {
     static ImageIcon import16 = getIcon("Import16.gif");
     static ImageIcon information16 = getIcon("Information16.gif");
     static ImageIcon literal = getIcon("Literal.gif");
-    static ImageIcon literalLocal = getIcon("Literal-Local.gif");
+    static ImageIcon literalLocal = getIcon("LiteralPrivate.gif");
     static ImageIcon new16 = getIcon("New16.gif");
     static ImageIcon newLiteral = getIcon("NewLiteral.gif");
     static ImageIcon newReference = getIcon("NewReference.gif");
@@ -59,7 +59,7 @@ public class Resources {
     static ImageIcon reference = getIcon("Reference.gif");
     static ImageIcon refresh16 = getIcon("Refresh16.gif");
     static ImageIcon regex = getIcon("Regex.gif");
-    static ImageIcon regexLocal = getIcon("Regex-Local.gif");
+    static ImageIcon regexLocal = getIcon("RegexPrivate.gif");
     static ImageIcon repSep = getIcon("RepSep.gif");
     static ImageIcon replace16 = getIcon("Replace16.gif");
     static ImageIcon root = getIcon("Root.gif");

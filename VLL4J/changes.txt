@@ -1,3 +1,5 @@
+10.41 2012-JUL-22
+  Private-scoped token icons changed again
 10.40 2012-JUL-22
   Private-scoped tokens now have distinct icons (gray versions)
 10.39 2012-JUL-08
