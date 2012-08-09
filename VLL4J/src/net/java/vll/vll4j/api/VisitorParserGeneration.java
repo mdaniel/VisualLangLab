@@ -60,11 +60,12 @@ public class VisitorParserGeneration extends VisitorBase {
         for (Map.Entry<String, String> e: theForest.tokenBank.entrySet()) {
             if (e.getKey().endsWith("_"))
                 continue;
+            String tokenName = e.getKey();
             String pat = e.getValue();
             if (pat.startsWith("L")) {
-                parsersInstance.defineLiteral(Utils.unEscape(pat.substring(1)));
+                parsersInstance.defineLiteral(tokenName, Utils.unEscape(pat.substring(1)));
             } else if (pat.startsWith("R")) {
-                parsersInstance.defineRegex(Pattern.compile(Utils.unEscape(pat.substring(1))));
+                parsersInstance.defineRegex(tokenName, Pattern.compile(Utils.unEscape(pat.substring(1))));
             } else 
                 throw new IllegalArgumentException("Bad token");
         }
@@ -177,7 +178,7 @@ public class VisitorParserGeneration extends VisitorBase {
         if (n.accept(visitorNodeValidation) == null) {
             String litString = Utils.unEscape(theForest.tokenBank.get(n.literalName).substring(1));
             String errMsg = n.errorMessage.isEmpty() ? 
-                    String.format("literal:%s(%s)", n.literalName, n.nodeName()) : n.errorMessage;
+                    String.format("%s expects literal %s, found ", n.nodeName(), n.literalName) : n.errorMessage;
             return withMultiplicity(withStopTest(n.literalName.endsWith("_") ?
                     parsersInstance.literal(errMsg, litString) : parsersInstance.literal2(errMsg, litString)), n);
         } else {
@@ -217,7 +218,7 @@ public class VisitorParserGeneration extends VisitorBase {
         if (n.accept(visitorNodeValidation) == null) {
             String regString = Utils.unEscape(theForest.tokenBank.get(n.regexName).substring(1));
             String errMsg = n.errorMessage.isEmpty() ? 
-                    String.format("regex:%s(%s)", n.regexName, n.nodeName()) : n.errorMessage;
+                    String.format("%s expects regex %s, found ", n.nodeName(), n.regexName) : n.errorMessage;
             return withMultiplicity(withStopTest(n.regexName.endsWith("_") ?
                     parsersInstance.regex(errMsg, Pattern.compile(regString)) : 
                     parsersInstance.regex2(errMsg, Pattern.compile(regString))), n);

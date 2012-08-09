@@ -38,6 +38,8 @@ public class SimpleLexingParsers extends RegexParsers {
         literalsMatcher = null;
         theRegexs.clear();
         regexMatchers = null;
+        tokenList.clear();
+        lastTokenId = null;
     }
     
     public void resetWhitespace() {
@@ -55,7 +57,7 @@ public class SimpleLexingParsers extends RegexParsers {
         }
     }
     
-    public void defineLiteral(String lit) {
+    public void defineLiteral(String tokenName, String lit) {
         if (setupDone)
             throw new IllegalStateException();
         String litKey = "L" + Utils.escapeMetachars(lit);
@@ -66,10 +68,11 @@ public class SimpleLexingParsers extends RegexParsers {
             theLiterals.add(lit);
             int id = -theLiterals.size(); // -1, -2, -3, etc.
             tokenLexerMap.put(litKey, lexerById(id));
+            tokenList.add(0, tokenName);
         }
     }
     
-    public void defineRegex(Pattern pat) {
+    public void defineRegex(String tokenName, Pattern pat) {
         if (setupDone)
             throw new IllegalStateException();
         String regString = pat.toString();
@@ -77,11 +80,11 @@ public class SimpleLexingParsers extends RegexParsers {
         if (tokenLexerMap.containsKey(regKey)) {
             throw new IllegalArgumentException(String.format("Regex '%s' already defined",
                     regKey.substring(1)));
-
         } else {
             theRegexs.add(regString);
             int id = theRegexs.size() - 1; // 0, 1, 2, etc.
             tokenLexerMap.put(regKey, lexerById(id));
+            tokenList.add(tokenName);
         }
     }
 
@@ -115,7 +118,7 @@ public class SimpleLexingParsers extends RegexParsers {
                 try {
                     Object[] lexRes = lexer.apply(in);
                     if (lexRes == null)
-                        return new Failure<String>(errMsg, in);
+                        return new Failure<String>(errMsg + lastTokenId, in);
                     else
                         return new Success<String>((String)lexRes[0], in.drop((Integer)lexRes[2]));
                 } catch (StackOverflowError soe) {
@@ -131,8 +134,10 @@ public class SimpleLexingParsers extends RegexParsers {
                 if (!setupDone) {
                     setupLexerLiterals();
                     setupLexerRegexs();
+                    tokenArray = tokenList.toArray(new String[tokenList.size()]);
                     setupDone = true;
                 }
+                lastTokenId = "";
                 Object litRes[] = theLiterals.isEmpty() ? null : lexKnownLiterals(input);
                 Object regRes[] = regexMatchers.length == 0 ? null : lexKnownRegexs(input);
                 String lit = litRes == null ? null : (String)litRes[0];
@@ -145,29 +150,37 @@ public class SimpleLexingParsers extends RegexParsers {
                         int regId = (Integer)regRes[1];
                         if (regId == id || id == Integer.MAX_VALUE) {
                             return regRes; 
-                        } else 
-                            return null; 
+                        } else {
+                            lastTokenId = tokenArray[regId + sortedLiterals.length];
+                            return null;
+                        }
                     }
                 } else {
                     if (reg == null) {
                         int litId = (Integer)litRes[1];
                         if (litId == id || id == Integer.MAX_VALUE)
                             return litRes; 
-                        else
-                            return null; 
+                        else {
+                            lastTokenId = tokenArray[litId + sortedLiterals.length];
+                            return null;
+                        }
                     } else {
                         if (lit.length() >= reg.length()) {
                             int litId = (Integer)litRes[1];
                             if (litId == id)
                                 return litRes; 
-                            else
-                                return null; 
+                            else {
+                                lastTokenId = tokenArray[litId + sortedLiterals.length];
+                                return null;
+                            }
                         } else {
                             int regId = (Integer)regRes[1];
                             if (regId == id)
                                 return regRes; 
-                            else 
-                                return null; 
+                            else {
+                                lastTokenId = tokenArray[regId + sortedLiterals.length];
+                                return null;
+                            }
                         }
                     }
                 }
@@ -271,7 +284,8 @@ public class SimpleLexingParsers extends RegexParsers {
 //System.out.println("Regex: " + theRegexs.get(i));
         }
     }
-    
+
+    private String lastTokenId = null;
     public String whiteSpaceRegex = Utils.reEscape(whiteSpace.pattern());
     public String commentSpecRegex = "";
     private Map<String, Lexer> tokenLexerMap = new HashMap<String, Lexer>();
@@ -279,6 +293,8 @@ public class SimpleLexingParsers extends RegexParsers {
     private List<String> theLiterals = new ArrayList<String>();
     private Object[][] sortedLiterals = null;
     private Matcher literalsMatcher = null;
+    private List<String> tokenList = new ArrayList<String>();
+    private String[] tokenArray = null;
     private List<String> theRegexs = new ArrayList<String>();
     private Matcher regexMatchers[] = null;
     private Comparator literalsComparator = new Comparator() {

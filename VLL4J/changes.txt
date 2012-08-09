@@ -1,3 +1,5 @@
+10.42 2012-AUG-09
+  (Fix for  VLL-56) Error messages now contain NAME of the token found
 10.41 2012-JUL-22
   Private-scoped token icons changed again
 10.40 2012-JUL-22
