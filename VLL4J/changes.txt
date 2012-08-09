@@ -1,3 +1,5 @@
+10.43 2012-AUG-09
+  (Fix for  VLL-57) "RepSep with mult=* and action function cant handle only whitespace"
 10.42 2012-AUG-09
   (Fix for  VLL-56) Error messages now contain NAME of the token found
 10.41 2012-JUL-22
