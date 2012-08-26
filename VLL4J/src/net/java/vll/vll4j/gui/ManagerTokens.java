@@ -58,9 +58,19 @@ public class ManagerTokens {
             return null;
         }
         String tokenPattern = (m.group(1) == null) ? m.group(3) : m.group(0);
+        try {
+            String reg = Utils.unEscape(tokenPattern);
+            if (isRegex)
+                Pattern.compile(reg);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(gui, ex.toString(), "WARNING - New " +
+                    (isRegex ? "regex" :"literal"), JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
         boolean ok = true;
         for (Map.Entry<String,String> e: gui.theForest.tokenBank.entrySet()) {
-            if (e.getValue().substring(1).equals(tokenPattern)) {
+            if (e.getValue().substring(1).equals(tokenPattern) &&
+                    (e.getKey().endsWith("_") == tokenName.endsWith("_"))) {
                 JOptionPane.showMessageDialog(gui, String.format("Pattern conflict\nToken '%s' uses the same pattern",
                         e.getKey()), "WARNING - " + title, JOptionPane.WARNING_MESSAGE);
                 ok = false;
@@ -94,12 +104,6 @@ public class ManagerTokens {
             String info[] = getTokenInfo(false);
             if (info == null)
                 return;
-            try {
-                Utils.unEscape(info[1]);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(gui, ex.toString(), "WARNING - New literal", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
             gui.theForest.tokenBank.put(info[0], info[1]);
         }
     };
@@ -110,13 +114,6 @@ public class ManagerTokens {
             String info[] = getTokenInfo(true);
             if (info == null)
                 return;
-            try {
-                String reg = Utils.unEscape(info[1]);
-                Pattern.compile(reg);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(gui, ex.toString(), "WARNING - New regex", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
             gui.theForest.tokenBank.put(info[0], info[1]);
         }
     };

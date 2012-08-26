@@ -1,3 +1,6 @@
+10.44 2012-AUG-26
+  (Fix for VLL-58) Regex pattern "\\s{5:}" throws uncaught exception
+  (Fix for VLL-59) Token pattern conflict must operate within scope
 10.43 2012-AUG-09
   (Fix for  VLL-57) "RepSep with mult=* and action function cant handle only whitespace"
 10.42 2012-AUG-09
