@@ -192,6 +192,7 @@ public class ManagerTesting {
             inFile = fileChooser.getSelectedFile();
         }
         if (fromFile && inFile.isDirectory()) {
+            gui.theTestingPanel.setMultiFileLog(false);
             inFile = fileChooser.getSelectedFile();
             t0 = System.currentTimeMillis();
             int countOk = 0, countNotOk = 0;
@@ -233,6 +234,7 @@ public class ManagerTesting {
                 appendStatus(String.format(" %d Ok, %d NOk in %d ms", countOk, countNotOk, t1 - t0), true);
             }
         } else {
+            gui.theTestingPanel.setMultiFileLog(true);
             t0 = System.currentTimeMillis();
             try {
                 Reader reader = fromFile ? new ReaderFile(inFile) : 
@@ -245,8 +247,6 @@ public class ManagerTesting {
                     t0 = System.currentTimeMillis();
                     String ast = Utils.dumpValue(pr.get(), printStructured);
                     t1 = System.currentTimeMillis();
-                    if (ast.length() > 50000)
-                        JOptionPane.showMessageDialog(gui, "Large ASTs are slow to appear, please wait", "Print Delay Warning", JOptionPane.WARNING_MESSAGE);
                     appendStatus(String.format(", AST->String: %d ms", t1 - t0), false);
                     t0 = System.currentTimeMillis();
                     System.out.println(ast);

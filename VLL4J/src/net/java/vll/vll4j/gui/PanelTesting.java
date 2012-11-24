@@ -41,19 +41,14 @@ public class PanelTesting extends JPanel {
         JPanel eastPanel = new JPanel();
         eastPanel.setLayout(new BorderLayout());
         eastPanel.add(new JLabel("Parser Log", SwingConstants.CENTER), BorderLayout.NORTH);
-        logArea.setFont(new Font(Font.MONOSPACED, logArea.getFont().getStyle(), 
+        logArea.setOpaque(true);
+        logArea.setFont(new Font(Font.MONOSPACED, logArea.getFont().getStyle(),
                 logArea.getFont().getSize()));
         logArea.setEditable(false);
-        StyleConstants.setFontFamily(blackFont, "monospaced");
-        StyleConstants.setFontSize(blackFont, 12);
-        StyleConstants.setForeground(blackFont, Color.black);
-        StyleConstants.setFontFamily(redFont, "monospaced");
-        StyleConstants.setFontSize(redFont, 12);
-        StyleConstants.setForeground(redFont, Color.red);
         JPanel logBtnPanel = new JPanel();
         logBtnPanel.setLayout(new BorderLayout());
         logBtnPanel.add(logStatus, BorderLayout.CENTER);
-        helpButton2 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestLog) {
+        JButton helpButton2 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestLog) {
             @Override
             public Dimension getPreferredSize() {
                 int h = super.getPreferredSize().height;
@@ -88,7 +83,7 @@ public class PanelTesting extends JPanel {
         JPanel inputBtnPanel = new JPanel();
         inputBtnPanel.setLayout(new BorderLayout());
         inputBtnPanel.add(inputStatus, BorderLayout.CENTER);
-        helpButton1 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestInput) {
+        JButton helpButton1 = new JButton(theGui.theHelpFunctionsManager.displayHelpTestInput) {
             @Override
             public Dimension getPreferredSize() {
                 int h = super.getPreferredSize().height;
@@ -107,9 +102,19 @@ public class PanelTesting extends JPanel {
         sp.setDividerLocation(theGui.frameWidth / 5);
         add(sp, BorderLayout.CENTER);
     }
+
+    void setMultiFileLog(boolean mf) {
+        if (mf) {
+            logArea.setLineWrap(true);
+        } else {
+            logArea.setLineWrap(false);
+        }
+    }
     
     void logClear() {
+        logArea.errLines.clear();
         logArea.setText("");
+        currentLine = 0;
     }
     
     void logCopy() {
@@ -121,81 +126,53 @@ public class PanelTesting extends JPanel {
         logArea.setSelectionStart(selectionStart);
         logArea.setSelectionEnd(selectionEnd);
     }
-    
-    /*PrintStream getOutStream() {
-        OutputStream os = new OutputStream() {
-        StringBuilder sb = new StringBuilder();
-            @Override
-            public void write(int b) {
-                sb.append((char)b);
-            }
-            @Override
-            public void write(byte b[], int off, int len) throws IOException {
-                if (b == null) {
-                    throw new NullPointerException();
-                } else if ((off < 0) || (off > b.length) || (len < 0) ||
-                        ((off + len) > b.length) || ((off + len) < 0)) {
-                    throw new IndexOutOfBoundsException();
-                } else if (len == 0) {
-                    return;
-                }
-                for (int i = 0; i < len; ++i) {
-                    sb.append((char)b[off + i]);
-                }
-            }
-            @Override
-            public void flush() {
-                try {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            try {
-                                logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), blackFont);
-                            } catch (BadLocationException ex) {}
-                            logArea.setSelectionStart(logArea.getDocument().getLength());
-                            logArea.setSelectionEnd(logArea.getDocument().getLength());
-                            sb.setLength(0);
-                        }
-                    });
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        };
-        return new PrintStream(os, false);
-    }*/
-    
+
     PrintStream getOutStream() {
         OutputStream os = new OutputStream() {
             StringBuilder sb = new StringBuilder();
             public void write(int b) {
                 System.out.flush();
                 sb.append((char)b);
-                if (b == '\n' || sb.length() >= 1024) {
-                    try {
-                        logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), blackFont);
-                    } catch (BadLocationException ex) {}
-                    logArea.setSelectionStart(logArea.getDocument().getLength());
-                    logArea.setSelectionEnd(logArea.getDocument().getLength());
+                if (b == '\n') {
+                    final String line = sb.toString();
                     sb.setLength(0);
+                    ++currentLine;
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            logArea.append(line);
+                            int len = logArea.getText().length();
+                            logArea.setSelectionStart(len);
+                            logArea.setSelectionEnd(len);
+                        }
+                    });
                 }
             }
         };
         return new PrintStream(os, true);
     }
-    
+
     PrintStream getErrStream() {
         OutputStream os = new OutputStream() {
             StringBuilder sb = new StringBuilder();
             public void write(int b) {
                 System.out.flush();
                 sb.append((char)b);
-                if (b == '\n' || sb.length() >= 1024) {
-                    try {
-                        logArea.getDocument().insertString(logArea.getDocument().getLength(), sb.toString(), redFont);
-                    } catch (BadLocationException ex) {}
-                    logArea.setSelectionStart(logArea.getDocument().getLength());
-                    logArea.setSelectionEnd(logArea.getDocument().getLength());
+                if (b == '\n') {
+                    final String line = sb.toString();
                     sb.setLength(0);
+                    final int lineNo = currentLine;
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            logArea.append(line);
+                            logArea.errLines.add(new Object[]{lineNo, line});
+                            int len = logArea.getText().length();
+                            logArea.setSelectionStart(len);
+                            logArea.setSelectionEnd(len);
+                        }
+                    });
+                    ++currentLine;
                 }
             }
         };
@@ -203,13 +180,10 @@ public class PanelTesting extends JPanel {
     }
     
     Vll4jGui theGui;
-    
+
+    int currentLine = 0;
     JTextArea inputArea = new TextAreaCustom();
-    JTextPane logArea = new JTextPane();
-    private SimpleAttributeSet blackFont = new SimpleAttributeSet();
-    private SimpleAttributeSet redFont = new SimpleAttributeSet();
-    private JButton helpButton1 = null;
-    private JButton helpButton2 = null;
+    LogTextArea logArea = new LogTextArea();
     private JLabel inputStatus = new JLabel();
     JLabel logStatus = new JLabel();
 }
