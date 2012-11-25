@@ -136,6 +136,9 @@ public class Vll4jGui extends JFrame {
         bg.add(testTreeHandlerStructured);
         testTraceAllItem = new JCheckBoxMenuItem(theTestManager.traceAllAction);
         testMenu.add(testTraceAllItem);
+        testMenu.add(new JSeparator());
+        useRichCharSequenceItem = new JCheckBoxMenuItem(theTestManager.useRichCharSequenceAction);
+        testMenu.add(useRichCharSequenceItem);
         menuBar.add(helpMenu);
         helpMenu.add(theHelpFunctionsManager.displayHelpMain);
 //        helpMenu.addSeparator();
@@ -257,6 +260,7 @@ public class Vll4jGui extends JFrame {
     JMenuItem testTreeHandlerBasic = null;
     JMenuItem testTreeHandlerStructured = null;
     JMenuItem testTraceAllItem = null;
+    JMenuItem useRichCharSequenceItem = null;
     JMenu helpMenu = new JMenu("Help");
     JMenu helpSamplesMenu = new JMenu("Sample grammars");
         
@@ -265,6 +269,6 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    public final String version = "10.45";
+    public final String version = "10.46";
     private ListCellRenderer theCellRenderer = new RendererRuleComboBox(this);
 }

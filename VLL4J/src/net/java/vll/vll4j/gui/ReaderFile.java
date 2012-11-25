@@ -24,10 +24,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import net.java.vll.vll4j.RichCharSequence;
 import net.java.vll.vll4j.combinator.Reader;
 
 public class ReaderFile extends Reader {
-    public ReaderFile(File theFile) {
+    public ReaderFile(File theFile, boolean useRichCharSequence) {
         if (!theFile.exists())
             throw new IllegalArgumentException("Nonexistent file");
         BufferedReader br = null;
@@ -36,9 +38,10 @@ public class ReaderFile extends Reader {
             fr = new FileReader(theFile);
             br = new BufferedReader(fr);
             StringBuilder sb = new StringBuilder();
-            while ((buffer = br.readLine()) != null)
-                sb.append(buffer).append('\n');
-            buffer = sb.toString();
+            String line;
+            while ((line = br.readLine()) != null)
+                sb.append(line).append('\n');
+            buffer = useRichCharSequence ? new RichCharSequence(sb.toString()) : sb.toString();
         } catch (Exception ex) {
         } finally {
             try {fr.close();} catch (IOException ex) {}
@@ -46,7 +49,7 @@ public class ReaderFile extends Reader {
         }
     }
     
-    private ReaderFile(String b) {
+    private ReaderFile(CharSequence b) {
         buffer = b;
     }
     
@@ -68,7 +71,7 @@ public class ReaderFile extends Reader {
     public int column() {return column;}
     @Override
     public ReaderFile drop(int nbrToDrop) {
-        String src = buffer;
+        CharSequence src = buffer;
         if (offset + nbrToDrop > src.length())
             throw new IllegalArgumentException();
         ReaderFile csr = new ReaderFile(buffer);
@@ -86,5 +89,5 @@ public class ReaderFile extends Reader {
     
     private int offset = 0;
     private int line = 1, column = 1;
-    private String buffer;
+    private CharSequence buffer;
 }

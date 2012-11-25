@@ -147,10 +147,10 @@ public class VisitorParserGeneration extends VisitorBase {
         return withTrace(pm, node);
     }
 
-    Parser<String> withStopTest(final Parser<String> p) {
-        return new Parser<String>() {
+    Parser<CharSequence> withStopTest(final Parser<CharSequence> p) {
+        return new Parser<CharSequence>() {
             @Override
-            public ParseResult<String> apply(Reader input) {
+            public ParseResult<CharSequence> apply(Reader input) {
                 if (stopFlag[0])
                     throw new IllegalArgumentException("User-Requested STOP", new IOException());
                 return p.apply(input);

@@ -117,6 +117,13 @@ public class ManagerTesting {
         }
     };
 
+    Action useRichCharSequenceAction = new AbstractAction("RichCharSequence") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            useRichCharSequence = !useRichCharSequence;
+        }
+    };
+
     Action traceAllAction = new AbstractAction("Trace all") {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -199,7 +206,7 @@ public class ManagerTesting {
             for (File f: dredgeFiles(inFile)) {
                 t1 = System.currentTimeMillis();
                 try {
-                    ReaderFile readerFile = new ReaderFile(f);
+                    ReaderFile readerFile = new ReaderFile(f, useRichCharSequence);
                     gui.theForest.bindings.put("vllSource", readerFile.source());
                     ParseResult pr = gui.packratParsers.parseAll(parser, readerFile);
                     t2 = System.currentTimeMillis();
@@ -237,8 +244,8 @@ public class ManagerTesting {
             gui.theTestingPanel.setMultiFileLog(true);
             t0 = System.currentTimeMillis();
             try {
-                Reader reader = fromFile ? new ReaderFile(inFile) : 
-                        new ReaderTextArea(gui.theTestingPanel.inputArea);
+                Reader reader = fromFile ? new ReaderFile(inFile, useRichCharSequence) :
+                        new ReaderTextArea(gui.theTestingPanel.inputArea, useRichCharSequence);
                 gui.theForest.bindings.put("vllSource", reader.source());
                 ParseResult pr = gui.packratParsers.parseAll(parser, reader);
                 t1 = System.currentTimeMillis();
@@ -276,5 +283,6 @@ public class ManagerTesting {
     private Thread myThread = null;
     private JFileChooser fileChooser = null;
     private boolean traceAll = false;
+    private boolean useRichCharSequence = false;
     private boolean printStructured = false;
 }

@@ -21,14 +21,28 @@
 package net.java.vll.vll4j.gui;
 
 import javax.swing.JTextArea;
+
+import net.java.vll.vll4j.RichCharSequence;
 import net.java.vll.vll4j.combinator.Reader;
 
 public class ReaderTextArea extends Reader {
-    public ReaderTextArea(JTextArea textArea) {
+    public ReaderTextArea(JTextArea textArea, boolean useRichCharSequence) {
         this.textArea = textArea;
+        this.useRichCharSequence = useRichCharSequence;
+        source = useRichCharSequence ? new RichCharSequence(textArea.getText()) : textArea.getText();
     }
     @Override
-    public CharSequence source() {return textArea.getText();}
+    public CharSequence source() {
+        if (useRichCharSequence) {
+            if (source.equals(textArea.getText()))
+                return source;
+            else {
+                source = new RichCharSequence(textArea.getText());
+                return source;
+            }
+        } else
+            return textArea.getText();
+    }
     @Override
     public int offset() {return offset;}
     @Override
@@ -47,7 +61,7 @@ public class ReaderTextArea extends Reader {
     public ReaderTextArea drop(int nbrToDrop) {
         if (offset + nbrToDrop > textArea.getText().length())
             throw new IllegalArgumentException();
-        ReaderTextArea csr = new ReaderTextArea(textArea);
+        ReaderTextArea csr = new ReaderTextArea(textArea, useRichCharSequence);
         csr.offset = offset + nbrToDrop; csr.line = line; csr.column = column;
         String src = textArea.getText();
         for (int i = 0; i < nbrToDrop; ++i) {
@@ -60,7 +74,9 @@ public class ReaderTextArea extends Reader {
         }
         return csr;
     }
+    private boolean useRichCharSequence;
     private JTextArea textArea;
     private int offset = 0;
     private int line = 1, column = 1;
+    private CharSequence source;
 }

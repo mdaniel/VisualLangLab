@@ -88,7 +88,7 @@ public class SimpleLexingParsers extends RegexParsers {
         }
     }
 
-    public Parser<String> literal2(String errMsg, String lit) {
+    public Parser<CharSequence> literal2(String errMsg, String lit) {
         String litKey = "L" + Utils.escapeMetachars(lit);
         if (tokenLexerMap.containsKey(litKey)) {
             return lexer2parser(tokenLexerMap.get(litKey), errMsg);
@@ -97,7 +97,7 @@ public class SimpleLexingParsers extends RegexParsers {
         }
     }
     
-    public Parser<String> regex2(String errMsg, Pattern pat) {
+    public Parser<CharSequence> regex2(String errMsg, Pattern pat) {
 //System.out.printf("regex(%s, %s)%n", errMsg, pat.toString());
         String regString = pat.toString();
         String regKey = "R" + regString;
@@ -108,19 +108,19 @@ public class SimpleLexingParsers extends RegexParsers {
         }
     }
     
-    public Parser<String> wildCard(final String errMsg) {
+    public Parser<CharSequence> wildCard(final String errMsg) {
         return lexer2parser(lexerById(Integer.MAX_VALUE), errMsg);
     }
     
-    private Parser<String> lexer2parser(final Lexer lexer, final String errMsg) {
-        return new Parser<String>() {
-            public ParseResult<String> apply(Reader in) {
+    private Parser<CharSequence> lexer2parser(final Lexer lexer, final String errMsg) {
+        return new Parser<CharSequence>() {
+            public ParseResult<CharSequence> apply(Reader in) {
                 try {
                     Object[] lexRes = lexer.apply(in);
                     if (lexRes == null)
-                        return new Failure<String>(errMsg + lastTokenId, in);
+                        return new Failure<CharSequence>(errMsg + lastTokenId, in);
                     else
-                        return new Success<String>((String)lexRes[0], in.drop((Integer)lexRes[2]));
+                        return new Success<CharSequence>((CharSequence)lexRes[0], in.drop((Integer)lexRes[2]));
                 } catch (StackOverflowError soe) {
                     throw new RuntimeException(String.format("Java bug 5050507 at (%d, %d)", in.line(), in.column()), soe);
                 }
@@ -140,8 +140,8 @@ public class SimpleLexingParsers extends RegexParsers {
                 lastTokenId = "";
                 Object litRes[] = theLiterals.isEmpty() ? null : lexKnownLiterals(input);
                 Object regRes[] = regexMatchers.length == 0 ? null : lexKnownRegexs(input);
-                String lit = litRes == null ? null : (String)litRes[0];
-                String reg = regRes == null ? null : (String)regRes[0];
+                CharSequence lit = litRes == null ? null : (CharSequence)litRes[0];
+                CharSequence reg = regRes == null ? null : (CharSequence)regRes[0];
 //System.out.printf("parserById(%d): Lit=%s, Reg=%s%n", id, lit, reg);
                 if (lit == null) {
                     if (reg == null) {
@@ -238,12 +238,12 @@ public class SimpleLexingParsers extends RegexParsers {
         int offset2 = handleWhiteSpace(input.source(), offset);
         CharSequence cs = input.source().subSequence(offset2, input.source().length());
 //System.out.printf("lexKnownRegexs(): CharSequence=%s%n", cs);
-        int idx = -1;
-        String lexeme = "", newLexeme;
+        int idx = -1, maxLength = -1;
+//        String lexeme = "", newLexeme;
         for (int i = 0; i < regexMatchers.length; ++i) {
             Matcher m = regexMatchers[i].reset(cs);
-            if (m.lookingAt() && (newLexeme = m.group()).length() > lexeme.length()) {
-                lexeme = newLexeme;
+            if (m.lookingAt() && ((m.end() - m.start()) > maxLength)) {
+                maxLength = m.end() - m.start();
                 idx = i;
             } 
         }
@@ -251,7 +251,7 @@ public class SimpleLexingParsers extends RegexParsers {
         if (idx == -1)
             return null;
         else
-            return new Object[] {lexeme, idx, offset2 - offset + lexeme.length()};
+            return new Object[] {cs.subSequence(0, maxLength), idx, offset2 - offset + maxLength};
     }
     
     private void setupLexerLiterals() {

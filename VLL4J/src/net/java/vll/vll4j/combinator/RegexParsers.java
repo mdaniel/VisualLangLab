@@ -49,42 +49,51 @@ public class RegexParsers extends Parsers {
         }
     }
     
-    public Parser<String> literal(final String lit) {
+    public Parser<CharSequence> literal(final String lit) {
         return literal(String.format("expected literal(%s)", lit), lit);
     }
+
+    private boolean startsWith(CharSequence cs, String t) {
+        if (t.length() > cs.length())
+            return false;
+        for (int i = 0; i < t.length(); ++i)
+            if (cs.charAt(i) != t.charAt(i))
+                return false;
+        return true;
+    }
     
-    public Parser<String> literal(final String errMsg, final String lit) {
-        return new Parser<String>() {
+    public Parser<CharSequence> literal(final String errMsg, final String lit) {
+        return new Parser<CharSequence>() {
             @Override
-            public ParseResult<String> apply(Reader input) {
+            public ParseResult<CharSequence> apply(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
                 CharSequence cs = input.source();
-                if (cs.subSequence(offset2, cs.length()).toString().startsWith(lit))
-                    return new Success<String>(lit, input.drop(offset2 - input.offset() + lit.length()));
+                if (startsWith(cs.subSequence(offset2, cs.length()), lit))
+                    return new Success<CharSequence>(lit, input.drop(offset2 - input.offset() + lit.length()));
                 else
-                    return new Failure<String>(errMsg, input);
+                    return new Failure<CharSequence>(errMsg, input);
             }
         };
     }
     
-    public Parser<String> regex(final Pattern p) {
+    public Parser<CharSequence> regex(final Pattern p) {
         return regex(String.format("expected regex(%s)", p.toString()), p);
     }
     
-    public Parser<String> regex(final String errMsg, final Pattern p) {
-        return new Parser<String>() {
+    public Parser<CharSequence> regex(final String errMsg, final Pattern p) {
+        return new Parser<CharSequence>() {
             @Override
-            public ParseResult<String> apply(Reader input) {
+            public ParseResult<CharSequence> apply(Reader input) {
                 int offset2 = handleWhiteSpace(input.source(), input.offset());
                 if (p.toString().equals("\\\\z") && offset2 >= input.source().length()) {
-                    return new Success<String>("", input.drop(offset2 - input.offset()));
+                    return new Success<CharSequence>("", input.drop(offset2 - input.offset()));
                 }
                 CharSequence cs = input.source();
                 Matcher m = p.matcher(cs.subSequence(offset2, cs.length()));
                 if (m.lookingAt()) {
-                    return new Success<String>(m.group(), input.drop(offset2 - input.offset() + m.group().length()));
+                    return new Success<CharSequence>(m.group(), input.drop(offset2 - input.offset() + m.group().length()));
                 } else {
-                    return new Failure<String>(errMsg, input);
+                    return new Failure<CharSequence>(errMsg, input);
                 }
             }
         };
@@ -114,7 +123,7 @@ public class RegexParsers extends Parsers {
     public <T> ParseResult<T> parseAll(Parser<T> p, CharSequence cs) {
         return phrase(p).apply(new CharSequenceReader(cs));
     }
-    
+
     public <T> ParseResult<T> parseAll(Parser<T> p, Reader rdr) {
         return phrase(p).apply(rdr);
     }

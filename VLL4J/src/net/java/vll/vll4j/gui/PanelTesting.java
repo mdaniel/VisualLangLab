@@ -159,9 +159,9 @@ public class PanelTesting extends JPanel {
                 System.out.flush();
                 sb.append((char)b);
                 if (b == '\n') {
-                    final String line = sb.toString();
+                    final String line = sb.toString().replace("\t", "        ");
                     sb.setLength(0);
-                    final int lineNo = currentLine;
+                    final int lineNo = currentLine++;
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
@@ -172,7 +172,6 @@ public class PanelTesting extends JPanel {
                             logArea.setSelectionEnd(len);
                         }
                     });
-                    ++currentLine;
                 }
             }
         };
