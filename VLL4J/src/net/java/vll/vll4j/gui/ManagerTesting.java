@@ -41,6 +41,16 @@ public class ManagerTesting {
         this.gui = gui;
     }
 
+    private void enableTestControls(boolean enable) {
+        parseFileAction.setEnabled(enable);
+        parseInputAction.setEnabled(enable);
+        treeHandlerBasicAction.setEnabled(enable);
+        treeHandlerStructuredAction.setEnabled(enable);
+        traceAllAction.setEnabled(enable);
+        useCharSequenceAction.setEnabled(enable);
+        useStringAction.setEnabled(enable);
+    }
+
     Action parseInputAction = new AbstractAction("Parse text", Resources.alignLeft16) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -48,9 +58,9 @@ public class ManagerTesting {
                 @Override
                 public void run() {
                     parseStopAction.setEnabled(true);
-                    setEnabled(false);
+                    enableTestControls(false);
                     runner(false);
-                    setEnabled(true);
+                    enableTestControls(true);
                     parseStopAction.setEnabled(false);
                     System.out.flush();
                 }
@@ -66,7 +76,7 @@ public class ManagerTesting {
                 @Override
                 public void run() {
                     parseStopAction.setEnabled(true);
-                    setEnabled(false);
+                    enableTestControls(false);
                     if (fileChooser == null) {
                         fileChooser = new JFileChooser();
                         fileChooser.setDialogTitle("Open");
@@ -80,7 +90,7 @@ public class ManagerTesting {
                             e.printStackTrace();
                         }
                     }
-                    setEnabled(true);
+                    enableTestControls(true);
                     parseStopAction.setEnabled(false);
                     System.out.flush();
                 }
@@ -117,10 +127,17 @@ public class ManagerTesting {
         }
     };
 
-    Action useRichCharSequenceAction = new AbstractAction("RichCharSequence") {
+    Action useCharSequenceAction = new AbstractAction("CharSequence") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            useRichCharSequence = !useRichCharSequence;
+            useRichCharSequence = true;
+        }
+    };
+
+    Action useStringAction = new AbstractAction("String") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            useRichCharSequence = false;
         }
     };
 

@@ -125,6 +125,16 @@ public class Vll4jGui extends JFrame {
         testMenu.add(theTestManager.parseInputAction);
         testMenu.add(theTestManager.parseFileAction);
         testMenu.add(new JSeparator());
+        testMenu.add(testTextTypeMenu);
+        ButtonGroup bg2 = new ButtonGroup();
+        testTextTypeString = new JRadioButtonMenuItem(theTestManager.useStringAction);
+        testTextTypeString.setSelected(true);
+        testTextTypeMenu.add(testTextTypeString);
+        testTextTypeCharSequence = new JRadioButtonMenuItem(theTestManager.useCharSequenceAction);
+        testTextTypeMenu.add(testTextTypeCharSequence);
+        bg2.add(testTextTypeString);
+        bg2.add(testTextTypeCharSequence);
+        testMenu.add(new JSeparator());
         testMenu.add(testTreeHandlerMenu);
         ButtonGroup bg = new ButtonGroup();
         testTreeHandlerBasic = new JRadioButtonMenuItem(theTestManager.treeHandlerBasicAction);
@@ -136,9 +146,6 @@ public class Vll4jGui extends JFrame {
         bg.add(testTreeHandlerStructured);
         testTraceAllItem = new JCheckBoxMenuItem(theTestManager.traceAllAction);
         testMenu.add(testTraceAllItem);
-        testMenu.add(new JSeparator());
-        useRichCharSequenceItem = new JCheckBoxMenuItem(theTestManager.useRichCharSequenceAction);
-        testMenu.add(useRichCharSequenceItem);
         menuBar.add(helpMenu);
         helpMenu.add(theHelpFunctionsManager.displayHelpMain);
 //        helpMenu.addSeparator();
@@ -256,7 +263,10 @@ public class Vll4jGui extends JFrame {
     JMenu globalsMenu = new JMenu("Globals");
     JMenu logMenu = new JMenu("Log");
     JMenu testMenu = new JMenu("Test");
+    JMenu testTextTypeMenu = new JMenu("Text type");
     JMenu testTreeHandlerMenu = new JMenu("Tree handler");
+    JMenuItem testTextTypeString = null;
+    JMenuItem testTextTypeCharSequence = null;
     JMenuItem testTreeHandlerBasic = null;
     JMenuItem testTreeHandlerStructured = null;
     JMenuItem testTraceAllItem = null;
@@ -269,6 +279,6 @@ public class Vll4jGui extends JFrame {
     int frameWidth = (int) (screenSize.width * 0.75);
     int frameHeight = (int) (screenSize.height * 0.75);
     private String titleString;
-    public final String version = "10.46";
+    public final String version = "11.01";
     private ListCellRenderer theCellRenderer = new RendererRuleComboBox(this);
 }

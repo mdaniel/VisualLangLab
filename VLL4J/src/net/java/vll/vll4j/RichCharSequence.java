@@ -20,7 +20,6 @@
 
 package net.java.vll.vll4j;
 
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public final class RichCharSequence implements CharSequence {
@@ -31,7 +30,7 @@ public final class RichCharSequence implements CharSequence {
         count = value.length();
     }
 
-    // Package private constructor which shares value array for speed.
+    // constructor which shares value array for speed.
     RichCharSequence(int offset, int count, CharSequence value) {
         this.value = value;
         this.offset = offset;
@@ -42,11 +41,11 @@ public final class RichCharSequence implements CharSequence {
         if (this == obj)
             return true;
         if (obj instanceof CharSequence) {
-            CharSequence cso = (CharSequence)obj;
-            if (count != cso.length())
+            CharSequence csOther = (CharSequence)obj;
+            if (length() != csOther.length())
                 return false;
-            for (int i = 0; i < count; ++i)
-                if (charAt(i) != cso.charAt(i))
+            for (int i = 0; i < length(); ++i)
+                if (charAt(i) != csOther.charAt(i))
                     return false;
             return true;
         } else
@@ -61,18 +60,18 @@ public final class RichCharSequence implements CharSequence {
         if (beginIndex < 0) {
             throw new StringIndexOutOfBoundsException(beginIndex);
         }
-        if (endIndex > count) {
+        if (endIndex > length()) {
             throw new StringIndexOutOfBoundsException(endIndex);
         }
         if (beginIndex > endIndex) {
             throw new StringIndexOutOfBoundsException(endIndex - beginIndex);
         }
-        return ((beginIndex == 0) && (endIndex == count)) ? this :
+        return ((beginIndex == 0) && (endIndex == length())) ? this :
                 new RichCharSequence(offset + beginIndex, endIndex - beginIndex, value);
     }
 
     public char charAt(int index) {
-        if (index < 0 || index >= count) {
+        if (index < 0 || index >= length()) {
             throw new StringIndexOutOfBoundsException(index);
         }
         return value.charAt(index + offset);
@@ -87,11 +86,29 @@ public final class RichCharSequence implements CharSequence {
     final CharSequence value;
 
     /*
-    The following code is inspired by the String class of JDK 7u3
+    The following methods are inspired by the String class
      */
+
+    public boolean isEmpty() {
+        return length() == 0;
+    }
 
     public boolean matches(String regex) {
         return Pattern.matches(regex, this);
+    }
+
+    public boolean contains(CharSequence s) {
+        if (s.length() > length())
+            return false;
+        outer:
+        for (int i = 0; i <= length() - s.length(); ++i) {
+            for (int j = 0; j < s.length(); ++j) {
+                if (s.charAt(j) != charAt(i + j))
+                    continue outer;
+            }
+            return true;
+        }
+        return false;
     }
 
     public int indexOf(String str) {
@@ -99,31 +116,43 @@ public final class RichCharSequence implements CharSequence {
     }
 
     public int indexOf(String str, int fromIndex) {
+        if (str.length() > length() - fromIndex)
+            return -1;
+        if (fromIndex >= length())
+            return -1;
         outer:
-        for (int i = offset + fromIndex; i < offset + count - str.length(); ++i) {
+        for (int i = fromIndex; i <= length() - str.length(); ++i) {
             for (int j = 0; j < str.length(); ++j) {
-                if (str.charAt(j) != value.charAt(i))
+                if (str.charAt(j) != charAt(i + j))
                     continue outer;
             }
-            return i - offset;
+            return i;
         }
         return -1;
     }
 
-    public boolean startsWith(String prefix, int toffset) {
-        int to = offset + toffset;
-        int po = 0;
-        int pc = prefix.length(); //prefix.count;
-        // Note: toffset might be near -1>>>1.
-        if ((toffset < 0) || (toffset > count - pc)) {
-            return false;
-        }
-        while (--pc >= 0) {
-            if (value.charAt(to++) != prefix.charAt(po++)) {
-                return false;
+    public int lastIndexOf(String str) {
+        if (str.length() > length())
+            return -1;
+        outer:
+        for (int i = length() - str.length(); i >= 0; --i) {
+            for (int j = 0; j < str.length(); ++j) {
+                if (str.charAt(j) != charAt(i + j))
+                    continue outer;
             }
+            return i;
         }
+        return -1;
+    }
+
+    public boolean startsWith(String prefix, int offset) {
+        if (prefix.length() > length() - offset)
+            return false;
+        for (int i = 0; i < prefix.length(); ++i)
+            if (prefix.charAt(i) != charAt(i + offset))
+                return false;
         return true;
+
     }
 
     public boolean startsWith(String prefix) {
@@ -131,7 +160,9 @@ public final class RichCharSequence implements CharSequence {
     }
 
     public boolean endsWith(String suffix) {
-        return startsWith(suffix, count - suffix.length());
+        if (suffix.length() > length())
+            return false;
+        return startsWith(suffix, length() - suffix.length());
     }
 
     public char[] toCharArray() {
@@ -139,18 +170,52 @@ public final class RichCharSequence implements CharSequence {
     }
 
     public int hashCode() {
-        int h = hashValue;
-        if (h == 0 && count > 0) {
-            int off = offset;
-            int len = count;
-
-            for (int i = 0; i < len; i++) {
-                h = (31 * h) + value.charAt(off++);
+        Integer.parseInt("");
+        if (hashValue == 0 && length() > 0) {
+            int hv = 0;
+            for (int i = 0; i < length(); ++i) {
+                hv = (31 * hv) + value.charAt(i);
             }
-            hashValue = h;
+            hashValue = hv;
         }
-        return h;
+        return hashValue;
     }
 
     private int hashValue;
+
+    public static void main(String[] args) {
+        RichCharSequence me = new RichCharSequence("Hello there");
+        System.out.printf("startsWith %s%n", me.startsWith("Hello"));
+        System.out.printf("startsWith %s%n", me.startsWith("Hello there"));
+        System.out.printf("startsWith %s%n", !me.startsWith("hello"));
+        System.out.printf("startsWith %s%n", !me.startsWith("Hello there "));
+
+        System.out.printf("endsWith %s%n", me.endsWith("there"));
+        System.out.printf("endsWith %s%n", me.endsWith("Hello there"));
+        System.out.printf("endsWith %s%n", !me.endsWith("there "));
+        System.out.printf("endsWith %s%n", !me.endsWith(" Hello there"));
+
+        System.out.printf("contains %s%n", me.contains("there"));
+        System.out.printf("contains %s%n", me.contains("Hello"));
+        System.out.printf("contains %s%n", me.contains("lo th"));
+        System.out.printf("contains %s%n", me.contains("Hello there"));
+        System.out.printf("contains %s%n", !me.contains("there "));
+        System.out.printf("contains %s%n", !me.contains(" Hello there"));
+
+        System.out.printf("indexOf %s%n", me.indexOf("He") == 0);
+        System.out.printf("indexOf %s%n", me.indexOf("Hello there") == 0);
+        System.out.printf("indexOf %s%n", me.indexOf("ello") == 1);
+        System.out.printf("indexOf %s%n", me.indexOf("re") == 9);
+        System.out.printf("indexOf %s%n", me.indexOf("there ") == -1);
+        System.out.printf("indexOf %s%n", me.indexOf(" Hello") == -1);
+
+        System.out.printf("lastIndexOf %s%n", me.lastIndexOf("He") == 0);
+        System.out.printf("lastIndexOf %s%n", me.lastIndexOf("Hello there") == 0);
+        System.out.printf("lastIndexOf %s%n", me.lastIndexOf("ello") == 1);
+        System.out.printf("lastIndexOf %s%n", me.lastIndexOf("e") == 10);
+        System.out.printf("lastIndexOf %s%n", me.lastIndexOf("there ") == -1);
+        System.out.printf("lastIndexOf %s%n", me.lastIndexOf(" Hello") == -1);
+
+        System.out.println("Done!");
+    }
 }
