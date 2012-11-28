@@ -114,7 +114,6 @@ public class PanelTesting extends JPanel {
     void logClear() {
         logArea.errLines.clear();
         logArea.setText("");
-        currentLine = 0;
     }
     
     void logCopy() {
@@ -136,14 +135,12 @@ public class PanelTesting extends JPanel {
                 if (b == '\n') {
                     final String line = sb.toString();
                     sb.setLength(0);
-                    ++currentLine;
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
                             logArea.append(line);
                             int len = logArea.getText().length();
-                            logArea.setSelectionStart(len);
-                            logArea.setSelectionEnd(len);
+                            logArea.select(len, len);
                         }
                     });
                 }
@@ -161,15 +158,13 @@ public class PanelTesting extends JPanel {
                 if (b == '\n') {
                     final String line = sb.toString().replace("\t", "        ");
                     sb.setLength(0);
-                    final int lineNo = currentLine++;
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
+                            logArea.errLines.add(new Integer[]{logArea.getText().length(), line.length()});
                             logArea.append(line);
-                            logArea.errLines.add(new Object[]{lineNo, line});
                             int len = logArea.getText().length();
-                            logArea.setSelectionStart(len);
-                            logArea.setSelectionEnd(len);
+                            logArea.select(len, len);
                         }
                     });
                 }
@@ -180,7 +175,6 @@ public class PanelTesting extends JPanel {
     
     Vll4jGui theGui;
 
-    int currentLine = 0;
     JTextArea inputArea = new TextAreaCustom();
     LogTextArea logArea = new LogTextArea();
     private JLabel inputStatus = new JLabel();

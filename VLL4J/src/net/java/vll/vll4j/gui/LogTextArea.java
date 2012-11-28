@@ -31,17 +31,37 @@ public class LogTextArea extends JTextArea {
         int y2 = y1 + getVisibleRect().height;
         int width = getVisibleRect().width;
         int rowHeight = getRowHeight();
-        int fontBase = g.getFontMetrics().getLeading() + g.getFontMetrics().getAscent();
-        Color bgColor = getBackground();
-        for (Object[] el: errLines) {
-            int y = rowHeight * (Integer)el[0];
-            if (y + rowHeight >= y1 && y <= y2) {
-                g.setColor(bgColor);
-                g.fillRect(0, y, width, rowHeight);
-                g.setColor(Color.red);
-                g.drawString((String)el[1], 0, y + fontBase);
-            }
+        FontMetrics fm = g.getFontMetrics();
+        int fontBase = fm.getLeading() + g.getFontMetrics().getAscent();
+        g.setColor(Color.red);
+        for (Integer[] el: errLines) {
+            try {
+                int textOffset = el[0];
+                int textLength = el[1];
+                int y = modelToView(textOffset).y;
+                if (y + rowHeight >= y1 && y <= y2) {
+                    String s = getText(textOffset, textLength);
+                    outer:
+                    while (getLineWrap() && (s != null) && !s.isEmpty()) {
+                        int len = 0;
+                        for (int j = 0; j < s.length(); ++j) {
+                            len += fm.charWidth(s.charAt(j));
+                            if (len > width) {
+                                String ss = s.substring(0, j);
+                                g.drawString(ss, 0, y + fontBase);
+                                y += rowHeight;
+                                s = s.substring(j);
+                                continue outer;
+                            }
+                        }
+                        break;
+                    }
+                    if (!s.isEmpty()) {
+                        g.drawString(s, 0, y + fontBase);
+                    }
+                }
+            } catch (Exception e) {}
         }
     }
-    volatile ArrayList<Object[]> errLines = new ArrayList<Object[]>();
+    volatile ArrayList<Integer[]> errLines = new ArrayList<Integer[]>();
 }

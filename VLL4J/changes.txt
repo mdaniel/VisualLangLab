@@ -1,3 +1,8 @@
+11.00 2012-NOV-28
+  Version for JavaSE 7u6 and later (see VLL-61)
+  Minor improvements to feature VLL-60
+10.45 2012-NOV-24
+  (VLL-60 fixed) Use JTextArea for the log output area
 10.44 2012-AUG-26
   (Fix for VLL-58) Regex pattern "\\s{5:}" throws uncaught exception
   (Fix for VLL-59) Token pattern conflict must operate within scope
