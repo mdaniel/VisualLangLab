@@ -254,13 +254,19 @@ public class ManagerHelp {
             "&nbsp;&nbsp;&nbsp;&nbsp;http://vll.java.net/RapidPrototypingForScala.html";
    };
 
-    Action displayHelpMain = new AbstractAction("Web-Site", Resources.home16) {
+    Action displayHelpMain = new AbstractAction("Web-Site", Resources.icon) {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
                 URI webLink = new URL("http://vll.java.net/").toURI();
                 desktop.browse(webLink);
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+                if (desktop == null)
+                    JOptionPane.showMessageDialog(gui, "Please visit http://vll.java.net/",
+                            "Unsupported: java.awt.Desktop", JOptionPane.PLAIN_MESSAGE);
+                else
+                    ex.printStackTrace();
+            }
         }
     };
 
@@ -274,6 +280,11 @@ public class ManagerHelp {
                     URI webLink = new URL("http://vll.java.net/EditingTheGrammarTree.html").toURI();
                     desktop.browse(webLink);
                 } catch (Exception ex) {
+                    if (desktop == null)
+                        JOptionPane.showMessageDialog(gui, "Please visit http://vll.java.net/EditingTheGrammarTree.html",
+                                "Unsupported: java.awt.Desktop", JOptionPane.PLAIN_MESSAGE);
+                    else
+                        ex.printStackTrace();
                 }
             }
         }
@@ -289,6 +300,11 @@ public class ManagerHelp {
                     URI webLink = new URL("http://vll.java.net/ASTAndActionCode.html").toURI();
                     desktop.browse(webLink);
                 } catch (Exception ex) {
+                    if (desktop == null)
+                        JOptionPane.showMessageDialog(gui, "Please visit http://vll.java.net/ASTAndActionCode.html",
+                                "Unsupported: java.awt.Desktop", JOptionPane.PLAIN_MESSAGE);
+                    else
+                        ex.printStackTrace();
                 }
             }
         }
@@ -304,6 +320,11 @@ public class ManagerHelp {
                     URI webLink = new URL("http://vll.java.net/ASTAndActionCode.html#ActionCodeDesign").toURI();
                     desktop.browse(webLink);
                 } catch (Exception ex) {
+                    if (desktop == null)
+                        JOptionPane.showMessageDialog(gui, "Please visit http://vll.java.net/ASTAndActionCode.html#ActionCodeDesign",
+                                "Unsupported: java.awt.Desktop", JOptionPane.PLAIN_MESSAGE);
+                    else
+                        ex.printStackTrace();
                 }
             }
         }
@@ -319,6 +340,11 @@ public class ManagerHelp {
                     URI webLink = new URL("http://vll.java.net/TestingParsers.html").toURI();
                     desktop.browse(webLink);
                 } catch (Exception ex) {
+                    if (desktop == null)
+                        JOptionPane.showMessageDialog(gui, "Please visit http://vll.java.net/TestingParsers.html",
+                                "Unsupported: java.awt.Desktop", JOptionPane.PLAIN_MESSAGE);
+                    else
+                        ex.printStackTrace();
                 }
             }
         }
@@ -334,6 +360,11 @@ public class ManagerHelp {
                     URI webLink = new URL("http://vll.java.net/TestingParsers.html").toURI();
                     desktop.browse(webLink);
                 } catch (Exception ex) {
+                    if (desktop == null)
+                        JOptionPane.showMessageDialog(gui, "Please visit http://vll.java.net/TestingParsers.html",
+                                "Unsupported: java.awt.Desktop", JOptionPane.PLAIN_MESSAGE);
+                    else
+                        ex.printStackTrace();
                 }
             }
         }

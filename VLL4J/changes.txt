@@ -1,4 +1,7 @@
-11.00 2012-NOV-28
+11.02 2012-NOV-29
+  Fix for VLL-62 (Dispatch to web-site not working)
+  Changed icon used for help->web-site menu.
+11.01 2012-NOV-28
   Version for JavaSE 7u6 and later (see VLL-61)
   Minor improvements to feature VLL-60
 10.45 2012-NOV-24
