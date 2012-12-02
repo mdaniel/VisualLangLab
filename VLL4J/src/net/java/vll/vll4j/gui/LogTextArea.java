@@ -27,13 +27,16 @@ import java.util.ArrayList;
 public class LogTextArea extends JTextArea {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (fontMetrics == null) {
+            fontMetrics = g.getFontMetrics();
+            fontBase = fontMetrics.getLeading() + fontMetrics.getAscent();
+            fontHeight = fontMetrics.getHeight();
+            backGroundColor = getBackground();
+        }
         int y1 = getVisibleRect().y;
         int y2 = y1 + getVisibleRect().height;
         int width = getVisibleRect().width;
         int rowHeight = getRowHeight();
-        FontMetrics fm = g.getFontMetrics();
-        int fontBase = fm.getLeading() + g.getFontMetrics().getAscent();
-        g.setColor(Color.red);
         for (Integer[] el: errLines) {
             try {
                 int textOffset = el[0];
@@ -45,9 +48,12 @@ public class LogTextArea extends JTextArea {
                     while (getLineWrap() && (s != null) && !s.isEmpty()) {
                         int len = 0;
                         for (int j = 0; j < s.length(); ++j) {
-                            len += fm.charWidth(s.charAt(j));
+                            len += fontMetrics.charWidth(s.charAt(j));
                             if (len > width) {
                                 String ss = s.substring(0, j);
+                                g.setColor(backGroundColor);
+                                g.fillRect(0, y, width, fontHeight);
+                                g.setColor(Color.red);
                                 g.drawString(ss, 0, y + fontBase);
                                 y += rowHeight;
                                 s = s.substring(j);
@@ -57,6 +63,9 @@ public class LogTextArea extends JTextArea {
                         break;
                     }
                     if (!s.isEmpty()) {
+                        g.setColor(backGroundColor);
+                        g.fillRect(0, y, width, fontHeight);
+                        g.setColor(Color.red);
                         g.drawString(s, 0, y + fontBase);
                     }
                 }
@@ -64,4 +73,7 @@ public class LogTextArea extends JTextArea {
         }
     }
     volatile ArrayList<Integer[]> errLines = new ArrayList<Integer[]>();
+    private Color backGroundColor;
+    private int fontHeight, fontBase;
+    private FontMetrics fontMetrics = null;
 }
